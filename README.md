@@ -9,3 +9,8 @@ The platform allows exploitation of mobility data such as to make  <strong> spat
 
 
 ![image](https://github.com/user-attachments/assets/7716d40d-8efa-41cd-a42e-a71f3c99d08b)
+
+<br>
+
+![image](https://github.com/user-attachments/assets/26cc8762-bb6e-42e1-bec0-c174c547aa04)
+
