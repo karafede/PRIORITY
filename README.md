@@ -1,7 +1,7 @@
 # PRIORITY
  <strong> PRIORITY  </strong> is the acronim of Platform for the tRansition to sustanInable zerO-caRbon mobilITY. 
 This work presents the design and the implementation of a digital platform for <strong>  urban mobility </strong>  addressed to decision makers. The platform allows aggregating mobilit mobility data  within   <strong> traffic zones  </strong> for analysis of  <strong> travel demand, polluting emissions, energy consumption and externalities  </strong> in the metropolitan city of Rome (Italy).
-Detailed architecture and functionalities are explained together with the final outputs to summarize the status of mobility over a study area based on its urbanization and traffic indicators. T
+Detailed architecture and functionalities are explained together with the final outputs to summarize the status of mobility over a study area based on its urbanization and traffic indicators.
 
 The platform has been designed to retrieve mobility insights from Floating Car Data, General   <strong>(FCD)  </strong> Transit Feed Specification data  <strong> (GTFS)  </strong> and public transport data. 
 PRIOIRTY has been Built with the  <strong> Python Flask  </strong> framework to allow the users to easily explore data through a dashboard together with interactive maps. This platform integrates real-world mobility data with modelled data to enhance the reconstruction of individual travel. In addition, it offers the option to perform  <strong> online statistics  </strong> over traffic zones upon a mouse click with the possibility to visualize  <strong> hourly profiles  </strong> of several traffic variables as well as polluting emissions, energy consumption and externalities. 
