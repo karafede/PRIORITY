@@ -19,7 +19,7 @@ To make the platform working on your own system follow these steps
 3. Create your own working directory where you are going to copy the file **main.py** and directories **templates** and **static**
 4. Once you have download the files in this repositoriy and installed the necessary libraries, while in the terminal window, go to your working directory and execute **python main.py***
 
-# Database
+## Database
 6. 
 
 
