@@ -8,10 +8,21 @@ PRIOIRTY has been Built with the  <strong> Python Flask  </strong> framework to 
 
 The platform allows exploitation of mobility data to perform <strong> spatial and temporal aggregations  </strong>, to compute  <strong> desire lines  </strong> between origins and destinations and, to highlight traffic zones crossed by trips originating from a specific zone. Additionally, the PRIORITY platform offers the possibility to  <strong> retrieve Points of Interests (POI)  </strong> from the OpenStreetMap database and to load an updated charging network for electric vehicles through the direct connection with Open Charge Map.
 
+for any question contact federico.karagulian@enea.it or karafede@hotmail.com
+
 
 ![image](https://github.com/user-attachments/assets/7716d40d-8efa-41cd-a42e-a71f3c99d08b)
 
 <br>
 
 ![image](https://github.com/user-attachments/assets/26cc8762-bb6e-42e1-bec0-c174c547aa04)
+
+# Installation
+The platform PRIORITY has been developed considering both Windows and Linux operating systems. 
+To make the platform working on your own system follow these steps
+
+1. Consider installing a recent Python verison. I suggest the verison <strong> Pythyon 3.10 </strong> or later versions
+2. In the terminal window install the requred packages as lieted in the **requirements.txt**
+
+The main Python file to be executed in the terminal is  *<strong> PRIORITY  </strong>*
 
