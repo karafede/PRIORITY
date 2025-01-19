@@ -31,3 +31,16 @@ A database should be setup using **Postgresql** to store input data to be proces
 ![image](https://github.com/user-attachments/assets/26cc8762-bb6e-42e1-bec0-c174c547aa04)
 
 
+... and much other work is going on....
+
+## Citation
+If you used Genesis in your research, we would appreciate it if you could cite it. We are still working on a technical report, and before it's public, you could consider citing:
+```
+@software{PRIORITY,
+  author = {PRIORITY Authors},
+  title = {PRIORITY: PRIORITY, a web-server Mobility Platform: design and implementation},
+  month = {January},
+  year = {2024},
+  url = {https://github.com/karafede/PRIORITY}
+}
+```
