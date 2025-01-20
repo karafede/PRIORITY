@@ -28,6 +28,7 @@ A database should be setup using **Postgresql** to store input data to be proces
 <br>
 
 ![image](https://github.com/user-attachments/assets/7716d40d-8efa-41cd-a42e-a71f3c99d08b)
+
 *Home page of the platform PRIORITY*
 
 <br>
