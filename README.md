@@ -43,7 +43,26 @@ with engine.connect() as conn:
 df = pd.DataFrame(res)
 ```
 
+## Possible Setup Issues
 
+```
+  ##----> filter by day and ZMU zone....
+    ## read back zmu index
+    with open(path_app + "static/params/index_zmu_" + session.sid + ".txt") as f:
+        lines = f.readlines()
+
+    """   
+    #### ----- to use in LINUX (Apache 2) ----------##########
+    line = ((lines[0]).split(':'))[1]
+    import re
+    line = re.sub('}\n', '', line)
+    selected_index_zmu = line
+    #### ----------------------------------------- ###########
+    """
+    ## string split and get value....
+
+    selected_index_zmu = ((lines[1]).split())[1]
+```
 <br>
 <br>
 
