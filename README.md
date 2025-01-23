@@ -8,8 +8,6 @@ PRIOIRTY has been Built with the  **Python Flask** framework to allow the users 
 
 The platform allows exploitation of mobility data to perform  **spatial and temporal aggregations**, to compute  <strong> desire lines  </strong> between origins and destinations and, to highlight traffic zones crossed by trips originating from a specific zone. Additionally, the PRIORITY platform offers the possibility to  **retrieve Points of Interests (POI)** from the OpenStreetMap database and to load an updated charging network for electric vehicles through the direct connection with Open Charge Map.
 
-## Problems or questions?
-for any question contact federico.karagulian@enea.it or karafede@hotmail.com
 
 # Installation
 The platform PRIORITY has been developed considering both Windows and Linux operating systems. 
@@ -67,7 +65,8 @@ df = pd.DataFrame(res)
 
 *The module Private Mobility within the platform PRIORITY*
 
-
+## Problems or questions?
+for any question contact federico.karagulian@enea.it or karafede@hotmail.com
 ... and much other work is going on....
 
 ## Citation
