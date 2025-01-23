@@ -28,9 +28,7 @@ from sqlalchemy import exc
 import sqlalchemy as sal
 from sqlalchemy.pool import NullPool
 from sqlalchemy.sql import text
-```
 
-```
 engine = create_engine("postgresql://username:password@123.456.555.567:5432/DB_NAME")
 query = text('''SELECT.....FROM..... WHERE...''')
 ```
