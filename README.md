@@ -16,7 +16,7 @@ To make the platform working on your own system follow these steps
 1. Consider installing a recent Python verison. I suggest the verison **Pythyon 3.10** or later versions
 2. In the terminal window install the requred packages as lieted in the **requirements.txt**. Be aware, you might be required to install additional packages or dependencies upon installation on Windows or Linux environment.
 3. Create your own working directory where you are going to copy the file **main.py** and directories **templates** and **static**
-4. Once you have download the files in this repositoriy and installed the necessary libraries, while in the terminal window, go to your working directory and execute **python main.py**
+4. Once you have download the files in this repositoriy and installed the necessary libraries, while in the terminal window, go to your working directory and execute  **> python main.py**
 5. To deploy the this application on a web-server (Linux machine using Apache+WSGI), follow the indication suggested in this link: https://tecadmin.net/deploying-flask-application-on-ubuntu-apache-wsgi/
 
 
