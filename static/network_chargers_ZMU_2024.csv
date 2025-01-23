@@ -1,0 +1,772 @@
+index_zmu;POP_TOT_ZMU;zmu;comune;nome_comun;quartiere;pgtu;municipio;OperatorInfo;NumberOfPoints;ID;city;Connection_TypeID;Connection_ID;Power;charging_stations
+0.0;33;1001236;58091;Roma;Castel Porziano;5;9.0;CASTEL ROMANO DESIGNER OUTLET;4;88480;Roma;25;125019;7;1
+0.0;33;1001236;58091;Roma;Castel Porziano;5;9.0;Pittarello;1;85105;Castelromano ;25;120414;not available;1
+0.0;33;1001236;58091;Roma;Castel Porziano;5;9.0; Roadhouse Restaurant Castel Romano;1;85104;Castelromano ;25;120413;not available;1
+2.0;4901;1001941;58091;Roma;La Storta;5;14.0;EnelX EVA+  ADS Selva Candida Esterna;2;93878;Roma;1036;132469;43;1
+2.0;4901;1001941;58091;Roma;La Storta;5;14.0;EnelX EVA+  ADS Selva Candida Esterna;2;93878;Roma;33;132467;50;1
+2.0;4901;1001941;58091;Roma;La Storta;5;14.0;EnelX EVA+  ADS Selva Candida Esterna;2;93878;Roma;2;132468;50;1
+10.0;15746;1058119;58119;San cesareo;;7;;Eurospin;2;135133;San Cesareo;25;188593;not available;1
+10.0;15746;1058119;58119;San cesareo;;7;;Eneldrive Fast EVA+ Conad San Cesareo;2;104446;San Cesareo;2;146998;50;1
+10.0;15746;1058119;58119;San cesareo;;7;;Eneldrive Fast EVA+ Conad San Cesareo;2;104446;San Cesareo;33;146997;50;1
+10.0;15746;1058119;58119;San cesareo;;7;;Eneldrive Fast EVA+ Conad San Cesareo;2;104446;San Cesareo;1036;146999;43;1
+10.0;15746;1058119;58119;San cesareo;;7;;Centro Commerciale La Noce;8;168151;San Cesareo ;25;254758;22;1
+18.0;2669;1001418;58120;Fiumicino;;7;;HPC Atlante Aeroporto Fiumicino;1;211297;Fiumicino;33;351543;200;1
+18.0;2669;1001418;58120;Fiumicino;;7;;HPC Atlante Aeroporto Fiumicino;1;211296;Fiumicino;33;351542;200;1
+18.0;2669;1001418;58120;Fiumicino;;7;;HPC Atlante Aeroporto Fiumicino;2;211298;Fiumicino;33;351544;300;1
+22.0;87039;1058047;58047;Guidonia montecel;;7;;EnelX EVA+ c/o  +VISTA FABBRICA OCCHIALI;2;93833;Guidonia ;33;132388;50;1
+22.0;87039;1058047;58047;Guidonia montecel;;7;;EnelX EVA+ c/o  +VISTA FABBRICA OCCHIALI;2;93833;Guidonia ;1036;132390;43;1
+22.0;87039;1058047;58047;Guidonia montecel;;7;;EnelX EVA+ c/o  +VISTA FABBRICA OCCHIALI;2;93833;Guidonia ;2;132389;50;1
+22.0;87039;1058047;58047;Guidonia montecel;;7;;EnelX EVA+ c/o  +VISTA FABBRICA OCCHIALI;2;93833;Guidonia ;25;132391;22;1
+22.0;87039;1058047;58047;Guidonia montecel;;7;;Villanova Via Cavour | EnelX ;1;156133;Villanova;25;219342;12;1
+22.0;87039;1058047;58047;Guidonia montecel;;7;;Villanova Cavour | EnelX;2;170176;Guidonia Montecelio;25;258739;22;1
+22.0;87039;1058047;58047;Guidonia montecel;;7;;Burger King Guidonia;1;296480;Guidonia Montecelio ;25;528161;7.2;1
+22.0;87039;1058047;58047;Guidonia montecel;;7;;EnelX Largo Giuseppe Cornetto Bourlot;2;132172;Guidonia Montecelio;25;184486;22;1
+22.0;87039;1058047;58047;Guidonia montecel;;7;;POLIMAR srl (Guidonia);2;60780;Guidonia Montecelio ;25;76556;22;1
+22.0;87039;1058047;58047;Guidonia montecel;;7;;Colleverde | EnelX;2;132582;Guidonia Montecelio;25;185094;22;1
+22.0;87039;1058047;58047;Guidonia montecel;;7;;Eneldrive Barbieri;2;72918;Guidonia Montecelio;25;104024;22;1
+24.0;64;1000194;58091;Roma;Trevi;1;1.0;Roma  Piazza Venezia | EnelX;2;58120;Roma;36;73158;3;1
+24.0;64;1000194;58091;Roma;Trevi;1;1.0;Roma  Piazza Venezia | EnelX;2;58120;Roma;25;73157;3;1
+30.0;47754;1058072;58072;Nettuno;;7;;IN'S Mercato Nettuno| Lampionet;2;108748;Nettuno;25;153266;not available;1
+34.0;80;1002009;58091;Roma;Tomba di Nerone;4;15.0;Roma Due Ponti Sporting Club | EnelX;4;134642;Roma;25;187938;3;1
+42.0;10644;1058018;58018;Capena;;7;;BECHARGE Capena Tiberina;4;170824;Capena;25;260118;22;1
+42.0;10644;1058018;58018;Capena;;7;;Free To X ADS Mascherone Ovest;3;267043;Capena;33;471537;64;1
+42.0;10644;1058018;58018;Capena;;7;;Free To X ADS Mascherone Ovest;3;267043;Capena;2;471538;64;1
+42.0;10644;1058018;58018;Capena;;7;;Free To X ADS Mascherone Ovest;3;267043;Capena;25;471539;22;1
+42.0;10644;1058018;58018;Capena;;7;;Free To X ADS Mascherone Ovest;3;267043;Capena;33;453956;300;1
+44.0;840;1000154;58091;Roma;S.Eustachio;1;1.0;Eneldrive Piazza Navona;1;58116;Roma;25;73149;22;1
+44.0;840;1000154;58091;Roma;S.Eustachio;1;1.0;Eneldrive Piazza Navona;1;58116;Roma;36;73150;3;1
+48.0;1984;1002061;58091;Roma;Cesano;5;15.0;F40;6;191930;Rome;25;311102;22;1
+48.0;1984;1002061;58091;Roma;Cesano;5;15.0;F42;2;191928;Rome;25;311100;22;1
+48.0;1984;1002061;58091;Roma;Cesano;5;15.0;F64;2;191927;Rome;25;311099;22;1
+48.0;1984;1002061;58091;Roma;Cesano;5;15.0;F83;2;191926;ROME;25;311098;22;1
+48.0;1984;1002061;58091;Roma;Cesano;5;15.0;F13;2;191925;Rome;25;311097;22;1
+52.0;18890;1058013;58013;Bracciano;;7;;Enel X - Ipertriscount - Bracciano;1;206024;Bracciano;33;343274;50;1
+52.0;18890;1058013;58013;Bracciano;;7;;Enel X - Ipertriscount - Bracciano;1;206024;Bracciano;2;343275;50;1
+52.0;18890;1058013;58013;Bracciano;;7;;Enel X - Ipertriscount - Bracciano;1;206024;Bracciano;1036;343276;22;1
+52.0;18890;1058013;58013;Bracciano;;7;;Ewiva McDonald's - Bracciano;1;203668;Bracciano;33;339756;150;1
+53.0;11215;1058015;58015;Campagnano di rom;;7;;Campignano del Salvatore | EnelX;2;130442;Campagnano di Roma;36;203999;3.7;1
+53.0;11215;1058015;58015;Campagnano di rom;;7;;Campignano del Salvatore | EnelX;2;130442;Campagnano di Roma;25;182101;22;1
+53.0;11215;1058015;58015;Campagnano di rom;;7;;CAMPIGNANO Piazza Croce | ENELX;2;147053;Campagnano di Roma;25;204000;22;1
+53.0;11215;1058015;58015;Campagnano di rom;;7;;CAMPIGNANO Piazza Croce | ENELX;2;147053;Campagnano di Roma;36;204001;3.7;1
+53.0;11215;1058015;58015;Campagnano di rom;;7;;Via Mola Maggiorana;2;303552;Campagnano di Roma;33;570067;300.0;1
+53.0;11215;1058015;58015;Campagnano di rom;;7;;Enel X Autodromo di Vallelunga;5;190086;Campagnano di Roma;25;306969;20;1
+53.0;11215;1058015;58015;Campagnano di rom;;7;;Enel X Autodromo di Vallelunga;5;190086;Campagnano di Roma;33;306968;50;1
+56.0;37244;1058029;58029;Cerveteri;;7;;B&B Villa la Giulia;1;91327;17;30;129036;11;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;Civitavecchia Piazza Verdi | EnelX fast;2;133512;Civitavecchia;1036;186482;43;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;Civitavecchia Piazza Verdi | EnelX fast;2;133512;Civitavecchia;33;186480;50;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;Civitavecchia Piazza Verdi | EnelX fast;2;133512;Civitavecchia;2;186481;50;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;Civitavecchia Thaon De Revel | EnelX;4;130075;Civitavecchia;25;181593;22;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;Civitavecchia Thaon De Revel | EnelX;4;130075;Civitavecchia;36;181594;3.7;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;Civitavecchia Repubblica | EnelX;4;130076;Civitavecchia;36;181596;3.7;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;Civitavecchia Repubblica | EnelX;4;130076;Civitavecchia;25;181595;22;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;Civitavecchia Eroi | EnelX;2;130077;Civitavecchia;25;181597;22;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;Civitavecchia Eroi | EnelX;2;130077;Civitavecchia;36;181598;3.7;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;Municipio di Civitavecchia | EnelX;4;132865;Civitavecchia;25;185526;22;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;Municipio di Civitavecchia | EnelX;4;132865;Civitavecchia;36;185527;3.7;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;Civitavecchia D'Ardia | EnelX;2;130078;Civitavecchia;25;181599;22;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;Civitavecchia D'Ardia | EnelX;2;130078;Civitavecchia;36;181600;3.7;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;EnelX EVA+ Civitavecchia;2;95785;Civitavecchia;33;135216;50;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;EnelX EVA+ Civitavecchia;2;95785;Civitavecchia;2;135217;50;1
+57.0;51690;1058032;58032;Civitavecchia;;7;;EnelX EVA+ Civitavecchia;2;95785;Civitavecchia;1036;135218;43;1
+58.0;6248;1058040;58040;Gallicano nel laz;;7;;Free To X ADS Prenestina Ovest;3;211426;Gallicano Nel Lazio;33;351790;300;1
+58.0;6248;1058040;58040;Gallicano nel laz;;7;;Free To X ADS Prenestina Ovest;3;211426;Gallicano Nel Lazio;25;351793;22;1
+58.0;6248;1058040;58040;Gallicano nel laz;;7;;Free To X ADS Prenestina Ovest;3;211426;Gallicano Nel Lazio;33;351791;64;1
+58.0;6248;1058040;58040;Gallicano nel laz;;7;;Free To X ADS Prenestina Ovest;3;211426;Gallicano Nel Lazio;2;351792;64;1
+58.0;6248;1058040;58040;Gallicano nel laz;;7;;F2X Prenestina Est;6;194152;not avaialble;33;315493;300;1
+58.0;6248;1058040;58040;Gallicano nel laz;;7;;F2X Prenestina Est;6;194152;not avaialble;33;471534;64;1
+58.0;6248;1058040;58040;Gallicano nel laz;;7;;F2X Prenestina Est;6;194152;not avaialble;25;471536;43;1
+58.0;6248;1058040;58040;Gallicano nel laz;;7;;F2X Prenestina Est;6;194152;not avaialble;2;471535;64;1
+59.0;23123;1058043;58043;Genzano di roma;;7;;Conad Genzano  | EnelX;2;109794;Genzano di Roma ;36;154623;3.7;1
+59.0;23123;1058043;58043;Genzano di roma;;7;;Conad Genzano  | EnelX;2;109794;Genzano di Roma ;25;154622;22;1
+62.0;21594;1058057;58057;MARINO;;7;;Enel X McDonald's Frattocchie;2;190336;Marino;1036;307715;43;1
+62.0;21594;1058057;58057;MARINO;;7;;Enel X McDonald's Frattocchie;2;190336;Marino;33;307713;50;1
+62.0;21594;1058057;58057;MARINO;;7;;Enel X McDonald's Frattocchie;2;190336;Marino;2;307714;50;1
+70.0;3734;1058112;58112;Vicovaro;;7;;Via G. Mazzini;1;209011;Vicovaro;25;347158;22;1
+72.0;8699;1058103;58103;Subiaco;;7;;Via dei Monasteri 22 Subiaco;4;192373;Subiaco;25;311897;22;1
+72.0;8699;1058103;58103;Subiaco;;7;;Subiaco;1;103513;Subiaco ;25;145763;5;1
+73.0;18174;1058097;58097;Santa marinella;;7;;Via Giunone Lucina - Santa Severa | Enel X;1;190088;Santa Severa;36;306973;2;1
+73.0;18174;1058097;58097;Santa marinella;;7;;Via Giunone Lucina - Santa Severa | Enel X;1;190088;Santa Severa;25;306972;20;1
+73.0;18174;1058097;58097;Santa marinella;;7;;Piazza Carlo Garbieri - ‌Santa Severa | Enel X;1;190089;Santa Severa;25;306974;20;1
+73.0;18174;1058097;58097;Santa marinella;;7;;Piazza Carlo Garbieri - ‌Santa Severa | Enel X;1;190089;Santa Severa;36;306975;2;1
+74.0;15206;1058110;58110;Valmontone;;7;;Ionity Valmontone Outlet;12;274977;Valmontone;33;476338;350;1
+74.0;15206;1058110;58110;Valmontone;;7;;EnelX EVA+ Valmontone Outlet;2;104418;Valmontone ;33;146913;50;1
+74.0;15206;1058110;58110;Valmontone;;7;;EnelX EVA+ Valmontone Outlet;2;104418;Valmontone ;2;146914;50;1
+74.0;15206;1058110;58110;Valmontone;;7;;EnelX EVA+ Valmontone Outlet;2;104418;Valmontone ;1036;146915;43;1
+74.0;15206;1058110;58110;Valmontone;;7;;HPC enelx Valmontone Outlet;4;175716;Valmontone;33;272019;350;1
+76.0;54366;1058104;58104;Tivoli;;7;;Tivoli Viale Roma | EnelX ;2;156140;Tivoli;25;219349;22;1
+76.0;54366;1058104;58104;Tivoli;;7;;Esteticar;1;125730;Tivoli Terme;25;175702;7.4;1
+76.0;54366;1058104;58104;Tivoli;;7;;Tivoli Terme Tiburtina | EnelX;2;162748;Tivoli Terme;25;233731;22;1
+76.0;54366;1058104;58104;Tivoli;;7;;Grand Hotel Duca d'Este;1;169694;Tivoli;25;257868;not available;1
+76.0;54366;1058104;58104;Tivoli;;7;;Villa Adriana Parcheggio Via Val Gardena | EnelX;2;156138;Villa Adriana;25;219347;22;1
+76.0;54366;1058104;58104;Tivoli;;7;; Conad Superstore Tivoli  | EnelX;2;112931;Tivoli ;25;158400;22;1
+76.0;54366;1058104;58104;Tivoli;;7;; Conad Superstore Tivoli  | EnelX;2;112931;Tivoli ;36;158401;3.7;1
+77.0;48715;1058117;58117;Ardea;;7;;ADS ESSO Ardea BECHARGE;2;170366;Ardea;25;259128;22;1
+80.0;4954;1058105;58105;Tolfa;;7;;F2X Tirreno Ovest;2;235813;not avaialble;2;388314;64;1
+80.0;4954;1058105;58105;Tolfa;;7;;F2X Tirreno Ovest;2;235813;not avaialble;33;388313;64;1
+80.0;4954;1058105;58105;Tolfa;;7;;F2X Tirreno Ovest;2;235813;not avaialble;33;388312;300;1
+80.0;4954;1058105;58105;Tolfa;;7;;F2X Tirreno Ovest;2;235813;not avaialble;25;388315;22;1
+80.0;4954;1058105;58105;Tolfa;;7;;AdS Tirreno Est A12 direzione Livorno;1;211539;not avaialble;33;352018;300;1
+82.0;52937;1058111;58111;Velletri;;7;;Nemi De Santis | EnelX;2;130884;Nemi;25;182738;22;1
+82.0;52937;1058111;58111;Velletri;;7;;Nemi De Santis | EnelX;2;130884;Nemi;36;182739;3.7;1
+83.0;609;1001127;58091;Roma;Torricola;3;8.0;ADS Q8 Roma Ardeatina | ENELX FAST;2;168754;Roma;2;255743;50;1
+83.0;609;1001127;58091;Roma;Torricola;3;8.0;ADS Q8 Roma Ardeatina | ENELX FAST;2;168754;Roma;33;255742;50;1
+83.0;609;1001127;58091;Roma;Torricola;3;8.0;ADS Q8 Roma Ardeatina | ENELX FAST;2;168754;Roma;1036;255744;43;1
+84.0;4695;1000261;58091;Roma;Trieste;2;2.0;Roma Via Fezzan | EnelX ;2;106362;Roma;25;149316;22;1
+84.0;4695;1000261;58091;Roma;Trieste;2;2.0;Via Migiurtinia;4;194117;Rome;25;315413;22;1
+84.0;4695;1000261;58091;Roma;Trieste;2;2.0;Via Migiurtinia;4;194117;Rome;36;315414;3.7;1
+89.0;287;1000335;58091;Roma;Nomentano;2;2.0;Eneldrive Piazzale delle Provincie;3;58236;Roma;36;73417;3;1
+89.0;287;1000335;58091;Roma;Nomentano;2;2.0;Eneldrive Piazzale delle Provincie;3;58236;Roma;25;73416;3;1
+93.0;31441;1058122;58122;Fonte Nuova;;7;;Fontenuova Via Lago di Como | EnelX  ;2;156135;Fonte Nuova;25;219344;20;1
+93.0;31441;1058122;58122;Fonte Nuova;;7;;Fonte Nuova Parcheggio COOP | EnelX;2;156137;Fonte Nuova;25;219346;22;1
+97.0;1534;1000189;58091;Roma;Sallustiano;1;1.0;Eneldrive Boncompagni;1;58237;Roma;36;73419;3.7;1
+97.0;1534;1000189;58091;Roma;Sallustiano;1;1.0;Eneldrive Boncompagni;1;58237;Roma;25;73418;22;1
+100.0;2427;1000326;58091;Roma;Nomentano;2;2.0;Roma Piazza Bologna | EnelX;2;58235;Roma;25;73414;3;1
+100.0;2427;1000326;58091;Roma;Nomentano;2;2.0;Roma Piazza Bologna | EnelX;2;58235;Roma;36;73415;3;1
+103.0;3;1000445;58091;Roma;Castel Giubileo;4;3.0;Acea Scuola Maria Stern Nuovo;1;175235;Roma;2;270984;50;1
+103.0;3;1000445;58091;Roma;Castel Giubileo;4;3.0;Acea Scuola Maria Stern Nuovo;1;175235;Roma;33;270983;50;1
+103.0;3;1000445;58091;Roma;Castel Giubileo;4;3.0;Acea Scuola Maria Stern Nuovo;1;175235;Roma;1036;270985;43;1
+135.0;0;1001102;58091;Roma;Ostiense;3;8.0;Talent Gardern Ostiense;1;188545;Roma;25;303732;7.4;1
+152.0;256;1000187;58091;Roma;Trevi;1;1.0;Roma Barberini 15 | EnelX;2;130798;Roma;25;182628;22;1
+152.0;256;1000187;58091;Roma;Trevi;1;1.0;Roma Barberini 15 | EnelX;2;130798;Roma;36;182629;3;1
+152.0;256;1000187;58091;Roma;Trevi;1;1.0;Roma Barberini 19 | EnelX;2;130797;Roma;36;182627;3;1
+152.0;256;1000187;58091;Roma;Trevi;1;1.0;Roma Barberini 19 | EnelX;2;130797;Roma;25;182626;22;1
+152.0;256;1000187;58091;Roma;Trevi;1;1.0;Roma Barberini 29 | EnelX;2;130799;Roma;25;182630;22;1
+152.0;256;1000187;58091;Roma;Trevi;1;1.0;Roma Barberini 29 | EnelX;2;130799;Roma;36;182631;3;1
+152.0;256;1000187;58091;Roma;Trevi;1;1.0;Roma Barberini 43 | EnelX;2;130800;Roma;25;182632;22;1
+152.0;256;1000187;58091;Roma;Trevi;1;1.0;Roma Barberini 43 | EnelX;2;130800;Roma;36;182633;3;1
+153.0;886;1001726;58091;Roma;Prati;2;1.0;Eneldrive Cola di Rienzo;2;58112;Roma;25;73141;3;1
+153.0;886;1001726;58091;Roma;Prati;2;1.0;Eneldrive Cola di Rienzo;2;58112;Roma;36;73142;3;1
+167.0;3438;1000422;58091;Roma;Monte Sacro;3;3.0;Roma Val Padana | EnelX;4;162800;Roma;25;233801;22;1
+167.0;3438;1000422;58091;Roma;Monte Sacro;3;3.0;Roma Val Padana | EnelX;4;162800;Roma;36;233800;3.7;1
+175.0;2246;1001858;58091;Roma;Aurelio;3;13.0;Roma Gregorio VII | EnelX;2;58107;Roma;25;73131;3;1
+175.0;2246;1001858;58091;Roma;Aurelio;3;13.0;Roma Gregorio VII | EnelX;2;58107;Roma;36;73132;3;1
+181.0;61346;1058079;58079;Pomezia;;7;;Torvajanica Meduse | EnelX;2;109801;Pomezia ;25;154635;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Torvajanica Meduse | EnelX;2;109801;Pomezia ;36;154636;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Torvajanica Via Gran Bretagna | EnelX;2;113993;Pomezia;36;160172;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Torvajanica Via Gran Bretagna | EnelX;2;113993;Pomezia;25;160171;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Eneldrive Spagna;1;57863;Roma;25;72680;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Eneldrive Spagna;1;57863;Roma;36;72681;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Torvajanica Piazza Italia | EnelX;2;113994;Pomezia;25;160173;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Torvajanica Piazza Italia | EnelX;2;113994;Pomezia;36;160174;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;IN'S Mercato Torvaianica  | Lampionet;2;108747;Pomezia ;25;153265;not available;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Castagnetta | EnelX;2;133168;Pomezia;36;186053;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Castagnetta | EnelX;2;133168;Pomezia;25;186052;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Torvajanica Via Signa | EnelX;2;113995;Pomezia;36;160176;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Torvajanica Via Signa | EnelX;2;113995;Pomezia;25;160175;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Torvajanica Levante | EnelX;2;134635;Pomezia;25;187929;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Torvajanica Levante | EnelX;2;134635;Pomezia;36;187930;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Torvajanica Via Lago Maggiore | EnelX;2;113992;Pomezia;36;160170;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Torvajanica Via Lago Maggiore | EnelX;2;113992;Pomezia;25;160169;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Eneldrive Centro Commerciale Sedici Pini;1;57864;Pomezia;36;72683;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Eneldrive Centro Commerciale Sedici Pini;1;57864;Pomezia;25;72682;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Anchise | EnelX;2;109802;Pomezia;36;154638;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Anchise | EnelX;2;109802;Pomezia;25;154637;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Odisseo | EnelX;2;133154;Pomezia;25;186023;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Odisseo | EnelX;2;133154;Pomezia;36;186024;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Nenni | EnelX;2;113991;Pomezia;25;160167;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Nenni | EnelX;2;113991;Pomezia;36;160168;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Pontina Vecchia | EnelX;2;109803;Pomezia;25;154639;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Pontina Vecchia | EnelX;2;109803;Pomezia;36;154640;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Aldo Moro | EnelX;2;133153;Pomezia;36;186022;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Aldo Moro | EnelX;2;133153;Pomezia;25;186021;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;EnelX ADS Eni Pomezia;3;57867;Pomezia;33;72691;43;1
+181.0;61346;1058079;58079;Pomezia;;7;;EnelX ADS Eni Pomezia;3;57867;Pomezia;25;72689;43;1
+181.0;61346;1058079;58079;Pomezia;;7;;EnelX ADS Eni Pomezia;3;57867;Pomezia;25;72688;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;EnelX ADS Eni Pomezia;3;57867;Pomezia;2;72690;43;1
+181.0;61346;1058079;58079;Pomezia;;7;;POMEZIA Copernico | ENELX;2;148732;Pomezia;36;206000;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;POMEZIA Copernico | ENELX;2;148732;Pomezia;25;205999;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Cincinnato | EnelX;2;148731;Pomezia;36;205998;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Cincinnato | EnelX;2;148731;Pomezia;25;205997;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Simon Hotel Pomezia | E-Station;1;174826;Pomezia;25;270276;11;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Varrone;2;113990;Pomezia;25;160165;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Varrone;2;113990;Pomezia;36;160166;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Eneldrive Municipio di Pomezia;1;57865;Pomezia;36;72685;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Eneldrive Municipio di Pomezia;1;57865;Pomezia;25;72684;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Cavour | EnelX;2;148730;Pomezia;36;205996;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Cavour | EnelX;2;148730;Pomezia;25;205995;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Via Roma | EnelX;2;113989;Pomezia;25;160163;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Pomezia Via Roma | EnelX;2;113989;Pomezia;36;160164;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Eneldrive Via dei Castelli Romani;1;57866;Pomezia;25;72686;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Eneldrive Via dei Castelli Romani;1;57866;Pomezia;36;72687;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;McDonald's POMEZIA | ENELX;2;171010;Pomezia;36;260579;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;McDonald's POMEZIA | ENELX;2;171010;Pomezia;25;260578;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Eneldrvie Stazione Santa Palomba;2;91460;Pomezia ;25;129193;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Eneldrvie Stazione Santa Palomba;2;91460;Pomezia ;36;129194;3.7;1
+181.0;61346;1058079;58079;Pomezia;;7;;Santa Palomba Fiorucci | EnelX;2;133169;Pomezia;25;186054;22;1
+181.0;61346;1058079;58079;Pomezia;;7;;Santa Palomba Fiorucci | EnelX;2;133169;Pomezia;36;186055;3.7;1
+186.0;8340;1001407;58120;Fiumicino;;7;;Aranova Rosi | EnelX;2;115487;Fiumicino;25;162055;22;1
+186.0;8340;1001407;58120;Fiumicino;;7;;Aranova Rosi | EnelX;2;115487;Fiumicino;36;162056;3.7;1
+186.0;8340;1001407;58120;Fiumicino;;7;;Stazione Torre In Pietra - Palidoro | EnelX;2;115486;Fiumicino;36;162054;3.7;1
+186.0;8340;1001407;58120;Fiumicino;;7;;Stazione Torre In Pietra - Palidoro | EnelX;2;115486;Fiumicino;25;162053;22;1
+192.0;225;1000141;58091;Roma;Colonna;1;1.0;Roma Crispi | EnelX;2;58121;Roma;25;73159;3;1
+192.0;225;1000141;58091;Roma;Colonna;1;1.0;Roma Crispi | EnelX;2;58121;Roma;36;73160;3;1
+196.0;0;1001004;58091;Roma;Don Bosco;3;7.0;Eneldrive Cinecittà;2;58087;Roma;36;73097;3;1
+196.0;0;1001004;58091;Roma;Don Bosco;3;7.0;Eneldrive Cinecittà;2;58087;Roma;25;73096;3;1
+203.0;7039;1001529;58091;Roma;Portuense;3;11.0;Garage Berardo | EnelX;2;128483;Roma;25;179308;22;1
+207.0;4884;1001505;58091;Roma;Portuense;3;11.0;Autorimessa Fantilli | EnelX;2;130230;Roma;25;181872;22;1
+214.0;3513;1001615;58091;Roma;Gianicolense;2;12.0;Eneldrive Park Trastevere ATAC;2;58226;Roma;36;73398;3;1
+214.0;3513;1001615;58091;Roma;Gianicolense;2;12.0;Eneldrive Park Trastevere ATAC;2;58226;Roma;25;73397;3;1
+217.0;4519;1000485;58091;Roma;Monte Sacro;3;3.0;Via Valtravaglia;4;194116;Rome;25;315411;22;1
+217.0;4519;1000485;58091;Roma;Monte Sacro;3;3.0;Via Valtravaglia;4;194116;Rome;36;315412;3.7;1
+221.0;6398;1000603;58091;Roma;Prenestino-Labicano;3;5.0;Acea Piazza Roberto Malatesta;1;211318;Roma;1036;351586;43;1
+221.0;6398;1000603;58091;Roma;Prenestino-Labicano;3;5.0;Acea Piazza Roberto Malatesta;1;211318;Roma;33;351584;50;1
+221.0;6398;1000603;58091;Roma;Prenestino-Labicano;3;5.0;Acea Piazza Roberto Malatesta;1;211318;Roma;2;351585;50;1
+223.0;1223;1000215;58091;Roma;Trieste;2;2.0;Piazza di Sant'Emerenziana;1;194144;Rome;36;315485;3.7;1
+223.0;1223;1000215;58091;Roma;Trieste;2;2.0;Piazza di Sant'Emerenziana;1;194144;Rome;25;315484;22;1
+226.0;411;1000715;58091;Roma;Torre Spaccata;4;5.0;GranRoma;1;171011;Roma;25;260580;22;1
+228.0;2221;1000922;58091;Roma;Tuscolano;2;7.0;Parking Due Emme | EnelX;2;130228;Roma;25;181869;22;1
+237.0;3552;1001712;58091;Roma;Trionfale;2;1.0;Parcheggio Mercato Trionfale - Musei Vaticani ;2;48308;Roma;25;59170;22;1
+240.0;2457;1001716;58091;Roma;Prati;2;1.0; NH Collection Roma Giustiniano;1;65470;Roma;0;89636;not available;1
+246.0;163;1001730;58091;Roma;Della Vittoria;2;1.0;Parking Faravelli;3;81962;Roma;30;116364;22;1
+251.0;5080;1000428;58091;Roma;Marcigliana;5;3.0;Acea ;2;174936;Roma;1036;270479;43;1
+251.0;5080;1000428;58091;Roma;Marcigliana;5;3.0;Acea ;2;174936;Roma;2;270478;50;1
+251.0;5080;1000428;58091;Roma;Marcigliana;5;3.0;Acea ;2;174936;Roma;33;270477;50;1
+251.0;5080;1000428;58091;Roma;Marcigliana;5;3.0;Nissan Autogiapponese;1;108290;Roma;2;152438;44;1
+251.0;5080;1000428;58091;Roma;Marcigliana;5;3.0;Gallo Capitale Pizza E Grill;1;104004;726;30;146328;22;1
+262.0;2061;1000437;58091;Roma;Monte Sacro Alto;4;3.0;Via Franco Sacchetti;2;194118;Rome;1036;315417;43;1
+262.0;2061;1000437;58091;Roma;Monte Sacro Alto;4;3.0;Via Franco Sacchetti;2;194118;Rome;2;315416;50;1
+262.0;2061;1000437;58091;Roma;Monte Sacro Alto;4;3.0;Via Franco Sacchetti;2;194118;Rome;33;315415;50;1
+265.0;3927;1001801;58091;Roma;Aurelio;2;13.0;Eneldrive Stazione  Roma S.Pietro;2;58108;Roma;36;73134;3;1
+265.0;3927;1001801;58091;Roma;Aurelio;2;13.0;Eneldrive Stazione  Roma S.Pietro;2;58108;Roma;25;73133;3;1
+266.0;420;1000102;58091;Roma;S.Eustachio;1;1.0;Roma Piazza Sant'Andrea | EnelX;2;58118;Roma;36;73154;3;1
+266.0;420;1000102;58091;Roma;S.Eustachio;1;1.0;Roma Piazza Sant'Andrea | EnelX;2;58118;Roma;25;73153;22;1
+266.0;420;1000102;58091;Roma;S.Eustachio;1;1.0;Eneldrive Teatro Valle;3;58117;Roma;25;73151;3;1
+266.0;420;1000102;58091;Roma;S.Eustachio;1;1.0;Eneldrive Teatro Valle;3;58117;Roma;36;73152;3;1
+268.0;3536;1001803;58091;Roma;Aurelio;2;13.0;Hotel Residence Vatican Suites;1;104953;Rome;1036;147642;6.6;1
+273.0;1839;1000701;58091;Roma;Collatino;3;5.0;Esselunga Prenestino;2;148191;Roma;25;205226;11;1
+274.0;1394;1000902;58091;Roma;Tuscolano;2;7.0;Roma Via Aosta | EnelX Fast;2;170580;Roma;2;259527;50;1
+274.0;1394;1000902;58091;Roma;Tuscolano;2;7.0;Roma Via Aosta | EnelX Fast;2;170580;Roma;33;259526;50;1
+274.0;1394;1000902;58091;Roma;Tuscolano;2;7.0;Roma Via Aosta | EnelX Fast;2;170580;Roma;1036;259528;43;1
+280.0;1811;1000247;58091;Roma;Trieste;2;2.0;Roma Arno | EnelX;2;149414;Roma;36;207011;3.7;1
+280.0;1811;1000247;58091;Roma;Trieste;2;2.0;Roma Arno | EnelX;2;149414;Roma;25;207012;22;1
+281.0;2916;1001049;58091;Roma;Casal Morena;5;7.0;Acea Anagnina;2;189458;Roma;33;305690;50;1
+281.0;2916;1001049;58091;Roma;Casal Morena;5;7.0;Acea Anagnina;2;189458;Roma;2;305691;50;1
+281.0;2916;1001049;58091;Roma;Casal Morena;5;7.0;Acea Anagnina;2;189458;Roma;1036;305692;22;1
+287.0;1230;1001411;58120;Fiumicino;;7;;Municipio di Fiumicino | EnelX;2;131960;Fiumicino;25;184196;22;1
+287.0;1230;1001411;58120;Fiumicino;;7;;Municipio di Fiumicino | EnelX;2;131960;Fiumicino;36;184197;3.7;1
+289.0;483;1001965;58091;Roma;Casalotti;5;14.0;Hotel Residence Santa Rosa;1;104954;Rome;1036;147643;10;1
+302.0;2283;1001807;58091;Roma;Aurelio;4;13.0;The Church Palace;1;117154;481;30;165365;22;1
+305.0;2643;1001816;58091;Roma;Aurelio;2;13.0; Hotel NH Roma Villa Carpegna;2;65471;Roma;16;89637;3.6;1
+311.0;3346;1001105;58091;Roma;Ostiense;3;8.0;Via Girolamo Benzoni;2;194138;Rome;33;315470;50;1
+311.0;3346;1001105;58091;Roma;Ostiense;3;8.0;Via Girolamo Benzoni;2;194138;Rome;1036;315472;43;1
+311.0;3346;1001105;58091;Roma;Ostiense;3;8.0;Via Girolamo Benzoni;2;194138;Rome;2;315471;50;1
+321.0;6575;1001410;58120;Fiumicino;;7;;Fiumicino Torre Clementina | EnelX;2;130106;Fiumicino;36;181641;3.7;1
+321.0;6575;1001410;58120;Fiumicino;;7;;Fiumicino Torre Clementina | EnelX;2;130106;Fiumicino;25;181640;22;1
+321.0;6575;1001410;58120;Fiumicino;;7;;Fiumicino Ombrine | EnelX;2;109793;Fiumicino ;36;154621;3.7;1
+321.0;6575;1001410;58120;Fiumicino;;7;;Fiumicino Ombrine | EnelX;2;109793;Fiumicino ;25;154620;22;1
+324.0;3836;1001825;58091;Roma;Aurelio;3;13.0; Centro Commerciale AURA;6;102188;Roma ;25;143761;22;1
+324.0;3836;1001825;58091;Roma;Aurelio;3;13.0;Supercharger Roma City;8;272873;Roma;33;466668;250;1
+329.0;4684;1001708;58091;Roma;Della Vittoria;2;1.0;Roma Clodio | EnelX;2;58110;Roma;36;73138;3;1
+329.0;4684;1001708;58091;Roma;Della Vittoria;2;1.0;Roma Clodio | EnelX;2;58110;Roma;25;73137;3;1
+339.0;2289;1001856;58091;Roma;Primavalle;3;13.0;Eneldrive Battistini;2;58106;Roma;36;73130;3;1
+339.0;2289;1001856;58091;Roma;Primavalle;3;13.0;Eneldrive Battistini;2;58106;Roma;25;73129;3;1
+360.0;269;1001902;58091;Roma;Trionfale;3;14.0;Rome Cavalieri, A Waldorf Astoria Resort;1;105694;Roma;30;148512;22;1
+362.0;4659;1001906;58091;Roma;Trionfale;3;14.0;Axpo - Stazio;4;126215;Roma;1036;176397;7.4;1
+367.0;2478;1000253;58091;Roma;Trieste;2;2.0;LUISS University | EnelX;4;58240;Roma;36;73425;3;1
+367.0;2478;1000253;58091;Roma;Trieste;2;2.0;LUISS University | EnelX;4;58240;Roma;25;73424;22;1
+370.0;4419;1000309;58091;Roma;Tiburtino;2;2.0;Garage Autobruzi | EnelX;4;149460;Roma;25;207058;22;1
+375.0;2147;1001925;58091;Roma;Trionfale;3;14.0;Hotel Residence Villa Tassoni;1;104952;Rome;1036;147641;7;1
+381.0;2320;1000274;58091;Roma;Trieste;2;2.0; Roma Vescovio | EnelX;1;58243;Roma;25;73430;22;1
+381.0;2320;1000274;58091;Roma;Trieste;2;2.0; Roma Vescovio | EnelX;1;58243;Roma;36;73431;3;1
+401.0;15111;1001612;58091;Roma;Gianicolense;2;12.0;Roma de' Paoli | EnelX;2;128485;Roma;25;179310;22;1
+401.0;15111;1001612;58091;Roma;Gianicolense;2;12.0;Acea Falconieri ;1;175489;Roma;25;271455;22;1
+401.0;15111;1001612;58091;Roma;Gianicolense;2;12.0;Acea Falconieri ;1;175489;Roma;33;271453;50;1
+401.0;15111;1001612;58091;Roma;Gianicolense;2;12.0;Acea Falconieri ;1;175489;Roma;2;271454;50;1
+405.0;1416;1000235;58091;Roma;Trieste;2;2.0;Via di Santa Maria Goretti;2;194143;Rome;36;315483;3.7;1
+405.0;1416;1000235;58091;Roma;Trieste;2;2.0;Via di Santa Maria Goretti;2;194143;Rome;25;315482;22;1
+406.0;7763;1001938;58091;Roma;Ottavia;4;14.0;Eneldrive Fast EVA+ Selva candida Interna;2;104474;Roma;2;147045;50;1
+406.0;7763;1001938;58091;Roma;Ottavia;4;14.0;Eneldrive Fast EVA+ Selva candida Interna;2;104474;Roma;1036;147046;43;1
+406.0;7763;1001938;58091;Roma;Ottavia;4;14.0;Eneldrive Fast EVA+ Selva candida Interna;2;104474;Roma;33;147044;50;1
+417.0;600;1002011;58091;Roma;Grottarossa;4;15.0;Eneldrive  Saxa Rubra;1;58105;Roma;36;73128;3;1
+417.0;600;1002011;58091;Roma;Grottarossa;4;15.0;Eneldrive  Saxa Rubra;1;58105;Roma;25;73127;3;1
+430.0;710;1002012;58091;Roma;Grottarossa;4;15.0;Ewiva Via Flaminia;14;209857;not avaialble;33;348546;300;1
+449.0;3106;1002032;58091;Roma;Tor di Quinto;3;15.0;Piazza Stefano Jacini;4;194121;Rome;36;315424;3.7;1
+449.0;3106;1002032;58091;Roma;Tor di Quinto;3;15.0;Piazza Stefano Jacini;4;194121;Rome;25;315423;22;1
+456.0;535;1002035;58091;Roma;Grottarossa;4;15.0;Autostar Flaminia;2;108446;Roma;25;152702;22;1
+465.0;505;1000186;58091;Roma;Castro Pretorio;1;1.0;Eneldrive Via Torino;1;58232;Roma;36;73410;3;1
+465.0;505;1000186;58091;Roma;Castro Pretorio;1;1.0;Eneldrive Via Torino;1;58232;Roma;25;73409;3;1
+469.0;1748;1002073;58091;Roma;Tor di Quinto;3;15.0;Ewiva Corso di Francia;6;174414;Roma;33;268637;350;1
+469.0;1748;1002073;58091;Roma;Tor di Quinto;3;15.0;Ewiva Corso di Francia;6;174414;Roma;2;268638;80;1
+469.0;1748;1002073;58091;Roma;Tor di Quinto;3;15.0;Ewiva Corso di Francia;6;174414;Roma;25;268639;11;1
+484.0;410;1000107;58091;Roma;Trevi;1;1.0;Roma Santi Apostoli | EnelX;2;58119;Roma;25;73155;3;1
+484.0;410;1000107;58091;Roma;Trevi;1;1.0;Roma Santi Apostoli | EnelX;2;58119;Roma;36;73156;3;1
+487.0;14701;1001413;58120;Fiumicino;;7;;EnelX EVA+ Roma  Parco Leonardo;2;95784;Fiumicino ;1036;135215;43;1
+487.0;14701;1001413;58120;Fiumicino;;7;;EnelX EVA+ Roma  Parco Leonardo;2;95784;Fiumicino ;33;135213;50;1
+487.0;14701;1001413;58120;Fiumicino;;7;;EnelX EVA+ Roma  Parco Leonardo;2;95784;Fiumicino ;2;135214;50;1
+487.0;14701;1001413;58120;Fiumicino;;7;;CC Parco Da Vinci - Fiumicino - Enel X;5;190064;Fiumicino;36;306904;3.7;1
+487.0;14701;1001413;58120;Fiumicino;;7;;CC Parco Da Vinci - Fiumicino - Enel X;5;190064;Fiumicino;25;306903;22;1
+487.0;14701;1001413;58120;Fiumicino;;7;;Parco Da Vinci - Fiumicino - Enel x;3;190066;Fiumicino;36;306908;3.7;1
+487.0;14701;1001413;58120;Fiumicino;;7;;Parco Da Vinci - Fiumicino - Enel x;3;190067;Fiumicino;36;306910;3.7;1
+487.0;14701;1001413;58120;Fiumicino;;7;;Parco Da Vinci - Fiumicino - Enel x;3;190066;Fiumicino;25;306907;22;1
+487.0;14701;1001413;58120;Fiumicino;;7;;Parco Da Vinci - Fiumicino - Enel x;3;190065;Fiumicino;36;306906;3.7;1
+487.0;14701;1001413;58120;Fiumicino;;7;;Parco Da Vinci - Fiumicino - Enel x;3;190067;Fiumicino;25;306909;22;1
+487.0;14701;1001413;58120;Fiumicino;;7;;Parco Da Vinci - Fiumicino - Enel x;3;190065;Fiumicino;25;306905;22;1
+487.0;14701;1001413;58120;Fiumicino;;7;;Parco Da Vinci - Fiumicino - Enel X;3;190068;Fiumicino;25;306911;22;1
+487.0;14701;1001413;58120;Fiumicino;;7;;Parco Da Vinci - Fiumicino - Enel X;3;190068;Fiumicino;36;306912;3.7;1
+491.0;23309;1058059;58059;Mentana;;7;;Mentana Zeri | ENELX;2;149619;Mentana;36;207256;3.7;1
+491.0;23309;1058059;58059;Mentana;;7;;Mentana Zeri | ENELX;2;149619;Mentana;25;207255;22;1
+491.0;23309;1058059;58059;Mentana;;7;;Ewiva Mentana;2;266313;Mentana ;33;452436;150;1
+491.0;23309;1058059;58059;Mentana;;7;;Mentana Amendola | EnelX;2;135235;Mentana ;36;188729;3.7;1
+491.0;23309;1058059;58059;Mentana;;7;;Mentana Amendola | EnelX;2;135235;Mentana ;25;188728;22;1
+495.0;52335;1058007;58007;Anzio;;7;;Enel X Municipio;1;174911;Anzio;36;270437;3;1
+495.0;52335;1058007;58007;Anzio;;7;;Enel X Municipio;1;174911;Anzio;25;270436;22;1
+495.0;52335;1058007;58007;Anzio;;7;;Enel X CoTIE;2;189556;Anzio;33;305887;50;1
+495.0;52335;1058007;58007;Anzio;;7;;Enel X CoTIE;2;189556;Anzio;1036;305889;43;1
+495.0;52335;1058007;58007;Anzio;;7;;Enel X CoTIE;2;189556;Anzio;2;305888;50;1
+495.0;52335;1058007;58007;Anzio;;7;;Enel X Ospedale;1;174895;Anzio;25;270405;22;1
+495.0;52335;1058007;58007;Anzio;;7;;Enel X ;1;174885;Anzio;25;270387;22;1
+495.0;52335;1058007;58007;Anzio;;7;;Centro Anthos Ii;2;109229;not avaialble;30;154000;22;1
+495.0;52335;1058007;58007;Anzio;;7;;Coop;1;108044;Anzio RM;1036;152052;not available;1
+495.0;52335;1058007;58007;Anzio;;7;;Enel X Stazione Padiglione;1;174882;Anzio;36;270382;3;1
+495.0;52335;1058007;58007;Anzio;;7;;Enel X Stazione Padiglione;1;174882;Anzio;25;270381;22;1
+495.0;52335;1058007;58007;Anzio;;7;;Enel X  Lido dei Pini;1;174872;Via dei Gelsi 509;36;270365;3;1
+495.0;52335;1058007;58007;Anzio;;7;;Enel X  Lido dei Pini;1;174872;Via dei Gelsi 509;25;270364;22;1
+499.0;2215;1001636;58091;Roma;Portuense;2;12.0;Via Ettore Rolli;4;194139;Rome;25;315473;22;1
+499.0;2215;1001636;58091;Roma;Portuense;2;12.0;Via Ettore Rolli;4;194139;Rome;36;315474;3.7;1
+502.0;2768;1058012;58012;Bellegra;;7;;Via Macerone 2;1;209010;Bellegra;25;347157;22;1
+504.0;4130;1058016;58016;Canale monterano;;7;;Terme di Stigliano;2;130443;Canale Monterano;25;182102;22;1
+508.0;10693;1058026;58026;Cave;;7;;Via della Selce Cave;2;192371;Cave;25;311895;22;1
+508.0;10693;1058026;58026;Cave;;7;;Cave zona artigianale;1;192019;Cave;25;311257;22;1
+508.0;10693;1058026;58026;Cave;;7;;Via Falcone e Borsellino;2;192029;Cave;25;311270;22;1
+509.0;5757;1001623;58091;Roma;Gianicolense;3;12.0;Supermercato PIM Newton;3;94306;Roma ;36;133016;not available;1
+509.0;5757;1001623;58091;Roma;Gianicolense;3;12.0;Supermercato PIM Newton;3;94306;Roma ;25;133015;not available;1
+511.0;845;1058025;58025;Castel san pietro;;7;;Via 4 Novembre;1;209008;Castel San Pietro Romano;25;347154;15;1
+511.0;845;1058025;58025;Castel san pietro;;7;;Via Vito Fontana 1;1;209009;Castel San Pietro Romano;25;347155;20;1
+511.0;845;1058025;58025;Castel san pietro;;7;;Via Vito Fontana 1;1;209009;Castel San Pietro Romano;36;347156;3.7;1
+515.0;20924;1058034;58034;Colleferro;;7;;Via dei Larici;1;192035;Colleferro;25;311279;22;1
+515.0;20924;1058034;58034;Colleferro;;7;;Palasport Comunale Colleferro Driwe;1;172555;Colleferro;25;263206;22;1
+515.0;20924;1058034;58034;Colleferro;;7;;Via Francesco Petrarca;1;192034;Colleferro;25;311278;22;1
+515.0;20924;1058034;58034;Colleferro;;7;;Corso Filippo Turati;1;192033;Colleferro;25;311277;22;1
+515.0;20924;1058034;58034;Colleferro;;7;;Piazza Italia;1;192032;Colleferro;25;311276;22;1
+515.0;20924;1058034;58034;Colleferro;;7;;Quarto Chilometro Driwe;1;172554;Colleferro;25;263205;22;1
+515.0;20924;1058034;58034;Colleferro;;7;;Via Casilina Centro Commerciale;1;192036;Colleferro;25;311280;22;1
+515.0;20924;1058034;58034;Colleferro;;7;;Truckvillage Colleferro;6;71437;Colleferro;17;101870;22;1
+515.0;20924;1058034;58034;Colleferro;;7;;EnelX EVA+  Truckvillage Colleferro;2;119019;Colleferro ;1036;167836;43;1
+515.0;20924;1058034;58034;Colleferro;;7;;EnelX EVA+  Truckvillage Colleferro;2;119019;Colleferro ;2;167835;50;1
+515.0;20924;1058034;58034;Colleferro;;7;;EnelX EVA+  Truckvillage Colleferro;2;119019;Colleferro ;33;167834;50;1
+520.0;5171;1058063;58063;Montelibretti;;7;;Montelibretti S.Antonio | ENELX;2;171600;Montelibretti;36;261702;3.7;1
+520.0;5171;1058063;58063;Montelibretti;;7;;Montelibretti S.Antonio | ENELX;2;171600;Montelibretti;25;261701;22;1
+520.0;5171;1058063;58063;Montelibretti;;7;;Borgo Santa Maria Don Luigi Sturzo |  ENELX;2;171599;Montelibretti;25;261699;22;1
+520.0;5171;1058063;58063;Montelibretti;;7;;Borgo Santa Maria Don Luigi Sturzo |  ENELX;2;171599;Montelibretti;36;261700;3.7;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Fiano Romano Pasolini | EnelX;2;134284;Fiano Romano;36;187421;3.7;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Fiano Romano dalla Chiesa | EnelX;2;134282;Fiano Romano;36;187417;3.7;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Fiano Romano dalla Chiesa | EnelX;2;134282;Fiano Romano;25;187416;22;1
+524.0;15424;1058036;58036;Fiano romano;;7;;FIANO ROMANO Belvedere | ENELX;2;149230;Fiano Romano;25;206741;22;1
+524.0;15424;1058036;58036;Fiano romano;;7;;FIANO ROMANO Belvedere | ENELX;2;149230;Fiano Romano;36;206742;3.7;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Fiano Romano Terracini | EnelX;2;134283;Fiano Romano;36;187419;3.7;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Ionity Hotel Hampton By Hilton;6;194642;Fiano Romano;33;316493;350;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Ewiva Fiano Romano;2;194456;Fiano Romano;33;316131;150;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Fiano Romano Tiberina | EnelX;2;134287;Fiano Romano;25;187426;22;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Fiano Romano Tiberina | EnelX;2;134287;Fiano Romano;36;187427;3.7;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Fiano Romano Via Firenze | EnelX;2;134286;Fiano Romano;25;187424;22;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Fiano Romano Via Firenze | EnelX;2;134286;Fiano Romano;36;187425;3.7;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Eneldrive Fast EVA+ Conad Fiano Romano;2;104444;RM;2;146992;50;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Eneldrive Fast EVA+ Conad Fiano Romano;2;104444;RM;33;146991;50;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Eneldrive Fast EVA+ Conad Fiano Romano;2;104444;RM;1036;146993;43;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Fiano Romano Pasolini | EnelX;2;134284;Fiano Romano;25;187420;22;1
+524.0;15424;1058036;58036;Fiano romano;;7;;BECHARGE Enerpetroli Fiano Romano;2;171202;Fiano Romano;25;261051;22;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Fiano Romano San Sebastiano | EnelX;2;134285;Fiano Romano;36;187423;3.7;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Fiano Romano San Sebastiano | EnelX;2;134285;Fiano Romano;25;187422;22;1
+524.0;15424;1058036;58036;Fiano romano;;7;;FIANO ROMANO Tevere | ENELX;2;149231;Tevere;36;206744;3.7;1
+524.0;15424;1058036;58036;Fiano romano;;7;;FIANO ROMANO Tevere | ENELX;2;149231;Tevere;25;206743;22;1
+524.0;15424;1058036;58036;Fiano romano;;7;;Fiano Romano Terracini | EnelX;2;134283;Fiano Romano;25;187418;22;1
+530.0;5716;1058042;58042;Genazzano;;7;;Piazza della Repubblica;1;209007;Genazzano;25;347153;22;1
+533.0;6371;1058049;58049;Labico;;7;;Circonvallazione Giovanni Falcone Labico;2;192372;Labico;25;311896;22;1
+533.0;6371;1058049;58049;Labico;;7;;Labico;2;192020;Labico;25;311258;22;1
+534.0;1892;1000932;58091;Roma;Appio-Latino;2;7.0;Roma Ponte Lungo | EnelX;4;130229;Roma;36;181871;3.7;1
+534.0;1892;1000932;58091;Roma;Appio-Latino;2;7.0;Roma Ponte Lungo | EnelX;4;130229;Roma;25;181870;22;1
+552.0;1333;1058069;58069;Nazzano;;7;;Eneldrive Nazzano;2;94080;Nazzano;25;132707;22;1
+552.0;1333;1058069;58069;Nazzano;;7;;Eneldrive Nazzano;2;94080;Nazzano;36;132708;3;1
+553.0;40898;1058065;58065;Monterotondo;;7;;Centro Commerciale Monterotondo;2;118089;Monterotondo;25;166583;22;1
+553.0;40898;1058065;58065;Monterotondo;;7;;Enel X Monterotondo Lampedusa ;1;190444;Monterotondo;25;307980;22;1
+557.0;1862;1058070;58070;Nemi;;7;;Nemi Trebbiano | EnelX;2;130883;Nemi;25;182736;22;1
+557.0;1862;1058070;58070;Nemi;;7;;Nemi Trebbiano | EnelX;2;130883;Nemi;36;182737;3.7;1
+557.0;1862;1058070;58070;Nemi;;7;;Eneldrive Nemi;2;85856;Nemi;25;121593;22;1
+557.0;1862;1058070;58070;Nemi;;7;;Eneldrive Nemi;2;85856;Nemi;36;121594;3.7;1
+588.0;5010;1058128;58039;FRASCATI;;7;;Area di Servizio Frascati Ovest;2;57860;Frascati;2;72676;44;1
+588.0;5010;1058128;58039;FRASCATI;;7;;Area di Servizio Frascati Ovest;2;57860;Frascati;25;72675;22;1
+588.0;5010;1058128;58039;FRASCATI;;7;;Area di Servizio Frascati Ovest;2;57860;Frascati;33;72677;44;1
+588.0;5010;1058128;58039;FRASCATI;;7;;Area di Servizio Frascati Est (Esso);2;57859;Frascati;2;72673;44;1
+588.0;5010;1058128;58039;FRASCATI;;7;;Area di Servizio Frascati Est (Esso);2;57859;Frascati;25;72672;22;1
+588.0;5010;1058128;58039;FRASCATI;;7;;Area di Servizio Frascati Est (Esso);2;57859;Frascati;33;72674;44;1
+591.0;3204;1000128;58091;Roma;Esquilino;1;1.0;Best Western Hotel President;1;100013;17;30;140812;22;1
+593.0;5641;1058107;58107;Trevignano romano;;7;;Trevignano al Molo | EnelX;2;112932;Trevignano Romano;36;158403;3.7;1
+593.0;5641;1058107;58107;Trevignano romano;;7;;Trevignano al Molo | EnelX;2;112932;Trevignano Romano;25;158402;22;1
+593.0;5641;1058107;58107;Trevignano romano;;7;;Trevignano Rena | EnelX;2;114035;Trevignano Romano;36;160237;3.7;1
+593.0;5641;1058107;58107;Trevignano romano;;7;;Trevignano Rena | EnelX;2;114035;Trevignano Romano;25;160236;22;1
+593.0;5641;1058107;58107;Trevignano romano;;7;;Trevignano Via Roma | EnelX;2;114036;Trevignano Romano;36;160239;3.7;1
+593.0;5641;1058107;58107;Trevignano romano;;7;;Trevignano Via Roma | EnelX;2;114036;Trevignano Romano;25;160238;22;1
+593.0;5641;1058107;58107;Trevignano romano;;7;;Trevignano Platani | EnelX;2;112933;Trevignano Romano;36;158405;3.7;1
+593.0;5641;1058107;58107;Trevignano romano;;7;;Trevignano Platani | EnelX;2;112933;Trevignano Romano;25;158404;22;1
+594.0;2802;1000410;58091;Roma;Monte Sacro Alto;4;3.0;Via Ugo Ojetti;2;194142;Rome;36;315481;3.7;1
+594.0;2802;1000410;58091;Roma;Monte Sacro Alto;4;3.0;Via Ugo Ojetti;2;194142;Rome;25;315480;22;1
+594.0;2802;1000410;58091;Roma;Monte Sacro Alto;4;3.0;Eneldrive Ojetti;2;58091;Roma;36;73105;3;1
+594.0;2802;1000410;58091;Roma;Monte Sacro Alto;4;3.0;Eneldrive Ojetti;2;58091;Roma;25;73104;22;1
+602.0;39584;1058116;58116;Ladispoli;;7;;Repower  Marina di San Nicola;1;174849;Ladispoli;25;270312;22;1
+602.0;39584;1058116;58116;Ladispoli;;7;;Repower Consorzio Marina di San Nicola;1;174814;Ladispoli;25;270252;22;1
+602.0;39584;1058116;58116;Ladispoli;;7;;EUROSPIN - Ladispoli;2;202665;Ladispoli;25;338311;22;1
+602.0;39584;1058116;58116;Ladispoli;;7;;EUROSPIN - Ladispoli;2;202665;Ladispoli;25;338312;22;1
+602.0;39584;1058116;58116;Ladispoli;;7;;Enel X - Parcheggio Stazione FS - Ladispoli;1;190443;Ladispoli;25;307979;22;1
+602.0;39584;1058116;58116;Ladispoli;;7;;Ewiva Ladispoli;1;202664;Ladispoli;33;338310;100;1
+602.0;39584;1058116;58116;Ladispoli;;7;;Enel X - Conad - Ladispoli;2;190062;Ladispoli;33;306899;50;1
+602.0;39584;1058116;58116;Ladispoli;;7;;Enel X - Conad - Ladispoli;2;190062;Ladispoli;2;306900;50;1
+602.0;39584;1058116;58116;Ladispoli;;7;;Enel X - Conad - Ladispoli;2;190062;Ladispoli;1036;306901;43;1
+602.0;39584;1058116;58116;Ladispoli;;7;;Enel X - Carrefour -Ladispoli;1;190063;Ladispoli;25;306902;22;1
+603.0;1871;1058118;58118;Ciampino;;7;; Mirauto Nissan;1;66244;Ciampino ;2;91090;44;1
+603.0;1871;1058118;58118;Ciampino;;7;;CONCESSIONARIO NISSAN Mirauto;2;148315;Ciampino;25;205402;22;1
+603.0;1871;1058118;58118;Ciampino;;7;;CONCESSIONARIO NISSAN Mirauto;2;148315;Ciampino;33;205401;50;1
+603.0;1871;1058118;58118;Ciampino;;7;;CONCESSIONARIO NISSAN Mirauto;2;148315;Ciampino;2;205400;50;1
+604.0;12749;1058125;58118;Ciampino;;7;;CM Motors | EnelX;2;130067;Ciampino;25;181573;22;1
+607.0;6124;1001008;58091;Roma;Appio Claudio;3;7.0;Viale Tito Labieno;2;194123;Rome;2;315429;50;1
+607.0;6124;1001008;58091;Roma;Appio Claudio;3;7.0;Viale Tito Labieno;2;194123;Rome;33;315428;50;1
+607.0;6124;1001008;58091;Roma;Appio Claudio;3;7.0;Viale Tito Labieno;2;194123;Rome;1036;315430;43;1
+637.0;277;1000160;58091;Roma;Colonna;1;1.0;Roma Palazzo Montecitorio | EnelX;2;58115;Roma;36;73148;3;1
+637.0;277;1000160;58091;Roma;Colonna;1;1.0;Roma Palazzo Montecitorio | EnelX;2;58115;Roma;25;73147;3;1
+638.0;2046;1001720;58091;Roma;Della Vittoria;2;1.0;Garage Dacar Roma | EnelX;3;171320;Roma;25;261202;3;1
+640.0;2263;1001363;58091;Roma;Acilia Sud;6;10.0;Supermercato MA;1;175967;Roma;25;272652;not available;1
+645.0;286;1000202;58091;Roma;Pinciano;2;2.0;Roma Facoltà di Architettura | EnelX;2;58245;Roma;36;73435;3;1
+645.0;286;1000202;58091;Roma;Pinciano;2;2.0;Roma Facoltà di Architettura | EnelX;2;58245;Roma;25;73434;22;1
+645.0;286;1000202;58091;Roma;Pinciano;2;2.0;Via Bruino Buozzi ang. Via Gramsci;4;194120;Rome;36;315422;3.7;1
+645.0;286;1000202;58091;Roma;Pinciano;2;2.0;Via Bruino Buozzi ang. Via Gramsci;4;194120;Rome;25;315421;22;1
+648.0;4837;1000912;58091;Roma;Appio-Latino;2;7.0;Supergarage Italia | EnelX;2;128498;Roma;25;179329;22;1
+657.0;1440;1000521;58091;Roma;Pietralata;3;4.0;Enel X MiMS;4;189393;Roma;33;305547;50;1
+657.0;1440;1000521;58091;Roma;Pietralata;3;4.0;Enel X MiMS;4;189393;Roma;25;305550;20;1
+657.0;1440;1000521;58091;Roma;Pietralata;3;4.0;Enel X MiMS;4;189393;Roma;1036;305549;43;1
+657.0;1440;1000521;58091;Roma;Pietralata;3;4.0;Enel X MiMS;4;189393;Roma;2;305548;50;1
+663.0;8722;1058022;58022;Castel gandolfo;;7;;Via L. da Vinci;2;201610;Castel Gandolfo;25;335656;not available;1
+669.0;1077;1000262;58091;Roma;Trieste;2;2.0;Via di Priscilla;2;194115;Rome;1036;315410;43;1
+669.0;1077;1000262;58091;Roma;Trieste;2;2.0;Via di Priscilla;2;194115;Rome;2;315409;50;1
+669.0;1077;1000262;58091;Roma;Trieste;2;2.0;Via di Priscilla;2;194115;Rome;33;315408;50;1
+670.0;1625;1000231;58091;Roma;Trieste;2;2.0;Roma Regina Margherita | EnelX;4;58239;Roma;25;73422;22;1
+670.0;1625;1000231;58091;Roma;Trieste;2;2.0;Roma Regina Margherita | EnelX;4;58239;Roma;36;73423;3.7;1
+670.0;1625;1000231;58091;Roma;Trieste;2;2.0;Via Reno;4;194114;Rome;25;315406;22;1
+670.0;1625;1000231;58091;Roma;Trieste;2;2.0;Via Reno;4;194114;Rome;36;315407;3.7;1
+676.0;2242;1000258;58091;Roma;Parioli;2;2.0;Roma Yser | EnelX;4;127873;Roma;36;178523;3.7;1
+676.0;2242;1000258;58091;Roma;Parioli;2;2.0;Roma Yser | EnelX;4;127873;Roma;25;178522;22;1
+676.0;2242;1000258;58091;Roma;Parioli;2;2.0;Hilton Garden Inn Rome Claridge;1;100019;62;30;140818;22;1
+677.0;555;1000217;58091;Roma;Trieste;2;2.0;Roma Istria | EnelX;4;58242;Roma;25;73428;3;1
+677.0;555;1000217;58091;Roma;Trieste;2;2.0;Roma Istria | EnelX;4;58242;Roma;36;73429;3;1
+684.0;1440;1000416;58091;Roma;Castel Giubileo;4;3.0; IKEA Porta di Roma;2;60781;Roma;36;76558;3;1
+684.0;1440;1000416;58091;Roma;Castel Giubileo;4;3.0; IKEA Porta di Roma;2;60781;Roma;25;76557;22;1
+684.0;1440;1000416;58091;Roma;Castel Giubileo;4;3.0;Enel X HPC Redicicoli;4;193754;Rome;33;314607;350;1
+686.0;3073;1000914;58091;Roma;Appio-Latino;2;7.0;Eneldrive Magnagrecia;2;58230;Roma;36;73406;3;1
+686.0;3073;1000914;58091;Roma;Appio-Latino;2;7.0;Eneldrive Magnagrecia;2;58230;Roma;25;73405;22;1
+700.0;1113;1000109;58091;Roma;Campo Marzio;1;1.0;Roma Mausoleo di Augusto | EnelX;4;130802;Roma;36;182637;3.7;1
+700.0;1113;1000109;58091;Roma;Campo Marzio;1;1.0;Roma Mausoleo di Augusto | EnelX;4;130802;Roma;25;182636;22;1
+700.0;1113;1000109;58091;Roma;Campo Marzio;1;1.0;Roma Piazza del Popolo | EnelX;4;58113;Roma;25;73143;22;1
+700.0;1113;1000109;58091;Roma;Campo Marzio;1;1.0;Roma Piazza del Popolo | EnelX;4;58113;Roma;36;73144;3.7;1
+704.0;1962;1000117;58091;Roma;Trastevere;1;1.0;Roma Mastai | EnelX;2;58227;Roma;36;73400;3;1
+704.0;1962;1000117;58091;Roma;Trastevere;1;1.0;Roma Mastai | EnelX;2;58227;Roma;25;73399;3;1
+704.0;1962;1000117;58091;Roma;Trastevere;1;1.0;Roma Torre Anguillara | EnelX;1;58228;Roma;25;73401;22;1
+704.0;1962;1000117;58091;Roma;Trastevere;1;1.0;Roma Torre Anguillara | EnelX;1;58228;Roma;36;73402;3.7;1
+708.0;837;1000121;58091;Roma;Ostiense;1;1.0;Roma Il Milione | EnelX;2;58058;Roma;36;73030;3;1
+708.0;837;1000121;58091;Roma;Ostiense;1;1.0;Roma Il Milione | EnelX;2;58058;Roma;25;73029;3;1
+708.0;837;1000121;58091;Roma;Ostiense;1;1.0;EnelX EVA+  Acea;8;114062;Roma;25;161990;22;1
+708.0;837;1000121;58091;Roma;Ostiense;1;1.0;EnelX EVA+  Acea;8;114062;Roma;36;161991;3.7;1
+708.0;837;1000121;58091;Roma;Ostiense;1;1.0;EnelX EVA+  Acea;8;114062;Roma;2;160283;50;1
+708.0;837;1000121;58091;Roma;Ostiense;1;1.0;EnelX EVA+  Acea;8;114062;Roma;1036;160284;43;1
+708.0;837;1000121;58091;Roma;Ostiense;1;1.0;EnelX EVA+  Acea;8;114062;Roma;33;160282;50;1
+710.0;1579;1000134;58091;Roma;Monti;1;1.0; Rome Life Hotel;1;88311;Roma;25;124781;not available;1
+717.0;1609;1000145;58091;Roma;Castro Pretorio;1;1.0; Best Western Hotel Royal Santina;2;71478;Roma;1036;101922;22;1
+717.0;1609;1000145;58091;Roma;Castro Pretorio;1;1.0;Eneldrive Indipendenza;2;50680;Roma;25;62000;22;1
+717.0;1609;1000145;58091;Roma;Castro Pretorio;1;1.0;Eneldrive Indipendenza;2;50680;Roma;36;62001;3.7;1
+718.0;858;1000214;58091;Roma;Trieste;2;2.0;Piazza Raffaele Casimiri;1;194141;Rome;36;315479;3.7;1
+718.0;858;1000214;58091;Roma;Trieste;2;2.0;Piazza Raffaele Casimiri;1;194141;Rome;25;315478;22;1
+719.0;2547;1000147;58091;Roma;Celio;1;1.0;Park Colosseo | EnelX;2;119077;Roma;25;167939;22;1
+729.0;380;1000169;58091;Roma;Monti;1;1.0;Roma Ricci | EnelX;1;58231;Roma;25;73407;22;1
+729.0;380;1000169;58091;Roma;Monti;1;1.0;Roma Ricci | EnelX;1;58231;Roma;36;73408;3.7;1
+732.0;282;1000177;58091;Roma;Celio;1;1.0;Roma Dipartimento Tutela Ambientale | EnelX;2;58229;Roma;36;73404;3;1
+732.0;282;1000177;58091;Roma;Celio;1;1.0;Roma Dipartimento Tutela Ambientale | EnelX;2;58229;Roma;25;73403;3;1
+733.0;1451;1000208;58091;Roma;Flaminio;2;2.0;EnelDrive MAXXI;2;77916;Roma;25;112045;not available;1
+733.0;1451;1000208;58091;Roma;Flaminio;2;2.0;EnelDrive MAXXI;2;77916;Roma;36;112046;3.5;1
+748.0;789;1000212;58091;Roma;Pinciano;2;2.0;Eneldrive Bellini;2;58244;Roma;36;73433;3;1
+748.0;789;1000212;58091;Roma;Pinciano;2;2.0;Eneldrive Bellini;2;58244;Roma;25;73432;22;1
+751.0;2198;1000226;58091;Roma;Flaminio;2;2.0;Roma Mancini | EnelX;2;58247;Roma;25;73438;3;1
+751.0;2198;1000226;58091;Roma;Flaminio;2;2.0;Roma Mancini | EnelX;2;58247;Roma;36;73439;3;1
+751.0;2198;1000226;58091;Roma;Flaminio;2;2.0;Enel X ;1;189420;Roma;2;305614;50;1
+751.0;2198;1000226;58091;Roma;Flaminio;2;2.0;Enel X ;1;189420;Roma;33;305613;50;1
+751.0;2198;1000226;58091;Roma;Flaminio;2;2.0;Enel X ;1;189420;Roma;1036;305615;43;1
+756.0;1813;1000222;58091;Roma;Pinciano;2;2.0;Aldrovandi Villa Borghese;1;71477;Roma;30;101921;11;1
+757.0;188;1000219;58091;Roma;Parioli;2;2.0;Roma Stazione dell'Acqua Acetosa | EnelX fast;3;172602;Roma;1036;263325;43;1
+757.0;188;1000219;58091;Roma;Parioli;2;2.0;Roma Stazione dell'Acqua Acetosa | EnelX fast;3;172602;Roma;2;263324;50;1
+757.0;188;1000219;58091;Roma;Parioli;2;2.0;Roma Stazione dell'Acqua Acetosa | EnelX fast;3;172602;Roma;33;263323;50;1
+758.0;2415;1000257;58091;Roma;Salario;2;2.0;Piazza Fiume | EnelX;2;58238;Roma;36;73421;3.7;1
+758.0;2415;1000257;58091;Roma;Salario;2;2.0;Piazza Fiume | EnelX;2;58238;Roma;25;73420;22;1
+763.0;39;1000333;58091;Roma;Tiburtino;2;2.0;Eneldrive Università La Sapienza;6;58233;Roma;36;73411;3;1
+763.0;39;1000333;58091;Roma;Tiburtino;2;2.0;Eneldrive Università La Sapienza;1;58234;Roma;25;73412;22;1
+763.0;39;1000333;58091;Roma;Tiburtino;2;2.0;Eneldrive Università La Sapienza;1;58234;Roma;36;73413;3;1
+766.0;5;1000255;58091;Roma;Parioli;2;2.0;Roma Palazzetto Dello Sport | EnelX;4;58246;Roma;36;73437;3.7;1
+766.0;5;1000255;58091;Roma;Parioli;2;2.0;Roma Palazzetto Dello Sport | EnelX;4;58246;Roma;25;73436;22;1
+767.0;3074;1000250;58091;Roma;Trieste;2;2.0;Roma Viale Somalia 260 | EnelX ;2;106361;Roma;25;149315;22;1
+779.0;145;1000302;58091;Roma;Nomentano;2;2.0;Lidl Jolly;2;107229;Roma;25;150672;22;1
+779.0;145;1000302;58091;Roma;Nomentano;2;2.0;Lidl Jolly;2;107229;Roma;25;150673;22;1
+785.0;1046;1000307;58091;Roma;Nomentano;2;2.0;BeCharge Enerpetroli Roma;2;157681;Roma;25;226597;22;1
+791.0;31;1000313;58091;Roma;Tiburtino;2;2.0;Bici & Motori;2;88978;Roma;33;125717;40;1
+791.0;31;1000313;58091;Roma;Tiburtino;2;2.0;Bici & Motori;2;88978;Roma;2;125716;40;1
+791.0;31;1000313;58091;Roma;Tiburtino;2;2.0;Bici & Motori;2;88978;Roma;25;125715;7;1
+801.0;1416;1000448;58091;Roma;Monte Sacro;3;3.0;Via Val di Cogne 40;2;162801;not avaialble;25;233803;22;1
+801.0;1416;1000448;58091;Roma;Monte Sacro;3;3.0;Via Val di Cogne 40;2;162801;not avaialble;36;233802;3.7;1
+801.0;1416;1000448;58091;Roma;Monte Sacro;3;3.0;Roma Val di Cogne | EnelX fast;2;162799;Roma;2;233798;50;1
+801.0;1416;1000448;58091;Roma;Monte Sacro;3;3.0;Roma Val di Cogne | EnelX fast;2;162799;Roma;33;233797;50;1
+801.0;1416;1000448;58091;Roma;Monte Sacro;3;3.0;Roma Val di Cogne | EnelX fast;2;162799;Roma;1036;233799;43;1
+810.0;5938;1000412;58091;Roma;Castel Giubileo;4;3.0;Piazza Marianna Benti Bulgarelli | EnelX;1;210191;Roma;36;349153;3;1
+810.0;5938;1000412;58091;Roma;Castel Giubileo;4;3.0;Piazza Marianna Benti Bulgarelli | EnelX;1;210191;Roma;25;349152;22;1
+825.0;1741;1001518;58091;Roma;Magliana Vecchia;4;11.0;Roma West Supercharger;12;190299;Rome;33;307576;250;1
+825.0;1741;1001518;58091;Roma;Magliana Vecchia;4;11.0;Ewiva Magliana Sud;3;274309;Roma;33;474175;300;1
+825.0;1741;1001518;58091;Roma;Magliana Vecchia;4;11.0;Ewiva Magliana Sud;3;274309;Roma;33;474174;300;1
+825.0;1741;1001518;58091;Roma;Magliana Vecchia;4;11.0;Roma The Village | EnelX;12;58004;Roma;25;72926;22;1
+825.0;1741;1001518;58091;Roma;Magliana Vecchia;4;11.0;Roma The Village | EnelX;12;58004;Roma;36;72927;3.7;1
+825.0;1741;1001518;58091;Roma;Magliana Vecchia;4;11.0;Parco dei Medici - Roma | Acea e-mobility;2;190087;Roma;25;306970;22;1
+825.0;1741;1001518;58091;Roma;Magliana Vecchia;4;11.0;Parco dei Medici - Roma | Acea e-mobility;2;190087;Roma;36;306971;3.7;1
+825.0;1741;1001518;58091;Roma;Magliana Vecchia;4;11.0;Ionity Rome West;6;235750;Rome;33;388222;350;1
+825.0;1741;1001518;58091;Roma;Magliana Vecchia;4;11.0;Ewiva Magliana Sud;3;274309;Roma;33;474173;300;1
+830.0;5414;1000465;58091;Roma;Monte Sacro Alto;4;3.0;Via Franscesco D'Ovidio;2;194119;Rome;2;315419;50;1
+830.0;5414;1000465;58091;Roma;Monte Sacro Alto;4;3.0;Via Franscesco D'Ovidio;2;194119;Rome;33;315418;50;1
+830.0;5414;1000465;58091;Roma;Monte Sacro Alto;4;3.0;Via Franscesco D'Ovidio;2;194119;Rome;1036;315420;43;1
+830.0;5414;1000465;58091;Roma;Monte Sacro Alto;4;3.0;Acea ;1;175316;Roma;2;271126;50;1
+830.0;5414;1000465;58091;Roma;Monte Sacro Alto;4;3.0;Acea ;1;175316;Roma;33;271125;50;1
+830.0;5414;1000465;58091;Roma;Monte Sacro Alto;4;3.0;Acea ;1;175316;Roma;25;271127;22;1
+851.0;2097;1000469;58091;Roma;Casal Boccone;4;3.0;Via della Bufalotta;2;168209;Rome;1036;254847;43;1
+851.0;2097;1000469;58091;Roma;Casal Boccone;4;3.0;Via della Bufalotta;2;168209;Rome;2;254846;50;1
+851.0;2097;1000469;58091;Roma;Casal Boccone;4;3.0;Via della Bufalotta;2;168209;Rome;33;254845;50;1
+853.0;1831;1000493;58091;Roma;Monte Sacro;3;3.0;Viale Tirreno;2;174719;Rome;1036;270013;43;1
+853.0;1831;1000493;58091;Roma;Monte Sacro;3;3.0;Viale Tirreno;2;174719;Rome;2;270012;50;1
+853.0;1831;1000493;58091;Roma;Monte Sacro;3;3.0;Viale Tirreno;2;174719;Rome;33;270011;50;1
+865.0;1372;1000491;58091;Roma;Casal Boccone;4;3.0;Tesla Porta di Roma;8;211223;Roma;33;351389;250;1
+872.0;5212;1000503;58091;Roma;Collatino;3;4.0;Renexia Recharge AdS Tiburtina Sud;3;257278;Roma;33;428182;110;1
+872.0;5212;1000503;58091;Roma;Collatino;3;4.0;Renexia Recharge AdS Tiburtina Sud;3;257278;Roma;2;428183;51;1
+872.0;5212;1000503;58091;Roma;Collatino;3;4.0;Renexia Recharge AdS Tiburtina Sud;3;257278;Roma;25;428184;22;1
+889.0;1953;1000523;58091;Roma;Ponte Mammolo;3;4.0;Urban Garden Hotel;1;125732;Roma;25;175704;7.4;1
+897.0;526;1000529;58091;Roma;Settecamini;5;4.0;CET Settecamini;2;60779;Roma;26;76555;not available;1
+897.0;526;1000529;58091;Roma;Settecamini;5;4.0;CET Settecamini;2;60779;Roma;36;76554;3;1
+899.0;1085;1000530;58091;Roma;Settecamini;5;4.0;Axpo - Tecnopolo Olivetti;2;126212;Roma;25;176395;22;1
+899.0;1085;1000530;58091;Roma;Settecamini;5;4.0;Tecnopolo;4;125731;Roma;25;175703;22;1
+900.0;5033;1000531;58091;Roma;Tiburtino;3;4.0;Best Western Blu Hotel Roma;1;77728;Roma;1036;111502;22;1
+910.0;673;1000542;58091;Roma;San Basilio;4;4.0;Renault RRG;not avaialble;107350;Roma;1036;150849;not available;1
+910.0;673;1000542;58091;Roma;San Basilio;4;4.0;Audi Roma;1;192874;Rome;33;312815;150;1
+911.0;2335;1000543;58091;Roma;Pietralata;3;4.0;Roma Camesena | EnelX Fast;3;172930;Roma;33;263856;50;1
+911.0;2335;1000543;58091;Roma;Pietralata;3;4.0;Roma Camesena | EnelX Fast;3;172930;Roma;25;263859;22;1
+911.0;2335;1000543;58091;Roma;Pietralata;3;4.0;Roma Camesena | EnelX Fast;3;172930;Roma;1036;263858;43;1
+911.0;2335;1000543;58091;Roma;Pietralata;3;4.0;Roma Camesena | EnelX Fast;3;172930;Roma;2;263857;50;1
+911.0;2335;1000543;58091;Roma;Pietralata;3;4.0;Roma Camesena | EnelX Fast;3;172930;Roma;36;263860;3;1
+940.0;1590;1000646;58091;Roma;Prenestino-Labicano;3;5.0;Garage Parcheggi | Enel X ;2;113854;Roma ;25;159931;22;1
+942.0;8254;1000703;58091;Roma;Prenestino-Centocelle;3;5.0;Moauro srl - Officina e Soccorso Stradale Europ Assistance | EnelX;4;149461;Roma;25;207059;22;1
+942.0;8254;1000703;58091;Roma;Prenestino-Centocelle;3;5.0;Moauro srl - Officina e Soccorso Stradale Europ Assistance | EnelX;4;149461;Roma;36;207060;3.7;1
+942.0;8254;1000703;58091;Roma;Prenestino-Centocelle;3;5.0;Eneldrive Autorimessa Primula;2;58089;Roma;36;73101;3;1
+942.0;8254;1000703;58091;Roma;Prenestino-Centocelle;3;5.0;Eneldrive Autorimessa Primula;2;58089;Roma;25;73100;22;1
+948.0;5625;1000707;58091;Roma;Alessandrino;4;5.0;EnelX EVA+ Bella Villa;4;113781;Roma;2;159802;50;1
+948.0;5625;1000707;58091;Roma;Alessandrino;4;5.0;EnelX EVA+ Bella Villa;4;113781;Roma;1036;159803;43;1
+948.0;5625;1000707;58091;Roma;Alessandrino;4;5.0;EnelX EVA+ Bella Villa;4;113781;Roma;33;159801;50;1
+952.0;6802;1000719;58091;Roma;Prenestino-Centocelle;3;5.0;Via dei Noci;2;194122;Rome;33;315425;50;1
+952.0;6802;1000719;58091;Roma;Prenestino-Centocelle;3;5.0;Via dei Noci;2;194122;Rome;2;315426;50;1
+952.0;6802;1000719;58091;Roma;Prenestino-Centocelle;3;5.0;Via dei Noci;2;194122;Rome;1036;315427;43;1
+983.0;2962;1000918;58091;Roma;Appio-Latino;3;7.0;Roma Appia | EnelX;3;58090;Roma;36;73103;3;1
+983.0;2962;1000918;58091;Roma;Appio-Latino;3;7.0;Roma Appia | EnelX;3;58090;Roma;25;73102;3;1
+993.0;18578;1000812;58091;Roma;Lunghezza;5;6.0;Enel X ;2;176232;Roma;33;273120;50;1
+993.0;18578;1000812;58091;Roma;Lunghezza;5;6.0;Enel X ;2;176232;Roma;1036;273122;43;1
+993.0;18578;1000812;58091;Roma;Lunghezza;5;6.0;Enel X ;2;176232;Roma;2;273121;50;1
+1006.0;3952;1000829;58091;Roma;Torre Spaccata;4;6.0;Enel X Way AdS Casilina Interna;2;192995;Rome;33;313088;50;1
+1034.0;3052;1000865;58091;Roma;Torre Angela;5;6.0;Enel X AdS Casilina Esterna;4;192994;Roma;33;313087;350;1
+1037.0;1308;1000909;58091;Roma;Tuscolano;3;7.0; Holiday Inn Express Rome San Giovanni;2;77985;Roma;1036;112159;22;1
+1041.0;1458;1000929;58091;Roma;Tuscolano;3;7.0;Ewiva Volkswagen Balduina;1;192875;Rome;33;312816;150;1
+1048.0;6692;1001625;58091;Roma;Gianicolense;3;12.0;Acea ;1;175903;Roma;33;272485;50;1
+1048.0;6692;1001625;58091;Roma;Gianicolense;3;12.0;Acea ;1;175903;Roma;1036;272487;22;1
+1048.0;6692;1001625;58091;Roma;Gianicolense;3;12.0;Acea ;1;175903;Roma;2;272486;50;1
+1058.0;1684;1001202;58091;Roma;Europa;4;9.0;EnelX EVA+ Largo Apollinaire;4;101694;Roma;1036;143090;43;1
+1058.0;1684;1001202;58091;Roma;Europa;4;9.0;EnelX EVA+ Largo Apollinaire;4;101694;Roma;33;143088;50;1
+1058.0;1684;1001202;58091;Roma;Europa;4;9.0;EnelX EVA+ Largo Apollinaire;4;101694;Roma;2;143089;50;1
+1058.0;1684;1001202;58091;Roma;Europa;4;9.0;Enel Drive Europa Ovest;2;24914;Roma;36;26836;3;1
+1058.0;1684;1001202;58091;Roma;Europa;4;9.0;Enel Drive Europa Ovest;2;24914;Roma;25;26835;3;1
+1058.0;1684;1001202;58091;Roma;Europa;4;9.0;EnelX EVA+ Piazza Marconi;2;101696;Roma;1036;143096;43;1
+1058.0;1684;1001202;58091;Roma;Europa;4;9.0;EnelX EVA+ Piazza Marconi;2;101696;Roma;2;143095;50;1
+1058.0;1684;1001202;58091;Roma;Europa;4;9.0;EnelX EVA+ Piazza Marconi;2;101696;Roma;33;143094;50;1
+1063.0;9;1001009;58091;Roma;Appio Claudio;3;7.0;  LIDL Roma Tuscolana;2;170678;Roma;25;259754;22;1
+1069.0;1016;1001020;58091;Roma;Torrenova;5;7.0;Roma Alimena | EnelX;2;58088;Roma;25;73098;3;1
+1069.0;1016;1001020;58091;Roma;Torrenova;5;7.0;Roma Alimena | EnelX;2;58088;Roma;36;73099;3;1
+1070.0;3;1001208;58091;Roma;Europa;4;9.0;Roma Val Fiorita | EnelX;4;148830;Roma;25;206135;22;1
+1070.0;3;1001208;58091;Roma;Europa;4;9.0;Roma Val Fiorita | EnelX;4;148830;Roma;36;206136;3.7;1
+1070.0;3;1001208;58091;Roma;Europa;4;9.0;Roma Val Fiorita | EnelX Fast;2;148829;Roma;2;206133;50;1
+1070.0;3;1001208;58091;Roma;Europa;4;9.0;Roma Val Fiorita | EnelX Fast;2;148829;Roma;33;206132;50;1
+1070.0;3;1001208;58091;Roma;Europa;4;9.0;Roma Val Fiorita | EnelX Fast;2;148829;Roma;1036;206134;43;1
+1073.0;1015;1001021;58091;Roma;Casal Morena;5;7.0;Roma Raf Vallone 12 | EnelX;4;118830;Roma;36;167587;3.7;1
+1073.0;1015;1001021;58091;Roma;Casal Morena;5;7.0;Roma Raf Vallone 12 | EnelX;4;118830;Roma;25;167586;22;1
+1073.0;1015;1001021;58091;Roma;Casal Morena;5;7.0;EnelX EVAD IKEA Anagnina;2;130185;Roma;2;181781;50;1
+1073.0;1015;1001021;58091;Roma;Casal Morena;5;7.0;EnelX EVAD IKEA Anagnina;2;130185;Roma;33;181782;50;1
+1073.0;1015;1001021;58091;Roma;Casal Morena;5;7.0;EnelX EVAD IKEA Anagnina;2;130185;Roma;25;181780;43;1
+1073.0;1015;1001021;58091;Roma;Casal Morena;5;7.0; IKEA Roma Anagnina;2;104570;Roma;2;147181;50;1
+1073.0;1015;1001021;58091;Roma;Casal Morena;5;7.0; IKEA Roma Anagnina;2;104570;Roma;25;147182;22;1
+1073.0;1015;1001021;58091;Roma;Casal Morena;5;7.0;Roma CC Anagnina | EnelX fast;2;115485;Roma;33;162050;50;1
+1073.0;1015;1001021;58091;Roma;Casal Morena;5;7.0;Roma CC Anagnina | EnelX fast;2;115485;Roma;25;165558;22;1
+1073.0;1015;1001021;58091;Roma;Casal Morena;5;7.0;Roma CC Anagnina | EnelX fast;2;115485;Roma;1036;162052;43;1
+1073.0;1015;1001021;58091;Roma;Casal Morena;5;7.0;Roma CC Anagnina | EnelX fast;2;115485;Roma;2;162051;50;1
+1111.0;978;1001384;58091;Roma;Castel Fusano;6;10.0;Viale di Castel Porziano;2;175957;Rome;25;272631;22;1
+1117.0;4342;1001405;58120;Fiumicino;;7;;Fiumicino Villacidro | EnelX;2;135105;Fiumicino;25;188553;22;1
+1117.0;4342;1001405;58120;Fiumicino;;7;;Fiumicino Villacidro | EnelX;2;135105;Fiumicino;36;188554;3.7;1
+1120.0;2844;1001401;58120;Fiumicino;;7;;Stazione Maccarese - Fregene | EnelX;2;125649;Roma Fiumicino;36;175595;3.7;1
+1120.0;2844;1001401;58120;Fiumicino;;7;;Stazione Maccarese - Fregene | EnelX;2;125649;Roma Fiumicino;25;175594;22;1
+1123.0;5664;1001122;58091;Roma;Ardeatino;3;8.0;ADS TotalERG Tintoretto | EnelX;2;58037;Roma;25;72990;22;1
+1123.0;5664;1001122;58091;Roma;Ardeatino;3;8.0;ADS TotalERG Tintoretto | EnelX;2;58037;Roma;36;72991;3;1
+1125.0;382;1001508;58091;Roma;Portuense;3;11.0; Edra Oil;2;108749;Roma ;25;153267;not available;1
+1125.0;382;1001508;58091;Roma;Portuense;3;11.0; Edra Oil;2;108749;Roma ;36;153268;3.7;1
+1126.0;135;1001510;58091;Roma;Portuense;4;11.0;Europa Car Point S.r.l. | EnelX;2;149459;Roma;25;207057;22;1
+1129.0;247;1001524;58091;Roma;Ponte Galeria;5;11.0;Eneldrive Fiera di Roma;1;58003;Roma;36;72925;3;1
+1129.0;247;1001524;58091;Roma;Ponte Galeria;5;11.0;Eneldrive Fiera di Roma;1;58003;Roma;25;72924;22;1
+1133.0;1865;1001606;58091;Roma;Gianicolense;4;12.0;Ala/34;1;188546;Roma;25;303733;7.4;1
+1134.0;7668;1001607;58091;Roma;Gianicolense;4;12.0;EnelX EVA+ Distributore IP Matic La Pisana;2;104129;Roma;1036;176601;43;1
+1134.0;7668;1001607;58091;Roma;Gianicolense;4;12.0;EnelX EVA+ Distributore IP Matic La Pisana;2;104129;Roma;33;146462;50;1
+1134.0;7668;1001607;58091;Roma;Gianicolense;4;12.0;EnelX EVA+ Distributore IP Matic La Pisana;2;104129;Roma;2;176600;50;1
+1135.0;3833;1001608;58091;Roma;Gianicolense;4;12.0;Crowne Plaza Rome-St. Peter's;1;98200;Roma;30;138762;14;1
+1138.0;4111;1001136;58091;Roma;Ostiense;3;8.0;Via Silvio d'Amico;2;194134;Rome;1036;315460;43;1
+1138.0;4111;1001136;58091;Roma;Ostiense;3;8.0;Via Silvio d'Amico;2;194134;Rome;2;315459;50;1
+1138.0;4111;1001136;58091;Roma;Ostiense;3;8.0;Via Silvio d'Amico;2;194134;Rome;33;315458;50;1
+1150.0;5975;1001107;58091;Roma;Ostiense;3;8.0;Roma Regione Lazio | EnelX;2;50658;Roma;36;61966;3.4;1
+1150.0;5975;1001107;58091;Roma;Ostiense;3;8.0;Roma Regione Lazio | EnelX;2;50658;Roma;25;61965;3.7;1
+1151.0;4768;1001111;58091;Roma;Ostiense;3;8.0;Via Silvio D'Amico;2;194133;Rome;1036;315457;43;1
+1151.0;4768;1001111;58091;Roma;Ostiense;3;8.0;Via Silvio D'Amico;2;194133;Rome;33;315455;50;1
+1151.0;4768;1001111;58091;Roma;Ostiense;3;8.0;Via Silvio D'Amico;2;194133;Rome;2;315456;50;1
+1152.0;5882;1001108;58091;Roma;Ostiense;3;8.0;Garage Cristoforo Colombo | EnelX;4;134600;Rome;25;187863;22;1
+1153.0;8993;1001109;58091;Roma;Ostiense;3;8.0;Roma Nicolò da Pistoia | EnelX;4;134601;Roma;36;187865;3.7;1
+1153.0;8993;1001109;58091;Roma;Ostiense;3;8.0;Roma Nicolò da Pistoia | EnelX;4;134601;Roma;25;187864;22;1
+1155.0;1895;1001113;58091;Roma;Ardeatino;3;8.0;Eneldrive ACI Roma;2;50657;Roma;36;61964;not available;1
+1155.0;1895;1001113;58091;Roma;Ardeatino;3;8.0;Eneldrive ACI Roma;2;50657;Roma;25;61963;not available;1
+1156.0;8332;1001114;58091;Roma;Ardeatino;3;8.0;Via Mario Musco;2;194132;Rome;33;315452;50;1
+1156.0;8332;1001114;58091;Roma;Ardeatino;3;8.0;Via Mario Musco;2;194132;Rome;1036;315454;43;1
+1156.0;8332;1001114;58091;Roma;Ardeatino;3;8.0;Via della Badia di Cava;2;194130;Rome;1036;315448;43;1
+1156.0;8332;1001114;58091;Roma;Ardeatino;3;8.0;Via della Badia di Cava;2;194130;Rome;2;315447;50;1
+1156.0;8332;1001114;58091;Roma;Ardeatino;3;8.0;Via della Badia di Cava;2;194130;Rome;33;315446;50;1
+1156.0;8332;1001114;58091;Roma;Ardeatino;3;8.0;Via Aristide Leonori;2;194131;Rome;33;315449;50;1
+1156.0;8332;1001114;58091;Roma;Ardeatino;3;8.0;Via Aristide Leonori;2;194131;Rome;1036;315451;43;1
+1156.0;8332;1001114;58091;Roma;Ardeatino;3;8.0;Via Aristide Leonori;2;194131;Rome;2;315450;50;1
+1156.0;8332;1001114;58091;Roma;Ardeatino;3;8.0;Via Mario Musco;2;194132;Rome;2;315453;50;1
+1160.0;4914;1001116;58091;Roma;Ardeatino;3;8.0;Via Benedetto Croce;2;194129;Rome;1036;315445;43;1
+1160.0;4914;1001116;58091;Roma;Ardeatino;3;8.0;Via Benedetto Croce;2;194129;Rome;33;315443;50;1
+1160.0;4914;1001116;58091;Roma;Ardeatino;3;8.0;Via Benedetto Croce;2;194129;Rome;2;315444;50;1
+1160.0;4914;1001116;58091;Roma;Ardeatino;3;8.0;Via Gaetano Trezza;2;194128;Rome;1036;315442;43;1
+1160.0;4914;1001116;58091;Roma;Ardeatino;3;8.0;Via Gaetano Trezza;2;194128;Rome;33;315440;50;1
+1160.0;4914;1001116;58091;Roma;Ardeatino;3;8.0;Via Gaetano Trezza;2;194128;Rome;2;315441;50;1
+1161.0;3279;1001121;58091;Roma;Ardeatino;4;8.0;Roma Martini | Enel X ;4;125809;Roma;36;175813;3.7;1
+1161.0;3279;1001121;58091;Roma;Ardeatino;4;8.0;Roma Martini | Enel X ;4;125809;Roma;25;175814;22;1
+1161.0;3279;1001121;58091;Roma;Ardeatino;4;8.0;Via Simone Martini;2;194127;Rome;2;315438;50;1
+1161.0;3279;1001121;58091;Roma;Ardeatino;4;8.0;Via Simone Martini;2;194127;Rome;33;315437;50;1
+1161.0;3279;1001121;58091;Roma;Ardeatino;4;8.0;Via Simone Martini;2;194127;Rome;1036;315439;43;1
+1167.0;636;1001203;58091;Roma;Europa;4;9.0;Eneldrive Europa Est;2;58035;Roma;25;72986;3;1
+1167.0;636;1001203;58091;Roma;Europa;4;9.0;Eneldrive Europa Est;2;58035;Roma;36;72987;3;1
+1167.0;636;1001203;58091;Roma;Europa;4;9.0;Roma dell'Arte 20 | EnelX;4;130840;Roma;36;182681;3.7;1
+1167.0;636;1001203;58091;Roma;Europa;4;9.0;Roma dell'Arte 20 | EnelX;4;130840;Roma;25;182680;22;1
+1167.0;636;1001203;58091;Roma;Europa;4;9.0;EnelX EVA+ Viale Europa;4;101697;Roma;33;143097;50;1
+1167.0;636;1001203;58091;Roma;Europa;4;9.0;EnelX EVA+ Viale Europa;4;101697;Roma;1036;143099;43;1
+1167.0;636;1001203;58091;Roma;Europa;4;9.0;EnelX EVA+ Viale Europa;4;101697;Roma;2;143098;50;1
+1167.0;636;1001203;58091;Roma;Europa;4;9.0;EnelX EVA+ Viale dell'Arte 19;2;125474;Roma;33;175372;50;1
+1167.0;636;1001203;58091;Roma;Europa;4;9.0;EnelX EVA+ Viale dell'Arte 19;2;125474;Roma;1036;175374;43;1
+1167.0;636;1001203;58091;Roma;Europa;4;9.0;EnelX EVA+ Viale dell'Arte 19;2;125474;Roma;2;175373;50;1
+1167.0;636;1001203;58091;Roma;Europa;4;9.0;Roma Industria | EnelX;4;127872;Roma;25;178520;22;1
+1167.0;636;1001203;58091;Roma;Europa;4;9.0;Roma Industria | EnelX;4;127872;Roma;36;178521;3.7;1
+1171.0;525;1001134;58091;Roma;Ostiense;3;8.0;Via Rodrigo De Triana;2;194135;Rome;2;315462;50;1
+1171.0;525;1001134;58091;Roma;Ostiense;3;8.0;Via Rodrigo De Triana;2;194135;Rome;33;315461;50;1
+1171.0;525;1001134;58091;Roma;Ostiense;3;8.0;Via Rodrigo De Triana;2;194135;Rome;1036;315463;43;1
+1171.0;525;1001134;58091;Roma;Ostiense;3;8.0;Via Bartolomeo Diaz;2;194136;Rome;33;315464;50;1
+1171.0;525;1001134;58091;Roma;Ostiense;3;8.0;Via Bartolomeo Diaz;2;194136;Rome;1036;315466;43;1
+1171.0;525;1001134;58091;Roma;Ostiense;3;8.0;Via Bartolomeo Diaz;2;194136;Rome;2;315465;50;1
+1171.0;525;1001134;58091;Roma;Ostiense;3;8.0;Eataly Roma Ostiense | EnelX;2;58059;Roma;25;73031;22;1
+1171.0;525;1001134;58091;Roma;Ostiense;3;8.0;Eataly Roma Ostiense | EnelX;2;58059;Roma;36;73032;3;1
+1177.0;3200;1001143;58091;Roma;Ostiense;3;8.0;Eneldrive Usodimare;1;58061;Roma;36;73036;3;1
+1177.0;3200;1001143;58091;Roma;Ostiense;3;8.0;Eneldrive Usodimare;1;58061;Roma;25;73035;3;1
+1177.0;3200;1001143;58091;Roma;Ostiense;3;8.0;Roma Capitale - Dipartimento Mobilità e Trasporti | EnelX;1;58060;Roma;25;73033;22;1
+1177.0;3200;1001143;58091;Roma;Ostiense;3;8.0;Roma Capitale - Dipartimento Mobilità e Trasporti | EnelX;1;58060;Roma;36;73034;3;1
+1177.0;3200;1001143;58091;Roma;Ostiense;3;8.0;Piazza Giovanni Da Verazzano;2;194137;Rome;2;315468;50;1
+1177.0;3200;1001143;58091;Roma;Ostiense;3;8.0;Piazza Giovanni Da Verazzano;2;194137;Rome;1036;315469;43;1
+1177.0;3200;1001143;58091;Roma;Ostiense;3;8.0;Roma Ministero dell'Ambiente | EnelX;2;58057;Roma;36;73028;3;1
+1177.0;3200;1001143;58091;Roma;Ostiense;3;8.0;Piazza Giovanni Da Verazzano;2;194137;Rome;33;315467;50;1
+1177.0;3200;1001143;58091;Roma;Ostiense;3;8.0;Roma Ministero dell'Ambiente | EnelX;2;58057;Roma;25;73027;3;1
+1181.0;533;1001142;58091;Roma;Ostiense;3;8.0;Sede Croce Rossa Italiana Roma | EnelX;2;58038;Roma;36;72993;3;1
+1181.0;533;1001142;58091;Roma;Ostiense;3;8.0;Sede Croce Rossa Italiana Roma | EnelX;2;58038;Roma;25;72992;3;1
+1182.0;3821;1001204;58091;Roma;Europa;4;9.0;Roma Ospedale S. Eugenio | EnelX;1;58033;Roma;25;72982;3;1
+1182.0;3821;1001204;58091;Roma;Europa;4;9.0;Roma Ospedale S. Eugenio | EnelX;1;58033;Roma;36;72983;3;1
+1182.0;3821;1001204;58091;Roma;Europa;4;9.0;Hotel  Villa Eur;2;78111;Roma;1036;112347;22;1
+1182.0;3821;1001204;58091;Roma;Europa;4;9.0;Eneldrive Douhet;2;58034;Roma;36;72985;3;1
+1182.0;3821;1001204;58091;Roma;Europa;4;9.0;Eneldrive Douhet;2;58034;Roma;25;72984;3;1
+1182.0;3821;1001204;58091;Roma;Europa;4;9.0;Be Charge Eni;2;190730;Roma;1036;308603;22;1
+1182.0;3821;1001204;58091;Roma;Europa;4;9.0;Be Charge Eni;2;190730;Roma;33;308602;110;1
+1182.0;3821;1001204;58091;Roma;Europa;4;9.0;EnelX EVA+ Viale dell'Arte 68;4;101698;Roma;33;143100;50;1
+1182.0;3821;1001204;58091;Roma;Europa;4;9.0;EnelX EVA+ Viale dell'Arte 68;4;101698;Roma;2;143101;50;1
+1182.0;3821;1001204;58091;Roma;Europa;4;9.0;EnelX EVA+ Viale dell'Arte 68;4;101698;Roma;1036;143102;43;1
+1183.0;2138;1001338;58091;Roma;Lido di Ostia Levante;6;10.0;Ostia Vannutelli | EnelX;4;126352;Roma;25;176606;22;1
+1183.0;2138;1001338;58091;Roma;Lido di Ostia Levante;6;10.0;Ostia Vannutelli | EnelX;4;126352;Roma;36;176607;3.7;1
+1183.0;2138;1001338;58091;Roma;Lido di Ostia Levante;6;10.0;Stazione Ostia Lido Centro | EnelX;4;130227;Roma;25;181867;22;1
+1183.0;2138;1001338;58091;Roma;Lido di Ostia Levante;6;10.0;Stazione Ostia Lido Centro | EnelX;4;130227;Roma;36;181868;3.7;1
+1184.0;1376;1001205;58091;Roma;Europa;4;9.0;EnelX EVA+ Roma Nervi;2;126010;Roma;2;176097;50;1
+1184.0;1376;1001205;58091;Roma;Europa;4;9.0;EnelX EVA+ Roma Nervi;2;126010;Roma;1036;176098;43;1
+1184.0;1376;1001205;58091;Roma;Europa;4;9.0;EnelX EVA+ Roma Nervi;2;126010;Roma;33;176096;50;1
+1184.0;1376;1001205;58091;Roma;Europa;4;9.0;Roma Il Fungo | EnelX;4;126401;Roma;36;176680;3.7;1
+1184.0;1376;1001205;58091;Roma;Europa;4;9.0;Roma Il Fungo | EnelX;4;126401;Roma;25;176679;22;1
+1184.0;1376;1001205;58091;Roma;Europa;4;9.0;Roma America | EnelX;4;126351;Roma;25;176604;22;1
+1184.0;1376;1001205;58091;Roma;Europa;4;9.0;Roma America | EnelX;4;126351;Roma;36;176605;3.7;1
+1186.0;1239;1001206;58091;Roma;Europa;4;9.0;Roma Oceano Pacifico | EnelX;2;134644;Roma;36;187941;3.7;1
+1186.0;1239;1001206;58091;Roma;Europa;4;9.0;Roma Oceano Pacifico | EnelX;2;134644;Roma;25;187940;22;1
+1186.0;1239;1001206;58091;Roma;Europa;4;9.0;Eneldrive Palazzo della Civiltà Italiana;2;58036;Roma;25;72988;3;1
+1186.0;1239;1001206;58091;Roma;Europa;4;9.0;Eneldrive Palazzo della Civiltà Italiana;2;58036;Roma;36;72989;3;1
+1190.0;5309;1001212;58091;Roma;Torrino;4;9.0;Roma Via Canton | EnelX;2;118609;Roma;36;167332;3.7;1
+1190.0;5309;1001212;58091;Roma;Torrino;4;9.0;Roma Via Canton | EnelX;2;118609;Roma;25;167331;22;1
+1190.0;5309;1001212;58091;Roma;Torrino;4;9.0;Roma Piazzale Cina 1 | EnelX;2;118608;Roma;25;167329;22;1
+1190.0;5309;1001212;58091;Roma;Torrino;4;9.0;Roma Piazzale Cina 1 | EnelX;2;118608;Roma;36;167330;3.7;1
+1195.0;13141;1001216;58091;Roma;Fonte Ostiense;4;9.0;Roma Silone | EnelX;2;167632;Roma;25;253318;22;1
+1195.0;13141;1001216;58091;Roma;Fonte Ostiense;4;9.0;Roma Silone | EnelX;2;167632;Roma;36;254601;3.7;1
+1195.0;13141;1001216;58091;Roma;Fonte Ostiense;4;9.0;Viale Ignazio Silone;4;194126;Rome;36;315436;3.7;1
+1195.0;13141;1001216;58091;Roma;Fonte Ostiense;4;9.0;Viale Ignazio Silone;4;194126;Rome;25;315435;22;1
+1200.0;1207;1000276;58091;Roma;Trieste;2;2.0;Roma Verbano | EnelX;1;58241;Roma;36;73427;3;1
+1200.0;1207;1000276;58091;Roma;Trieste;2;2.0;Roma Verbano | EnelX;1;58241;Roma;25;73426;20;1
+1205.0;2042;1000471;58091;Roma;Monte Sacro;3;3.0;Via Val Maira;4;194707;Rome;25;316646;22;1
+1205.0;2042;1000471;58091;Roma;Monte Sacro;3;3.0;Via Val Maira;4;194707;Rome;36;316647;3.7;1
+1206.0;2014;1001220;58091;Roma;Giuliano-Dalmata;4;9.0;Acea Maximo ;3;210362;Roma;2;349523;50;1
+1206.0;2014;1001220;58091;Roma;Giuliano-Dalmata;4;9.0;Acea Maximo ;3;210362;Roma;25;349524;22;1
+1206.0;2014;1001220;58091;Roma;Giuliano-Dalmata;4;9.0;Acea Maximo ;3;210362;Roma;33;349522;50;1
+1208.0;1562;1001702;58091;Roma;Prati;2;1.0;Eneldrive Risorgimento;2;58109;Roma;36;73136;3;1
+1208.0;1562;1001702;58091;Roma;Prati;2;1.0;Garage Properzio | EnelX;2;128486;Roma;25;179311;22;1
+1208.0;1562;1001702;58091;Roma;Prati;2;1.0;Eneldrive Risorgimento;2;58109;Roma;25;73135;3;1
+1217.0;645;1001829;58091;Roma;Casalotti;5;13.0;Roscini Veicoli Industriali S.P.A.;1;69082;Roma;2;96401;44;1
+1223.0;12421;1001229;58091;Roma;Tor de' Cenci;5;9.0;Roma Zaccagnini | EnelX;4;132167;Roma;25;184479;22;1
+1223.0;12421;1001229;58091;Roma;Tor de' Cenci;5;9.0;Roma Zaccagnini | EnelX;4;132167;Roma;36;184480;3.7;1
+1224.0;8636;1001231;58091;Roma;Castel di Leva;5;9.0;Roma de Finetti | EnelX;4;134608;Roma;36;187877;3.7;1
+1224.0;8636;1001231;58091;Roma;Castel di Leva;5;9.0;Roma de Finetti | EnelX;4;134608;Roma;25;187876;22;1
+1224.0;8636;1001231;58091;Roma;Castel di Leva;5;9.0;Roma Laurentina Edoardo Amaldi | ENELX FAST;6;167505;Roma;36;253125;3.7;1
+1224.0;8636;1001231;58091;Roma;Castel di Leva;5;9.0;Roma Laurentina Edoardo Amaldi | ENELX FAST;6;167505;Roma;25;253124;22;1
+1224.0;8636;1001231;58091;Roma;Castel di Leva;5;9.0;Roma Laurentina Edoardo Amaldi | ENELX FAST;6;167505;Roma;33;253122;50;1
+1224.0;8636;1001231;58091;Roma;Castel di Leva;5;9.0;Roma Laurentina Edoardo Amaldi | ENELX FAST;6;167505;Roma;1036;253121;43;1
+1224.0;8636;1001231;58091;Roma;Castel di Leva;5;9.0;Roma Laurentina Edoardo Amaldi | ENELX FAST;6;167505;Roma;2;253123;50;1
+1224.0;8636;1001231;58091;Roma;Castel di Leva;5;9.0;Via Edoardo Amaldi;4;194124;Rome;36;315432;3.7;1
+1224.0;8636;1001231;58091;Roma;Castel di Leva;5;9.0;Via Edoardo Amaldi;4;194124;Rome;25;315431;22;1
+1224.0;8636;1001231;58091;Roma;Castel di Leva;5;9.0;Enel X Leroy Merlin;2;193710;Roma;33;314523;50;1
+1224.0;8636;1001231;58091;Roma;Castel di Leva;5;9.0;Enel X Leroy Merlin;2;193710;Roma;1036;314525;43;1
+1224.0;8636;1001231;58091;Roma;Castel di Leva;5;9.0;Enel X Leroy Merlin;2;193710;Roma;2;314524;50;1
+1230.0;2139;1001707;58091;Roma;Della Vittoria;2;1.0;Roma Mazzini | EnelX;2;58111;Roma;25;73139;22;1
+1230.0;2139;1001707;58091;Roma;Della Vittoria;2;1.0;Roma Mazzini | EnelX;2;58111;Roma;36;73140;3.7;1
+1231.0;3474;1001241;58091;Roma;Giuliano-Dalmata;4;9.0;Roma Sinigaglia | EnelX fast;2;115484;Roma;2;162048;50;1
+1231.0;3474;1001241;58091;Roma;Giuliano-Dalmata;4;9.0;Roma Sinigaglia | EnelX fast;2;115484;Roma;1036;162049;43;1
+1231.0;3474;1001241;58091;Roma;Giuliano-Dalmata;4;9.0;Roma Sinigaglia | EnelX fast;2;115484;Roma;33;162047;50;1
+1231.0;3474;1001241;58091;Roma;Giuliano-Dalmata;4;9.0;Metro Laurentina | EnelX;2;128657;Roma;36;179605;3;1
+1231.0;3474;1001241;58091;Roma;Giuliano-Dalmata;4;9.0;Metro Laurentina | EnelX;2;128657;Roma;25;179604;22;1
+1237.0;1088;1001349;58091;Roma;Acilia Sud;6;10.0;Aris Garden Hotel;1;118415;10;30;167088;22;1
+1238.0;4504;1001253;58091;Roma;Torrino;4;9.0;Acea  Torrino;1;266882;Roma;2;453611;50;1
+1238.0;4504;1001253;58091;Roma;Torrino;4;9.0;Acea  Torrino;1;266882;Roma;33;453610;50;1
+1238.0;4504;1001253;58091;Roma;Torrino;4;9.0;Acea  Torrino;1;266882;Roma;1036;453612;43;1
+1244.0;4910;1001266;58091;Roma;Torrino;4;9.0;Roma Edimburgo | EnelX;4;130837;Roma;36;182677;3.7;1
+1244.0;4910;1001266;58091;Roma;Torrino;4;9.0;Roma Edimburgo | EnelX;4;130837;Roma;25;182676;22;1
+1244.0;4910;1001266;58091;Roma;Torrino;4;9.0;Roma Bombay | EnelX;4;130801;Roma;25;182634;22;1
+1244.0;4910;1001266;58091;Roma;Torrino;4;9.0;Roma Bombay | EnelX;4;130801;Roma;36;182635;3.7;1
+1262.0;19;1000718;58091;Roma;Torre Spaccata;4;5.0;YouGo Prenestina | EnelX;2;128497;Roma;36;179328;3.7;1
+1262.0;19;1000718;58091;Roma;Torre Spaccata;4;5.0;YouGo Prenestina | EnelX;2;128497;Roma;25;179327;22;1
+1270.0;4742;1001314;58091;Roma;Lido di Ostia Ponente;6;10.0;Lido di Ostia Duca di Genova | EnelX;4;118290;Roma;25;166939;22;1
+1270.0;4742;1001314;58091;Roma;Lido di Ostia Ponente;6;10.0;Lido di Ostia Duca di Genova | EnelX;4;118290;Roma;36;166940;3.7;1
+1270.0;4742;1001314;58091;Roma;Lido di Ostia Ponente;6;10.0;Exdepò;1;21569;Ostia;0;120161;not available;1
+1271.0;2082;1001316;58091;Roma;Lido di Ostia Levante;6;10.0;Eneldrive Lungomare Paolo Toscanelli;2;57991;Roma;36;72911;3;1
+1271.0;2082;1001316;58091;Roma;Lido di Ostia Levante;6;10.0;Roma Regina Pacis | EnelX;2;57992;Roma;25;72912;22;1
+1271.0;2082;1001316;58091;Roma;Lido di Ostia Levante;6;10.0;Roma Regina Pacis | EnelX;2;57992;Roma;36;72913;3;1
+1271.0;2082;1001316;58091;Roma;Lido di Ostia Levante;6;10.0;Eneldrive Lungomare Paolo Toscanelli;2;57991;Roma;25;72910;3;1
+1275.0;905;1001321;58091;Roma;Castel Fusano;6;10.0;Eurospin;2;190329;Rome;25;307693;22;1
+1275.0;905;1001321;58091;Roma;Castel Fusano;6;10.0;Eurospin;2;190329;Rome;25;307692;22;1
+1289.0;170;1001417;58120;Fiumicino;;7;;Lungomare della Salute;2;191250;Fiumicino;1036;309622;43;1
+1289.0;170;1001417;58120;Fiumicino;;7;;Lungomare della Salute;2;191250;Fiumicino;33;309620;50;1
+1289.0;170;1001417;58120;Fiumicino;;7;;Lungomare della Salute;2;191250;Fiumicino;2;309621;50;1
+1319.0;10200;1001504;58091;Roma;Portuense;3;11.0;Via Gerolamo Cardano;2;194140;Rome;1036;315477;43;1
+1319.0;10200;1001504;58091;Roma;Portuense;3;11.0;Via Gerolamo Cardano;2;194140;Rome;2;315476;50;1
+1319.0;10200;1001504;58091;Roma;Portuense;3;11.0;Via Gerolamo Cardano;2;194140;Rome;33;315475;50;1
