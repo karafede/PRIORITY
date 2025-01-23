@@ -6,8 +6,7 @@ Detailed architecture and functionalities are explained together with the final 
 The platform has been designed to retrieve mobility insights from Floating Car Data, General **(FCD)** Transit Feed Specification data  **(GTFS)** and public transport data. 
 PRIOIRTY has been Built with the  **Python Flask** framework to allow the users to easily explore data through a dashboard together with interactive maps. This platform integrates real-world mobility data with modelled data to enhance the reconstruction of individual travel. In addition, it offers the option to perform  **online statistics** over traffic zones upon a mouse click with the possibility to visualize  **hourly profiles** of several traffic variables as well as polluting emissions, energy consumption and externalities. 
 
-The platform allows exploitation of mobility data to perform  **spatial and temporal aggregations**, to compute  <strong> desire lines  </strong> between origins and destinations and, to highlight traffic zones crossed by trips originating from a specific zone. Additionally, the PRIORITY platform offers the possibility to  **retrieve Points of Interests (POI)** from the OpenStreetMap database and to load an updated charging network for electric vehicles through the direct connection with Open Charge Map.
-
+The platform allows exploitation of mobility data to perform  **spatial and temporal aggregations**, to compute  <strong> desire lines  </strong> between origins and destinations and, to highlight traffic zones crossed by trips originating from a specific zone. Additionally, the PRIORITY platform offers the possibility to  **retrieve Points of Interests (POI)** from the OpenStreetMap database.
 
 # Installation
 The platform PRIORITY has been developed considering both Windows and Linux operating systems. 
