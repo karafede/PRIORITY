@@ -104,7 +104,9 @@ Instead, if you are going to work within a **Linux environment**, proceed as fol
 The PRIORTY platform has been realized with the puprose to follow the best practice for deliverign an acceptable web-interface. While the back-end has been completly created using **Python** with the implentation of complex algorithm to process mobility data upon user request, the front-end has been implemented using **css, javascript, html** and namy **java libraries**. 
 
 However there are few things that should be considered for future improvement:
-1. the front-end (web-interface) can be better optimized to have a dashboard better adjustable to different screen sizes.
+1. The front-end (web-interface) can be better optimized to have a dashboard better adjustable to different screen sizes.
+2. Every html file used to build the interface contains css and javascripts code. This choice was taken to customize each web-page. However, once the content of the platform is well-defined as well as its functionalites, it is possible to use sperate css and javascripts files included into the html files.
+3. In the select option, it is only possible selecting the same parameter once
 
 ## Problems or questions?
 for any question contact federico.karagulian@enea.it or karafede@hotmail.com
