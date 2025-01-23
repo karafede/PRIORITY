@@ -18,7 +18,7 @@ To make the platform working on your own system follow these steps
 3. Create your own working directory where you are going to copy the file **main.py** and directories **templates** and **static**
 4. Once you have download the files in this repositoriy and installed the necessary libraries, while in the terminal window, go to your working directory and execute **python main.py**
 5. To deploy the this application on a web-server (Linux machine using Apache+WSGI), follow the indication suggested in this link: https://tecadmin.net/deploying-flask-application-on-ubuntu-apache-wsgi/
-6. Most of parameters and datasets stored in the format of .csv files, .geojson files, .txt files have been linekd to a session user id (i.e. **data_sessionID.geojson**). The sessionID is an unique alphanumeric code generated automatically 
+
 
 ## Database
 A database should be setup using **PostgreSQL** to store input data to be processed in the Platform. The main structure of the tables is explained into details in the publication linked to this project.
@@ -41,6 +41,10 @@ with engine.connect() as conn:
   res = conn.execute(stmt).all()
 df = pd.DataFrame(res)
 ```
+
+## Initialization
+Most of parameters and datasets stored in the format of .csv files, .geojson files, .txt files have been linekd to a session user id (i.e. **data_sessionID.geojson**). The sessionID is an unique alphanumeric code generated automatically each time an user access to the link of the Platform. In this way, multiple users can operate on the same webpage with any interference in the results. At the first installation, most of the parameters and tables must be generated, prevuous setting of the paramenters, upon execution of tyhe engine behind the page. For instance, in the Provate Module 
+
 
 ## Possible Setup Issues
 
