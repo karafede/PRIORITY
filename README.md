@@ -30,7 +30,7 @@ import sqlalchemy as sal
 from sqlalchemy.pool import NullPool
 from sqlalchemy.sql import text
 
-engine = create_engine("postgresql://username:password@123.456.555.567:5432/DB_NAME")
+engine = create_engine("postgresql://username:password@123.456.555.567:5432/database_name")
 query = text('''SELECT.....FROM..... WHERE...''')
 ```
 if the query contains **parameters**, you must consider using the following line:
