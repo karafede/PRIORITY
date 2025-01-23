@@ -43,7 +43,19 @@ df = pd.DataFrame(res)
 ```
 
 ## Initialization
-Most of parameters and datasets stored in the format of .csv files, .geojson files, .txt files have been linekd to a session user id (i.e. **data_sessionID.geojson**). The sessionID is an unique alphanumeric code generated automatically each time an user access to the link of the Platform. In this way, multiple users can operate on the same webpage with any interference in the results. At the first installation, most of the parameters and tables must be generated, prevuous setting of the paramenters, upon execution of tyhe engine behind the page. For instance, in the Provate Module 
+Most of parameters and datasets stored in the format of .csv files, .geojson files, .txt files have been linekd to a session user id (i.e. **data_0b4c7f3d-c6ae-46ca-8705-ac159ebc8aa7,geojson** ). The sessionID is an unique alphanumeric code generated automatically each time an user access to the link of the Platform. In this way, multiple users can operate on the same webpage with any interference in the results. At the first installation, most of the parameters and tables must be generated, prevuous setting of the paramenters, upon execution of tyhe engine behind the page. For instance, in the Provate Module.
+
+```
+session["aggregated_recharge"] = aggr_steps_recharge.to_json()
+```
+
+
+```
+var aggregated_recharge_zmu = JSON.parse(JSON.stringify({{session['aggregated_recharge'] | tojson | safe}}));
+   aggregated_recharge_zmu = "[" + aggregated_recharge_zmu + "]";
+   var aggregated_recharge_zmu = eval(aggregated_recharge_zmu );
+```
+
 
 
 ## Possible Setup Issues
