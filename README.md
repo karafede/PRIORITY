@@ -53,7 +53,7 @@ In the **Python FLask** code, the commnad line that transforms a given dataset i
 session["result_variable"] = dataset_result.to_json()
 ```
 
-In the **html/javascript** code, the commnad line creating a variable of data from the session variable is:
+In the **html-css-javascript** code, the commnad line creating a variable of data from the session variable is:
 ```
 var data = JSON.parse(JSON.stringify({{session["result_variable"] | tojson | safe}}));
    data = "[" + data + "]";
@@ -100,6 +100,9 @@ Instead, if you are going to work within a **Linux environment**, proceed as fol
 ![image](https://github.com/user-attachments/assets/d6ab6899-bc60-4e68-9966-8d24cd7c2542)
 
 *The module Private Mobility within the platform PRIORITY*
+
+## Caveats
+The PRIORTY platform has been realized with the puprose to follow the best practice for deliverign a decent web-interface. However, while the back-end has been completly created using **Python** with the implentation of complex algorithm to process mobility data upon user request, the front-end has been implemente usign **css, javascript, html** and namy **java libraries**.
 
 ## Problems or questions?
 for any question contact federico.karagulian@enea.it or karafede@hotmail.com
