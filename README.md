@@ -45,6 +45,7 @@ df = pd.DataFrame(res)
 
 When clicking on a selected geographical zone on the map, the **index** of that zone is saved in a .txt file and read by the Python Flask code.
 The index file is read differently when considering working in a Windows or Linux environment. 
+
 Therefore, when working within **Windows environment** proceed as follow:
 
 ```
