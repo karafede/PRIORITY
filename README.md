@@ -25,7 +25,7 @@ To make the platform working on your own system follow these steps
 A database should be setup using **Postgresql** to store input data to be processed in the Platform. The structure of the table is explained into details in the publication linked to this project.
 
 
-´´´´from sqlalchemy import create_engine
+´´´´from sqlalchemy import create_engine´´´´
 from sqlalchemy import exc
 import sqlalchemy as sal
 from sqlalchemy.pool import NullPool
