@@ -50,14 +50,14 @@ The datasets and parameters present in the **/static** folder are mainly as defa
 
 In the Python FLask code, the commnad line where a given dataset becomes a session variable is:
 ```
-session["aggregated_recharge"] = aggr_steps_recharge.to_json()
+session["result_variable"] = dataset_result.to_json()
 ```
 
-
+In the html/javascrip code, the commnad line where a given session variable becomes a dataset is:
 ```
-var aggregated_recharge_zmu = JSON.parse(JSON.stringify({{session['aggregated_recharge'] | tojson | safe}}));
-   aggregated_recharge_zmu = "[" + aggregated_recharge_zmu + "]";
-   var aggregated_recharge_zmu = eval(aggregated_recharge_zmu );
+var data = JSON.parse(JSON.stringify({{session["result_variable"] | tojson | safe}}));
+   data = "[" + data + "]";
+   var data = eval(data);
 ```
 
 
