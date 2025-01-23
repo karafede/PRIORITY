@@ -25,23 +25,23 @@ To make the platform working on your own system follow these steps
 A database should be setup using **Postgresql** to store input data to be processed in the Platform. The structure of the table is explained into details in the publication linked to this project.
 
 
-*from sqlalchemy import create_engine*
-*from sqlalchemy import exc*
-*import sqlalchemy as sal*
-*from sqlalchemy.pool import NullPool*
-*from sqlalchemy.sql import text*
+'''from sqlalchemy import create_engine
+from sqlalchemy import exc
+import sqlalchemy as sal
+from sqlalchemy.pool import NullPool
+from sqlalchemy.sql import text'''
 
-*engine = create_engine("postgresql://username:password@123.456.555.567:5432/DB_NAME")*
+engine = create_engine("postgresql://username:password@123.456.555.567:5432/DB_NAME")
 
 
-*query = text('''SELECT .....FROM ..... WHERE ''')*
+query = text('''SELECT .....FROM ..... WHERE ''')
 if the query contains parameters, you must consider using the following line:
-*stmt = query.bindparams(x=str(param_1), y=str(param_2), z=str(param_3))*
+stmt = query.bindparams(x=str(param_1), y=str(param_2), z=str(param_3))
 
 
-*with engine.connect() as conn:*
-  *res = conn.execute(stmt).all()*
-*df = pd.DataFrame(res)*
+with engine.connect() as conn:
+  res = conn.execute(stmt).all()
+df = pd.DataFrame(res)
 
 
 
