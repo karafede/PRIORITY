@@ -1,0 +1,2 @@
+var aggregated_names_quartiere = 
+['Ponte Galeria', 'Ostia Antica', 'Castel Fusano', 'Castel di Guido', None, 'Lido di Castel Fusano', 'Castel Porziano', 'Acilia Sud', 'Acilia Nord', 'Casal Palocco', 'Lido di Ostia Levante', 'Lido di Ostia Ponente', 'Magliana Vecchia', 'Mezzocammino', "Tor de' Cenci"]

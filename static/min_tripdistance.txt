@@ -1,0 +1,2 @@
+var min_tripdistance = 
+0

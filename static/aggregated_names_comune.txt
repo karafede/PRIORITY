@@ -1,0 +1,2 @@
+var aggregated_names_comune = 
+['Roma', 'Fiumicino']
