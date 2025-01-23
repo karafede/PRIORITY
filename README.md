@@ -32,15 +32,12 @@ from sqlalchemy.sql import text
 
 ```
 engine = create_engine("postgresql://username:password@123.456.555.567:5432/DB_NAME")
-```
-```
 query = text('''SELECT .....FROM ..... WHERE--''')
 ```
 if the query contains parameters, you must consider using the following line:
 ```
 stmt = query.bindparams(x=str(param_1), y=str(param_2), z=str(param_3))
-```
-```
+
 with engine.connect() as conn:
   res = conn.execute(stmt).all()
 df = pd.DataFrame(res)
