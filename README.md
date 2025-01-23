@@ -48,12 +48,12 @@ Most of parameters and datasets stored in the format of .csv files, .geojson fil
 At the first installation, the datasets supporting the visualization are generated upon execution of tyhe engine behind the page after setting the initial paramenters. For instance, in the Provate Module, upon setting of the *range of days, trip indicator, type of data*, and *type of staypoints*, the execution of the page only starts after selecting the **Hour range**. Default parameters and datasets (in the format of .csv, .txt and .geojson file) are loaded from the **/static** folder that you can download from this repository. If you have any problem finding or generating a dataset, or something missing, please feel free to contact me. 
 The datasets and parameters present in the **/static** folder are mainly as default data to be used when the user open a selected page. For most of the module the datasets generated upon exection of a page are stored in session and sent from Python Flask to the html/javascript. This data are not saved into the **/static** folder but into the **cache** that is located in the **/flask_session** folder. This cache should be empty quite frequently depending on the workload of the platform. 
 
-In the **Python FLask** code, the commnad line where a given dataset becomes a session variable is:
+In the **Python FLask** code, the commnad line that transforms a given dataset into a session variable is:
 ```
 session["result_variable"] = dataset_result.to_json()
 ```
 
-In the **html/javascript** code, the commnad line where a given session variable becomes a dataset is:
+In the **html/javascript** code, the commnad line creating a variable of data from the session variable is:
 ```
 var data = JSON.parse(JSON.stringify({{session["result_variable"] | tojson | safe}}));
    data = "[" + data + "]";
