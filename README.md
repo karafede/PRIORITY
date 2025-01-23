@@ -32,7 +32,7 @@ from sqlalchemy.sql import text
 engine = create_engine("postgresql://username:password@123.456.555.567:5432/DB_NAME")
 query = text('''SELECT.....FROM..... WHERE...''')
 ```
-if the query contains parameters, you must consider using the following line:
+if the query contains **parameters**, you must consider using the following line:
 ```
 stmt = query.bindparams(x=str(param_1), y=str(param_2), z=str(param_3))
 
@@ -43,23 +43,28 @@ df = pd.DataFrame(res)
 
 ## Possible Setup Issues
 
+When clicking on a selected geographical zone on the map, the **index** of that zone is saved in a .txt file and read by the Python Flask code.
+The index file is read differently when considering working in a Windows or Linux environment. 
+Therefore, when working within **Windows environment** proceed as follow:
+
 ```
-  ##----> filter by day and ZMU zone....
     ## read back zmu index
     with open(path_app + "static/params/index_zmu_" + session.sid + ".txt") as f:
         lines = f.readlines()
-
-    """   
-    #### ----- to use in LINUX (Apache 2) ----------##########
+    ## string split and get value
+    selected_index_zmu = ((lines[1]).split())[1]
+```
+Instead, if you are going to work within a **Linux environment**, proceed as follow:
+```
+    ## read back zmu index
+    with open(path_app + "static/params/index_zmu_" + session.sid + ".txt") as f:
+        lines = f.readlines()
+   
     line = ((lines[0]).split(':'))[1]
     import re
+    ## string split and get value
     line = re.sub('}\n', '', line)
-    selected_index_zmu = line
-    #### ----------------------------------------- ###########
-    """
-    ## string split and get value....
-
-    selected_index_zmu = ((lines[1]).split())[1]
+    selected_index_zmu = line  
 ```
 <br>
 <br>
