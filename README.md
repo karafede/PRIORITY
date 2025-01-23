@@ -20,8 +20,8 @@ To make the platform working on your own system follow these steps
 5. To deploy the this application on a web-server (Linux machine using Apache+WSGI), follow the indication suggested in this link: https://tecadmin.net/deploying-flask-application-on-ubuntu-apache-wsgi/
 
 ## Database
-A database should be setup using **Postgresql** to store input data to be processed in the Platform. The structure of the table is explained into details in the publication linked to this project.
-
+A database should be setup using **PostgreSQL** to store input data to be processed in the Platform. The main structure of the tables is explained into details in the publication linked to this project.
+Connection to a PostgreSQL database has been done in the following way:
 ```
 from sqlalchemy import create_engine
 from sqlalchemy import exc
@@ -33,23 +33,18 @@ from sqlalchemy.sql import text
 ```
 engine = create_engine("postgresql://username:password@123.456.555.567:5432/DB_NAME")
 ```
-
 ```
 query = text('''SELECT .....FROM ..... WHERE--''')
 ```
 if the query contains parameters, you must consider using the following line:
-
 ```
 stmt = query.bindparams(x=str(param_1), y=str(param_2), z=str(param_3))
 ```
-
 ```
 with engine.connect() as conn:
   res = conn.execute(stmt).all()
 df = pd.DataFrame(res)
 ```
-
-
 
 
 <br>
