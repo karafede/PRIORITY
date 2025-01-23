@@ -43,7 +43,9 @@ df = pd.DataFrame(res)
 ```
 
 ## Initialization
-Most of parameters and datasets stored in the format of .csv files, .geojson files, .txt files have been linekd to a session user id (i.e. **data_0b4c7f3d-c6ae-46ca-8705-ac159ebc8aa7,geojson** ). The sessionID is an unique alphanumeric code generated automatically each time an user access to the link of the Platform. In this way, multiple users can operate on the same webpage with any interference in the results. At the first installation, most of the parameters and tables must be generated, prevuous setting of the paramenters, upon execution of tyhe engine behind the page. For instance, in the Provate Module.
+Most of parameters and datasets stored in the format of .csv files, .geojson files, .txt files have been linekd to a session user id (i.e. **data_0b4c7f3d-c6ae-46ca-8705-ac159ebc8aa7,geojson** ). The sessionID is an unique alphanumeric code generated automatically each time an user access to the link of the Platform. In this way, multiple users can operate on the same webpage and visualize their own results. 
+
+At the first installation, the datasets supporting the visualization are generated upon execution of tyhe engine behind the page after setting the initial paramenters. For instance, in the Provate Module, upon setting of the *range of days, trip indicator, type of data*, and *type of staypoints*, the execution of the page only starts after selecting the **Hour range**
 
 ```
 session["aggregated_recharge"] = aggr_steps_recharge.to_json()
