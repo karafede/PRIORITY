@@ -103,7 +103,8 @@ Instead, if you are going to work within a **Linux environment**, proceed as fol
 
 ## Problems or questions?
 for any question contact federico.karagulian@enea.it or karafede@hotmail.com
-... and much other work is going on....
+
+... work is in progress to populate this GitHub page........
 
 ## Citation
 If you used Genesis in your research, we would appreciate it if you could cite it. We are still working on a technical report, and before it's public, you could consider citing:
