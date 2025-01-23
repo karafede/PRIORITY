@@ -1,0 +1,1014 @@
+
+<!doctype html>
+<html lang="en">
+
+
+<style type="text/css">
+    body {
+            padding: 0;
+            margin: 0;
+			font-family: Arial, Helvetica, sans-serif;
+        }
+   
+	#map {
+	  height: 100%;
+	}
+	
+	/* Optional: Makes the sample page fill the window. */
+	html, body {
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	}
+
+
+	
+	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	.legend { text-align: left; line-height: 29px; color: #555; font-size: 25px} .legend i { width: 10px; height: 10px; float: left; margin-right: 6px; margin-top: 6px; opacity: 0.7}
+	.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+	
+	
+	#refreshButton {
+	  position: absolute;
+	  top: 60px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #000000;
+	  background-color:#FFFF00;
+	}
+	
+	
+	#home_locations {
+	  position: absolute;
+	  width: 100%;
+	  top: 60px;
+	  margin-top: 40px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #ffffff ;
+	  background-color:#000099;
+	}
+	
+	#refreshButton:hover{
+		opacity: 0.8;
+		cursor: pointer;
+    }
+	
+
+
+	  html, body,  #map {
+        width : 100%;
+        height : 100%;
+      }
+	.box{	  
+		width:15px;
+		height:15px;
+		border-radius:25px;
+		display: inline-block;
+		}
+	
+
+     /** sidebar menu **/
+	.innerDiv{
+		position: absolute;
+		width: 10%;
+		height: 15%;
+		background-color: #b2b2ff;
+		opacity: 0.8;
+		margin-top:  1%;
+		margin-left: 5%;
+		z-index: 800;
+		padding-top: 1%;
+		text-overflow:ellipsis;
+        overflow:hidden;
+		
+	}
+	
+
+	
+
+ .button {
+	    position: absolute;
+		left: 2%;
+		top: 80%;
+		height: 8%;
+		width: 7%
+        min-width: 7%;
+		margin-top: 30%;
+		margin-left: 50%;
+		z-index: 500;
+	    border: none;
+	    color: white;
+	    padding: 20px;
+	    text-align: center;
+	    display: inline-block;
+	    font-size: 1.5em;
+	    margin: 10px 20px;		
+	}
+
+		
+   header, nav {
+    left: 2%;
+	top: 85%;
+  	z-index: 700;
+	position: absolute;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	border-spacing: 5px;
+  }
+
+	nav a {
+	  text-decoration: none;
+	  background: #000000;  /* Black */
+	  border-radius: 5px;
+	  font-size: 1.4em;
+	  color: white;
+	  padding: 3px 8px;
+	  display: table-cell;
+	}
+	
+	
+	nav .col_home {
+		background-color: #6b0000;
+	}
+	
+	nav .col_privata {
+		background-color: #4CAF50;
+	}
+	
+	
+	nav .col_collettivo {
+		background-color: #0000ff ;
+	}
+	
+	nav .col_scenari {
+		background-color: #ffa500 ;
+	}
+	
+	
+	nav .col_impatti {
+		background-color: #76a5af ;
+	}
+	
+	
+	nav .IEA_statistics {
+		background-color: #ededed ;
+		color: blue;
+	}
+	
+	
+ nav .col_best {background-color: #326bbb ;<!--color: blue;-->}
+	
+	
+	
+	
+		
+
+  /** submit lat lon and input text to Python **/
+   main {
+		background-color: rgba(51, 170, 51, .3); 
+		left: 2%;
+		top: 3%;
+		z-index: 700;
+		position: absolute;
+		margin: 2px 0;
+		padding: 5px;
+		text-overflow:ellipsis;
+        overflow:hidden;
+    width: 360px;
+    height: 360px
+	}
+
+	main div {
+	  background: transparent; 
+	  color: white;
+	  padding: 1px;
+	  margin: 5px auto;
+	}
+	
+
+	main div:nth-child(1) {
+	  width: 270px;
+	  height: 0px;
+	   background: transparent;
+	}
+	
+	
+    main div:nth-child(2) {
+	  width: 270px;
+	  height: 0px;
+	   background: #326bbb;
+	}
+	
+
+	main div:nth-child(3) {
+      width: 170px;
+	 background: transparent;
+	}
+	
+	main div:nth-child(4) {
+	  width: 270px;
+	   height: 0px;
+	   background: #326bbb;
+	   float: center;
+	}
+	
+	main div:nth-child(5) {
+	  width: 270px;
+	 background: transparent;
+	}
+	
+	main div:nth-child(6) {
+	   width: 270px;
+	    background: transparent;
+	}
+	
+
+	.inline-block-center {
+	  text-align: center;
+	}
+	
+	.flex-center {
+	  display: flex;
+	  justify-content: center;
+	}
+	
+
+	h2 {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+	line-height: 0.5em;
+	}
+	
+	
+	h3 {
+    margin: 0;
+    padding: 0;
+	display: inline;
+	}
+	
+	
+	
+	
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: absolute; /* Stay in place */
+	  z-index: 700; /* Sit on top */
+	  
+	  position: absolute;
+	   left: 20%;
+		top: 4%;
+	  width: 50%; /* Full width */
+	  height: 70%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+
+	/* Modal Content/Box */
+	.modal-content {
+	  z-index: 700;
+	  top: 5%;
+	  background-color: #fefefe;
+	  margin: 5% auto; /* 15% from the top and centered */
+	  padding: 1%;
+	  border: 1px solid #888;
+	  width: 100%; /* Could be more or less, depending on screen size */
+	}
+
+	/* The Close Button */
+	.close {
+	  color: #aaa;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+	  color: black;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+	
+	
+
+
+.animation_link {
+  font-size: 130%;
+  color: blue;
+  font-weight: bold;
+}
+
+.animation_link_heatmap {
+  font-size: 130%;
+  color: red;
+  font-weight: bold;
+}
+
+.animation_link_IEA_STATS {
+  font-size: 130%;
+  color: #0f45d2;
+  font-weight: bold;
+}
+
+
+	
+	
+</style>
+
+<style>
+
+.label {
+  color: black;
+  padding: 8px;
+  font-family: Arial Black;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+
+
+
+
+#.tpl_line {background-color: #2196F3;} /* Blue */
+
+
+table, th, td {
+  border:1px solid black;
+   left: 20%;
+}
+
+
+table.center_table {
+  margin-left: -15%; 
+  //margin-left: 20%;
+}
+
+
+
+/* Center the loader (SPINNER) */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  // border-top: 16px solid #3498db;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-right: 16px solid yellow;
+  border-left: 16px solid pink;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+
+
+
+div#loading {
+    display: none;
+	position: absolute;
+	left: 50%;
+    top: 50%;
+    z-index: 700;
+	width: 270px;
+	height: 270px;
+	 margin: -76px 0 0 -76px;
+    background: url(/static/loadingimage_TPL.gif) no-repeat;
+    cursor: wait;
+ }
+ 
+ /* Button changing color when clicked */
+ input.btn_color:active { background:yellow; } 
+ 
+ 
+     /* custom primary buttons */
+    
+    .btn-primary {
+        color: #212529;
+        background-color: white ;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary:hover {
+        color: #212529;
+        background-color: #52bebe;
+        border-color: #8ad3d3
+    }
+    
+    .btn-primary:focus,
+    .btn-primary.focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+    
+    .btn-primary.disabled,
+    .btn-primary:disabled {
+        color: #212529;
+        background-color: #7cc;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active,
+    .btn-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #9cdada;
+        border-color: #2e7c7c
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active:focus,
+    .btn-primary:not(:disabled):not(.disabled).active:focus,
+    .show>.btn-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+    
+    .btn-outline-primary {
+        color: #000000;
+        background-color: yellow;
+        background-image: none;
+        border-color: #7cc;
+    }
+    
+    .btn-outline-primary:hover {
+        color: #222;
+        background-color: #8ad3d3;
+        border-color: #7cc
+    }
+    
+    .btn-outline-primary:focus,
+    .btn-outline-primary.focus {
+        box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+    }
+    
+    .btn-outline-primary.disabled,
+    .btn-outline-primary:disabled {
+        color: #7cc;
+        background-color: transparent
+    }
+    
+    .btn-outline-primary:not(:disabled):not(.disabled):active,
+    .btn-outline-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-outline-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #8ad3d3;
+        border-color: #7cc
+    }
+    
+    .btn-outline-primary:not(:disabled):not(.disabled):active:focus,
+    .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
+    .show>.btn-outline-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+    }
+
+
+.btn_heatmaps {border: none;
+			  background-color: blue;
+			  padding: 12px 48px 12px 24px;
+			  border-radius: 4px;
+			  color: #fff;
+			  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7.41' height='12' viewBox='0 0 7.41 12'%3E%3Cpath d='M10,6,8.59,7.41,13.17,12,8.59,16.59,10,18l6-6Z' transform='translate(-8.59 -6)' fill='%23fff'/%3E%3C/svg%3E");
+			  background-repeat: no-repeat;
+			  background-position: right 24px center;
+			  font-size: 20px;
+			  font-weight: bold;
+			  text-align: center;
+			   left: 80%;
+			   top: 85%;}
+		   
+.btn_animation {width: 55%;
+	  height:50px;
+	  font-size: 18px;
+	  font-weight: bold;
+	  text-align: center;
+	  color:blue}
+	   
+		   
+
+   .select{
+		width:  15%;
+		height: 30px;
+		font-size: 18px;
+		font-weight: bold;}
+		
+		
+ 
+ 
+ #form-wrapper {
+  width: 60%;
+  height: 12%;
+  margin: 0 auto;
+  text-align: center;
+  display:flex;
+}
+#form1 {
+  width: 50%;
+  display: inline-block;
+  min-width:200px;
+}
+#form2 {
+  width: 50%;
+  display: inline-block;
+  min-width:200px;
+   background: #66b266;
+  height:100%;
+}
+
+.flex {
+   display: flex;
+   flex-direction: row;
+}
+
+div.c {
+	  text-align: center;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+ 
+ 
+ input[type="radio"] {
+  -ms-transform: scale(1.5); /* IE 9 */
+  -webkit-transform: scale(1.5); /* Chrome, Safari, Opera */
+  transform: scale(1.5);
+}
+
+
+
+
+</style>
+
+
+
+
+
+
+
+
+
+</head>
+  <meta name="description" content="Leaflet Template">
+  <title>RdS-ENEA</title>
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <meta charset="utf-8">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+ </head>
+ 
+
+
+ <!--start the SPINNER or LOADER-->
+<div id="loader"></div>
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+
+<body>
+<div id="loading"></div>
+
+<main class="inline-block-center">
+
+<!--insert new line-->
+<br>
+
+ <h2 style="font-weight: bold; line-height: 1em;">Private mobility </h2> 
+ <p><i><b>animated GPS data over Roma</i></b></p>
+<!--insert new line-->
+<br>
+
+
+<form id="mainform" action="/FCD_day_selector" method="POST" >
+   <input type="text" id="daterange"  name="daterange" onchange="myFunction_daterange(event)" value="     ___from___to___" />
+   <button type="submit">enter</button><br><br>
+</form>
+
+
+
+	<form method="POST" action="/FCD_hour_selector/">	
+	<span class="label tpl_line">Hour range:</span>
+	<select class="FCD_hour_selector" name="FCD_hourrange" id="registrationhourrange" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange="this.form.submit()";>
+			<!--option value="999">--choose--</option-->
+			<option value="0">00:00 ---> 07:00</option>
+			<option value="1">07:00 ---> 10:00</option>
+			<option value="2">10:00 ---> 14:00</option>
+			<option value="3">14:00 ---> 16:00</option>
+			<option value="4">16:00 ---> 20:00</option>
+			<option value="5">20:00 ---> 24:00</option>
+		</select>
+	</form>
+	
+	
+<br>
+
+
+<ul>
+{% for item in datum %}
+<table class="center_table" style="width:100%">
+<tr>
+    <th>Day</th>
+    <th>hour</th>
+  </tr>
+  <tr>
+    <td>{{item.FCD_day}}</td>
+    <!--d>{{item.hour}}</td-->
+  </tr>
+</table>
+{% endfor %}
+</ul>
+
+
+
+  <button class="btn_animation btn-lg btn-primary mr-1"  style="font-weight: bold; color: black;" id="start">Start Animation</button>  
+  
+  
+</main>	
+
+
+
+<nav role='navigation'>
+  <a class="col_home" href="/home_page/">Home</a>
+  <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
+  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
+  <a class="col_impatti" href="/impacts_page/">Impacts</a>
+    <a class="col_best" onclick="$('#loading').show();" href="/best_page/">Best</a>
+</nav>  
+
+
+
+
+  <div id="map"></div>
+  
+
+ 
+<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
+  <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+  <script src="{{ url_for('static', filename='AnimatedMarker.js') }}" /></script>
+
+  <script src="{{ url_for('static', filename='selected_trip_path_FCD.txt') }}" /></script>
+  
+  
+<script>
+	
+
+	
+	
+	 //  date range picker //
+	$(function() {
+	  $('input[name="daterange"]').daterangepicker({
+		opens: 'left'
+	  }, function(start, end, label) {
+		  alert('---- ONLY CHOOSE AN INTERVAL OF 1 OR 2 DAYS ----');
+		  var daterange_FCD = start.format('MM-DD-YYYY');
+		  //  alert(start_daterange);
+	  });
+	});
+	
+	
+	
+	
+	
+    var form = document.getElementById("mainform")
+      var input = document.getElementById("daterange")
+      form.addEventListener('submit', function(e){
+        input.value = daterange_FCD
+        form.submit()
+      })
+
+
+
+	var input = document.getElementById('daterange');
+	var ___from___to___ = "{{ session['input_data_range']}}";
+	input.value = ___from___to___;
+
+	var myFunction_daterange = function (e) {
+	  console.log(e.target.value);
+	}
+
+
+
+	
+	var FCD_day_start = "{{ session['FCD_day_start']}}"
+	// alert(FCD_day_start);
+		 
+	var FCD_day_start = FCD_day_start.slice(0, 10);
+	//alert(FCD_day_start);
+		 
+	document.addEventListener("DOMContentLoaded", function(){
+    // var data_selezionata = "{{ session['FCD_day_start'] }}";
+	var data_selezionata_start = FCD_day_start;
+	//alert(data_selezionata);
+	document.getElementById('registrationday_start').value = data_selezionata_start;  
+	});
+	
+	
+	
+	
+	var FCD_day_end = "{{ session['FCD_day_end']}}"
+	//alert(zmu_day_end);
+		 
+	var FCD_day_end = FCD_day_end.slice(0, 10);
+	//alert(FCD_day_end);
+		 
+	document.addEventListener("DOMContentLoaded", function(){
+    // var data_selezionata_end = "{{ session['FCD_day_end'] }}";
+	var data_selezionata_end = FCD_day_end;
+	// alert(data_selezionata);
+	document.getElementById('registrationday_end').value = data_selezionata_end;  
+	});
+	
+	
+	$('form select').on('change', function(){
+		$(this).closest('form').submit()
+		$('#loading').show();
+	});
+	
+	
+
+	
+    var FCD_hourrange = "{{ session['FCD_hourrange']}}"
+    document.addEventListener("DOMContentLoaded", function(){
+	var range_ora_selezionata = FCD_hourrange;
+	//alert(range_ora_selezionata);
+	document.getElementById('registrationhourrange').value = range_ora_selezionata;  
+	});
+	
+
+	
+	
+	var FCD_tod = "{{ session['FCD_tod']}}"
+    document.addEventListener("DOMContentLoaded", function(){
+	var FCD_selezionata =  FCD_tod;
+	document.getElementById('registration_tod').value = FCD_selezionata;  
+	// alert(FCD_selezionata);
+	});
+	
+	
+	
+	
+	
+	
+	
+	
+	 function getColor_trials_origin_destinations(d) {
+		return d >= 2000 ? '#ffff00' :
+			d >= 10   ? '#0000ff' : '#0000ff';
+			}    
+
+ 			
+			
+	 
+	//////////* LEGEND USED FOR TRIALS DATA  (number of trips at destination per 1000 population)*////////////  
+			var legend_TRIALS = L.control({position: 'bottomright'});
+		
+            legend_TRIALS.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				
+				 
+				  // multiply by factor a == 7
+				  const labels=["Origin of trip"];
+				 const grades = ["aaaaaa"];
+
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_trials_origin_destinations(grades[i]) +' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i] +'<br/>';        						 
+                }
+                return div;
+            }
+
+	
+	
+	
+
+
+	// ADD Leaflet map
+	
+	const osm  = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		})
+         
+	var carto = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+	 });
+		 
+	
+	
+	// control that shows state info on hover
+	const info = L.control(); 
+
+
+
+
+	//// ----- ZMU zones -----------------------------////
+		function style_colors_ZMU_zones(feature) {
+			return {
+				weight: 1,
+				opacity: 0.6,
+				color: 'grey',
+				dashArray: '3',
+				fillOpacity: 0.0,
+				fillColor: 'white'
+			};
+		}
+		
+		
+		const selectedStyle_highlight_ZONES = {
+		  color: 'orange',
+		  weight: 3,
+		  opacity: 0.9,
+		}
+		
+		
+	    const selectedStyle_mouseout_ZONES = {
+		  color: 'black',
+		  weight: 1,
+		  opacity: 0.6,
+		}
+		
+		
+		
+		/// add ZMU zones  borders  /////////////////////////////////////////////////////
+		var ZMU_zones = L.geoJSON(charging_data, { style: style_colors_ZMU_zones, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupText = '';
+					popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupText += (feature.properties.n_charging_stations) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n. charging stations: ' + feature.properties.n_charging_stations : '' ;	
+					popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';		        	
+                    popupText += (feature.properties.Available_Power) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Power (Watt): ' + feature.properties.Available_Power : '' ;						
+					layer.bindTooltip(popupText);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+
+	
+		const ZMU_zones_Layer = L.layerGroup();
+		ZMU_zones_Layer.addLayer(ZMU_zones);	
+		// alert(ZMU_zones);
+		
+		const overlays = {
+			'Traffic Zones': ZMU_zones_Layer
+		};
+		
+		const baseLayers = {
+		'OpenStreetMap': osm,
+		'Carto': carto
+		};
+		
+
+		
+
+
+
+(function(){
+
+		
+  var bikeIcon = L.icon({
+      iconUrl: '/static/icons8-purple-circle-48.png',
+      iconSize: [6, 6],  //[25, 39],  [16, 22],
+      iconAnchor: [1, 1],   //[12, 39],
+      shadowUrl: null
+  });
+  
+
+
+  var config = {
+      tileUrl : 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+      overlayTileUrl : 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+      tileAttrib :  '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+      initLatLng : new L.LatLng(41.90266120539129, 12.492052587659225), // ROMA
+      initZoom : 11,
+      minZoom : 5,
+      maxZoom : 17
+  };
+		
+  var map = L.map('map', {minZoom: config.minZoom, 
+						  maxZoom: config.maxZoom}),
+						  
+      routeLines = route_FCD,
+      markers = [];
+	  map.addLayer(new L.TileLayer(config.tileUrl, {attribution: config.tileAttrib}));
+	  map.addLayer(new L.TileLayer(config.overlayTileUrl));
+	  map.setView(config.initLatLng, config.initZoom);	 
+ 
+  $.each(routeLines, function(i, routeLine) {
+    var marker = L.animatedMarker(routeLine.getLatLngs(), {
+      icon: bikeIcon,
+	  //route_id: route_id[i],
+      autoStart: false,
+    });
+	
+	
+	//alert(marker);
+	// alert(routeLines);
+    map.addLayer(marker);
+	markers.push(marker);
+	
+
+	 marker.on('mouseover', function(e){
+      this.openPopup();
+    })
+  });
+
+
+	
+// ----- ADD Traffic ZONES ------- //
+map.addLayer(ZMU_zones);
+const layerControl = L.control.layers(baseLayers, overlays ,{collapsed:false,}).addTo(map);	
+legend_TRIALS.addTo(map);
+
+			
+ $(function() {
+  $('#start').click(function() {
+    console.log('start');
+    $.each(markers, function(i, marker) {
+      marker.start();
+    });
+	
+    $(this).hide();
+  });
+ });
+}());
+
+
+
+	
+		
+
+
+   </script>
+   
+   
+   
+</script>
+
+   
+   
+</body>
+</html>
