@@ -101,9 +101,10 @@ Instead, if you are going to work within a **Linux environment**, proceed as fol
 *The module Private Mobility within the platform PRIORITY*
 
 ## Caveats
-The PRIORTY platform has been realized with the puprose to follow the best practice for deliverign an acceptable web-interface. While the back-end has been completly created using **Python** with the implentation of complex algorithm to process mobility data upon user request, the front-end has been implemented usign **css, javascript, html** and namy **java libraries**. 
+The PRIORTY platform has been realized with the puprose to follow the best practice for deliverign an acceptable web-interface. While the back-end has been completly created using **Python** with the implentation of complex algorithm to process mobility data upon user request, the front-end has been implemented using **css, javascript, html** and namy **java libraries**. 
 
-However, the front-end (web-interface) can be better optimized to have a better dashboard adjustable to different screen sizes.
+However there are few things that should be considered for future improvement:
+1. the front-end (web-interface) can be better optimized to have a dashboard better adjustable to different screen sizes.
 
 ## Problems or questions?
 for any question contact federico.karagulian@enea.it or karafede@hotmail.com
