@@ -47,10 +47,6 @@ from os import listdir
 
 import pyproj
 
-print(pyproj.__version__)   ## 3.3.1
-# osmnx.__version__  # (1.9.0)
-# shapely.__version__ # (1.8.5)
-## pyproj directory is (----> returns the valid data directory)
 proj_data_dir = pyproj.datadir.get_data_dir()
 
 
@@ -86,6 +82,12 @@ import uuid
 app.config['SECRET_KEY'] = 'karafede75'
 
 
+# img_dict = {}
+
+
+## https://www.digitalocean.com/community/tutorials/how-to-handle-errors-in-a-flask-application
+## ---- handle ERRORS ------ #####################################################################
+
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('error_404_page.html'), 404  # 404.html
@@ -93,16 +95,6 @@ def page_not_found(error):
 
 @app.route('/')
 def root():
-    # markers=[
-    #    {
-    #    'lat':41.88897126206829,
-    #    'lon':12.495815421278861,
-    #    'popup':'middle pnt.'
-    #    }
-    # ]
-    # ##--->> return
-    # return render_template('index.html', markers=markers)
-
     longitude = request.args.get('lng', type=float)
     latitude = request.args.get('latitude', type=float)
     print("latitude--->: ", latitude)
@@ -208,21 +200,6 @@ def form():
 
 @app.route('/mob_privata_page/', methods=['GET', 'POST'])
 def mob_privata():
-    """
-      longitude = request.args.get('lng', type=float)
-      latitude = request.args.get('latitude', type=float)
-      print("latitude--->: ", latitude)
-      print("longitude--->: ", longitude)
-      markers = [
-          {
-              'lat': longitude,
-              'lon': latitude,
-              'popup': 'user input pnt.'
-          }
-      ]
-      print(markers)
-    """
-
     import glob
     session['ZMU_day'] = '2022-10-11'
     session['ZMU_hour'] = 7
@@ -330,8 +307,6 @@ def impacts_page():
     print("selected_emission_type-------I AM HERE-----------: ", selected_emission_type)
     session["emission_type"] = selected_emission_type
 
-   
-
     #### ----- check for session ----> staypoint (H, W)
     stored_staypoint_files = glob.glob(path_app + "static/params/selected_stay_type_*.txt")
     stored_staypoint_files.sort(key=os.path.getmtime)
@@ -343,8 +318,6 @@ def impacts_page():
     session["id_stay_type"] = selected_stay_type
 
 
-    # for stored_tod_file in glob.glob(path_app + "static/params/selected_tod_zmu_*.txt"):
-    #    print(stored_tod_file)
     stored_tod_files = glob.glob(path_app + "static/params/selected_tod_zmu_*.txt")
     stored_tod_files.sort(key=os.path.getmtime)
     stored_tod_file = stored_tod_files[len(stored_tod_files) - 1]
@@ -561,8 +534,6 @@ def GTFS_hour_selector():
         import sqlalchemy as sal
         from sqlalchemy.pool import NullPool
 
-        # engine = create_engine("postgresql://postgres:superuser@192.168.134.36:5432/HAIG_ROMA")
-        # engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/rds_22-24")
         engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
         from sqlalchemy.sql import text
         connection = engine.connect()
@@ -708,8 +679,6 @@ def OD_pub_hour_selector():
         def wkb_tranformation_centroid(line):
             return wkb.loads(line.centroid, hex=True)
 
-        # engine = create_engine("postgresql://postgres:superuser@192.168.134.36:5432/HAIG_ROMA")
-        # engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/rds_22-24")
         engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
         from sqlalchemy.sql import text
         connection = engine.connect()
@@ -736,8 +705,6 @@ def OD_pub_hour_selector():
 
 
         ##### ---->>> Consider 'n_spostamenti_res' from ORIGIN (generation) @ ORIGIN  (highlight ORIGIN (coloured with the number of trips from Origin ---> Destination)
-        ## grouby + sum of the number of 'n_spostamenti_res'
-
         aggregated_gdf_OD_GTFS = gdf_OD_GTFS[
             ['orig', 'n_spostamenti_res']].groupby(['orig'], sort=False).sum().reset_index().rename(
             columns={0: 'sum_spostamenti'})
@@ -749,15 +716,10 @@ def OD_pub_hour_selector():
 
         aggregated_gdf_OD_GTFS = aggregated_gdf_OD_GTFS[
             ['n_spostamenti_res', 'index_zmu', 'POP_TOT_ZMU', 'zmu', 'nome_comun', 'quartiere', 'geometry', 'pgtu', 'municipio']]
-        # aggregated_gdf_OD_GTFS['n_spostamenti_res'] = (aggregated_gdf_OD_GTFS['n_spostamenti_res'] /aggregated_gdf_OD_GTFS['POP_TOT_ZMU']) * 1000
-
-
 
 
         #####----->>> save csv file ---- ##################################################
         aggregated_gdf_OD_GTFS['n_spostamenti_res'] = round(aggregated_gdf_OD_GTFS['n_spostamenti_res'], 0)
-        # aggregated_gdf_OD_GTFS.to_csv(
-        #    path_app + 'static/aggregated_gdf_OD_GTFS' + session.sid + '.csv')
 
         try:
             aggregated_gdf_OD_GTFS = gpd.GeoDataFrame(aggregated_gdf_OD_GTFS)
@@ -805,12 +767,9 @@ def OD_pub_hour_selector():
 
         ### convert Geodataframe into .geojson...
         session["aggregated_gdf_OD_GTFS"] = aggregated_gdf_OD_GTFS.to_json()
-        # session_aggregated_gdf_OD_GTFS = session["aggregated_gdf_OD_GTFS"]
-        # print(session["aggregated_gdf_OD_GTFS"])
 
         # print(session['id'])
     return render_template("index_OD_pub_zmu_select_hour.html", session_aggregated_gdf_OD_GTFS=session["aggregated_gdf_OD_GTFS"])
-    # return render_template("index_OD_pub_zmu.html")
 
 
 ######################################################################################################################
@@ -1039,10 +998,6 @@ def hour_selector_routing():
 
 
         aggregated_zmu_origin['index_zmu'] = aggregated_zmu_origin['index_zmu'].astype(int)
-        # aggregated_zmu_origin.reset_index(inplace=True)
-        # aggregated_zmu_origin['index_zmu'] = aggregated_zmu_origin['index']
-        # aggregated_zmu_origin.drop(columns=['index'], inplace=True)
-        ## remove "centroid" column
         aggregated_zmu_origin.drop(['centroid'], axis=1, inplace=True)
 
         aggregated_zmu_origin.to_csv(path_app + 'static/aggregated_zmu_origin.csv')
@@ -1069,9 +1024,6 @@ def hour_selector_routing():
         ### convert Geodataframe into .geojson...
         session["aggregated_zmu_routing_od_origin"] = aggregated_zmu_origin.to_json()
         print("------ I am here----- SESSION Colored ZMUs--------------------------")
-        # print(session["aggregated_zmu_routing_od_origin"])
-
-        # print(session['id'])
         return render_template("index_OD_routing_pub_select_hour.html",
                                session_aggregated_zmu_routing_od_origin=session["aggregated_zmu_routing_od_origin"])
 
@@ -1156,7 +1108,6 @@ def choose_zmu_index_routing():
     except IndexError:
         abort(404)
 
-  
     filtered_od_routing.to_file(filename=path_app + 'static/filtered_od_routing_' + session.sid + '.geojson',
                               driver='GeoJSON')
 
@@ -1179,10 +1130,9 @@ def redirect_zmu_paths_routing():
     import os
     ### open .geojson file in the form of dictionary.....
 
-
     filtered_od_routing = open(path_app + "static/filtered_od_routing_" + session.sid + ".geojson",)
     filtered_od_routing = json.load(filtered_od_routing)
-  
+
     session["filtered_od_routing"] = filtered_od_routing
     # print("session_filtered_od_routing", session["filtered_od_routing"])
     print("-------------- I am here...------------redirect.....")
@@ -1263,7 +1213,6 @@ def coords():
         return render_template("index_public_transport_select_hour.html", longitude=lng, latitude=lat)
 
 
-
 #############################################################################################
 #### ---- DRAW a CUSTOM POLYGON delimiting a given areas of ZMUs ----- ######################
 @app.route('/custom_polygon', methods=['POST'])
@@ -1314,16 +1263,11 @@ def process():
     import sqlalchemy as sal
     from sqlalchemy.pool import NullPool
 
-    # engine_lnx = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/andreatmp")
     engine_lnx = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/rds_22-24")
-    # engine_lnx = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
     from sqlalchemy.sql import text
     connection = engine_lnx.connect()
 
     zmu_zones = text('''SELECT * from zones.zones''')
-    # zmu_zones = text('''SELECT * from landuse.zones_with_pop_2015''')
-
-    # stmt = query_origin.bindparams(x=str(selected_FCD_day), y=str(selected_FCD_hour))
 
     with engine_lnx.connect() as conn:
         res = conn.execute(zmu_zones).all()
@@ -1346,8 +1290,6 @@ def process():
 
     ## convert into lat , lon
     ZMU_ROMA = ZMU_ROMA.to_crs({'init': 'epsg:4326'})
-    # ZMU_ROMA = ZMU_ROMA.to_crs(4326)
-    # ZMU_ROMA.plot()
     ZMU_ROMA = ZMU_ROMA[['area', 'zmu', 'comune', 'nome_comun', 'quartiere', 'pgtu', 'municipio', 'geometry']]
     ## make a column with the index of the ZMU_ROMA
     ZMU_ROMA['index_zmu'] = ZMU_ROMA.index
@@ -1425,8 +1367,6 @@ def process():
         f.seek(0)  # rewind
         f.write("var BORDER_selected_ZMUs = \n" + old)  # assign the "var name" in the .geojson file
 
-  
-    # return jsonify(result=poligon) # return the result to JavaScript
     return render_template("index_zmu_select_hour.html",
                            session_aggregated_names_comune=session['aggregated_names_comune'],
                            session_aggregated_names_quartiere=session['aggregated_names_quartiere']
@@ -1440,27 +1380,20 @@ def pois():
     tag = request.form['tag']  ## buffer distance in meters
     print("lat, lon---->:", lat, lng, tag)
 
-    # return(lat, lng)
     tags = {'amenity': True}
-    # tags = {'parking': True}
-    # tag = 5000   ## buffer distance in meters
 
     ### read geojson file of traffic zone (ZMU)
     ZMU_ROMA = gpd.read_file(path_app + "static/zmu_roma_index.geojson")
     ## Points of interests starting from central point in Rome
-    # lat = "41.89818843043047"
-    # lng = "12.499008178710938"
     pois_gdf = ox.geometries_from_point((float(lat), float(lng)), dist=float(tag), tags=tags)
     if len(pois_gdf) > 0:
         POIS = pd.DataFrame(pois_gdf)
         POIS.reset_index(inplace=True)
         POIS_parking = POIS[POIS.amenity == 'parking']
-        # POIS_parking = POIS_parking[['osmid', 'amenity', 'capacity', 'parking', 'name', 'operator', 'access', 'fee', 'note', 'park_ride', 'covered', 'geometry']]
 
         POIS_parking = gpd.GeoDataFrame(POIS_parking)
         POIS_parking = POIS_parking.set_crs('epsg:4326')
         POIS_parking = POIS_parking[POIS_parking.geom_type != 'Point']
-
 
         # save first as geojson file
         with open(path_app + 'static/POIS_parking.geojson', 'w') as f:
@@ -1620,7 +1553,6 @@ def pois():
 
 @app.route('/animation_TPL/', methods=['GET', 'POST'])
 def animation_TPL():
-   
     session["gtfs"] = '2023_04_05'
     return render_template("index_animated_TPL_GTFS_selection.html", session_GTFS=session["gtfs"])
 
@@ -1651,7 +1583,6 @@ def GTFS_selector():
         }]
 
         ## load timetable:
-        # path = "D:/Federico/Mobility/GTFS"
         path = path_app + "static/GTFS"
         ## list all files in the directory
         list_GTFS_files = listdir(path)
@@ -1675,7 +1606,6 @@ def GTFS_selector():
                 GTFS_dict[u] = list_GTFS_files[idx]
 
         ## add empty element in front of the list
-        # list_GTFS_files.insert(0, 'select day (GTFS)')
         readable_day_GTFS.insert(0, 'select day (GTFS)')
 
         ## save the list into a .txt file
@@ -1685,14 +1615,11 @@ def GTFS_selector():
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var list_GTFS_files = \n" + old)  # assign the "var name" in the .geojson file
-
-        # selected_GTFS_data = "2023_01_23"
         try:
             day = GTFS_dict[selected_GTFS_data]
         except KeyError:
             day = "20230123"
 
-        # day = selected_GTFS_data
         print("GTFS day:", selected_GTFS_data)
         print("day:", day)
         routes = pd.read_csv(path + '/' + day + '/' + 'routes.txt')  ## "route_id" is the "line"
@@ -1771,7 +1698,6 @@ def TPL_hour_selector():
             selected_TPL_hour = session["TPL_hour"]
             print("using stored variable: ", session["TPL_hour"])
 
-      
         path = path_app + "static/GTFS"
         ## list all files in the directory
         list_GTFS_files = listdir(path)
@@ -1795,7 +1721,6 @@ def TPL_hour_selector():
                 GTFS_dict[u] = list_GTFS_files[idx]
 
         ## add empty element in front of the list
-        # list_GTFS_files.insert(0, 'select day (GTFS)')
         readable_day_GTFS.insert(0, 'select day (GTFS)')
 
         ## save the list into a .txt file
@@ -1806,10 +1731,7 @@ def TPL_hour_selector():
             f.seek(0)  # rewind
             f.write("var list_GTFS_files = \n" + old)  # assign the "var name" in the .geojson file
 
-        # day = selected_GTFS_data
         print("GTFS day:", selected_GTFS_data)
-        # day = "20230123"
-        # day = selected_GTFS_data
         day = GTFS_dict[selected_GTFS_data]
         print("GTFS day:", day)
         stop_times = pd.read_csv(
@@ -1841,8 +1763,6 @@ def TPL_hour_selector():
         hour[hour > 24] = hour - 24
 
         stop_times['hour'] = hour
-        # stop_times = stop_times[stop_times['hour'] <= 24]
-        # max(stop_times['hour'])
         stop_times = stop_times[['trip_id', 'arrival_time', 'departure_time', 'stop_id', 'stop_sequence',
                                  'shape_dist_traveled', 'hour']]
         trips = trips[['route_id', 'service_id', 'trip_id', 'trip_headsign', 'shape_id']]
@@ -1851,7 +1771,6 @@ def TPL_hour_selector():
         stop_times = pd.merge(stop_times, stops[['stop_id', 'stop_name', 'stop_lat', 'stop_lon']], on=['stop_id'],
                               how='left')
 
-        ### merge "stop_times" with "trips" and build a timetable for the chosen day
         timetable = pd.merge(stop_times, trips, on=['trip_id'], how='left')
         timetable = pd.merge(timetable, routes[['route_id', 'route_short_name']], on=['route_id'], how='left')
         timetable_animation = timetable[
@@ -1864,7 +1783,6 @@ def TPL_hour_selector():
 
         ## build the sequence of stops following the timetable schedule....
         full_trip = timetable_animation[timetable_animation.route_short_name == route_id]
-        # trip = full_trip[full_trip['hour'] == hour]
         ## choose a time range that can COVER the fULL TRIP. Therefore, get trip within previous-current- next HOUR
         trip = full_trip[(full_trip['hour'] >= hour - 1) & (full_trip['hour'] <= hour + 1)]
 
@@ -1894,7 +1812,6 @@ def TPL_hour_selector():
             file.write(str(key_start_trip_time))
         with open(path_app + "static/list_trip_keys_time_TPL.txt", "w") as file:
             file.write(str(key_start_trip_time))
-
 
         with open(path_app + "static/list_trip_keys_TPL.txt", "r+") as f:
             old = f.read()  # read everything in the file
@@ -1993,8 +1910,6 @@ def TPL_trip_selector():
         for idx_v, v in enumerate(key_start_trip_time):
             print(idx_v, v)
             trip_dict_starttime[v] = all_trips_IDS[idx_v]
-
-       
         selected_trip_id = trip_dict_starttime[selected_trip_ID]
 
         print("selected TRIP:", selected_trip_id)
@@ -2048,8 +1963,6 @@ def TPL_trip_selector():
                             best = dd
                             dist = km
                 DISTANZA_start_stop.append(dist)
-                # print(f'{ss} is nearest {best}: {dist} km')
-                # min(DISTANZA_start_stop)
 
             ### find coordinates of the shapes that are closer to the first and last stop of the "selected_trip"
             DISTANZA_end_stop = []
@@ -2093,11 +2006,9 @@ def TPL_trip_selector():
                 selected_shape_path = shape_path[
                     (shape_path['shape_pt_sequence'] >= 1) & (shape_path['shape_pt_sequence'] <= end_stop_sequence_ID)]
                 ##-->>> sort by sequence
-                # trip_path = trip.sort_values(['stop_sequence'])
-                # make a polyline:
                 trip_poline_stop = [[x, y] for (x, y) in
                                     zip(selected_shape_path.shape_pt_lat, selected_shape_path.shape_pt_lon)]
-               
+                ## append last stop to list...
                 # get all the timing
                 timeline_poline = [[x] for (x) in selected_trip['arrival_time']]
                 ## build a L.polyline for the leaflet layer to put in the java script for the html page.
@@ -2115,8 +2026,6 @@ def TPL_trip_selector():
                     route_TPL_all = df_ROUTE
                     ##--->> save data
                     route_TPL_all.to_csv(path_app + 'static/selected_route_TPL.csv')
-                    # route_TPL_all = pd.read_csv("D:/Federico/Mobility/flask_app/static/selected_route_TPL.csv")
-
                     import os
                     if os.path.exists(path_app + "static/selected_trip_path_TPL.txt"):
                         os.remove(path_app + "static/selected_trip_path_TPL.txt")
@@ -2286,8 +2195,6 @@ def ZMU_day_selector():
                 selected_data_type = file.read()
             print("selected_data_type-------I AM HERE-----------: ", selected_data_type)
         except:
-            # for stored_tod_file in glob.glob(path_app + "static/params/selected_data_type_*.txt"):
-            #    print(stored_tod_file)
             stored_data_type_files = glob.glob(path_app + "static/params/selected_data_type_*.txt")
             stored_data_type_files.sort(key=os.path.getmtime)
             stored_data_type_file = stored_data_type_files[len(stored_data_type_files) - 1]
@@ -2401,7 +2308,6 @@ def ZMU_tod_selector():
     import glob
 
     if request.method == "POST":
-
         session["ZMU_tod"] = request.form.get("ZMU_tod")
         selected_ZMU_tod = session["ZMU_tod"]
         print("selected_ZMU_tod:", selected_ZMU_tod)
@@ -2471,7 +2377,6 @@ def ZMU_hourrange_selector():
             print("using stored variable ZMU_day_start: ", session["ZMU_day_start"])
 
         try:
-            # selected_ZMU_day_end = session["ZMU_day_end"].strftime('%Y-%m-%d')
             selected_ZMU_day_end = session["ZMU_day_end"]
             print("day from selected_ZMU_day_end:", selected_ZMU_day_end)
         except:
@@ -2500,8 +2405,6 @@ def ZMU_hourrange_selector():
                 selected_data_type = file.read()
             print("selected_data_type-------I AM HERE-----------: ", selected_data_type)
         except:
-            # for stored_tod_file in glob.glob(path_app + "static/params/selected_data_type_*.txt"):
-            #    print(stored_tod_file)
             stored_data_type_files = glob.glob(path_app + "static/params/selected_data_type_*.txt")
             stored_data_type_files.sort(key=os.path.getmtime)
             stored_data_type_file = stored_data_type_files[len(stored_data_type_files) - 1]
@@ -2518,8 +2421,6 @@ def ZMU_hourrange_selector():
                 selected_ZMU_tod = file.read()
             print("selected_ZMU_tod-------I AM HERE-----------: ", selected_ZMU_tod)
         except:
-            # for stored_tod_file in glob.glob(path_app + "static/params/selected_tod_zmu_*.txt"):
-            #    print(stored_tod_file)
             stored_tod_files = glob.glob(path_app + "static/params/selected_tod_zmu_*.txt")
             stored_tod_files.sort(key=os.path.getmtime)
             stored_tod_file = stored_tod_files[len(stored_tod_files) - 1]
@@ -2911,23 +2812,16 @@ def ZMU_hourrange_selector():
                                                    left_on='zmu_origin', right_on='zmu')
 
             ### NORMALIZE each cont @destination with the number of staypoints in each traffic zone
-            # aggregated_zmu_origin['counts_norm'] = aggregated_zmu_origin.counts / aggregated_zmu_origin.count_staypoints
             aggregated_zmu_origin['counts_norm'] = aggregated_zmu_origin.counts / 1
 
             aggregated_zmu_origin = aggregated_zmu_origin[
                               ['index_zmu_origin','zmu', 'counts_norm', 'mean_triptime_m', 'mean_breaktime_m',
                                'mean_tripdistance_m', 'count_staypoints']]
 
-            # aggregated_zmu_origin.rename({'zmu_origin': 'zmu'}, axis=1, inplace=True)
             aggregated_zmu_origin['zmu'] = aggregated_zmu_origin.zmu.astype('int')
             aggregated_zmu_origin = pd.merge(aggregated_zmu_origin, ZMU_ROMA_with_population, on=['zmu'],
                                                    how='left')
 
-
-
-            # aggregated_zmu_destinations['counts'] = (aggregated_zmu_destinations['counts'] /
-            #                                         aggregated_zmu_destinations[
-            #                                             'POP_TOT_ZMU']) * 1000
             aggregated_zmu_origin.replace([np.inf, -np.inf], np.nan, inplace=True)
             aggregated_zmu_origin['counts_norm'] = round(aggregated_zmu_origin['counts_norm'], 2)
 
@@ -3106,7 +3000,6 @@ def ZMU_hourrange_selector():
 
             ### ----- @ ORIGINS ---------------------------------- ##################################################
 
-            ## grouby + counts....only if you want to estimate the NUMBER of vehicles
             aggregated_zmu_origin_day = origin_destination_routes_day[['hr', 'zmu_origin']].groupby(
                 ['hr', 'zmu_origin'], sort=False).size().reset_index().rename(columns={0: 'counts'})
 
@@ -3115,16 +3008,12 @@ def ZMU_hourrange_selector():
             aggregated_zmu_origin_day = pd.merge(aggregated_zmu_origin_day, all_staypoints,
                                                    left_on='zmu_origin', right_on='zmu')
 
-            ### NORMALIZE each cont @destination with the number of staypoints in each traffic zone
-            # aggregated_zmu_origin_day['counts_norm'] = aggregated_zmu_origin_day.counts / aggregated_zmu_origin_day.count_staypoints
-
             aggregated_zmu_origin_day[
                 'counts_norm'] = aggregated_zmu_origin_day.counts / 1
 
 
             aggregated_zmu_origin_day.replace([np.inf, -np.inf], np.nan, inplace=True)
             aggregated_zmu_origin_day['counts_norm'] = round(aggregated_zmu_origin_day['counts_norm'], 2)
-
 
             ## remove none values
             aggregated_zmu_origin_day = aggregated_zmu_origin_day[
@@ -3134,8 +3023,6 @@ def ZMU_hourrange_selector():
 
             ## merge with zmu to get geometries.....
             ## get geometry from "ZMU_ROMA"
-
-            # aggregated_zmu_destinations_day.rename({'zmu_destination': 'zmu'}, axis=1, inplace=True)
             aggregated_zmu_origin_day['zmu'] = aggregated_zmu_origin_day.zmu.astype('int')
             aggregated_zmu_origin_day = aggregated_zmu_origin_day[['hr', 'zmu', 'counts', 'count_staypoints', 'counts_norm']]
             aggregated_zmu_origin_day = pd.merge(aggregated_zmu_origin_day, ZMU_ROMA_with_population,
@@ -3146,9 +3033,6 @@ def ZMU_hourrange_selector():
 
             aggregated_zmu_origin_day = aggregated_zmu_origin_day[
                 ['counts_norm', 'index_zmu', 'POP_TOT_ZMU', 'zmu', 'hr', 'nome_comun', 'quartiere']]
-            # aggregated_zmu_destinations_day['counts'] = (aggregated_zmu_destinations_day['counts'] /
-            #                                             aggregated_zmu_destinations_day['POP_TOT_ZMU']) * 1000
-
 
             #### ------->>>> groupby + mean triptime, tripdistance, breaktime <<<-----------###########################################
 
@@ -3161,8 +3045,6 @@ def ZMU_hourrange_selector():
                 ['zmu', 'hr', 'triptime_s', 'breaktime_s', 'tripdistance_m']].groupby(['hr', 'zmu'],
                                                                                              sort=False).mean().reset_index().rename(
                 columns={0: 'means'})
-
-            # aggregated_means_zmu_destination['day'] = selected_ZMU_day
             ## convert triptime_s into minutes
             aggregated_means_zmu_origin['triptime_m'] = (aggregated_means_zmu_origin['triptime_s']) / 60
             aggregated_means_zmu_origin = aggregated_means_zmu_origin[
@@ -3342,7 +3224,6 @@ def ZMU_hourrange_selector():
                     aggregated_zmu_origin.mark_trip_distance.iloc[i] = "Relevant"
 
 
-
             #### save data into .csv format ###################################################
             #####----->>> save csv file ---- ##################################################
             csv_aggregated_zmu_origin = aggregated_zmu_origin[[ 'index_zmu_origin', 'zmu','score_trip_counts', 'score_trip_time', 'score_breaktime',
@@ -3350,11 +3231,6 @@ def ZMU_hourrange_selector():
                 'mark_breaktime', 'mark_trip_distance']]
             csv_aggregated_zmu_origin.to_csv(
                 path_app + 'static/csv_aggregated_zmu_origin_' + session.sid + '.csv')
-
-
-
-
-
 
             ##########################################################################################################
             ##########################################################################################################
@@ -3409,9 +3285,6 @@ def ZMU_hourrange_selector():
             ### convert Geodataframe into .geojson...
             session["aggregated_zmu_origin"] = aggregated_zmu_origin.to_json()
             print("------ I am here----- SESSION Colored ZMUs--------------------------")
-            # print(session["aggregated_zmu_origin"])
-
-            # print(session['id'])
             return render_template("index_zmu_select_hour.html",
                                    var_ZMU_day=selected_ZMU_day_start, session_aggregated_zmu_origin = session["aggregated_zmu_origin"])
 
@@ -3723,29 +3596,17 @@ def ZMU_hourrange_selector():
                                                    left_on='zmu_origin', right_on='zmu')
 
             ### NORMALIZE each cont @destination with the number of staypoints in each traffic zone
-            # aggregated_zmu_origin['counts_norm'] = aggregated_zmu_origin.counts / aggregated_zmu_origin.count_staypoints
             aggregated_zmu_origin['counts_norm'] = aggregated_zmu_origin.counts / 1
 
             aggregated_zmu_origin = aggregated_zmu_origin[
                               ['index_zmu_origin','zmu', 'counts_norm', 'mean_triptime_m', 'mean_breaktime_m',
                                'mean_tripdistance_m', 'count_staypoints']]
 
-            # aggregated_zmu_origin.rename({'zmu_origin': 'zmu'}, axis=1, inplace=True)
             aggregated_zmu_origin['zmu'] = aggregated_zmu_origin.zmu.astype('int')
             aggregated_zmu_origin = pd.merge(aggregated_zmu_origin, ZMU_ROMA_with_population, on=['zmu'],
                                                    how='left')
-
-
-
-            # aggregated_zmu_destinations['counts'] = (aggregated_zmu_destinations['counts'] /
-            #                                         aggregated_zmu_destinations[
-            #                                             'POP_TOT_ZMU']) * 1000
             aggregated_zmu_origin.replace([np.inf, -np.inf], np.nan, inplace=True)
             aggregated_zmu_origin['counts_norm'] = round(aggregated_zmu_origin['counts_norm'], 2)
-
-            print(
-                "-------- I am HERE .....FCD-------------------------------------------------------------------------------")
-
 
 
             ################################################################################################
@@ -3915,7 +3776,6 @@ def ZMU_hourrange_selector():
                                                    left_on='zmu_origin', right_on='zmu')
 
             ### NORMALIZE each cont @destination with the number of staypoints in each traffic zone
-            # aggregated_zmu_origin_day['counts_norm'] = aggregated_zmu_origin_day.counts / aggregated_zmu_origin_day.count_staypoints
 
             aggregated_zmu_origin_day[
                 'counts_norm'] = aggregated_zmu_origin_day.counts / 1
@@ -3960,8 +3820,6 @@ def ZMU_hourrange_selector():
                 ['zmu', 'hr', 'triptime_s', 'breaktime_s', 'tripdistance_m']].groupby(['hr', 'zmu'],
                                                                                              sort=False).mean().reset_index().rename(
                 columns={0: 'means'})
-
-            # aggregated_means_zmu_destination['day'] = selected_ZMU_day
             ## convert triptime_s into minutes
             aggregated_means_zmu_origin['triptime_m'] = (aggregated_means_zmu_origin['triptime_s']) / 60
             aggregated_means_zmu_origin = aggregated_means_zmu_origin[
@@ -4176,8 +4034,6 @@ def ZMU_hourrange_selector():
             aggregated_means_zmu_origin['counts_norm'] = round(aggregated_zmu_origin_day['counts_norm'], 2)
             aggregated_zmu_origin_day.to_csv(
                 path_app + 'static/aggregated_zmu_origin_day_' + session.sid + '.csv')
-
-            
             ## remove "centroid" column
             aggregated_zmu_origin.drop(['centroid'], axis=1, inplace=True)
 
@@ -4197,10 +4053,7 @@ def ZMU_hourrange_selector():
 
             ### convert Geodataframe into .geojson...
             session["aggregated_zmu_origin"] = aggregated_zmu_origin.to_json()
-            # print("------ I am here----- SESSION Colored ZMUs--------------------------")
-            # print(session["aggregated_zmu_origin"])
 
-            # print(session['id'])
             return render_template("index_zmu_select_hour.html",
                                    var_ZMU_day=selected_ZMU_day_start, session_aggregated_zmu_origin = session["aggregated_zmu_origin"])
 
@@ -4345,8 +4198,6 @@ def emission_type_selector():
         return render_template("index_zmu_emiss_select_day.html")
 
 
-
-
 ### select FLEET TYPE  -------- #################################
 @app.route('/fleet_type_selector/', methods=['GET', 'POST'])
 def fleet_type_selector():
@@ -4390,9 +4241,6 @@ def fleet_type_selector():
 
 
 
-
-
-
 ### select Time of DAY (TOD) -------- #################################
 @app.route('/tod_emiss_selector/', methods=['GET', 'POST'])
 def tod_emiss_selector():
@@ -4405,9 +4253,6 @@ def tod_emiss_selector():
             selected_emission_type = file.read()
         print("selected_emission_type-------I AM HERE-----------: ", selected_emission_type)
         session["emission_type"] = selected_emission_type
-
-      
-
         with open(path_app + "static/params/selected_fleet_type_" + session.sid + ".txt", "r") as file:
             selected_fleet_type = file.read()
         print("selected_fleet_type-------I AM HERE-----------: ", selected_fleet_type)
@@ -4471,7 +4316,6 @@ def ZMU_emiss_hourrange_selector():
         # selected_emission_type = 11
 
         try:
-            # selected_ZMU_day_start = session["ZMU_day_start"].strftime('%Y-%m-%d')
             selected_ZMU_day_start = session["ZMU_day_start"]
             print("day from selected_ZMU_day_start:", selected_ZMU_day_start)
         except:
@@ -4480,7 +4324,6 @@ def ZMU_emiss_hourrange_selector():
             print("using stored variable ZMU_day_start: ", session["ZMU_day_start"])
 
         try:
-            # selected_ZMU_day_end = session["ZMU_day_end"].strftime('%Y-%m-%d')
             selected_ZMU_day_end = session["ZMU_day_end"]
             print("day from selected_ZMU_day_end:", selected_ZMU_day_end)
         except:
@@ -4495,15 +4338,11 @@ def ZMU_emiss_hourrange_selector():
             selected_emission_type = file.read()
         print("selected_emission_type-------I AM HERE-----------: ", selected_emission_type)
 
-      
-
         stored_fleet_type_files = glob.glob(path_app + "static/params/selected_fleet_type_*.txt")
         stored_fleet_type_files.sort(key=os.path.getmtime)
         stored_fleet_type_file = stored_fleet_type_files[len(stored_fleet_type_files) - 1]
         with open(stored_fleet_type_file) as file:
             selected_fleet_type = file.read()
-        # with open(path_app + "static/params/selected_fleet_type_" + session.sid + ".txt", "r") as file:
-        #    selected_fleet_type = file.read()
         print("selected_fleet_type-------I AM HERE-----------: ", selected_fleet_type)
 
         try:
@@ -4606,10 +4445,8 @@ def ZMU_emiss_hourrange_selector():
 
 
         session["tod"] = tod
-        # tod = session["tod"]
         print("----- tod------:", session["tod"])
 
-       
         ######################################################################################
         #####----- make selection between FCD data and Synthetic data ------ #################
         ######################################################################################
@@ -4855,7 +4692,6 @@ def ZMU_emiss_hourrange_selector():
             # abort(404)
 
         #### merge with staypoints
-        # emission_origin_zones_day = pd.merge(emission_origin_zones_day, df_staypoints[['id_veh', 'id_stay_type']], on=['id_veh'], how='left')
         costs_origin_zones_day = pd.merge(costs_origin_zones_day, df_staypoints[['id_veh', 'id_stay_type']],
                                              on=['id_veh'], how='left')
         external_costs_origin_zones_day = pd.merge(external_costs_origin_zones_day, df_staypoints[['id_veh', 'id_stay_type']],
@@ -4874,7 +4710,6 @@ def ZMU_emiss_hourrange_selector():
         ZMU_ROMA = gpd.GeoDataFrame(ZMU_ROMA)
 
         ##### ---->>> Consider emission from ORIGIN (generation) @ ORIGIN  (highlight ORIGIN (coloured with the emission concentration at the Origin)
-        ## grouby + sum of the number of 'emission (ec,NOx, PM etc.)'
 
         #### use extennd emissions over all the traffic zones crossed during the trip (valid only for NOX, NMVOCs, PM, PM_nexh)
         if (selected_emission_type == 13 or selected_emission_type == 14 or selected_emission_type == 15 or selected_emission_type == 16):
@@ -4954,8 +4789,6 @@ def ZMU_emiss_hourrange_selector():
         aggregated_gdf_emission['zmu'] = aggregated_gdf_emission.zmu.astype('int')
 
         aggregated_gdf_emission.replace([np.inf, -np.inf], np.nan, inplace=True)
-
-
         aggregated_gdf_emission['ec'] = round(
             aggregated_gdf_emission['ec'], 2)
         aggregated_gdf_emission['ec_wtt'] = round(
@@ -4999,14 +4832,6 @@ def ZMU_emiss_hourrange_selector():
             aggregated_gdf_externalities['acc_cost'], 4)
         aggregated_gdf_externalities['noise_cost'] = round(
             aggregated_gdf_externalities['noise_cost'], 4)
-
-
-
-        #####----->>> save csv file ---- ##################################################
-        # aggregated_gdf_OD_GTFS['n_spostamenti_res'] = round(aggregated_gdf_OD_GTFS['n_spostamenti_res'], 2)
-        # aggregated_gdf_OD_GTFS.to_csv(
-        #    path_app + 'static/aggregated_gdf_OD_GTFS' + session.sid + '.csv')
-
         ### ---- EMISSIONS  <---- ##############
         try:
             aggregated_gdf_emission = gpd.GeoDataFrame(aggregated_gdf_emission)
@@ -5149,8 +4974,6 @@ def ZMU_emiss_hourrange_selector():
                                session_aggregated_costs_oring_zones = session["aggregated_costs_origin_zones"],
                                session_aggregated_externalities_costs_oring_zones = session["aggregated_externalities_costs_origin_zones"])
 
-
-## https://stackoverflow.com/questions/62823361/download-dataframe-as-csv-from-flask
 from flask import send_file
 
 @app.route('/download/',methods=["GET"])
@@ -5424,12 +5247,14 @@ def home_work_selector():
 ####################################################################################################################
 #######################################################################################################################
 
+
 #######///////////////////////////////////////////////////////////////////////##############
 #####-----------------------------------------------------------------------------##########
 #######///////////////////////////////////////////////////////////////////////##############
 #####-----------------------------------------------------------------------------##########
 ### ------  HIGHLIGHT ZMUs crossed from ORIGIN ZONES to all DESTINATION ZMU zones --- #####
 ### ------------------------------------------------------------------------------- ########
+
 
 
 ### select DATA TYPE  -------- #################################
@@ -5714,10 +5539,6 @@ def ZMU_paths_hour_selector():
         ZMU_ROMA_with_population['centroid'] = ZMU_ROMA_with_population.apply(wkb_tranformation_centroid, axis=1)
         ZMU_ROMA = gpd.GeoDataFrame(ZMU_ROMA_with_population)
 
-        #### -------------------------------------------- ##########################################################
-        #### -------------------------------------------- ##########################################################
-        #### -------------------------------------------- ##########################################################
-
         ### ----- DESTINATIONS ---------------------------------- ##################################################
 
         ## remove none values
@@ -5776,9 +5597,7 @@ def ZMU_paths_hour_selector():
         df_gdf_destination_routes.to_csv(
             path_app + 'static/df_gdf_destination_routes_path_zmu_' + session.sid + '.csv')
 
-        # session["crossed_zmu"] = crossed_zmu
 
-     
         return render_template("index_zmu_paths_select_hour.html")  # data_ZMU_path=data_ZMU_path
 
 
@@ -5816,8 +5635,6 @@ def ZMU_paths_tod_selector():
                 selected_data_type = file.read()
             print("selected_data_type-------I AM HERE-----------: ", selected_data_type)
         except:
-            # for stored_tod_file in glob.glob(path_app + "static/params/selected_data_type_*.txt"):
-            #    print(stored_tod_file)
             stored_data_type_files = glob.glob(path_app + "static/params/selected_data_type_*.txt")
             stored_data_type_files.sort(key=os.path.getmtime)
             stored_data_type_file = stored_data_type_files[len(stored_data_type_files) - 1]
@@ -6035,17 +5852,14 @@ def choose_zmu_index():
     df_gdf_destination_routes = pd.read_csv(
         path_app + 'static/df_gdf_destination_routes_path_zmu_' + session.sid + '.csv')
 
-
     crossed_zmu['index_zmu'] = crossed_zmu.index_zmu.astype('int')
 
+    # ZMU_ROMA = gpd.read_file(path_app + "static/zmu_aggregated_POP_ROMA_2011.geojson")
     ZMU_ROMA = gpd.read_file(path_app + "static/zmu_aggregated_POP_ROMA_2015_new.geojson")
 
     selected_index_zmu = session["ZMU_index"]
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 881
     print("selected_index_zmu;", selected_index_zmu)
-    # print("I am here...selected_index_zmu is: ", selected_index_zmu)
-    ## select ORIGIN zone ZMU .......
     filtered_crossed_zmu = crossed_zmu[
         crossed_zmu.index_zmu == selected_index_zmu]  ## this will be selected by the user.....flask + web interface.....
 
@@ -6055,7 +5869,6 @@ def choose_zmu_index():
         highlighted_zmus = []
         for idtrajectory in filtered_crossed_zmu.idtrajectory.tolist():
             ## ---->>> cross trajectory geometry with zmu zones and find intersections -------
-            # idtrajectory = 31763873
             path_trajectory = df_gdf_destination_routes[df_gdf_destination_routes.idtrajectory == idtrajectory]
             path_trajectory = path_trajectory[['zmu', 'geom']]
 
@@ -6095,7 +5908,6 @@ def choose_zmu_index():
         grouped_zmu_paths.columns = ['zmu', 'counts']
         ### merge with zmu and build a .json file
         grouped_zmu_paths = pd.merge(grouped_zmu_paths, ZMU_ROMA, on=['zmu'], how='left')
-        # grouped_zmu_paths.to_csv(path_app + 'static/grouped_zmu_paths_' + session.sid + '.csv')
 
         ## save as .geojson file
         try:
@@ -6422,14 +6234,6 @@ def TRIP_LEGS_hour_selector():
                                         grouped_trajectories_DESTINATION[['zmu_destination', 'count_destination']],
                                         left_on='zmu_destination', right_on='zmu_destination', how='left')
 
-       
-       
-        ##################---------------------------------------------------########################################
-        ##################---------------------------------------------------########################################
-        ##################---------------------------------------------------########################################
-        ### --->>> Group by ORIGIN & DESTINATION separately ----------------- #######################################
-        ##################---------- Create a list of OD counts to make polylines ------#############################
-
         ##----> find CENTROID of each ZMU zone (ORIGIN and DESTINATION)
         ## get geomeries of each ZMU zone (ORIGIN and DESTINATION)
         grouped_trajectories_ORIGIN = pd.merge(grouped_trajectories,
@@ -6606,7 +6410,6 @@ def AGGREGATERD_ZMU_border_selector():
         session.pop('BORDER_selected_ZMUs', default=None)
 
         try:
-            # selected_ZMU_day_start = session["ZMU_day_start"].strftime('%Y-%m-%d')
             selected_ZMU_day_start = session["ZMU_day_start"]
             print("hour from selected_ZMU_day_start:", selected_ZMU_day_start)
         except:
@@ -6615,7 +6418,6 @@ def AGGREGATERD_ZMU_border_selector():
             print("using stored variable ZMU_day_start: ", session["ZMU_day_start"])
 
         try:
-            # selected_ZMU_day_end = session["ZMU_day_end"].strftime('%Y-%m-%d')
             selected_ZMU_day_end = session["ZMU_day_end"]
             print("hour from selected_ZMU_day_end:", selected_ZMU_day_end)
         except:
@@ -6688,7 +6490,6 @@ def AGGREGATERD_ZMU_border_selector():
 
         engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
         from sqlalchemy.sql import text
-
 
         ###########################################################################
         #######--------------------------------------------- ######################
@@ -6821,7 +6622,6 @@ def download_aggregated_destinations():
         as_attachment=True
     )
 
-
 @app.route('/process_zmu_index', methods=['POST'])
 def process_zmu_index():
     data = request.json['data']
@@ -6866,12 +6666,8 @@ def figure_plotly1():
     selected_index_zmu = ((lines[1]).split())[1]
     print("selected_index_zmu: ", selected_index_zmu)
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 124
-    # selected_index_zmu = str(selected_index_zmu)
-    # selected_ZMU_day = '2019-10-13'
 
     print("I am here....in plotly....")
-    # filtered_ZMU = aggregated_zmu_destinations_by_day[(aggregated_zmu_destinations_by_day.day == selected_ZMU_day) & (aggregated_zmu_destinations_by_day.index_zmu == selected_index_zmu)]
     filtered_ZMU = aggregated_zmu_origin_by_day[(aggregated_zmu_origin_by_day.index_zmu == selected_index_zmu)]
     filtered_ZMU = filtered_ZMU[['hr', 'counts_norm', 'index_zmu', 'tripdistance_m',
                                  'triptime_m', 'breaktime_m']]
@@ -6916,11 +6712,8 @@ def figure_plotly2():
     selected_index_zmu = ((lines[1]).split())[1]
     print("selected_index_zmu: ", selected_index_zmu)
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 602
-    # selected_index_zmu = str(selected_index_zmu)
 
     print("I am here....in plotly....")
-    # filtered_ZMU = aggregated_zmu_destinations_by_day[(aggregated_zmu_destinations_by_day.day == selected_ZMU_day) & (aggregated_zmu_destinations_by_day.index_zmu == selected_index_zmu)]
     filtered_ZMU = aggregated_zmu_origin_by_day[
         (aggregated_zmu_origin_by_day.index_zmu == selected_index_zmu)]
     filtered_ZMU = filtered_ZMU[['hr', 'counts_norm', 'index_zmu', 'tripdistance_m',
@@ -6930,6 +6723,7 @@ def figure_plotly2():
     ####---->>> normalize data
     filtered_ZMU['triptime_m'] = ((filtered_ZMU.triptime_m) * (filtered_ZMU.counts_norm)) / max(filtered_ZMU.counts_norm)
     filtered_ZMU['tripdistance_m'] = (filtered_ZMU.tripdistance_m * filtered_ZMU.counts_norm) / max(filtered_ZMU.counts_norm)
+    # filtered_ZMU['breaktime_m'] = (filtered_ZMU.breaktime_m * filtered_ZMU.counts) / max(filtered_ZMU.counts)
 
     ## plot houlry profile with plotly and make an. html file
     ##----->>> mean TRIPDISTANCE (meters) at destination-----#############################
@@ -6966,9 +6760,6 @@ def figure_plotly3():
     selected_index_zmu = ((lines[1]).split())[1]
     print("selected_index_zmu: ", selected_index_zmu)
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 602
-    # selected_index_zmu = str(selected_index_zmu)
-
     print("I am here....in plotly....")
     # filtered_ZMU = aggregated_zmu_destinations_by_day[(aggregated_zmu_destinations_by_day.day == selected_ZMU_day) & (aggregated_zmu_destinations_by_day.index_zmu == selected_index_zmu)]
     filtered_ZMU = aggregated_zmu_origin_by_day[
@@ -6980,6 +6771,7 @@ def figure_plotly3():
     ####---->>> normalize data
     filtered_ZMU['triptime_m'] = ((filtered_ZMU.triptime_m) * (filtered_ZMU.counts_norm)) / max(filtered_ZMU.counts_norm)
     filtered_ZMU['tripdistance_m'] = (filtered_ZMU.tripdistance_m * filtered_ZMU.counts_norm) / max(filtered_ZMU.counts_norm)
+    # filtered_ZMU['breaktime_m'] = (filtered_ZMU.breaktime_m * filtered_ZMU.counts) / max(filtered_ZMU.counts)
 
     ## plot houlry profile with plotly and make an. html file
     ##----->>> mean TRIPTIME (minutes) at destination-----#############################
@@ -7016,12 +6808,7 @@ def figure_plotly4():
     selected_index_zmu = ((lines[1]).split())[1]
     print("selected_index_zmu: ", selected_index_zmu)
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 602
-    # selected_index_zmu = str(selected_index_zmu)
-
-    # stmt = query_filtered_ZMU.bindparams(x=str(selected_ZMU_day), y=str(selected_index_zmu))
     print("I am here....in plotly....")
-    # filtered_ZMU = aggregated_zmu_destinations_by_day[(aggregated_zmu_destinations_by_day.day == selected_ZMU_day) & (aggregated_zmu_destinations_by_day.index_zmu == selected_index_zmu)]
 
     filtered_ZMU = aggregated_zmu_origin_by_day[
         (aggregated_zmu_origin_by_day.index_zmu == selected_index_zmu)]
@@ -7032,6 +6819,7 @@ def figure_plotly4():
     ####---->>> normalize data
     filtered_ZMU['triptime_m'] = ((filtered_ZMU.triptime_m) * (filtered_ZMU.counts_norm)) / max(filtered_ZMU.counts_norm)
     filtered_ZMU['tripdistance_m'] = (filtered_ZMU.tripdistance_m * filtered_ZMU.counts_norm) / max(filtered_ZMU.counts_norm)
+    # filtered_ZMU['breaktime_m'] = (filtered_ZMU.breaktime_m * filtered_ZMU.counts) / max(filtered_ZMU.counts)
 
     ## plot houlry profile with plotly and make an. html file
     ##----->>> mean TRIPTIME (minutes) at destination-----#############################
@@ -7070,9 +6858,6 @@ def figure_polar_FCD():
     selected_index_zmu = ((lines[1]).split())[1]
     print("selected_index_zmu: ", selected_index_zmu)
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 602
-    # selected_index_zmu = str(selected_index_zmu)
-
 
     #### make POLAR chart for SCORES about trip counts, triptime, breaktime, and tripdistance.
 
@@ -7110,7 +6895,6 @@ def figure_polar_FCD():
 
     fig.update_xaxes(title_font_family="Arial")
     fig.update_xaxes(tickangle=90)
-
     import os
     import glob
     files_to_remove = glob.glob(path_app + 'templates/plotly_polar_fcd/*')
@@ -7154,19 +6938,14 @@ def figure_plotly5():
     selected_index_zmu = ((lines[1]).split())[1]
     print("selected_index_zmu: ", selected_index_zmu)
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 116
-    # selected_index_zmu = str(selected_index_zmu)
-    # selected_ZMU_day = '2019-10-13'
 
     print("I am here....in plotly....")
-    # filtered_ZMU = aggregated_zmu_destinations_by_day[(aggregated_zmu_destinations_by_day.day == selected_ZMU_day) & (aggregated_zmu_destinations_by_day.index_zmu == selected_index_zmu)]
     filtered_ZMU = aggregated_origin_OD_hourly_profile[(aggregated_origin_OD_hourly_profile.index_zmu == selected_index_zmu)]
     filtered_ZMU = filtered_ZMU[['ora', 'sum', 'index_zmu']]
     filtered_ZMU.sort_values('ora', ascending=True, inplace=True)
     ## rename
     filtered_ZMU.rename({'ora': 'hr'}, axis=1, inplace=True)
     filtered_ZMU.rename({'sum': 'number_of_visits'}, axis=1, inplace=True)
-
 
     ## plot houlry profile with plotly and make an. html file
     ##----->>> number of Vehicles at destination-----#############################
@@ -7197,7 +6976,6 @@ def figure_plotly6():
     ### ---> get filtered data of ZMU from csv file  <--- ###########################
     aggregated_emission_consumption_hourly_profile = pd.read_csv(
         path_app + 'static/aggregated_emission_origin_zones_hourly_profile_' + session.sid + '.csv')
-    # aggregated_emission_consumption_hourly_profile = pd.read_csv(path_app + 'static/aggregated_emission_origin_zones_hourly_profile_950c6991-2d77-4d2c-9743-9a04c9730243.csv')
 
     ##----> filter by day and ZMU zone....
     ## read back zmu index
@@ -7217,12 +6995,8 @@ def figure_plotly6():
     selected_index_zmu = ((lines[1]).split())[1]
     print("selected_index_zmu: ", selected_index_zmu)
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 12
-    # selected_index_zmu = str(selected_index_zmu)
-    # selected_ZMU_day = '2019-10-13'
 
     print("I am here....in plotly....")
-    # filtered_ZMU = aggregated_zmu_destinations_by_day[(aggregated_zmu_destinations_by_day.day == selected_ZMU_day) & (aggregated_zmu_destinations_by_day.index_zmu == selected_index_zmu)]
     filtered_ZMU = aggregated_emission_consumption_hourly_profile[(aggregated_emission_consumption_hourly_profile.index_zmu == selected_index_zmu)]
     filtered_ZMU = filtered_ZMU[['hour', 'ec', 'index_zmu']]
     filtered_ZMU.sort_values('hour', ascending=True, inplace=True)
@@ -7231,6 +7005,7 @@ def figure_plotly6():
 
 
     ## plot houlry profile with plotly and make an. html file
+    ##----->>> number of Vehicles at destination-----#############################
     fig = px.line(filtered_ZMU, x='hr', y="ec", labels={
         "ec": "Energy Cons. [MJ]"})
     ##----> delete files within the folder "/templates/plotly_plots..."
@@ -7274,9 +7049,6 @@ def figure_plotly7():
     selected_index_zmu = ((lines[1]).split())[1]
     print("selected_index_zmu: ", selected_index_zmu)
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 12
-    # selected_index_zmu = str(selected_index_zmu)
-    # selected_ZMU_day = '2019-10-13'
 
     print("I am here....in plotly....")
     # filtered_ZMU = aggregated_zmu_destinations_by_day[(aggregated_zmu_destinations_by_day.day == selected_ZMU_day) & (aggregated_zmu_destinations_by_day.index_zmu == selected_index_zmu)]
@@ -7286,8 +7058,8 @@ def figure_plotly7():
     ## rename
     filtered_ZMU.rename({'hour': 'hr'}, axis=1, inplace=True)
 
-
     ## plot houlry profile with plotly and make an. html file
+    ##----->>> number of Vehicles at destination-----#############################
     fig = px.line(filtered_ZMU, x='hr', y="ec_wtt", labels={
         "ec_wtt": "Energy Cons. Wtt [MJ]"})
     ##----> delete files within the folder "/templates/plotly_plots..."
@@ -7312,7 +7084,6 @@ def figure_plotly8():
     ### ---> get filtered data of ZMU from csv file  <--- ###########################
     aggregated_emission_consumption_hourly_profile = pd.read_csv(
         path_app + 'static/aggregated_emission_origin_zones_hourly_profile_' + session.sid + '.csv')
-    # aggregated_emission_consumption_hourly_profile = pd.read_csv(path_app + 'static/aggregated_emission_origin_zones_hourly_profile_950c6991-2d77-4d2c-9743-9a04c9730243.csv')
 
     ##----> filter by day and ZMU zone....
     ## read back zmu index
@@ -7332,9 +7103,6 @@ def figure_plotly8():
     selected_index_zmu = ((lines[1]).split())[1]
     print("selected_index_zmu: ", selected_index_zmu)
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 12
-    # selected_index_zmu = str(selected_index_zmu)
-    # selected_ZMU_day = '2019-10-13'
 
     print("I am here....in plotly....")
     # filtered_ZMU = aggregated_zmu_destinations_by_day[(aggregated_zmu_destinations_by_day.day == selected_ZMU_day) & (aggregated_zmu_destinations_by_day.index_zmu == selected_index_zmu)]
@@ -7345,6 +7113,7 @@ def figure_plotly8():
     filtered_ZMU.rename({'hour': 'hr'}, axis=1, inplace=True)
 
     ## plot houlry profile with plotly and make an. html file
+    ##----->>> number of Vehicles at destination-----#############################
     fig = px.line(filtered_ZMU, x='hr', y="nox", labels={
         "nox": "NOx [grams]"})
     ##----> delete files within the folder "/templates/plotly_plots..."
@@ -7372,7 +7141,6 @@ def figure_plotly9():
     ### ---> get filtered data of ZMU from csv file  <--- ###########################
     aggregated_emission_consumption_hourly_profile = pd.read_csv(
         path_app + 'static/aggregated_emission_origin_zones_hourly_profile_' + session.sid + '.csv')
-    # aggregated_emission_consumption_hourly_profile = pd.read_csv(path_app + 'static/aggregated_emission_origin_zones_hourly_profile_950c6991-2d77-4d2c-9743-9a04c9730243.csv')
 
     ##----> filter by day and ZMU zone....
     ## read back zmu index
@@ -7392,20 +7160,16 @@ def figure_plotly9():
     selected_index_zmu = ((lines[1]).split())[1]
     print("selected_index_zmu: ", selected_index_zmu)
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 12
-    # selected_index_zmu = str(selected_index_zmu)
-    # selected_ZMU_day = '2019-10-13'
 
     print("I am here....in plotly....")
-    # filtered_ZMU = aggregated_zmu_destinations_by_day[(aggregated_zmu_destinations_by_day.day == selected_ZMU_day) & (aggregated_zmu_destinations_by_day.index_zmu == selected_index_zmu)]
     filtered_ZMU = aggregated_emission_consumption_hourly_profile[(aggregated_emission_consumption_hourly_profile.index_zmu == selected_index_zmu)]
     filtered_ZMU = filtered_ZMU[['hour', 'nmvoc', 'index_zmu']]
     filtered_ZMU.sort_values('hour', ascending=True, inplace=True)
     ## rename
     filtered_ZMU.rename({'hour': 'hr'}, axis=1, inplace=True)
 
-
     ## plot houlry profile with plotly and make an. html file
+    ##----->>> number of Vehicles at destination-----#############################
     fig = px.line(filtered_ZMU, x='hr', y="nmvoc", labels={
         "nmvoc": "NMVOCs [grams]"})
     ##----> delete files within the folder "/templates/plotly_plots..."
@@ -7448,12 +7212,8 @@ def figure_plotly10():
     selected_index_zmu = ((lines[1]).split())[1]
     print("selected_index_zmu: ", selected_index_zmu)
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 12
-    # selected_index_zmu = str(selected_index_zmu)
-    # selected_ZMU_day = '2019-10-13'
 
     print("I am here....in plotly....")
-    # filtered_ZMU = aggregated_zmu_destinations_by_day[(aggregated_zmu_destinations_by_day.day == selected_ZMU_day) & (aggregated_zmu_destinations_by_day.index_zmu == selected_index_zmu)]
     filtered_ZMU = aggregated_emission_consumption_hourly_profile[(aggregated_emission_consumption_hourly_profile.index_zmu == selected_index_zmu)]
     filtered_ZMU = filtered_ZMU[['hour', 'pm', 'index_zmu']]
     filtered_ZMU.sort_values('hour', ascending=True, inplace=True)
@@ -7461,6 +7221,7 @@ def figure_plotly10():
     filtered_ZMU.rename({'hour': 'hr'}, axis=1, inplace=True)
 
     ## plot houlry profile with plotly and make an. html file
+    ##----->>> number of Vehicles at destination-----#############################
     fig = px.line(filtered_ZMU, x='hr', y="pm", labels={
         "pm": "PM [grams]"})
     ##----> delete files within the folder "/templates/plotly_plots..."
@@ -7487,7 +7248,6 @@ def figure_plotly11():
     ### ---> get filtered data of ZMU from csv file  <--- ###########################
     aggregated_emission_consumption_hourly_profile = pd.read_csv(
         path_app + 'static/aggregated_emission_origin_zones_hourly_profile_' + session.sid + '.csv')
-    # aggregated_emission_consumption_hourly_profile = pd.read_csv(path_app + 'static/aggregated_emission_origin_zones_hourly_profile_950c6991-2d77-4d2c-9743-9a04c9730243.csv')
 
     ##----> filter by day and ZMU zone....
     ## read back zmu index
@@ -7507,12 +7267,6 @@ def figure_plotly11():
     selected_index_zmu = ((lines[1]).split())[1]
     print("selected_index_zmu: ", selected_index_zmu)
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 12
-    # selected_index_zmu = str(selected_index_zmu)
-    # selected_ZMU_day = '2019-10-13'
-
-    print("I am here....in plotly....")
-    # filtered_ZMU = aggregated_zmu_destinations_by_day[(aggregated_zmu_destinations_by_day.day == selected_ZMU_day) & (aggregated_zmu_destinations_by_day.index_zmu == selected_index_zmu)]
     filtered_ZMU = aggregated_emission_consumption_hourly_profile[(aggregated_emission_consumption_hourly_profile.index_zmu == selected_index_zmu)]
     filtered_ZMU = filtered_ZMU[['hour', 'pm_nexh', 'index_zmu']]
     filtered_ZMU.sort_values('hour', ascending=True, inplace=True)
@@ -7520,6 +7274,7 @@ def figure_plotly11():
     filtered_ZMU.rename({'hour': 'hr'}, axis=1, inplace=True)
 
     ## plot houlry profile with plotly and make an. html file
+    ##----->>> number of Vehicles at destination-----#############################
     fig = px.line(filtered_ZMU, x='hr', y="pm_nexh", labels={
         "pm_nexh": "PM (tyres & brakes) [grams]"})
     ##----> delete files within the folder "/templates/plotly_plots..."
@@ -7545,7 +7300,6 @@ def figure_plotly12():
     ### ---> get filtered data of ZMU from csv file  <--- ###########################
     aggregated_emission_consumption_hourly_profile = pd.read_csv(
         path_app + 'static/aggregated_emission_origin_zones_hourly_profile_' + session.sid + '.csv')
-    # aggregated_emission_consumption_hourly_profile = pd.read_csv(path_app + 'static/aggregated_emission_origin_zones_hourly_profile_950c6991-2d77-4d2c-9743-9a04c9730243.csv')
 
     ##----> filter by day and ZMU zone....
     ## read back zmu index
@@ -7565,12 +7319,8 @@ def figure_plotly12():
     selected_index_zmu = ((lines[1]).split())[1]
     print("selected_index_zmu: ", selected_index_zmu)
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 12
-    # selected_index_zmu = str(selected_index_zmu)
-    # selected_ZMU_day = '2019-10-13'
 
     print("I am here....in plotly....")
-    # filtered_ZMU = aggregated_zmu_destinations_by_day[(aggregated_zmu_destinations_by_day.day == selected_ZMU_day) & (aggregated_zmu_destinations_by_day.index_zmu == selected_index_zmu)]
     filtered_ZMU = aggregated_emission_consumption_hourly_profile[(aggregated_emission_consumption_hourly_profile.index_zmu == selected_index_zmu)]
     filtered_ZMU = filtered_ZMU[['hour', 'co2eq', 'index_zmu']]
     filtered_ZMU.sort_values('hour', ascending=True, inplace=True)
@@ -7578,6 +7328,7 @@ def figure_plotly12():
     filtered_ZMU.rename({'hour': 'hr'}, axis=1, inplace=True)
 
     ## plot houlry profile with plotly and make an. html file
+    ##----->>> number of Vehicles at destination-----#############################
     fig = px.line(filtered_ZMU, x='hr', y="co2eq", labels={
         "co2eq": "CO2 eq. [grams]"})
     ##----> delete files within the folder "/templates/plotly_plots..."
@@ -7602,7 +7353,6 @@ def figure_plotly13():
     ### ---> get filtered data of ZMU from csv file  <--- ###########################
     aggregated_emission_consumption_hourly_profile = pd.read_csv(
         path_app + 'static/aggregated_emission_origin_zones_hourly_profile_' + session.sid + '.csv')
-    # aggregated_emission_consumption_hourly_profile = pd.read_csv(path_app + 'static/aggregated_emission_origin_zones_hourly_profile_950c6991-2d77-4d2c-9743-9a04c9730243.csv')
 
     ##----> filter by day and ZMU zone....
     ## read back zmu index
@@ -7622,12 +7372,7 @@ def figure_plotly13():
     selected_index_zmu = ((lines[1]).split())[1]
     print("selected_index_zmu: ", selected_index_zmu)
     selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 12
-    # selected_index_zmu = str(selected_index_zmu)
-    # selected_ZMU_day = '2019-10-13'
-
     print("I am here....in plotly....")
-    # filtered_ZMU = aggregated_zmu_destinations_by_day[(aggregated_zmu_destinations_by_day.day == selected_ZMU_day) & (aggregated_zmu_destinations_by_day.index_zmu == selected_index_zmu)]
     filtered_ZMU = aggregated_emission_consumption_hourly_profile[(aggregated_emission_consumption_hourly_profile.index_zmu == selected_index_zmu)]
     filtered_ZMU = filtered_ZMU[['hour', 'co2eq_wtt', 'index_zmu']]
     filtered_ZMU.sort_values('hour', ascending=True, inplace=True)
@@ -7635,6 +7380,7 @@ def figure_plotly13():
     filtered_ZMU.rename({'hour': 'hr'}, axis=1, inplace=True)
 
     ## plot houlry profile with plotly and make an. html file
+    ##----->>> number of Vehicles at destination-----#############################
     fig = px.line(filtered_ZMU, x='hr', y="co2eq_wtt", labels={
         "co2eq_wtt": "CO2eq wtt [grams]"})
     ##----> delete files within the folder "/templates/plotly_plots..."
@@ -7671,9 +7417,10 @@ def figure_BORDER_plotly1():
     aggregated_BORDER_destinations_by_day = pd.read_csv(
         path_app + 'static/aggregated_counts_and_means_BORDER_destination_' + session.sid + '.csv')
 
+    ##----> filter by day
 
     print("I am here....in plotly....")
-   
+
     aggregated_BORDER_destinations_by_day.sort_values('hr', ascending=True, inplace=True)
 
     ####---->>> normalize data
@@ -7840,7 +7587,6 @@ def animation_FCD():
     return render_template("index_animated_FCD.html")
 
 
-
 @app.route('/FCD_day_selector/', methods=['GET', 'POST'])
 ### select day (ZMU)...from Database
 def FCD_day_selector():
@@ -7971,6 +7717,7 @@ def FCD_hour_selector():
         stmt = query_origin_destination.bindparams(x=str(selected_FCD_day_start), xx=str(selected_FCD_day_end),
                                             y=str(hourrange_id), z=str(tod))
 
+        # stmt = query_origin_destination.bindparams(x=str(selected_FCD_day), y=str(selected_FCD_hour))
 
         with engine.connect() as conn:
             res = conn.execute(stmt).all()
@@ -7994,14 +7741,6 @@ def FCD_hour_selector():
         ## transform geom into linestring....
         ZMU_ROMA['geometry'] = ZMU_ROMA.apply(wkb_tranformation, axis=1)
         ZMU_ROMA = gpd.GeoDataFrame(ZMU_ROMA)
-        # ZMU_ROMA.rename({'geom': 'geometry'}, axis=1, inplace=True)
-
-        ## reference system = 6875 (in meters)
-        # ZMU_ROMA = ZMU_ROMA.set_geometry("geometry")
-        # ZMU_ROMA = ZMU_ROMA.set_crs('epsg:6875', allow_override=True)
-
-        ## convert into lat , lon
-        # ZMU_ROMA = ZMU_ROMA.to_crs({'init': 'epsg:4326'})
         ZMU_ROMA = ZMU_ROMA[['area', 'zmu', 'comune', 'quartiere', 'pgtu', 'municipio', 'geometry']]
         ## make a column with the index of the ZMU_ROMA
         ZMU_ROMA['index_zmu'] = ZMU_ROMA.index
@@ -8084,9 +7823,6 @@ def FCD_hour_selector():
                     trip_polyline = trip_polyline[0][0]
                     ##---> reverse lon lat poisition (LON, LAT)
                     trip_polyline = reverseTuple(trip_polyline)
-                ##---> make a list with first and last (lon, lat)
-
-                ##----> MAKE a dictionary...of points of polyline
                 lista = []
                 keys_coords = list(range(len(trip_polyline)))
                 dict_lat = {}
@@ -8099,7 +7835,6 @@ def FCD_hour_selector():
                     # print(element)
                     lista.append(element)
                 lista = (json.dumps(lista))
-                # lista_trip_poline = str("L.motion.polyline(JSON.parse(\'" + lista + "\'" + "),  {color: 'blue', weight: 3},  {easing: L.Motion.Ease.easeInOutQuad}, {removeOnEnd: true}).motionDuration(200)")
                 lista_trip_poline = str(
                     "L.motion.polyline(JSON.parse(\'" + lista + "\'" + "),  {color: 'blue', weight: 3},  {easing: L.Motion.Ease.easeInOutQuad}, {removeOnEnd: true,  icon: L.divIcon({html: " + "\"<i class='fa fa-car fa-2x fa-flip-horizontal' aria-hidden='true'></i>\"" + ", iconSize: L.point(26.5, 23)})" + " }).motionDuration(100)")
                 lista_trip_poline = pd.DataFrame({'motion_lines': [lista_trip_poline]})
@@ -8153,10 +7888,6 @@ def FCD_hour_selector():
             weight_of_zmu_zones['zmu_destination'] = weight_of_zmu_zones.zmu_destination.astype('Int64')
             (weight_of_zmu_zones[['zmu_origin', 'zmu_destination', 'OD_counts']]).to_csv(
                 path_app + 'static/weights_zmu.csv')
-
-            # route_FCD_all = route_FCD_all.dropna()
-            ## drop duplicates TRIP PATHS and keep only one
-            # route_FCD_all = route_FCD_all.drop_duplicates(['trip'])
             route_FCD_all['zmu_destination'] = route_FCD_all.zmu_destination.astype('Int64')
 
             import os
@@ -8208,7 +7939,6 @@ def FCD_hour_selector():
 def trails_FCD():
 
     try:
-        # selected_ZMU_day_start = session["ZMU_day_start"].strftime('%Y-%m-%d')
         selected_FCD_day_start = session["FCD_day_start"]
         print("day from selected_FCD_day_start:", selected_FCD_day_start)
     except:
@@ -8260,8 +7990,6 @@ def trails_FCD():
 
     ## transfor hours as integer
     routes['hour'] = routes['hour'].astype(int)
-    ## ---> initialize an empty list....
-    # route_FCD = []
     lista_polylines_FCD = []
     ##--> build the path of each FCD....
     all_days_IDs = list(routes.day.unique())  ## list all DAYS
@@ -8272,7 +8000,6 @@ def trails_FCD():
         ## select all trips for a particular day
         full_day_trips = routes[routes.day == day_id]
         ## loop al over the routes
-        # idtrajectory_id = 44106188
         for idx, idtrajectory_id in enumerate(all_idtrajectory_IDs):
             trip = full_day_trips[full_day_trips.idtrajectory == idtrajectory_id]
             if len(trip)>0:
@@ -8384,14 +8111,6 @@ def trails_FCD():
 
 
 
-
-#####################################################################################
-#####################################################################################
-#####################################################################################
-#####################################################################################
-### ---- new GTFS data by tpye --------------------- ################################
-
-
 @app.route('/GTFS_type_selector/', methods=['GET', 'POST'])
 def GTFS_type_selector():
 
@@ -8427,7 +8146,6 @@ def GTFS_type_selector():
             print("Rail data ----> ferro")
             print("selected_GTFS_type:--------selector", selected_GTFS_type)
             session['type'] = GTFS_type
-            # selected_GTFS_tod = session["GTFS_tod"]
             print("------GTFS_type------------>>>:", GTFS_type)
             with open(path_app + 'static/params/GTFS_name_' + user + '.txt', "w") as file:
                 file.write(str(GTFS_type))
@@ -8565,8 +8283,6 @@ def GTFS_LEGS_hour_selector():
 
         with open(path_app + "static/params/selected_GTFS_hour_" + session.sid + ".txt", "w") as file:
             file.write(str(selected_GTFS_hour))
-
-     
         tod =  session["tod"]
         print("------GTFS_type------------>>>:", selected_GTFS_type_name)
         print("------tod------------>>>:", tod)
@@ -8593,17 +8309,10 @@ def GTFS_LEGS_hour_selector():
         import shapely
         import numpy as np
 
-        # engine = create_engine("postgresql://postgres:superuser@192.168.134.36:5432/HAIG_ROMA")
         engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
         from sqlalchemy.sql import text
 
-        # selected_GTFS_hour = '8'
-        # GTFS_type = 'bus'
-        # tod = 'H'
-
         print("selected_GTFS_hour:", selected_GTFS_hour)
-        # print("selected_GTFS_day:", selected_GTFS_day)
-
 
         if (selected_GTFS_type_name == 'bus') & (tod == 'W'):
             query_gtfs = text('''SELECT route_id, trip_id, from_stop_id, to_stop_id, from_stop_name, from_ctime, 
@@ -8699,14 +8408,7 @@ def GTFS_LEGS_hour_selector():
 
         routes_gtfs = pd.DataFrame(res)
         len(routes_gtfs)
-
-
-
-        ###############################################################################
-        ################ ---- get STOPS from GTFS (DB)  -------------- ################
-
         ### groupby AND INDEX......
-        # GTFS_STOPS_from = routes_gtfs.groupby(['from_lat', 'from_lon', 'from_stop_name']).size().reset_index().rename(columns={0: 'counts'})
         GTFS_STOPS = routes_gtfs.groupby(['to_lat', 'to_lon', 'to_stop_name']).size().reset_index().rename(
                 columns={0: 'counts'})
 
@@ -8926,6 +8628,10 @@ def GTFS_LEGS_hour_selector():
 ###################################################################################
 ###################################################################################
 ###################################################################################
+
+
+
+
 
 
 ################################################################################################################
@@ -9336,8 +9042,7 @@ def emission_type_selector_tpl():
             print("EC")
             print("selected_emission_type:--------selector", selected_emission_type, pollutant)
             ## switch to table.........render....
-            # return render_template("index_zmu_emiss_select_day.html")
-
+            
         elif selected_emission_type == 12:  ## EC wtt
             print("EC_wtt")
             pollutant = 'EC_wtt'
@@ -9770,8 +9475,6 @@ def tpl_emissions_legs_hour_selector():
         res = conn.execute(stmt).all()
 
     vehicle_type = pd.DataFrame(res)
-    # vehicle_type = list(all_vehicle_type['id_veh_type'])
-
 
     query_all_veh_type = text('''SELECT * FROM gen.bus_types ''')
     with engine.connect() as conn:
@@ -9914,9 +9617,6 @@ def tpl_emissions_legs_hour_selector():
 
 
         if (tod == 'W'):
-
-
-          
             query_gtfs_emiss = text('''SELECT id_route_fleet, id_bus_load, route_id, trip_id, from_stop_id, to_stop_id, id_veh_type, from_ctime,
                                                    ec, ec_wtt, nox, nmvoc, pm, pm_nexh, co2eq, co2eq_wtt, km, hi, t, ac_cons, he_cons,
                                                                      date_part('hour', from_ctime) as hour
@@ -10118,13 +9818,10 @@ def tpl_emissions_legs_hour_selector():
         session["stop_buses_means_emiss_json"] = gdf_stop_sum_emiss_buses_json
         # print("-------- GTFS data file------------:", session["stop_buses_json"])
 
-
-
-        ###################################################################################
-        ################ ---- get TPL LINES from GTFS (DB)  -------------- ################
-
-        
-
+        ################################################################################
+        ################################################################################
+        ##### ------ HEATMAPS ------------- #############################################
+        #################################################################################
 
         GTFS_LEGS_emiss = emiss_gtfs[['geom', 'from_stop_name', 'to_stop_name', 'index_zmu', 'zmu',
                                      'ec', 'ec_wtt', 'nox', 'nmvoc', 'pm', 'pm_nexh', 'co2eq', 'co2eq_wtt',
@@ -10155,11 +9852,9 @@ def tpl_emissions_legs_hour_selector():
             ### make a polyline from linestring
             GTFS_LEG_polyline = LEG['geom'][0].strip("[]")
             GTFS_LEG_polyline = str("[") + GTFS_LEG_polyline + str("]")
-            # GTFS_LEG_polyline = eval(GTFS_LEG_polyline)
             GTFS_LEG_polyline = reverseTuple(eval(GTFS_LEG_polyline))
 
             ## make a geodataframe
-            # geom = LineString(GTFS_LEG_polyline)
             poline_gdf = gpd.GeoDataFrame(geometry=[LineString(GTFS_LEG_polyline)])
 
             ## make a dataframe
@@ -10178,17 +9873,11 @@ def tpl_emissions_legs_hour_selector():
                                        #'heating_cons': [LEG['he_cons'][0]]
                                        })
             ## attach geometry
-            # geom = poline_gdf['geometry']
             df_trip_poline['geometry'] = poline_gdf['geometry']
             gtfs_emiss_LEGS.append(df_trip_poline)
 
         ## concatenate all trips
         gtfs_emiss_LEGS_all = pd.concat(gtfs_emiss_LEGS)
-
-
-        ## normalize cosumption
-        # gtfs_LEGS_all['consumption']= round( (gtfs_LEGS_all['consumption']) / (gtfs_LEGS_all['dist_metri']/1000) , ndigits=2)
-
 
         del(gtfs_emiss_LEGS)
         del(GTFS_LEGS_emiss)
@@ -10298,11 +9987,9 @@ def tpl_emissions_legs_hour_selector():
         ### convert Geodataframe into .geojson...
         session["aggregated_tpl_emissions_origin_zones"] = aggregated_tpl_emission.to_json()
 
-
         return render_template("index_GTFS_emiss_select_hour.html",
                                session_stop_emissions_buses = session["stop_buses_emiss_json"],
                                session_emissions_LEGS_gtfs = session["emissions_LEGS_gtfs"],
-                               # session_STOPS_emiss_gtfs_heatmap = session["stop_emiss_buses_heatmap"],
                                session_aggregated_tpl_emissions_oring_zones=session["aggregated_tpl_emissions_origin_zones"]
                                )
 
@@ -10311,6 +9998,8 @@ def tpl_emissions_legs_hour_selector():
 ###################################################################################
 ###################################################################################
 ###################################################################################
+
+
 
 
 
@@ -10365,12 +10054,17 @@ def heatmaps_FCD():
 def FCD_heatmap_day_selector():
 
     # session["ZMU_tod"] = 6
+
     # session["data_type"] = 11
     # selected_ZMU_day_start = '2022-10-04'
     # selected_ZMU_day_end = '2022-10-05'
     # selected_ZMU_hourrange = 1
     # selected_ZMU_tod = 6
     if request.method == "POST":
+        # session["ZMU_tod"] = 6
+        ###--->> record the ZMU_day in into the Flask Session
+        ## TRY if session exists
+
         ##### ------ daterangepicker ----- ############################################
         ###############################################################################
 
@@ -10541,9 +10235,6 @@ def FCD_heatmap_hourrange_selector():
 
         engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
         from sqlalchemy.sql import text
-
-       
-
         query_destination = text(''' SELECT  id_veh, p_after, tt, dt_d, id, dist, hour_range_d,
                                                            date_part('hour', dt_d) as hour, geom
                                                           FROM fcd.trips  WHERE date(trips.dt_d) BETWEEN :x AND :xx 
@@ -10560,7 +10251,6 @@ def FCD_heatmap_hourrange_selector():
         routes_destination = pd.DataFrame(res)
 
         # routes_destination = routes_destination.sample(frac=0.1)  # 10%
-
         ## function to transform Geometry from text to LINESTRING
         def wkb_tranformation(line):
             return wkb.loads(line.geom, hex=True)
@@ -10578,12 +10268,12 @@ def FCD_heatmap_hourrange_selector():
         routes_destination = routes_destination.to_crs({'init': 'epsg:4326'})
         routes_destination = routes_destination.set_crs('epsg:4326', allow_override=True)
 
+
         df_coords = routes_destination.apply(lambda x: [y for y in x['geometry'].coords], axis=1)
         df_coords = pd.DataFrame(df_coords)
         df_coords.reset_index(inplace=True)
         df_coords = df_coords[0]
         ##---> reverse lon lat poisition (LON, LAT)
-        # trip_polyline = reverseTuple(trip_polyline)
         ##----> MAKE a dictionary...of points of polyline
         new_df = []
         index_coords = list(range(len(df_coords)))
@@ -10602,17 +10292,10 @@ def FCD_heatmap_hourrange_selector():
         ## transform the "destinations" table into a geodataframe
         geometry = [Point(xy) for xy in zip(routes_destination_coords.lon, routes_destination_coords.lat)]
         geo_destination_routes = GeoDataFrame(routes_destination, geometry=geometry, crs="EPSG:4326")  # CRS:3857
-        ## save geodataframe as .geojson file
-        # geo_destination_routes.to_file(filename=path_app + 'static/points_destination.geojson',driver='GeoJSON')
-
-        ### read geojson file of destiantion FCD data
-        # geo_destination_routes = gpd.read_file(path_app + "static/points_destination.geojson")
-        # gdf = geo_destination_routes.drop(columns=['lon', 'lat'])
         gdf=geo_destination_routes
 
         ## find the extents of the map
         xmin, ymin, xmax, ymax = geo_destination_routes.total_bounds
-        # cell_size = 0.005 ## 500 meters
         cell_size = 0.01  ## 1 km (0.01)
         grid_cells = []
         for x0 in np.arange(xmin, xmax + cell_size, cell_size):
@@ -10636,6 +10319,8 @@ def FCD_heatmap_hourrange_selector():
         dissolve = merged.dissolve(by="index_right", aggfunc="count")
         # aggregate by mean value the triptime, tripdistance and breaktime
         dissolve_means = merged.dissolve(by="index_right", aggfunc="mean")
+        # put this into cells
+        ## total number of vehicles within the grid
 
         #################################################################################################
         ##-------- total number of vehicles within the grid  --------------------------------------######
@@ -10891,7 +10576,6 @@ from folium.plugins import HeatMap, HeatMapWithTime
 def timeline_heatmaps():
     return render_template("timeline_heatmaps_FCD.html")
 
-
 @app.route('/timeline_heatmaps_hourly/', methods=['GET', 'POST'])
 def animated_heatmaps():
     if request.method == "POST":
@@ -10903,10 +10587,8 @@ def animated_heatmaps():
         selected_FCD_heatmap_day = selected_FCD_heatmap_day.strftime('%Y-%m-%d')
         selected_FCD_heatmap_day = str(selected_FCD_heatmap_day)
         print("selected_FCD_day:", selected_FCD_heatmap_day)
-        # selected_FCD_heatmap_day = '2019-10-09'
 
         ### set default day
-        # selected_FCD_heatmap_day = '2019-10-09'
         print("selected_FCD_day:", selected_FCD_heatmap_day)
 
         from sqlalchemy import create_engine
@@ -11471,25 +11153,192 @@ def animated_stoptime():
 ####-------- real time data from Open Charge Map -------------#####################
 
 @app.route('/charging_infrastructure_OSM/', methods=['GET', 'POST'])
-def charging_OSM():
+def charging_infrastructure_OSM():
 
     import glob
 
-    session['dow'] = '6'
+    session['dow_type'] = 13
     session["emission_type"] = 13 ### nox
     session["costs_type"] = 113
     session["external_type"] = 211
     session["fleet_type"] = 21
 
-    stored_dow_files = glob.glob(path_app + "static/params/selected_DOW*.txt")
+    stored_dow_files = glob.glob(path_app + "static/params/selected_DOW_*.txt")
     stored_dow_files.sort(key=os.path.getmtime)
     stored_dow_file = stored_dow_files[len(stored_dow_files) - 1]
     with open(stored_dow_file) as file:
         selected_dow = file.read()
     print("selected_dow-------I AM HERE-----------: ", selected_dow)
-    session["dow"] = selected_dow
+    session["dow_type"] = selected_dow
+    print(session["dow_type"])
 
-    return render_template("index_zmu_recharge_select_dow.html")
+    return render_template("index_zmu_recharge_select_day.html")
+
+
+
+
+
+@app.route('/dow_selector/', methods=['GET', 'POST'])
+def dow_selector():
+    import glob
+
+    # selected_dow = 11
+
+    if request.method == "POST":
+        session["dow_type"] = request.form.get("dow_type")
+        selected_dow = session["dow_type"]
+        print("selected_dow:", selected_dow)
+        selected_dow = str(selected_dow)
+        print("i am here")
+
+        selected_dow = int(selected_dow)
+        if selected_dow == 17:
+            dow = "0"
+            print("Sunday")
+        elif selected_dow == 11:
+            dow = "1"
+            print("Monday")
+        elif selected_dow == 12:
+            dow = "2"
+            print("Tuesday")
+        elif selected_dow == 13:
+            dow = "3"
+            print("Wednesday")
+        elif selected_dow == 14:
+            dow = "4"
+            print("Thursday")
+        elif selected_dow == 15:
+            dow = "5"
+            print("Friday")
+        elif selected_dow == 16:
+            dow = "6"
+            print("Saturday")
+
+        print("day of the week------:", selected_dow)
+
+        with open(path_app + "static/params/selected_DOW_" + session.sid + ".txt", "w") as file:
+            file.write(str(selected_dow))
+
+        ### -----> make QUERY of RECHARGE DATA --- or read input data ----##############################
+        #### ------------------------ ###############
+        ## switch to table.........TRIPS----FCD data
+        from sqlalchemy import create_engine
+        from sqlalchemy import exc
+        import sqlalchemy as sal
+        from sqlalchemy.pool import NullPool
+
+        engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
+        from sqlalchemy.sql import text
+
+        query_recharge_profiles_fcd = text(''' SELECT * FROM recharge.recharge_profiles_fcd
+                                                     WHERE dow = :yy ''')
+
+        stmt = query_recharge_profiles_fcd.bindparams(yy=str(dow))
+
+        with engine.connect() as conn:
+            res = conn.execute(stmt).all()
+        df_steps_recharge = pd.DataFrame(res)
+
+        ### ---> save .csv file
+        df_steps_recharge.to_csv(path_app + 'static/recharge_steps_' +  session.sid + '.csv')
+
+        ### ------- >>> aggregate by zones <<<<--- #####################################################
+        ## ---->>> make aggregation by ENERGY and zmu <<<<--------- ################################
+        aggr_steps_recharge = df_steps_recharge[['zmu', 'energy', 'index_zmu']].groupby(['zmu', 'index_zmu'],
+                                                 sort=False).sum().reset_index()
+        aggr_steps_recharge['energy'] = round(aggr_steps_recharge.energy, ndigits=4)
+
+
+        ## function to transform Geometry from text to LINESTRING
+        def wkb_tranformation(line):
+            return wkb.loads(line.geom, hex=True)
+
+
+        ZMU_ROMA = gpd.read_file(path_app + "static/zmu_aggregated_POP_ROMA_2015_new.geojson")
+        ZMU_ROMA = gpd.GeoDataFrame(ZMU_ROMA)
+        aggr_steps_recharge = pd.merge(aggr_steps_recharge, ZMU_ROMA, on=['zmu', 'index_zmu'], how='left')
+        aggr_steps_recharge['index_zmu'] = aggr_steps_recharge.index_zmu.astype('int')
+        aggr_steps_recharge = aggr_steps_recharge[['zmu','energy', 'index_zmu',
+                        'POP_TOT_ZMU', 'nome_comun', 'quartiere', 'geometry']]
+
+        try:
+            aggr_steps_recharge = gpd.GeoDataFrame(aggr_steps_recharge)
+        except IndexError:
+            abort(404)
+
+        ## save as .geojson file
+        ### ---- RECHARGE  <---- ##############
+        aggr_steps_recharge.to_file(filename=path_app + 'static/steps_recharge.geojson',
+                                        driver='GeoJSON')
+
+        ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        with open(path_app + "static/steps_recharge.geojson", "r+") as f:
+            old = f.read()  # read everything in the file
+            f.seek(0)  # rewind
+            f.write("var aggregated_recharge_zmu = \n" + old)  # assign the "var name" in the .geojson file
+
+        ##### --->>>>>> make the sessions data...<<<------------############################################
+        ### convert Geodataframe into .geojson...
+        session["aggregated_recharge"] = aggr_steps_recharge.to_json()
+
+        return render_template("index_zmu_recharge_select_dow.html")
+
+
+
+
+
+##--->> HISTOGRAMS for RECHARGE ------ ####################################################
+@app.route('/figure30')
+def figure_plotly30():
+    import plotly.express as px
+    ##---->>> make time series plotly.....-------------#######################
+    ### ---> get filtered data of ZMU from csv file  <--- ###########################
+    df_steps_recharge = pd.read_csv(path_app + 'static/recharge_steps_' + session.sid + '.csv')
+
+    ##----> filter by day and ZMU zone....
+    ## read back zmu index
+    with open(path_app + "static/params/index_zmu_" + session.sid + ".txt") as f:
+        lines = f.readlines()
+
+    """   
+    #### ----- to use in LINUX (Apache 2) ----------##########
+    line = ((lines[0]).split(':'))[1]
+    import re
+    line = re.sub('}\n', '', line)
+    selected_index_zmu = line
+    #### ----------------------------------------- ###########
+    """
+    ## string split and get value....
+
+    selected_index_zmu = ((lines[1]).split())[1]
+    print("selected_index_zmu: ", selected_index_zmu)
+    selected_index_zmu = int(float(selected_index_zmu))
+
+    filtered_ZMU = df_steps_recharge[(df_steps_recharge.index_zmu == selected_index_zmu)]
+    filtered_ZMU.sort_values('time_steps', ascending=True, inplace=True)
+
+    fig = px.bar(filtered_ZMU, x='time_steps', y="power", color="power_type", labels={"power": "power(kW)"} ,
+                 color_discrete_map={
+                     'Ot': 'yellow',
+                     'Hm': 'blue',
+                     'Hs': 'red'
+                 },
+                 title="Power Temporal Profile (kW)")
+
+
+    fig.update_yaxes(range=[0, 2*max(filtered_ZMU.power)])
+    ##----> delete files within the folder "/templates/plotly_plots. ---######
+    import os
+    import glob
+    files_to_remove = glob.glob(path_app + 'templates/plotly_recharge/*')
+    for f in files_to_remove:
+        os.remove(f)
+    import random
+    x = random.randint(0, 10000)
+    fig.write_html(path_app + 'templates/plotly_recharge/hourly_steps' + str(x) + '_recharge.html')
+    return render_template('plotly_recharge/hourly_steps' + str(x) + '_recharge.html')
+
+
 
 
 @app.route('/download_charging_infrastructure_OSM/', methods=['GET', 'POST'])
@@ -11504,12 +11353,6 @@ def download_charging_stations():
     json_data = open(path_app + 'static/CI_Italy_OCM_full.json', encoding="utf8")
     data_json = json.load(json_data)
     len(data_json)
-
-    ## get one element from the list
-    # data0 = data[10]
-
-    # for key, value in data0.items():
-    #    print("Key:", key, value)
 
     ### initialize an empty dataframe
     chargers = pd.DataFrame([])
@@ -11599,6 +11442,7 @@ def download_charging_stations():
     ##---> group by charging points and ZMUs
     ## get number of charging stations by ZMU zone
 
+    ## ---> find list of "lines" or "routes" passy by each "stop_id"
     def agg(g):
         return pd.Series({
             'Available_Power': [*g['Power'].unique()],
@@ -11655,1548 +11499,10 @@ def coords_OSM():
 
 
 
-
-@app.route('/dow_selector/', methods=['GET', 'POST'])
-def dow_selector():
-
-    import glob
-
-    if request.method == "POST":
-        session["dow"] = request.form.get("dow")
-        selected_dow = session["dow"]
-        print("selected_dow:", selected_dow)
-        selected_dow = str(selected_dow)
-
-
-        ### -----> make QUERY of RECHARGE DATA --- or read input data ----##############################
-        #### ------------------------ ###############
-        df_steps_recharge = pd.read_csv(path_app + 'static/recharge_steps.csv', usecols=[1, 2, 3, 4])
-
-        ### ---> save .csv file
-        # df_steps_recharge.to_csv(path_app + 'static/recharge_steps.csv')
-        # df_steps_recharge.to_csv(path_app + 'static/recharge_steps' + session.sid + '.csv')
-
-        ### ------- >>> aggregate by zones <<<<--- #####################################################
-        ## ---->>> make aggregation by time_steps and zmu <<<<--------- ################################
-        aggr_steps_recharge = df_steps_recharge[['random_increments_recharge', 'zmu']].groupby(['zmu'],
-            sort=False).sum().reset_index()
-
-
-        ## function to transform Geometry from text to LINESTRING
-        def wkb_tranformation(line):
-            return wkb.loads(line.geom, hex=True)
-
-
-        ZMU_ROMA = gpd.read_file(path_app + "static/zmu_aggregated_POP_ROMA_2015_new.geojson")
-        ZMU_ROMA = gpd.GeoDataFrame(ZMU_ROMA)
-        aggr_steps_recharge = pd.merge(aggr_steps_recharge, ZMU_ROMA, on=['zmu'], how='left')
-        aggr_steps_recharge['index_zmu'] = aggr_steps_recharge.index_zmu.astype('int')
-        aggr_steps_recharge = aggr_steps_recharge[['zmu', 'random_increments_recharge', 'index_zmu',
-                        'POP_TOT_ZMU', 'nome_comun', 'quartiere', 'geometry']]
-
-        try:
-            aggr_steps_recharge = gpd.GeoDataFrame(aggr_steps_recharge)
-        except IndexError:
-            abort(404)
-
-        ## save as .geojson file
-        ### ---- RECHARGE  <---- ##############
-        aggr_steps_recharge.to_file(filename=path_app + 'static/steps_recharge.geojson',
-                                        driver='GeoJSON')
-
-        ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
-        with open(path_app + "static/steps_recharge.geojson", "r+") as f:
-            old = f.read()  # read everything in the file
-            f.seek(0)  # rewind
-            f.write("var aggregated_recharge_zmu = \n" + old)  # assign the "var name" in the .geojson file
-
-        ##### --->>>>>> make the sessions data...<<<------------############################################
-        ### convert Geodataframe into .geojson...
-        session["aggregated_recharge"] = aggr_steps_recharge.to_json()
-
-        return render_template("index_EV_chargers.html")
-
-
-##--->> HISTOGRAMS for RECHARGE ------ ####################################################
-@app.route('/figure30')
-def figure_plotly30():
-    import plotly.express as px
-    ##---->>> make time series plotly.....-------------#######################
-    ### ---> get filtered data of ZMU from csv file  <--- ###########################
-    df_steps_recharge = pd.read_csv(path_app + 'static/recharge_steps.csv', usecols=[1, 2, 3, 4])
-    # df_steps_recharge = pd.read_csv(path_app + 'static/recharge_steps_' + session.sid + '.csv', usecols=[1, 2, 3, 4])
-    # df_steps_recharge = pd.read_csv(path_app + 'static/recharge_steps_9e141146-4699-421c-8355-3dd1fc2027ff.csv.csv')
-
-    ##----> filter by day and ZMU zone....
-    ## read back zmu index
-    with open(path_app + "static/params/index_zmu_" + session.sid + ".txt") as f:
-        lines = f.readlines()
-
-    """   
-    #### ----- to use in LINUX (Apache 2) ----------##########
-    line = ((lines[0]).split(':'))[1]
-    import re
-    line = re.sub('}\n', '', line)
-    selected_index_zmu = line
-    #### ----------------------------------------- ###########
-    """
-    ## string split and get value....
-
-    selected_index_zmu = ((lines[1]).split())[1]
-    print("selected_index_zmu: ", selected_index_zmu)
-    selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 1200
-    # selected_index_zmu = str(selected_index_zmu)
-    # selected_ZMU_day = '2019-10-13'
-
-    print("I am here....in plotly....")
-    # filtered_ZMU = aggregated_zmu_destinations_by_day[(aggregated_zmu_destinations_by_day.day == selected_ZMU_day) & (aggregated_zmu_destinations_by_day.index_zmu == selected_index_zmu)]
-    filtered_ZMU = df_steps_recharge[(df_steps_recharge.index_zmu == selected_index_zmu)]
-    filtered_ZMU.sort_values('time_steps', ascending=True, inplace=True)
-    ## rename
-    # filtered_ZMU.rename({'hour': 'hr'}, axis=1, inplace=True)
-
-
-    ## plot houlry profile with plotly and make an. html file
-    fig = px.histogram(filtered_ZMU, x='time_steps', y="random_increments_recharge", labels={
-        "random_increments_recharge": "power(kW)"})
-    fig.update_yaxes(range=[0, max(filtered_ZMU.random_increments_recharge)])
-    ##----> delete files within the folder "/templates/plotly_plots. ---######
-    import os
-    import glob
-    files_to_remove = glob.glob(path_app + 'templates/plotly_recharge/*')
-    for f in files_to_remove:
-        os.remove(f)
-    import random
-    x = random.randint(0, 10000)
-    fig.write_html(path_app + 'templates/plotly_recharge/hourly_steps' + str(x) + '_recharge.html')
-    return render_template('plotly_recharge/hourly_steps' + str(x) + '_recharge.html')
-
-
-
-
-####################################################################################################
-####################################################################################################
-####################################################################################################
-####################################################################################################
-####################################################################################################
-####################################################################################################
-####################################################################################################
-###############----- WEB SCRAPING to get IEA stats ---------------------- #########################
-####################################################################################################
-
-
-@app.route('/IEA_STATS_year_webscrap/', methods=['GET', 'POST'])
-def IEA_STATS_year():
-    selected_IEA_year = request.form["IEA_year"]
-    # selected_IEA_year = 2024
-    selected_IEA_year = str(selected_IEA_year)
-    with open(path_app + "static/params/selected_IEA_year.txt", "w") as file:
-        file.write(selected_IEA_year)
-    print("selected_IEA_year:", selected_IEA_year)
-
-    datum_IEA_year = [{
-        'IEA_year': selected_IEA_year,
-        'IEA_month': 'choose month'
-    }]
-
-    return render_template("index_IEA_stats_year.html", datum_IEA_year=datum_IEA_year)
-
-
-@app.route('/IEA_STATS_webscrap/', methods=['GET', 'POST'])
-def IEA_STATS():
-    import calendar
-
-    # selected_IEA_year = 2024 ------>> it must me the current year
-    # selected_IEA_month = 2   ---->> it must be the current month
-
-    ####################################################################################################
-    ##-----///// ACEA Automobiles -- STATISTICS, TEAR to DATE (Passenger Cars - NEW REGISTRATIONS) #####
-    #### -->>> scrap data from website of ACEA.AUTO ---------------------------------- #################
-
-    import PyPDF2
-    from tabula import read_pdf
-    import io
-    import urllib
-    from urllib.request import Request, urlopen
-    from PyPDF2 import PdfReader
-    import pandas as pd
-    import calendar
-
-    # Request to website and download HTML contents
-    ## insert current month....now we are in September.....
-    # MONTH = 9  ## AUGUST (!!! set one month after the month to search...)
-
-    selected_IEA_month = request.form["IEA_month"]
-    ## reload "selected_IEA_year"
-    with open(path_app + "static/params/selected_IEA_year.txt", "r") as file:
-        selected_IEA_year = file.read()
-
-    # selected_IEA_month = 11
-    selected_IEA_month = str(selected_IEA_month)
-    with open(path_app + "static/params/selected_IEA_month.txt", "w") as file:
-        file.write(selected_IEA_month)
-    print("selected_IEA_month:", selected_IEA_month)
-
-    # year = 2023
-    selected_IEA_year = int(selected_IEA_year)
-    short_yr = str(selected_IEA_year)[2:4]
-    selected_IEA_month = int(selected_IEA_month)
-
-    from datetime import date
-    today = date.today()
-    today = today.strftime("%d/%m/%Y")
-    today_date = today[:2]
-
-    if today_date < "17":
-        month_before = selected_IEA_month - 2
-        month_before_word = int(selected_IEA_month - 2)
-        month_before_word = calendar.month_name[month_before_word]
-    else:
-        month_before = selected_IEA_month - 1
-        month_before_word = int(selected_IEA_month - 1)
-        month_before_word = calendar.month_name[month_before_word]
-
-    if month_before == -1:
-        month_before = 11
-        month_before_word = calendar.month_name[int(month_before)]
-        selected_IEA_year = selected_IEA_year - 1
-
-    if month_before == 0:
-        month_before = 12
-        month_before_word = calendar.month_name[int(month_before)]
-        selected_IEA_year = selected_IEA_year - 1
-
-    month = str(selected_IEA_month).rjust(2, '0')
-    month_before = str(month_before).rjust(2, '0')
-    print(month)
-    print(month_before)
-    print(month_before_word)
-
-    def get_pdf_from_url(url):
-        remote_file = urlopen(Request(url)).read()
-        memory_file = io.BytesIO(remote_file)
-        pdf_file = PdfReader(memory_file)
-        return pdf_file
-
-    for i in range(32):
-        # print(i)
-        #### ACEA PRESS RELEASE FILES ----- ###############
-        url = "https://www.acea.auto/files/" + str(selected_IEA_year) + month + str(
-            i) + "_PRPC_" + short_yr + month_before + "_FINAL.pdf"
-        # print(url)
-        try:
-            reader = get_pdf_from_url(url)
-            # print("-----GOTTA!!!---------")
-            print(url)
-        except urllib.error.HTTPError:
-            # print("not found....try this instead --->>")
-            ## try also this configuration as exception
-            url = "https://www.acea.auto/files/2023" + month + str(i) + "_PRPC_23" + month_before + "-FINAL.pdf"
-            try:
-                reader = get_pdf_from_url(url)
-            except urllib.error.HTTPError:
-                # print("---searching.....-----")
-                url = "https://www.acea.auto/files/Press_release_car_registrations_" + str(
-                    month_before_word) + "_" + str(selected_IEA_year) + ".pdf"
-                try:
-                    reader = get_pdf_from_url(url)
-                    print("-----GOTTA!!!---------")
-                except urllib.error.HTTPError:
-                    print("---searching.....-----")
-
-    if month_before == '12':
-        url = "https://www.acea.auto/files/Press_release_car_registrations_full_year_" + str(selected_IEA_year) + ".pdf"
-        try:
-            reader = get_pdf_from_url(url)
-            print("-----GOTTA!!!---------")
-        except urllib.error.HTTPError:
-            print("---searching.....-----")
-
-    # print the number of pages in pdf file
-    print(len(reader.pages))
-    # print the text of the first page
-    print(reader.pages[4].extract_text())
-
-    #######################################
-    #####---->>> define key terms to search
-    string = "YEAR TO DATE"
-    import re
-
-    # extract text and do the search
-    i = 0
-    delta = 6
-    for page in reader.pages:
-        i = i + 1
-        # print(i)
-        text = page.extract_text()
-        # print(text)
-        res_search = re.search(string, text)
-        # print(res_search)
-        if (res_search != None):
-            print("gotta!")
-            print(text)
-            print(text.find("Italy"))
-            print(text.find("Latvia"))
-            index_italy = text.find("Italy")
-            index_latvia = text.find("Latvia")
-            print(text[index_italy:index_latvia])
-            Italy_row = text[index_italy:index_latvia]
-
-    ## ---> split file based on spaces
-    list_ITALY_ACEA = Italy_row.split(" ")
-
-    ## get numbers about EV vehicles
-    # new_EV_vehicles_ACEA = Italy_row[6:6+delta]
-    new_EV_vehicles_ACEA = list_ITALY_ACEA[1]
-    new_EV_vehicles_ACEA = int(new_EV_vehicles_ACEA.replace(',', ''))
-    print(new_EV_vehicles_ACEA)
-    # new_PHEV_vehicles_ACEA = Italy_row[26:26 + delta]
-    new_PHEV_vehicles_ACEA = list_ITALY_ACEA[4]
-    new_PHEV_vehicles_ACEA = int(new_PHEV_vehicles_ACEA.replace(',', ''))
-    print(new_PHEV_vehicles_ACEA)
-    # new_HEV_vehicles_ACEA = Italy_row[45:45 + delta]
-    new_HEV_vehicles_ACEA = list_ITALY_ACEA[7]
-    new_HEV_vehicles_ACEA = int(new_HEV_vehicles_ACEA.replace(',', ''))
-    print(new_HEV_vehicles_ACEA)
-    # TOTAL_new_vehicles_ACEA = Italy_row[131:132 + delta]  ## including internal combustion engines
-    TOTAL_new_vehicles_ACEA = list_ITALY_ACEA[19]
-    TOTAL_new_vehicles_ACEA = int(TOTAL_new_vehicles_ACEA.replace(',', ''))
-    print(TOTAL_new_vehicles_ACEA)
-
-    #################################################################################################
-    ########## ------------------------------------------------------------- ########################
-    #################################################################################################
-    ##-----///// ACEA Automobiles -- STATISTICS, YEAR to DATE (Commercial vehicles - NEW REGISTRATIONS)
-    # url_commercial = "https://www.acea.auto/files/20230727_PRCV_Q1-Q2_2023.pdf"  ## first half (first 6 months)
-
-    del (reader)
-    # year = 2023
-
-    ##--->> select "quarter"
-    first_quarter = 'Q1'
-    first_half = 'Q1-Q2'
-    third_quarter = 'Q1-Q3'
-    # fourth_quarter = 'Q1-Q4'
-
-
-    from datetime import datetime
-    today_date = datetime.today().strftime('%Y-%m-%d')
-    today_day = int(today_date[8:11])
-    today_month = int(today_date[5:7])
-
-    if int(month_before) <= 3:
-        time_range = first_quarter
-    elif int(month_before) <= 6:
-        time_range = first_half
-    elif int(month_before) <= 12:
-        time_range = third_quarter
-    if (today_day >= 29) | (today_month >= 1) and (today_month <= 4):
-        time_range = 'registrations_2023'
-
-
-    def get_pdf_from_url(url):
-        remote_file = urlopen(Request(url)).read()
-        memory_file = io.BytesIO(remote_file)
-        pdf_file = PdfReader(memory_file)
-        return pdf_file
-
-    ### grab the right day...
-    for i in range(32):
-        # print(i)
-        #### ACEA PRESS RELEASE FILES ----- ###############
-        url = "https://www.acea.auto/files/" + str(selected_IEA_year) + str(month_before) + str(
-            i) + "_PRCV_" + time_range + "_" + str(
-            selected_IEA_year) + ".pdf"
-        # print(url)
-        try:
-            reader = get_pdf_from_url(url)
-            print("----- got it!!! ---------")
-        except urllib.error.HTTPError:
-            print("not found....")
-            url = "https://www.acea.auto/files/Press_release_commercial_vehicles_" + str(time_range) + "_" + str(
-                selected_IEA_year) + ".pdf"
-            try:
-                reader = get_pdf_from_url(url)
-                print("-----GOTTA!!!---------")
-            except urllib.error.HTTPError:
-                print("---searching.....-----")
-                url = "https://www.acea.auto/files/Press_release-commercial_vehicle_" + str(time_range) + ".pdf"
-                try:
-                    reader = get_pdf_from_url(url)
-                    print("-----GOTTA!!!---------")
-                except urllib.error.HTTPError:
-                    print("---searching.....-----")
-
-    # print the number of pages in pdf file
-    print(len(reader.pages))
-    # print the text of the first page
-    print(reader.pages[4].extract_text())
-
-    ##########################################
-    ####-------->>> define key terms to search
-    string = "TOTAL NEW BUS"
-    import re
-
-    # extract text and do the search
-    i = 0
-    delta = 3
-    for page in reader.pages:
-        i = i + 1
-        # print(i)
-        text = page.extract_text()
-        # print(text)
-        res_search = re.search(string, text)
-        # print(res_search)
-        if (res_search != None):
-            print("gotta!")
-            print(text)
-            print(text.find("Italy"))
-            print(text.find("Latvia"))
-            index_italy = text.find("Italy")
-            index_latvia = text.find("Latvia")
-            print(text[index_italy:index_latvia])
-            Italy_row = text[index_italy:index_latvia]
-
-    ## ---> split file based on spaces
-    list_ITALY_ACEA = Italy_row.split(" ")
-
-    ## get numbers about EV vehicles
-    # new_EV_BUSES_ACEA = Italy_row[6:6+delta]
-    new_EV_BUSES_ACEA = list_ITALY_ACEA[1]
-    new_EV_BUSES_ACEA = int(new_EV_BUSES_ACEA.replace(',', ''))
-    print(new_EV_BUSES_ACEA)
-    # new_HEV_BUSES_ACEA = Italy_row[20:20 + delta]
-    new_HEV_BUSES_ACEA = list_ITALY_ACEA[4]
-    new_HEV_BUSES_ACEA = int(new_HEV_BUSES_ACEA.replace(',', ''))
-    print(new_HEV_BUSES_ACEA)
-    # TOTAL_new_BUSES_ACEA = Italy_row[70:72 + delta]  ## including internal combustion engines
-    TOTAL_new_BUSES_ACEA = list_ITALY_ACEA[15]  ## including internal combustion engines
-    TOTAL_new_BUSES_ACEA = int(TOTAL_new_BUSES_ACEA.replace(',', ''))
-    print(TOTAL_new_BUSES_ACEA)
-
-    #######################################
-    ####----->>> define key terms to search
-    string = "NEW VAN"
-    import re
-
-    # extract text and do the search
-    i = 0
-    delta = 3
-    for page in reader.pages:
-        i = i + 1
-        # print(i)
-        text = page.extract_text()
-        # print(text)
-        res_search = re.search(string, text)
-        # print(res_search)
-        if (res_search != None):
-            print("searching.....")
-            print(text)
-            print(text.find("Italy"))
-            print(text.find("Latvia"))
-            index_italy = text.find("Italy")
-            index_latvia = text.find("Latvia")
-            print(text[index_italy:index_latvia])
-            Italy_row = text[index_italy:index_latvia]
-
-    ## ---> split file based on spaces
-    list_ITALY_ACEA = Italy_row.split(" ")
-
-    ## get numbers about EV vehicles
-    # new_EV_LIGHT_COMMERCIAL_ACEA = Italy_row[6:8+delta]
-    new_EV_LIGHT_COMMERCIAL_ACEA = list_ITALY_ACEA[1]
-    new_EV_LIGHT_COMMERCIAL_ACEA = int(new_EV_LIGHT_COMMERCIAL_ACEA.replace(',', ''))
-    print(new_EV_LIGHT_COMMERCIAL_ACEA)
-    # new_HEV_LIGHT_COMMERCIAL_ACEA = Italy_row[25:28 + delta]
-    new_HEV_LIGHT_COMMERCIAL_ACEA = list_ITALY_ACEA[4]
-    new_HEV_LIGHT_COMMERCIAL_ACEA = int(new_HEV_LIGHT_COMMERCIAL_ACEA.replace(',', ''))
-    print(new_HEV_LIGHT_COMMERCIAL_ACEA)
-    # TOTAL_LIGHT_COMMERCIAL_ACEA = Italy_row[79:82 + delta]  ## including internal combustion engines
-    TOTAL_LIGHT_COMMERCIAL_ACEA = list_ITALY_ACEA[13]
-    TOTAL_LIGHT_COMMERCIAL_ACEA = int(TOTAL_LIGHT_COMMERCIAL_ACEA.replace(',', ''))
-    print(TOTAL_LIGHT_COMMERCIAL_ACEA)
-
-    ########################################
-    ####----->>>> define key terms to search
-    string = "NEW TRUCK"
-    import re
-
-    # extract text and do the search
-    i = 0
-    delta = 3
-    for page in reader.pages:
-        i = i + 1
-        # print(i)
-        text = page.extract_text()
-        # print(text)
-        res_search = re.search(string, text)
-        # print(res_search)
-        if (res_search != None):
-            print("----searching...")
-            print(text)
-            print(text.find("Italy"))
-            print(text.find("Latvia"))
-            index_italy = text.find("Italy")
-            index_latvia = text.find("Latvia")
-            print(text[index_italy:index_latvia])
-            Italy_row = text[index_italy:index_latvia]
-
-    ## ---> split file based on spaces
-    list_ITALY_ACEA = Italy_row.split(" ")
-
-    ## get numbers about EV vehicles
-    # new_EV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = Italy_row[6:6+delta]
-    new_EV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = list_ITALY_ACEA[1]
-    new_EV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = int(new_EV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA.replace(',', ''))
-    print(new_EV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA)
-    # new_HEV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = Italy_row[19:20 + delta]
-    new_HEV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = list_ITALY_ACEA[4]
-    new_HEV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = int(new_HEV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA.replace(',', ''))
-    print(new_HEV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA)
-    # TOTAL_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = Italy_row[71:74 + delta]  ## including internal combustion engines
-
-    TOTAL_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = list_ITALY_ACEA[15]
-    if (today_day >= 29) | (today_month >= 1) and (today_month <= 4):
-        time_range = 'registrations_2023'
-        TOTAL_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = list_ITALY_ACEA[16]
-
-    TOTAL_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = int(TOTAL_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA.replace(',', ''))
-    print(TOTAL_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA)
-
-    ###################################################################
-    ###################################################################
-    ##---- ANFIA ----------------------------------- ##################
-
-    ## ----//// ANFIA Statistics ---- YEAR to DATE ####################
-    ## https://www.anfia.it/it/portale-autobus/itemlist/category/23-dati-statistici
-    url_anfia = "https://www.anfia.it/data/studi-e-statistiche/dati-statistici/immatricolazioni-italia/autovetture%20-%20struttura%20mercato.xlsx"
-
-    import requests
-    resp = requests.get(url_anfia)
-    import io
-
-    import urllib
-    from urllib.request import Request, urlopen
-    from PyPDF2 import PdfReader
-    import pandas as pd
-
-    ## create a new empty file .excel
-    output = open(path_app + 'static/struttura_mercato_ANFIA.xls', 'wb')
-    output.write(resp.content)
-    output.close()
-
-    ### read xls fils (ANFIA)
-    ANFIA_data = pd.read_excel(path_app + 'static/struttura_mercato_ANFIA.xls', sheet_name=0,
-                               skiprows=[0, 1, 2, 3, 4])
-    # set column names equal to values in row index position 0
-    ANFIA_data.columns = ANFIA_data.iloc[0]
-    # remove first row from DataFrame
-    ANFIA_data = ANFIA_data[1:]
-
-    ## select columns
-
-    # ANFIA_data = ANFIA_data[['Volumi']]
-    # ANFIA_data.iloc[: , -3:len(ANFIA_data.columns)-2]
-    ANFIA_data = pd.concat([ANFIA_data[['Volumi']], ANFIA_data.iloc[:, -3:len(ANFIA_data.columns) - 2]], axis=1)
-    ## remove rows with NAN values
-    ANFIA_data = ANFIA_data[ANFIA_data['Volumi'].notna()]
-    contain_values = ANFIA_data[ANFIA_data['Volumi'].str.contains('ELETTRICA')]
-
-    ## get numbers about EV vehicles
-    new_EV_vehicles_ANFIA = ANFIA_data[ANFIA_data['Volumi'].str.contains('ELETTRICA')].iloc[0][1]
-    print("new_EV_vehicles_ANFIA:", new_EV_vehicles_ANFIA)
-    new_PHEV_vehicles_ANFIA = ANFIA_data[ANFIA_data['Volumi'].str.contains('PHEV')].iloc[0][1]
-    print("new_PHEV_vehicles_ANFIA:", new_PHEV_vehicles_ANFIA)
-    new_HEV_vehicles_ANFIA = ANFIA_data[ANFIA_data['Volumi'].str.contains('Hev')].iloc[0][1]
-    print("new_HEV_vehicles_ANFIA:", new_HEV_vehicles_ANFIA)
-    new_HYDROGEN_vehicles_ANFIA = ANFIA_data[ANFIA_data['Volumi'].str.contains('Hydrogen')].iloc[0][1]
-    print("new_HYDROGEN_vehicles_ANFIA:", new_HYDROGEN_vehicles_ANFIA)
-
-    TOTAL_new_vehicles_ANFIA = ANFIA_data[ANFIA_data['Volumi'].str.contains('TOTALE')].iloc[0][
-        1]  ## including internal combustion engines
-    print("TOTAL_new_vehicles_ANFIA", TOTAL_new_vehicles_ANFIA)
-
-    ######################################################################################################################
-    ##---- UNRAE ----------------------------------- #####################################################################
-    # url_UNRAE = "https://unrae.it/files/04%20Struttura%20del%20Mercato%20Luglio%202023_64c8d3375fb77.pdf" ---- #########
-    ####### --------- "https://unrae.it/files/04%20Struttura%20del%20Mercato%20Giugno%202023_64a2d8d1c4038.pdf" ---- #####
-
-    # month = "Novembre"
-    # selected_IEA_month = 11
-
-    import calendar
-
-    selected_IEA_month = int(selected_IEA_month)
-    month = calendar.month_name[selected_IEA_month]
-    # month = month.title()
-
-    it_month = 'Gennaio'
-
-    if month == 'January':
-        it_month = 'Gennaio'
-    elif month == 'February':
-        it_month = 'Febbraio'
-    elif month == 'March':
-        it_month = 'Marzo'
-    elif month == 'April':
-        it_month = 'Aprile'
-    elif month == 'June':
-        it_month = 'Giugno'
-    elif month == 'July':
-        it_month = 'Luglio'
-    elif month == 'August':
-        it_month = 'Agosto'
-    elif month == 'September':
-        it_month = 'Settembre'
-    elif month == 'October':
-        it_month = 'Ottobre'
-    elif month == 'November':
-        it_month = 'Novembre'
-    elif month == 'December':
-        it_month = 'Dicembre'
-
-    month = it_month
-
-    # year = 2023
-    # url_UNRAE = "https://unrae.it/files/04%20Struttura%20del%20Mercato%20" + month + "%20" + str(year) + "_64c8d3375fb77.pdf"
-
-    import httplib2
-    from bs4 import BeautifulSoup, SoupStrainer
-    from urllib.request import Request, urlopen
-    http = httplib2.Http()
-
-    ## --->> get link of UNRAE "immatricolazioni" (all STATISTICAL DATA)
-    status, response = http.request("https://unrae.it/dati-statistici/immatricolazioni")
-
-    ## --->> get link of UNRAE "immatricolazioni" referred to the month above
-    for link in BeautifulSoup(response, parse_only=SoupStrainer('a')):
-        if link.has_attr('href'):
-            if "struttura-del-mercato" in link['href']:
-                print(link['href'])
-                url_UNRAE = link['href']
-
-    status, response_url = http.request(url_UNRAE)
-
-    ## get the .pdf file with the STATISTICS of IMMATRICOLAZIONI for the month
-    for link in BeautifulSoup(response_url, parse_only=SoupStrainer('a')):
-        if link.has_attr('href'):
-            if "Struttura del Mercato" in link['href']:
-                print(link['href'])
-                file_struttura_mercato_UNRAE = link['href']
-
-    # url_UNRAE = "https://unrae.it/files/04%20Struttura%20del%20Mercato%20" + month + "%20" + str(year) + "_64c8d3375fb77.pdf"
-    ## ---> split file based on spaces
-    list_file_struttura_mercato_UNRAE = file_struttura_mercato_UNRAE.split(" ")
-    last_element = list_file_struttura_mercato_UNRAE[-1]
-    # url_UNRAE = "https://unrae.it/files/04%20Struttura%20del%20Mercato_" + month + "%20" + last_element
-    # url_UNRAE = "https://unrae.it/files/04%20Struttura%20del%20" + last_element
-    url_UNRAE = "https://unrae.it/files/04%20Struttura%20del%20" + list_file_struttura_mercato_UNRAE[
-        3] + "%20" + last_element
-
-    def get_pdf_from_url(url_UNRAE):
-        remote_file = urlopen(Request(url_UNRAE)).read()
-        memory_file = io.BytesIO(remote_file)
-        pdf_file = PdfReader(memory_file)
-        return pdf_file
-
-    try:
-        reader = get_pdf_from_url(url_UNRAE)
-    except urllib.error.HTTPError:
-        print("not found....")
-
-    # print the number of pages in pdf file
-    print(len(reader.pages))
-    # print the text of the first page
-    print(reader.pages[0].extract_text())
-
-    text = reader.pages[0].extract_text()
-
-    ###---Electric cars (BEV)
-    index_BEV = text.find("Elettriche (BEV)")
-    row_BEV = text[index_BEV:index_BEV + 100]
-    ## ---> split file based on spaces
-    list_BEV_row = row_BEV.split(" ")
-    Elettriche__UNRAE_BEV = list_BEV_row[2]
-    Elettriche__UNRAE_BEV = int(Elettriche__UNRAE_BEV.replace('.', ''))
-    print("Elettriche__UNRAE_BEV:", Elettriche__UNRAE_BEV)
-
-    ###---Hybrid (Electric)
-    index_HEV = text.find("HEV")
-    row_HEV = text[index_HEV:index_HEV + 100]
-    ## ---> split file based on spaces
-    list_HEV_row = row_HEV.split(" ")
-    Ibride_Elettriche_UNRAE_HEV = list_HEV_row[1]
-    Ibride_Elettriche_UNRAE_HEV = int(Ibride_Elettriche_UNRAE_HEV.replace('.', ''))
-    print("Ibride_Elettriche_UNRAE_HEV:", Ibride_Elettriche_UNRAE_HEV)
-
-    ###---PlugIn (Electric-Hybrid)
-    index_PHEV = text.find("PHEV")
-    row_PHEV = text[index_PHEV:index_PHEV + 100]
-    ## ---> split file based on spaces
-    list_PHEV_row = row_PHEV.split(" ")
-    PlugIn_Elettriche_UNRAE_PHEV = list_PHEV_row[1]
-    PlugIn_Elettriche_UNRAE_PHEV = int(PlugIn_Elettriche_UNRAE_PHEV.replace('.', ''))
-    print("PlugIn_Elettriche_UNRAE_PHEV:", PlugIn_Elettriche_UNRAE_PHEV)
-
-    ###---Fuel Cell (Hydrogen)
-    index_HYDROGEN = text.find("FCEV")
-    row_FCEV = text[index_HYDROGEN:index_HYDROGEN + 100]
-    ## ---> split file based on spaces
-    list_FCEV_row = row_FCEV.split(" ")
-    Fuel_Cell_Hydrogen_UNRAE_FCEV = list_FCEV_row[1]
-    Fuel_Cell_Hydrogen_UNRAE_FCEV = int(Fuel_Cell_Hydrogen_UNRAE_FCEV.replace('.', ''))
-    print("Fuel_Cell_Hydrogen_UNRAE_FCEV:", Fuel_Cell_Hydrogen_UNRAE_FCEV)
-
-    ###---total new vehicles
-    index_total = text.find("Totale mercato")
-    row_total = text[index_total:index_total + 100]
-    ## ---> split file based on spaces
-    list_TOTAL_row = row_total.split(" ")
-    total_NEW_VEHICLES_UNRAE = list_TOTAL_row[2]
-    total_NEW_VEHICLES_UNRAE = (total_NEW_VEHICLES_UNRAE.replace('.', ''))
-    # total_NEW_VEHICLES_UNRAE = int(total_NEW_VEHICLES_UNRAE.split(",")[1])
-    print("total_NEW_VEHICLES_UNRAE:", total_NEW_VEHICLES_UNRAE)
-
-    ######################################################################################################################
-    ######################################################################################################################
-    ######################################################################################################################
-    ####----- EAFO --------------------------------------------------------------#########################################
-
-    ## https://alternative-fuels-observatory.ec.europa.eu/transport-mode/road/italy/vehicles-and-fleet
-    # https://alternative-fuels-observatory.ec.europa.eu/transport-mode/road/italy/vehicles-and-fleet#chart-csv-pa8y2k6klql
-    ## month EAFO is about 3 month earlier...
-
-    import httplib2
-    from bs4 import BeautifulSoup, SoupStrainer
-    from urllib.request import Request, urlopen
-    http = httplib2.Http()
-    import requests
-    import pandas as pd
-    import json
-    import re
-
-    ## --->> get link of EAFO "immatricolazioni" (all STATISTICAL DATA - YEAR TO DATE)
-    status, response = http.request(
-        "https://alternative-fuels-observatory.ec.europa.eu/transport-mode/road/italy/vehicles-and-fleet")
-
-    ### ---->> web scraping.... find the web text containing all the information about new vehicles
-    url = "https://alternative-fuels-observatory.ec.europa.eu/transport-mode/road/italy/vehicles-and-fleet"
-    data = requests.get(url).text
-    soup = BeautifulSoup(data, 'html.parser')
-
-    # <div><script type="application/json">{"service":"charts","version":"2.0","options":{"separator":{"decimals":".","thousands":","}},
-    # "data":{"credits":{"enabled":false},"chart":{"type":"column"},"tooltip":{"shared":true},"xAxis":{"type":"category"},
-    # "plotOptions":{"column":{"borderColor":null},"series":{"stacking":"normal","dataLabels":{"style":{"fontWeight":"bold"}}}},
-    # "legend":{"itemStyle":{"fontWeight":"bold"},"align":"center"},"yAxis":{"reversedStacks":false,"title":{"text":" "}},
-    # "labels":{"csvExportName":"new_registrations_m1.csv"},"colors":["#134074","#AD7FA7","#2A9D8F","#E9C46A","#F4A261","#E76F51"]},
-    # "plugins":["drilldown"],"dataset":{"format":"csv","source":"https:\/\/alternative-fuels-observatory.ec.europa.eu\/sites\/default\/files\/csv\/italy\/new_registrations_m1.csv?token=1691158536"}}</script>
-    # </div>
-
-    ###------>>> find the all new registered passenger vehicles ----- #####
-    list_tags = []
-    tags = soup.find_all("script", type='application/json')
-    for tag in soup.find_all("script", type='application/json'):
-        print(tag)
-        if any(element in str(tag) for element in "new_registrations_m1.csv".split()):
-            print("--------------->>> gotta!  <<<<<---------------")
-            list_tags.append(tag)
-
-    for tag in list_tags:
-        # print(tag)
-        for t in tag:
-            res = json.loads(t)
-            # print(res)
-            keysList = list(res.keys())
-            # print(keysList)
-            ### get data links for .csv files to download for new registered cars
-            url = res['dataset']['source']
-            print(url)
-            ## download data
-            file_name = res['data']['labels']['csvExportName']
-            print(file_name)
-            resp = requests.get(url)
-            ## create a new empty file .excel
-            output = open(path_app + "static/" + file_name, 'wb')
-            output.write(resp.content)
-            output.close()
-
-    year = int(selected_IEA_year)
-    EAFO_vehicles_data = pd.read_csv(path_app + 'static/new_registrations_m1.csv')
-    EAFO_vehicles_data = EAFO_vehicles_data[EAFO_vehicles_data['YEAR'] == year]
-    EV_EAFO = EAFO_vehicles_data['BEV'].iloc[0]
-    print("EV_EAFO:", EV_EAFO)
-    PHEV_EAFO = EAFO_vehicles_data['PHEV'].iloc[0]
-    print("PHEV_EAFO:", PHEV_EAFO)
-    FC_EAFO = EAFO_vehicles_data['H2'].iloc[0]
-    print("FC_EAFO:", FC_EAFO)
-
-    #####################################################################################################
-    #####################################################################################################
-    ###------>>> find the all new registered LIGHT COMMERCIAL vehicles ----- ############################
-
-    list_tags = []
-    tags = soup.find_all("script", type='application/json')
-    for tag in soup.find_all("script", type='application/json'):
-        print(tag)
-        if any(element in str(tag) for element in "new_registrations_n1.csv".split()):
-            print("--------------->>> gotta!  <<<<<---------------")
-            list_tags.append(tag)
-
-    for tag in list_tags:
-        # print(tag)
-        for t in tag:
-            res = json.loads(t)
-            # print(res)
-            keysList = list(res.keys())
-            # print(keysList)
-            ### get data links for .csv files to download for new registered cars
-            url = res['dataset']['source']
-            print(url)
-            ## download data
-            file_name = res['data']['labels']['csvExportName']
-            print(file_name)
-            resp = requests.get(url)
-            ## create a new empty file .excel
-            output = open(path_app + "static/" + file_name, 'wb')
-            output.write(resp.content)
-            output.close()
-
-    EAFO_light_commercial_vehicles_data = pd.read_csv(path_app + 'static/new_registrations_n1.csv')
-    EAFO_light_commercial_vehicles_data = EAFO_light_commercial_vehicles_data[
-        EAFO_light_commercial_vehicles_data['YEAR'] == year]
-    EV_light_commercial_vehicles_EAFO = EAFO_light_commercial_vehicles_data['BEV'].iloc[0]
-    print("EV_light_commercial_vehicles_EAFO:", EV_light_commercial_vehicles_EAFO)
-    PHEV_light_commercial_vehicles_EAFO = EAFO_light_commercial_vehicles_data['PHEV'].iloc[0]
-    print("PHEV_light_commercial_vehicles_EAFO:", PHEV_light_commercial_vehicles_EAFO)
-    FC_light_commercial_vehicles_EAFO = EAFO_light_commercial_vehicles_data['H2'].iloc[0]
-    print("FC_light_commercial_vehicles_EAFO:", FC_light_commercial_vehicles_EAFO)
-
-    ###############################################################################################################
-    ###############################################################################################################
-    ###------>>> find the all new registered TRUCKS COMMERCIAL vehicles (N2 - N3 ----- ############################
-
-    list_tags = []
-    tags = soup.find_all("script", type='application/json')
-    for tag in soup.find_all("script", type='application/json'):
-        print(tag)
-        if any(element in str(tag) for element in "new_registrations_n2_n3.csv".split()):
-            print("--------------->>> gotta!  <<<<<---------------")
-            list_tags.append(tag)
-
-    for tag in list_tags:
-        # print(tag)
-        for t in tag:
-            res = json.loads(t)
-            # print(res)
-            keysList = list(res.keys())
-            # print(keysList)
-            ### get data links for .csv files to download for new registered cars
-            url = res['dataset']['source']
-            print(url)
-            ## download data
-            file_name = res['data']['labels']['csvExportName']
-            print(file_name)
-            resp = requests.get(url)
-            ## create a new empty file .excel
-            output = open(path_app + "static/" + file_name, 'wb')
-            output.write(resp.content)
-            output.close()
-
-    EAFO_heavy_commercial_vehicles_data = pd.read_csv(path_app + 'static/new_registrations_n2_n3.csv')
-    EAFO_heavy_commercial_vehicles_data = EAFO_heavy_commercial_vehicles_data[
-        EAFO_heavy_commercial_vehicles_data['YEAR'] == year]
-    EV_heavy_commercial_vehicles_EAFO = EAFO_heavy_commercial_vehicles_data['BEV'].iloc[0]
-    print("EV_heavy_commercial_vehicles_EAFO:", EV_heavy_commercial_vehicles_EAFO)
-
-
-    ######################################################################################################################
-    ######################################################################################################################
-    ######################################################################################################################
-    ####----- MOTUSe --------------------------------------------------------------#######################################
-
-    # https://www.motus-e.org/analisi-di-mercato/luglio-2023-auto-elettriche-italia-avanti-piano-mentre-leuropa-vola-i-dati-a-confronto/
-    # https://www.motus-e.org/analisi_di_mercato/
-
-    import httplib2
-    from bs4 import BeautifulSoup, SoupStrainer
-    from urllib.request import Request, urlopen
-    http = httplib2.Http()
-    import requests
-    import pandas as pd
-    import json
-    import re
-
-    ## --->> get link of MOTUSe (analisi di mercato @ Year to Date)
-    # status, response = http.request("https://www.motus-e.org/analisi_di_mercato/")
-
-    ### ---->> web scraping.... find the web text containing all the information about new vehicles
-    url = "https://www.motus-e.org/analisi_di_mercato/"
-    data = requests.get(url).text
-    soup = BeautifulSoup(data, 'html.parser')
-
-    ###------>>> find the all new registered passenger within the analisi di mercato on "Agosto 2023" ----- #####
-    # list_tags = []
-    tags = soup.find_all(attrs={'class': re.compile(r"^hero-news__title$")})
-    for tag in soup.find_all(attrs={'class': re.compile(r"^hero-news__title$")}):
-        print(tag)
-        # if any(element in str(tag) for element in "Settembre 2023".split()):
-        #    print("--------------->>> gotta!  <<<<<---------------")
-        #    list_tags.append(tag)
-
-    # for tag in list_tags:
-    # print(tag)
-    for t in tag:
-        link = t.get('href')
-        print(link)
-        # call get method to request that page
-        page = requests.get(link)
-        # with the help of beautifulSoup and html parser create soup
-        soup = BeautifulSoup(page.content, "html.parser")
-        # child_soup = soup.find_all(attrs={'class': re.compile(r"^title-number$")}) + soup.find_all(attrs={'class': re.compile(r"^number$")})  + soup.find_all(attrs={'class': re.compile(r"^title-section$")})
-        child_soup = soup.find_all(attrs={'class': re.compile(r"^container-numbers$")})
-
-    list_analysis = []
-
-    for i in child_soup:
-        if i:
-            list_analysis.append(i.text.strip())
-    print(list_analysis)
-
-    ### ---->>  find "BEV"
-    for element in list_analysis:
-        if "AUTO BEV" in element:
-            print("gotta!!!", element)
-            output = element.split('\n')
-            # ---> remove emmpty spaces
-            while ("" in output):
-                output.remove("")
-    if 'AUTO BEV' in output:
-        ## get index of the "AUTO BEV"
-        idx_BEV = output.index('AUTO BEV')
-        ## get VALUE of "AUTO BEV"
-        MOTUSe_BEV = output[idx_BEV + 1]
-        MOTUSe_BEV = MOTUSe_BEV.replace('.', "")
-        MOTUSe_BEV = int(MOTUSe_BEV)
-        print("MOTUSe_BEV:", MOTUSe_BEV)
-
-    ## -->> find total new vehicles ('Totale Auto')
-    for element in list_analysis:
-        if "Totale Auto" in element:
-            print("gotta!!!", element)
-            output = element.split('\n')
-            # ---> remove emmpty spaces
-            while ("" in output):
-                output.remove("")
-    if 'Totale Auto' in output:
-        ## get index of the "totale auto"
-        idx_totale_auto = output.index('Totale Auto')
-        ## get VALUE of "AUTO BEV"
-        MOTUSe_TOTALE_AUTO = output[idx_totale_auto + 1]
-        MOTUSe_TOTALE_AUTO = MOTUSe_TOTALE_AUTO.replace('.', "")
-        MOTUSe_TOTALE_AUTO = int(MOTUSe_TOTALE_AUTO)
-        print("MOTUSe_TOTALE_AUTO:", MOTUSe_TOTALE_AUTO)
-
-    #### ---- >> get data from plot about PHEV, HEV, Mild Hybrid and sum results ----- ########
-
-    child_soup_chart = soup.find_all(attrs={'class': re.compile(r"^fusion-chart-dataset$")})
-
-    ###############################################
-    ### ---->>  find "PHEV"------##################
-    for element in child_soup_chart:
-        print(element)
-        element = str(element)
-        if "Ibrido Plug-in (PHEV)" in element:
-            print('---------- gotta!!:')
-            element_tag = element
-
-    ## ---> split element_tag by "data-values=
-    element_tag = re.split('data-values=', element_tag)
-    data_PHEV = element_tag[1]
-    ## --->> more splitting....
-    value = data_PHEV.split('|')
-
-    MOTUSe_PHEV = 0
-    for j in value:
-        # print(j)
-        string = str(j)
-        try:
-            record_PHEV = int(''.join(e for e in string if e.isnumeric()))
-        except ValueError:
-            print("skip value")
-        # print(record_PHEV)
-        MOTUSe_PHEV += record_PHEV
-        print("MOTUSe_PHEV:", MOTUSe_PHEV)
-
-    #################################################
-    ### ---->>  find "hybrid"------##################
-
-    for element in child_soup_chart:
-        print(element)
-        element = str(element)
-        if "Ibrido" in element:
-            print('---------- gotta!!:')
-            element_tag = element
-
-    ## ---> split element_tag by "data-values=
-    element_tag = re.split('data-values=', element_tag)
-    data_HYBRID = element_tag[1]
-    ## --->> more splitting....
-    value = data_HYBRID.split('|')
-
-    MOTUSe_HYBRID = 0
-    for j in value:
-        print(j)
-        string = str(j)
-        try:
-            record_HYBRID = int(''.join(e for e in string if e.isnumeric()))
-            MOTUSe_HYBRID += record_HYBRID
-            print("MOTUSe_HYBRID:", MOTUSe_HYBRID)
-        except ValueError:
-            print("skip value")
-
-    #######################################################
-    ### ---->>  find " mild hybrid"------##################
-
-    for element in child_soup_chart:
-        print(element)
-        element = str(element)
-        if "Mild Hybrid" in element:
-            print('---------- gotta!!:')
-            element_tag = element
-
-    ## ---> split element_tag by "data-values=
-    element_tag = re.split('data-values=', element_tag)
-    data_MILD_HYBRID = element_tag[1]
-    ## --->> more splitting....
-    value = data_MILD_HYBRID.split('|')
-
-    MOTUSe_MILD_HYBRID = 0
-    for j in value:
-        print(j)
-        string = str(j)
-        try:
-            record_MILD_HYBRID = int(''.join(e for e in string if e.isnumeric()))
-            MOTUSe_MILD_HYBRID += record_MILD_HYBRID
-            print(MOTUSe_MILD_HYBRID)
-        except ValueError:
-            print("skip value")
-
-    MOTUSe_HYBRID = MOTUSe_HYBRID + MOTUSe_MILD_HYBRID
-    print("MOTUSe_HYBRID:", MOTUSe_HYBRID)
-
-    ########################################################################################################
-    ##### ------------ CHARGING POINTS ------------------------- ###########################################
-
-    child_soup_charging_data = soup.find_all(attrs={'class': re.compile(
-        r"^fusion-button button-flat fusion-button-default-size button-default button-2 fusion-button-default-span fusion-button-default-type$")})
-    current_year = selected_IEA_year
-
-    for t in child_soup_charging_data:
-        link_charging_points = t.get('href')
-        print(link_charging_points)
-        resp = requests.get(link_charging_points)
-        ## save .xlsx file
-        output = open(path_app + "/static/charging_points_MOTUSe.xls", 'wb')
-        output.write(resp.content)
-        output.close()
-
-    ## open file
-    charging_points_MOTUSe = pd.read_excel(path_app + 'static/charging_points_MOTUSe.xls',
-                                           sheet_name='Potenza Infrastrutture')
-
-    charging_less_3_7_AC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == '≤ 3,7 (AC)'].iloc[0]
-
-    charging_within_3_7_7_AC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == '3,7 < P ≤ 7 (AC)'].iloc[
-        0]
-    charging_within_7_22_AC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == '7 < P ≤ 22 (AC)'].iloc[0]
-    charging_within_3_7_22_AC = charging_within_3_7_7_AC + charging_within_7_22_AC
-
-    charging_within_22_43_AC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == '22 < P ≤ 43 (AC)'].iloc[
-        0]
-
-    charging_within_43_50_DC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == '43 < P ≤ 50 (DC)'].iloc[
-        0]
-
-    charging_within_50_99_DC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == '50 < P ≤99 (DC)'].iloc[0]
-    charging_within_99_150_DC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == '99 < P ≤150 (DC)'].iloc[
-        0]
-    charging_larger_150_DC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == 'P > 150 (DC)'].iloc[0]
-    charging_within_50_350_DC = charging_within_50_99_DC + charging_within_99_150_DC + charging_larger_150_DC
-
-    MOTUSe_charging_points = {
-        'type_a': ['AC Level 1 Chargers', 'AC Level 2 Chargers', 'AC Fast Chargers', 'DC Fast Chargers',
-                   'Tesla Superchargers',
-                   'Ultrafast-High power chargers', 'Inductive Chargers'],
-        'type_b': ['AC charging (<= 3.7 kW)', 'AC charging  (>3.7 kW, <= 22 kW)', 'AC charging (43 kW)',
-                   'DC charging (<= 50 kW)',
-                   'DC charging (> 120kW- 250kW)', 'DC charging (> 50 kW and <= 350 kW)', 'EM charging'],
-        'number': [charging_less_3_7_AC,
-                   charging_within_3_7_22_AC,
-                   charging_within_22_43_AC,
-                   charging_within_43_50_DC,
-                   0,
-                   charging_within_50_350_DC,
-                   0],
-        'year': [current_year, current_year, current_year, current_year, current_year, current_year, current_year]}
-    MOTUSe_charging_points = pd.DataFrame(MOTUSe_charging_points)
-
-    ###------------#############################################
-    ##--- charging points from EAFO --- ########################
-    ############################################################
-
-    import httplib2
-    from bs4 import BeautifulSoup, SoupStrainer
-    from urllib.request import Request, urlopen
-    http = httplib2.Http()
-    import requests
-    import pandas as pd
-    import json
-    import re
-
-    ### ---->> web scraping.... find the web text containing all the information about update infrastructucture of AC & DC charging points
-    url = "https://alternative-fuels-observatory.ec.europa.eu/transport-mode/road/italy/infrastructure"
-    data = requests.get(url).text
-    soup = BeautifulSoup(data, 'html.parser')
-
-    ##------->> AC Charging points -----------#######################
-
-    ###------>>> find the all AC public RECHARGINH POINTS ----- #####
-    list_tags = []
-    tags = soup.find_all("script", type='application/json')
-    for tag in soup.find_all("script", type='application/json'):
-        print(tag)
-        if any(element in str(tag) for element in "ac_public_recharging_points_afir.csv".split()):
-            print("--------------->>> gotta!  <<<<<---------------")
-            list_tags.append(tag)
-
-    for tag in list_tags:
-        # print(tag)
-        for t in tag:
-            res = json.loads(t)
-            # print(res)
-            keysList = list(res.keys())
-            # print(keysList)
-            ### get data links for .csv files to download for AC PUblic RECHARGING POINTS
-            url = res['dataset']['source']
-            print(url)
-            ## download data
-            file_name = res['data']['labels']['csvExportName']
-            print(file_name)
-            resp = requests.get(url)
-            ## create a new empty file .excel
-            output = open(path_app + "static/" + file_name, 'wb')
-            output.write(resp.content)
-            output.close()
-
-    year = selected_IEA_year
-    EAFO_AC_Recharging_data = pd.read_csv(path_app + 'static/ac_public_recharging_points_afir.csv')
-    EAFO_AC_Recharging_data = EAFO_AC_Recharging_data[EAFO_AC_Recharging_data['YEAR'] == year]
-
-    EAFO_AC_less_7_4kw = EAFO_AC_Recharging_data['Slow AC recharging point, single-phase (P < 7.4kW)'].iloc[0]
-    print("EAFO_AC_less_7_4kw:", EAFO_AC_less_7_4kw)
-    EAFO_AC_within_7_and_22kw = \
-    EAFO_AC_Recharging_data['Medium-speed AC recharging point, triple-phase (7.4kW ≤ P ≤ 22kW)'].iloc[0]
-    print("EAFO_AC_within_7_and_22kw:", EAFO_AC_within_7_and_22kw)
-    EAFO_AC_larger_22kw = EAFO_AC_Recharging_data['Fast AC recharging point, triple-phase (P > 22kW)'].iloc[0]
-    print("EAFO_AC_larger_22kw", EAFO_AC_larger_22kw)
-
-    ##------->> DC charging points ----- ############################
-    ###------>>> find the all DC public RECHARGING POINTS ----- #####
-    list_tags = []
-    tags = soup.find_all("script", type='application/json')
-    for tag in soup.find_all("script", type='application/json'):
-        print(tag)
-        if any(element in str(tag) for element in "dc_public_recharging_points_afir.csv".split()):
-            print("--------------->>> gotta!  <<<<<---------------")
-            list_tags.append(tag)
-
-    for tag in list_tags:
-        # print(tag)
-        for t in tag:
-            res = json.loads(t)
-            # print(res)
-            keysList = list(res.keys())
-            # print(keysList)
-            ### get data links for .csv files to download for DC PUblic RECHARGING POINTS
-            url = res['dataset']['source']
-            print(url)
-            ## download data
-            file_name = res['data']['labels']['csvExportName']
-            print(file_name)
-            resp = requests.get(url)
-            ## create a new empty file .excel
-            output = open(path_app + "static/" + file_name, 'wb')
-            output.write(resp.content)
-            output.close()
-
-    EAFO_DC_Recharging_data = pd.read_csv(path_app + 'static/dc_public_recharging_points_afir.csv')
-    EAFO_DC_Recharging_data = EAFO_DC_Recharging_data[EAFO_DC_Recharging_data['YEAR'] == year]
-
-    EAFO_DC_less_50kw = EAFO_DC_Recharging_data['Slow DC recharging point (P < 50kW)'].iloc[0]
-    print("EAFO_DC_less_50kw:", EAFO_DC_less_50kw)
-    EAFO_DC_within_50_and_150kw = EAFO_DC_Recharging_data['Fast DC recharging point (50kW ≤ P < 150kW)'].iloc[0]
-    print("EAFO_DC_within_50_and_150kw:", EAFO_DC_within_50_and_150kw)
-    EAFO_DC_within_150_and_350kw = \
-    EAFO_DC_Recharging_data['Level 1 - Ultra-fast DC recharging point (150kW ≤ P < 350kW)'].iloc[0]
-    print("EAFO_DC_within_150_and_350kw:", EAFO_DC_within_150_and_350kw)
-    EAFO_AC_larger_350kw = EAFO_DC_Recharging_data['Level 2 - Ultra-fast DC recharging point (P ≥ 350kW)'].iloc[0]
-    print("EAFO_AC_larger_350kw:", EAFO_AC_larger_350kw)
-    total_charging_EAFO = EAFO_AC_less_7_4kw + EAFO_AC_within_7_and_22kw + EAFO_AC_larger_22kw + EAFO_DC_less_50kw + EAFO_DC_within_50_and_150kw + EAFO_DC_within_150_and_350kw + EAFO_AC_larger_350kw
-    print("total_charging_EAFO:", total_charging_EAFO)
-
-    ############################################################################################################
-    #######------ TESLA SUPERCHARGERS  (DC charging (> 120kW- 250kW) ------------###############################
-    ############################################################################################################
-
-    ## read json file from this link
-    # https://supercharge.info/service/supercharge/allSites
-
-    import requests
-    import json
-
-    link_TESLSA_superchargers_allSites = "https://supercharge.info/service/supercharge/allSites"
-    link = link_TESLSA_superchargers_allSites
-    f = requests.get(link)
-    open(path_app + "static/TESLA_superchargers_allSites.json", "wb").write(f.content)
-
-    with open(path_app + 'static/TESLA_superchargers_allSites.json', encoding='utf-8') as inputfile:
-        df_TESLA_superchargers_all = pd.read_json(inputfile)
-
-    df_TESLA_superchargers_all.to_csv(path_app + 'static\TESLA_superchargers_allSites.csv', encoding='utf-8',
-                                      index=False)
-
-    count = 0
-    TESLA_charging_points = 0
-    data_chargers_TESLA = df_TESLA_superchargers_all['address']
-    for i in range(len(data_chargers_TESLA)):
-        # print(AAA.iloc[i])
-        dict = data_chargers_TESLA.iloc[i]
-        ## read the field 'Country'
-        dict.keys()
-        if dict['country'] == 'Italy':
-            count = count + 1
-            print("gotta")
-            print(dict['country'])
-            # print(i)
-            ## get the number of charging points or "Stalls"
-            charging_points = df_TESLA_superchargers_all[['stallCount']].iloc[i][0]
-            # print(charging_points)
-            TESLA_charging_points = TESLA_charging_points + charging_points
-    print("TESLA CHARGING POINTS: ", TESLA_charging_points)
-
-    ############################################################################################################
-    ############################################################################################################
-
-    ###---////////////////------/////////////////////////////////////////////////----####
-    ####----->>> make averages of Charging point infrastructure between EAFO and MOTUS-e
-
-    from statistics import mean, median
-
-    all_charging_within_3_7_22_AC = median(
-        [charging_within_3_7_22_AC, (EAFO_AC_less_7_4kw + EAFO_AC_within_7_and_22kw)])
-    all_charging_within_22_43_AC = median([charging_within_22_43_AC, EAFO_AC_larger_22kw])
-
-    all_charging_within_50_350_DC = median(
-        [charging_within_50_350_DC, (EAFO_DC_within_50_and_150kw + EAFO_DC_within_150_and_350kw)])
-
-    new_charging_points = {
-        'type_a': ['AC Level 1 Chargers', 'AC Level 2 Chargers', 'AC Fast Chargers', 'DC Fast Chargers',
-                   'Tesla Superchargers',
-                   'Ultrafast-High power chargers', 'Inductive Chargers'],
-        'type_b': ['AC charging (<= 3.7 kW)', 'AC charging  (>3.7 kW, <= 22 kW)', 'AC charging (43 kW)',
-                   'DC charging (<= 50 kW)',
-                   'TESLA-DC charging (> 120kW- 250kW)', 'DC charging (> 50 kW and <= 350 kW)', 'EM charging'],
-        'number': [charging_less_3_7_AC,
-                   all_charging_within_3_7_22_AC,
-                   all_charging_within_22_43_AC,
-                   charging_within_43_50_DC,
-                   TESLA_charging_points,
-                   all_charging_within_50_350_DC,
-                   0],
-        'year': [current_year, current_year, current_year, current_year, current_year, current_year, current_year]}
-    new_charging_points = pd.DataFrame(new_charging_points)
-
-    ###---->> load previous charging points data
-    previous_charging_data = pd.read_csv(path_app + 'static/Total_Chargers_2021_2022.csv')
-    previous_charging_data = previous_charging_data[['type_a', 'type_b', 'number', 'year']]
-
-    ## concatenate new data with previsou data
-    NEW_charging_data = pd.concat([previous_charging_data, new_charging_points])
-    ## remove all "nan" values
-    NEW_charging_data = NEW_charging_data.fillna("")
-    ## Save data to .csv file
-    NEW_charging_data.to_csv(path_app + 'static/NEW_charging_data_YTD.csv')
-
-    #########################################################################################################
-    #########################################################################################################
-    ### /////////////// ---- make AVERAGES -------------- ////////////////////////////#######################
-
-    ## average all available data as for "YEAR TO DATE"
-
-    from statistics import mean, median
-
-    ### --- EVs ------ #######
-    mean_passenger_EV = median([new_EV_vehicles_ACEA, new_EV_vehicles_ANFIA, Elettriche__UNRAE_BEV, EV_EAFO])
-    mean_buses_minibuses_EV = median([new_EV_BUSES_ACEA])
-    mean_light_commercial_EV = median([new_EV_LIGHT_COMMERCIAL_ACEA, EV_light_commercial_vehicles_EAFO])
-    mean_medium_and_heavy_commercial_EV = median([new_EV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA])
-
-    ### --- HEVs ------ ########
-    mean_passenger_HEV = median(
-        [new_HEV_vehicles_ACEA, new_HEV_vehicles_ANFIA, Ibride_Elettriche_UNRAE_HEV, MOTUSe_HYBRID])
-    mean_buses_minibuses_HEV = median([new_HEV_BUSES_ACEA])
-    mean_light_commercial_HEV = median([new_HEV_LIGHT_COMMERCIAL_ACEA])
-    mean_medium_and_heavy_commercial_HEV = median([new_HEV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA])
-
-    ### --- PHEVs ------ #######
-    mean_passenger_PHEV = median(
-        [new_PHEV_vehicles_ACEA, new_PHEV_vehicles_ANFIA, PlugIn_Elettriche_UNRAE_PHEV, PHEV_EAFO, MOTUSe_PHEV])
-    try:
-        mean_buses_minibuses_PHEV = median([])
-    except:
-        mean_buses_minibuses_PHEV = ''
-
-    mean_light_commercial_PHEV = median([PHEV_light_commercial_vehicles_EAFO])
-
-    try:
-        mean_medium_and_heavy_commercial_PHEV = median([])
-    except:
-        mean_medium_and_heavy_commercial_PHEV = ''
-
-    ### --- FCs ------ #######
-    mean_passenger_FC = median([new_HYDROGEN_vehicles_ANFIA, Fuel_Cell_Hydrogen_UNRAE_FCEV, FC_EAFO])
-
-    try:
-        mean_buses_minibuses_FC = median([])
-    except:
-        mean_buses_minibuses_FC = ''
-    mean_light_commercial_FC = median([FC_light_commercial_vehicles_EAFO])
-
-    try:
-        mean_medium_and_heavy_commercial_FC = median([])
-    except:
-        mean_medium_and_heavy_commercial_FC = ''
-
-    current_year = '2023'
-    # Create DataFrame
-    total_sale_current_year = {'Type': ['EVs', 'HEVs', 'PHEVs', 'FCs'],
-                               'Electric bike': ['', '', '', ''],
-                               'Electric moped (<50 kmph)': ['', '', '', ''],
-                               'Auto-rickshaw': ['', '', '', ''],
-                               'Motorcycle': ['', '', '', ''],
-                               'Motorcycle with sidecar': ['', '', '', ''],
-                               'Motorized tricycle': ['', '', '', ''],
-                               'Passenger vehicles': [mean_passenger_EV, mean_passenger_HEV, mean_passenger_PHEV,
-                                                      mean_passenger_FC],
-                               'Buses and Minibuses': [mean_buses_minibuses_EV, mean_buses_minibuses_HEV,
-                                                       mean_buses_minibuses_PHEV, mean_buses_minibuses_FC],
-                               'Light Commercial vehicles': [mean_light_commercial_EV, mean_light_commercial_HEV,
-                                                             mean_light_commercial_PHEV,
-                                                             mean_medium_and_heavy_commercial_FC],
-                               'Medium and Heavy Weight Trucks': [mean_medium_and_heavy_commercial_EV,
-                                                                  mean_medium_and_heavy_commercial_HEV,
-                                                                  mean_medium_and_heavy_commercial_PHEV,
-                                                                  mean_medium_and_heavy_commercial_FC],
-                               'year': [current_year, current_year, current_year, current_year]}
-    df_total_sale_current_year = pd.DataFrame(total_sale_current_year)
-
-    ##################################################################################
-    ##### ---------->>> load previous YEARLY data and merge with new data ------ #####
-
-    previous_new_registration_data = pd.read_csv(path_app + 'static/Total_sales_2021_2022.csv')
-
-    previous_new_registration_data = previous_new_registration_data[['x', 'Electric bike', 'Electric moped (<50 kmph)',
-                                                                     'Auto-rickshaw', 'Motorcycle',
-                                                                     'Motorcycle with sidecar',
-                                                                     'Motorized tricycle', 'Passenger vehicles',
-                                                                     'Buses and Minibuses',
-                                                                     'Light Commercial vehicles',
-                                                                     'Medium and Heavy Weight Trucks', 'year']]
-    previous_new_registration_data.columns = ['Type', 'Electric bike', 'Electric moped (<50 kmph)',
-                                              'Auto-rickshaw', 'Motorcycle', 'Motorcycle with sidecar',
-                                              'Motorized tricycle', 'Passenger vehicles', 'Buses and Minibuses',
-                                              'Light Commercial vehicles', 'Medium and Heavy Weight Trucks', 'year']
-
-    previous_total_fleet_data = pd.read_csv(path_app + 'static/Fleets_total_2021_2022.csv')
-    previous_total_fleet_data = previous_total_fleet_data[['x', 'Electric bike', 'Electric moped (<50 kmph)',
-                                                           'Auto-rickshaw', 'Motorcycle',
-                                                           'Motorcycle with sidecar',
-                                                           'Motorized tricycle', 'Passenger vehicles',
-                                                           'Buses and Minibuses',
-                                                           'Light Commercial vehicles',
-                                                           'Medium and Heavy Weight Trucks', 'year']]
-    previous_total_fleet_data.columns = ['Type', 'Electric bike', 'Electric moped (<50 kmph)',
-                                         'Auto-rickshaw', 'Motorcycle', 'Motorcycle with sidecar',
-                                         'Motorized tricycle', 'Passenger vehicles', 'Buses and Minibuses',
-                                         'Light Commercial vehicles', 'Medium and Heavy Weight Trucks', 'year']
-
-    ## concatenate new data with previsou data
-    NEW_registrations = pd.concat([previous_new_registration_data, df_total_sale_current_year])
-    ## remove all "nan" values
-    NEW_registrations = NEW_registrations.fillna("")
-    NEW_registrations.to_csv(path_app + 'static/NEW_registrations_YTD.csv')
-
-    ## remove all "nan" values
-    NEW_total_fleets = previous_total_fleet_data.fillna("")
-    NEW_total_fleets.to_csv(path_app + 'static/NEW_total_fleets.csv')
-
-    datum_IEA_month = [{
-        'IEA_year': selected_IEA_year,
-        'IEA_month': selected_IEA_month
-    }]
-
-    return render_template("index_IEA_stats_month.html", datum_IEA_month=datum_IEA_month)
-
-
-@app.route('/IEA_STATS_show/', methods=['GET', 'POST'])
-def IEA_STATS_prova():
-    import pandas as pd
-    import numpy as np
-
-    #### ---- NEW REGISTRATIONS ------ ##########################################################################
-    #############################################################################################################
-    NEW_registrations_new = pd.read_csv(path_app + 'static/NEW_registrations_YTD.csv',
-                                        usecols=['Type', 'Electric bike', 'Electric moped (<50 kmph)',
-                                                 'Auto-rickshaw', 'Motorcycle', 'Motorcycle with sidecar',
-                                                 'Motorized tricycle', 'Passenger vehicles', 'Buses and Minibuses',
-                                                 'Light Commercial vehicles', 'Medium and Heavy Weight Trucks', 'year'])
-
-    NEW_registrations_new = NEW_registrations_new.fillna("")
-    NEW_registrations_new['year'] = NEW_registrations_new.year.astype(object)
-
-    ## ------>> gather data
-    NEW_registrations = pd.melt(NEW_registrations_new, id_vars=['Type', 'year'])
-    NEW_registrations.columns = ['Type', 'year', 'vehicle_type', 'records']
-    ## remove none values in the "record" column
-    NEW_registrations['records'].replace('', np.nan, inplace=True)
-    NEW_registrations.dropna(subset=['records'], inplace=True)
-    NEW_registrations = NEW_registrations.reset_index(drop=True)
-    NEW_registrations['records'] = NEW_registrations.records.astype('int')
-
-    ##############################################################################################################
-    ############ ----------------------------------------------------------------------------- ###################
-
-    #### ---- NEW TOTAL FLEETS ------ ###########################################################################
-    #############################################################################################################
-    NEW_total_fleets = pd.read_csv(path_app + 'static/NEW_total_fleets.csv',
-                                   usecols=['Type', 'Electric bike', 'Electric moped (<50 kmph)',
-                                            'Auto-rickshaw', 'Motorcycle', 'Motorcycle with sidecar',
-                                            'Motorized tricycle', 'Passenger vehicles', 'Buses and Minibuses',
-                                            'Light Commercial vehicles', 'Medium and Heavy Weight Trucks', 'year'])
-
-    NEW_total_fleets = NEW_total_fleets.fillna("")
-    NEW_total_fleets['year'] = NEW_total_fleets.year.astype(object)
-
-    ## ------>> gather data
-    NEW_total_fleets = pd.melt(NEW_total_fleets, id_vars=['Type', 'year'])
-    NEW_total_fleets.columns = ['Type', 'year', 'vehicle_type', 'records']
-    ## remove none values in the "record" column
-    NEW_total_fleets['records'].replace('', np.nan, inplace=True)
-    NEW_total_fleets.dropna(subset=['records'], inplace=True)
-    NEW_total_fleets = NEW_total_fleets.reset_index(drop=True)
-    NEW_total_fleets['records'] = NEW_total_fleets.records.astype('int')
-
-    from plotnine import ggplot, aes, geom_line
-    from plotnine.data import mpg
-    from plotnine import ggplot, aes, geom_point, theme_bw, facet_grid, geom_bar, guides, theme, element_text, \
-        element_blank, ylab, ylim, geom_text, ggtitle, position_nudge, geom_label
-    import matplotlib.pyplot as plt
-    import matplotlib
-    matplotlib.use('agg')
-    from ipywidgets import interact
-
-    dpi = 96
-
-    ## ---->>> NEW Registrations -----------------------------------------------------------------------------------
-    q_new_registrations = ggplot(data=NEW_registrations) + aes(x='vehicle_type', y='records', fill='vehicle_type') + \
-                          theme_bw() + \
-                          facet_grid('year ~ Type', scales='free_x', space='free') + \
-                          geom_bar(stat="identity") + \
-                          theme(strip_text_x=element_text(size=12, colour="black")) + \
-                          theme(strip_text_y=element_text(size=12, colour="black")) + \
-                          guides(fill=False) + \
-                          theme(axis_text_x=element_text(angle=65, hjust=1, vjust=1, size=12)) + \
-                          theme(axis_text_x=element_text(size=12, face="bold", colour="black")) + \
-                          theme(axis_title_x=element_blank()) + \
-                          ylab("number of vehicles") + \
-                          ylim(0, 700000) + \
-                          theme(axis_title_y=element_text(face="bold", colour="black", size=14),
-                                axis_text_y=element_text(angle=0, vjust=0.5, size=12, colour="black")) + \
-                          geom_text(aes(label="records"), size=9, ha='center', va='center', nudge_y=50000, angle=0) + \
-                          ggtitle("Total Sales (2021 --> 2023)") + \
-                          theme(plot_title=element_text(lineheight=.8, face="bold", size=15))
-
-    q_new_registrations.save(path_app + "static/NEW_registrations_IEA.png", width=12, height=8, dpi=dpi)
-
-    ##### ---------------------- ######################
-    #### ---->> total fleets --------------------------
-    q_new_total_fleets = ggplot(data=NEW_total_fleets) + aes(x='vehicle_type', y='records', fill='vehicle_type') + \
-                         theme_bw() + \
-                         facet_grid('year ~ Type', scales='free_x', space='free') + \
-                         geom_bar(stat="identity") + \
-                         theme(strip_text_x=element_text(size=12, colour="black")) + \
-                         theme(strip_text_y=element_text(size=12, colour="black")) + \
-                         guides(fill=False) + \
-                         theme(axis_text_x=element_text(angle=65, hjust=1, vjust=1, size=12)) + \
-                         theme(axis_text_x=element_text(size=12, face="bold", colour="black")) + \
-                         theme(axis_title_x=element_blank()) + \
-                         ylab("number of vehicles") + \
-                         ylim(0, 1700000) + \
-                         theme(axis_title_y=element_text(face="bold", colour="black", size=14),
-                               axis_text_y=element_text(angle=0, vjust=0.5, size=12, colour="black")) + \
-                         geom_text(aes(label="records"), size=9, ha='center', va='center', nudge_y=80000, angle=0) + \
-                         ggtitle("Total Fleets (2021 --> 2022)") + \
-                         theme(plot_title=element_text(lineheight=.8, face="bold", size=15))
-
-    q_new_total_fleets.save(path_app + "static/NEW_total_fleets_IEA.png", width=12, height=8, dpi=dpi)
-
-    #####################################################
-    ######## charging points ----------------------------
-
-    NEW_charging_points = pd.read_csv(path_app + 'static/NEW_charging_data_YTD.csv',
-                                      usecols=['type_a', 'type_b', 'number', 'year'])
-    NEW_charging_points = NEW_charging_points.fillna("")
-    NEW_charging_points['year'] = NEW_charging_points.year.astype(object)
-
-    from plotnine import facet_wrap
-
-    qq = ggplot(data=NEW_charging_points) + aes(x='type_b', y='number', fill='type_b') + \
-         theme_bw() + \
-         facet_wrap('year', scales='free_x') + \
-         geom_bar(stat="identity") + \
-         theme(strip_text_x=element_text(size=12, colour="black")) + \
-         theme(strip_text_y=element_text(size=12, colour="black")) + \
-         guides(fill=False) + \
-         theme(axis_text_x=element_text(angle=65, hjust=1, vjust=1, size=10)) + \
-         theme(axis_text_x=element_text(size=10, face="bold", colour="black")) + \
-         theme(axis_title_x=element_blank()) + \
-         ylab("number of vehicles") + \
-         ylim(0, 40000) + \
-         theme(axis_title_y=element_text(face="bold", colour="black", size=14),
-               axis_text_y=element_text(angle=0, vjust=0.5, size=12, colour="black")) + \
-         geom_text(aes(label="number"), size=9, ha='center', va='center', nudge_y=1000, angle=0) + \
-         ggtitle("Number of Charging outlets (2021 --> 2023)") + \
-         theme(plot_title=element_text(lineheight=.8, face="bold", size=15))
-
-    qq.save(path_app + "static/NEW_charging_points.png", width=12, height=8, dpi=dpi)
-
-    return render_template("index_IEA_stats_month.html")
-
-
-
-
-
-
-
-
 #######################################################################################################
 #######################################################################################################
 ############# ----------- SIMULATE Origin ---> Destination PATH for private Vehicles ---- #############
 ###########////////////////////////////////////////////////////////////////////////////////############
-
-# https://www.tutorialspoint.com/how-to-get-the-longitude-and-latitude-of-a-city-using-python
-
 
 
 @app.route('/OD_path_vehicle/', methods=['GET', 'POST'])
@@ -13500,8 +11806,6 @@ def insert_ORIGIN_name_CSA():
     if location == None:
         abort(404)
 
-   
-
     print("-----------The latitude of the ORIGIN location is: ", location.latitude)
     print("-----------The longitude of the ORIGIN location is: ", location.longitude)
 
@@ -13658,7 +11962,7 @@ def GTFS_selector_CSA():
         print("GTFS day:", selected_GTFS_data)
         print("day:", day)
 
-     
+
         #### ---- retrieve ORIGIN - DESTINATION data --------------- ################################
         try:
             name_ORIGIN_location = session["name_ORIGIN_location"]
@@ -13792,8 +12096,6 @@ def OD_path_TPL_CSA():
     body.path_graph = graph_path
     try:
         body.create_timetable()
-        # body.create_walkNetstopToStopDistance(800)    ###---> to do only once
-        # body.create_stopToStopDistance(800)           ###---> to do only once
     except:
         abort(404)
 
@@ -13825,24 +12127,6 @@ def OD_path_TPL_CSA():
     lat_DESTINATION = session["lat_DESTINATION"]
     lon_DESTINATION = session["lon_DESTINATION"]
 
-    """
-    ## via Nicola Nisco 30, Roma
-    lat_ORIGIN = 41.8684964
-    lon_ORIGIN = 12.5191904
-
-    # via anguillarese 301,roma
-    lat_DESTINATION =  42.040126
-    lon_DESTINATION =  12.302037845479633
-    """
-
-    # print(lat_ORIGIN, lon_ORIGIN, lat_DESTINATION, lon_DESTINATION)
-
-    # lat_ORIGIN = 41.9009581
-    # lon_ORIGIN = 12.4804365
-    # lat_DESTINATION = 41.8991928
-    # lon_DESTINATION = 12.4291304
-
-    # selected_GTFS_data = "20201002"
     try:
         startLocation = [lat_ORIGIN, lon_ORIGIN]
         endLocation = [lat_DESTINATION, lon_DESTINATION]
@@ -13854,7 +12138,6 @@ def OD_path_TPL_CSA():
         print('loading footpath between adjacent stops....')
         print('loading stopToStop shape....')
         print("---list of foothpaths-------")
-        # c.load_stopsfootpath()  ## do not use this...
         c.load_walknetstopsfootpath()
         c.run(startLocation, endLocation, deptime)
         try:
@@ -13874,23 +12157,17 @@ def OD_path_TPL_CSA():
     ##################################################################################
     #### build path on the map......
     new_poline_list = []
-    # load "stop.txt"
 
     stops = pd.read_csv(path_app + '/static/GTFS/' + selected_GTFS_data + '/' + 'stops.txt')
     trips = pd.read_csv(path_app + '/static/GTFS/' + selected_GTFS_data + '/' + 'trips.txt')
     shapes = pd.read_csv(path_app + '/static/GTFS/' + selected_GTFS_data + '/' + 'shapes.txt')
 
     timetable = pd.read_csv(path_app + '/static/' + 'final_timetable.csv')
-
-    # for i in range(len(timetable)):
     for element in timetable.itertuples(index=True):
         print(element)
-        # if element.line_number =='MEA':
-        #    break
         ###-->> check for FIRST walking path ----------------------------------------------------#################
         ##########################################################################################################
         if ((element.line_number == '1fp') & (element.trip_id == 'footpath')):
-            # first_footpath_start = '41.9411_12.4619'
             first_footpath_start = element.stop1_code
             x = first_footpath_start.split("_")
             LAT_first_fp = float(x[0])
@@ -13899,20 +12176,14 @@ def OD_path_TPL_CSA():
             stop_name = element.stop
             stop2_code = str(element.stop2_code)
 
-            # stop_name = 'Orti Farnesina/Farnesina'
-            # LAT_next = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop_name + '(?:,\s|$)')]
             LAT_next = stops[stops['stop_name'] == stop_name]
-            # LAT_next = stops[stops['stop_code']==stop2_code]['stop_lat']
             LAT_next = stops[stops['stop_id'] == stop2_code]['stop_lat']
             LAT_next = pd.DataFrame(LAT_next)
             LAT_next = LAT_next.reset_index(drop=True)
             LAT_next = LAT_next[['stop_lat']]
             LAT_next = LAT_next['stop_lat'][0]
             LAT_next = float(LAT_next)
-
-            # LON_next = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop_name + '(?:,\s|$)')]
             LON_next = stops[stops['stop_name'] == stop_name]
-            # LON_next = stops[stops['stop_code']==stop2_code]['stop_lon']
             LON_next = stops[stops['stop_id'] == stop2_code]['stop_lon']
             LON_next = pd.DataFrame(LON_next)
             LON_next = LON_next.reset_index(drop=True)
@@ -13956,7 +12227,6 @@ def OD_path_TPL_CSA():
             stop1_code = str(element.stop1_code)
             # LAT_next = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop_name + '(?:,\s|$)')]
             LAT_next = stops[stops['stop_name'] == stop_name]
-            # LAT_next = stops[stops['stop_code'] == stop1_code]['stop_lat']
             LAT_next = stops[stops['stop_id'] == stop1_code]['stop_lat']
             LAT_next = pd.DataFrame(LAT_next)
             LAT_next = LAT_next.reset_index(drop=True)
@@ -13964,9 +12234,7 @@ def OD_path_TPL_CSA():
             LAT_next = LAT_next['stop_lat'][0]
             LAT_next = float(LAT_next)
 
-            # LON_next = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop_name + '(?:,\s|$)')]
             LON_next = stops[stops['stop_name'] == stop_name]
-            # LON_next = stops[stops['stop_code'] == stop1_code]['stop_lon']
             LON_next = stops[stops['stop_id'] == stop1_code]['stop_lon']
             LON_next = pd.DataFrame(LON_next)
             LON_next = LON_next.reset_index(drop=True)
@@ -14014,19 +12282,14 @@ def OD_path_TPL_CSA():
 
             stop1_name = element.start
             stop1_code = str(element.stop1_code)
-            # LAT_next1 = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop1_name + '(?:,\s|$)')]
             LAT_next1 = stops[stops['stop_name'] == stop1_name]
-            # LAT_next1 = LAT_next1[LAT_next1['stop_code'] == stop1_code]['stop_lat']
             LAT_next1 = LAT_next1[LAT_next1['stop_id'] == stop1_code]['stop_lat']
             LAT_next1 = pd.DataFrame(LAT_next1)
             LAT_next1 = LAT_next1.reset_index(drop=True)
             LAT_next1 = LAT_next1[['stop_lat']]
             LAT_next1 = LAT_next1['stop_lat'][0]
             LAT_next1 = float(LAT_next1)
-
-            # LON_next1 = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop1_name + '(?:,\s|$)')]
             LON_next1 = stops[stops['stop_name'] == stop1_name]
-            # LON_next1 = LON_next1[LON_next1['stop_code'] == stop1_code]['stop_lon']
             LON_next1 = LON_next1[LON_next1['stop_id'] == stop1_code]['stop_lon']
             LON_next1 = pd.DataFrame(LON_next1)
             LON_next1 = LON_next1.reset_index(drop=True)
@@ -14036,19 +12299,14 @@ def OD_path_TPL_CSA():
 
             stop2_name = element.stop
             stop2_code = str(element.stop2_code)
-            # LAT_next2 = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop2_name + '(?:,\s|$)')]
             LAT_next2 = stops[stops['stop_name'] == stop2_name]
-            # LAT_next2 = LAT_next2[LAT_next2['stop_code'] == stop2_code]['stop_lat']
             LAT_next2 = LAT_next2[LAT_next2['stop_id'] == stop2_code]['stop_lat']
             LAT_next2 = pd.DataFrame(LAT_next2)
             LAT_next2 = LAT_next2.reset_index(drop=True)
             LAT_next2 = LAT_next2[['stop_lat']]
             LAT_next2 = LAT_next2['stop_lat'][0]
             LAT_next2 = float(LAT_next2)
-
-            # LON_next2 = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop2_name + '(?:,\s|$)')]
             LON_next2 = stops[stops['stop_name'] == stop2_name]
-            # LON_next2 = LON_next2[LON_next2['stop_code'] == stop2_code]['stop_lon']
             LON_next2 = LON_next2[LON_next2['stop_id'] == stop2_code]['stop_lon']
             LON_next2 = pd.DataFrame(LON_next2)
             LON_next2 = LON_next2.reset_index(drop=True)
@@ -14115,32 +12373,25 @@ def OD_path_TPL_CSA():
             if len(shape_path) < 1:
                 shape_path = shapes[shapes['shape_id'] == str(shape_ID)]
 
-            # stop1_code = '72265'
             stop1_code = str(element.stop1_code)
-            # road_1_LAT = stops[stops['stop_code'] == stop1_code]['stop_lat']
             road_1_LAT = stops[stops['stop_id'] == stop1_code]['stop_lat']
             road_1_LAT = pd.DataFrame(road_1_LAT)
             road_1_LAT = road_1_LAT.reset_index(drop=True)
             road_1_LAT = road_1_LAT[['stop_lat']]
             road_1_LAT = road_1_LAT['stop_lat'][0]
 
-            # road_1_LON = stops[stops['stop_code'] == stop1_code]['stop_lon']
             road_1_LON = stops[stops['stop_id'] == stop1_code]['stop_lon']
             road_1_LON = pd.DataFrame(road_1_LON)
             road_1_LON = road_1_LON.reset_index(drop=True)
             road_1_LON = road_1_LON[['stop_lon']]
             road_1_LON = road_1_LON['stop_lon'][0]
 
-            # stop2_code = '72157'
             stop2_code = str(element.stop2_code)
-            # road_2_LAT = stops[stops['stop_code'] == stop2_code]['stop_lat']
             road_2_LAT = stops[stops['stop_id'] == stop2_code]['stop_lat']
             road_2_LAT = pd.DataFrame(road_2_LAT)
             road_2_LAT = road_2_LAT.reset_index(drop=True)
             road_2_LAT = road_2_LAT[['stop_lat']]
             road_2_LAT = road_2_LAT['stop_lat'][0]
-
-            # road_2_LON = stops[stops['stop_code'] == stop2_code]['stop_lon']
             road_2_LON = stops[stops['stop_id'] == stop2_code]['stop_lon']
             road_2_LON = pd.DataFrame(road_2_LON)
             road_2_LON = road_2_LON.reset_index(drop=True)
@@ -14150,10 +12401,6 @@ def OD_path_TPL_CSA():
             try:
                 ## get fraction of shape_path from lat, lon from Road1 to Road2
                 seq1_LAT_start = shape_path[(shape_path['shape_pt_lat']) == round(road_1_LAT, 6)]['shape_pt_sequence']
-                # if len(seq1_LAT_start) <1:
-                # AAA = shape_path.sort_values(by=['shape_pt_lat'])
-                #  seq1_LAT_start = shape_path[((shape_path['shape_pt_lat']) <= road_1_LAT + 0.0001 )  &
-                #                              ((shape_path['shape_pt_lat']) >= road_1_LAT - 0.00001 )]['shape_pt_sequence']
                 seq1_LAT_start = pd.DataFrame(seq1_LAT_start)
                 seq1_LAT_start = seq1_LAT_start.reset_index(drop=True)
                 seq1_LAT_start = seq1_LAT_start[['shape_pt_sequence']]
@@ -14164,9 +12411,6 @@ def OD_path_TPL_CSA():
 
             try:
                 seq2_LAT_stop = shape_path[shape_path['shape_pt_lat'] == round(road_2_LAT, 6)]['shape_pt_sequence']
-                # if len(seq2_LAT_stop) < 1:
-                #    seq2_LAT_stop = shape_path[((shape_path['shape_pt_lat']) <= road_2_LAT + 0.0001) &
-                #                                ((shape_path['shape_pt_lat']) >= road_2_LAT - 0.00001)]['shape_pt_sequence']
                 seq2_LAT_stop = pd.DataFrame(seq2_LAT_stop)
                 seq2_LAT_stop = seq2_LAT_stop.reset_index(drop=True)
                 seq2_LAT_stop = seq2_LAT_stop[['shape_pt_sequence']]
@@ -14264,11 +12508,6 @@ def simulated_path_CSA():
     # selected_GTFS_data = "20201002"
     df_stops_and_times = pd.read_csv(path_app + "static/final_timetable.csv")
     ## use the short_name for the 'line_number'
-    # df_stops_and_times.rename({'line_number': 'route_id'}, axis=1, inplace=True)
-    # routes = pd.read_csv(path_app + '/static/GTFS/' + selected_GTFS_data + '/' + 'routes.txt')
-    # AAA = routes[routes.route_id == '305']
-    # df_stops_and_times = pd.merge(df_stops_and_times, routes[['route_id', 'route_short_name']], on=['route_id'], how='left')
-
     df_stops_and_times.reset_index(inplace=True)
     df_stops_and_times = df_stops_and_times[['line_number', 'trip_id', 'stop1_code', 'start',
                                              'stop2_code', 'stop', 'start_time', 'end_time', 'distance(m)']]
@@ -14843,11 +13082,8 @@ def capolinea():
 
 
 
-
-
 if __name__ == '__main__':
     app.run(host="localhost", port=8080, debug=True, threaded=True, use_reloader=False)
-
 
 # ---------------------------------------- #
 ############################################
