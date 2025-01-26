@@ -1,0 +1,3743 @@
+
+<!doctype html>
+<html lang="en">
+
+<style type="text/css">
+    body {
+            padding: 0;
+            margin: 0;
+			font-family: Arial, Helvetica, sans-serif;
+        }
+   
+	#map {
+	  height: 100%;
+	}
+	
+	/* Optional: Makes the sample page fill the window. */
+	html, body {
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	}
+
+
+	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	.legend { text-align: left; line-height: 25px; color: #555; font-size: 22px} .legend i { width: 23px; height: 23px; float: left; margin-right: 6px; opacity: 0.7; }  
+	.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+	
+	
+	#heatmapContainerWrapper { width:100%; height:100%; position:absolute; background:rgba(0,0,0,.1);}
+	#heatmapContainer { width:10%; height:10%; z-index: 700;}
+	
+	//#heatmapLegend_N_buses { background:white; position:absolute; bottom:215px; right:0; padding:10px;  z-index: 700; font-size: 18px; display: inline;}
+	//#min_buses { float:left; }
+	//#max_buses { float:right; }
+	//#min_emiss { float:left; }
+	// #max_emiss { float:right; }
+	
+	
+	
+	#refreshButton {
+	  position: absolute;
+	  top: 60px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #000000;
+	  background-color:#FFFF00;
+	}
+	
+	
+	#home_locations {
+	  position: absolute;
+	  width: 100%;
+	  top: 60px;
+	  margin-top: 40px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #ffffff ;
+	  background-color:#000099;
+	}
+	
+	#refreshButton:hover{
+		opacity: 0.8;
+		cursor: pointer;
+    }
+	
+
+
+	  html, body,  #map {
+        width : 100%;
+        height : 100%;
+      }
+	.box{	  
+		width:15px;
+		height:15px;
+		border-radius:25px;
+		display: inline-block;
+		}
+	
+
+     /** sidebar menu **/
+	.innerDiv{
+		position: absolute;
+		width: 10%;
+		height: 15%;
+		background-color: #b2b2ff;
+		opacity: 0.8;
+		margin-top:  1%;
+		margin-left: 5%;
+		z-index: 800;
+		padding-top: 1%;
+		text-overflow:ellipsis;
+        overflow:hidden;
+		
+	}
+	
+
+	
+
+ .button {
+	    position: absolute;
+		left: 2%;
+		top: 80%;
+		height: 8%;
+		width: 7%
+        min-width: 7%;
+		margin-top: 30%;
+		margin-left: 50%;
+		z-index: 500;
+	    border: none;
+	    color: white;
+	    padding: 20px;
+	    text-align: center;
+	    display: inline-block;
+	    font-size: 1.5em;
+	    margin: 10px 20px;		
+	}
+
+		
+		
+  header, nav {
+    left: 2%;
+	top: 85%;
+  	z-index: 700;
+	position: absolute;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	border-spacing: 5px;
+  }
+
+	nav a {
+	  text-decoration: none;
+	  background: #000000;  /* Black */
+	  border-radius: 5px;
+	  font-size: 1.5em;
+	  color: white;
+	  padding: 3px 8px;
+	  display: table-cell;
+	}
+	
+	
+	nav .col_home {
+		background-color: #6b0000;
+	}
+	
+	nav .col_privata {
+		background-color: #4CAF50;
+	}
+	
+	
+	nav .col_collettivo {
+		background-color: #0000ff ;
+	}
+	
+	nav .col_scenari {
+		background-color: #ffa500 ;
+	}
+	
+	
+	nav .col_impatti {
+		background-color: #76a5af ;
+	}
+	
+	
+	nav .IEA_statistics {
+		background-color: #ededed ;
+		color: blue;
+	}
+	
+	
+	nav .col_best {background-color: #326bbb ;<!--color: blue;-->}
+		
+
+  /** submit lat lon and input text to Python **/
+   main {
+		background-color: rgba(51, 170, 51, .3); 
+		left: 2%;
+		top: 3%;
+		z-index: 700;
+		position: absolute;
+		margin: 2px 0;
+		padding: 5px;
+		  //overflow:hidden;
+		overflow-y:scroll;
+    width: 350px;
+    height:65%;
+	}
+
+	main div {
+	  background: transparent; 
+	  color: white;
+	  padding: 1px;
+	  margin: 5px auto;
+	}
+	
+
+	main div:nth-child(1) {
+	  width: 270px;
+	  height: 0px;
+	   background: transparent;
+	}
+	
+	
+    main div:nth-child(2) {
+	  width: 270px;
+	  height: 2px;
+	   background: transparent;
+	}
+	
+
+	main div:nth-child(3) {
+      width: 170px;
+	 background: transparent;
+	}
+	
+	main div:nth-child(4) {
+	  width: 270px;
+	   height: 2px;
+	   background: #326bbb;
+	   float: center;
+	}
+	
+	main div:nth-child(5) {
+	  width: 270px;
+	 background: transparent;
+	}
+	
+	main div:nth-child(6) {
+	   width: 270px;
+	    background: transparent;
+	}
+	
+
+	.inline-block-center {
+	  text-align: center;
+	}
+	
+	.flex-center {
+	  display: flex;
+	  justify-content: center;
+	}
+	
+
+	h2 {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+	line-height: 0.5em;
+	}
+	
+	
+	h3 {
+    margin: 0;
+    padding: 0;
+	display: inline;
+	}
+	
+	
+	
+	
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: absolute; /* Stay in place */
+	  z-index: 700; /* Sit on top */
+	  
+	  position: absolute;
+	   left: 20%;
+		top: 4%;
+	  width: 50%; /* Full width */
+	  height: 70%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+
+	/* Modal Content/Box */
+	.modal-content {
+	  z-index: 700;
+	  top: 5%;
+	  background-color: #fefefe;
+	  margin: 5% auto; /* 15% from the top and centered */
+	  padding: 1%;
+	  border: 1px solid #888;
+	  width: 100%; /* Could be more or less, depending on screen size */
+	}
+
+	/* The Close Button */
+	.close {
+	  color: #aaa;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+	  color: black;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+	
+	
+
+
+.animation_link {
+  font-size: 130%;
+  color: blue;
+  font-weight: bold;
+}
+
+.animation_link_heatmap {
+  font-size: 130%;
+  color: red;
+  font-weight: bold;
+}
+
+.animation_link_IEA_STATS {
+  font-size: 130%;
+  color: #0f45d2;
+  font-weight: bold;
+}
+
+
+	
+	
+</style>
+
+<style>
+
+.label {
+  color: black;
+  padding: 8px;
+  font-family: Arial Black;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+
+
+
+
+
+
+#.tpl_line {background-color: #2196F3;} /* Blue */
+
+
+table, th, td {
+  border:1px solid black;
+   left: 20%;
+}
+
+
+table.center_table {
+  margin-left: -15%; 
+  //margin-left: 20%;
+}
+
+
+
+/* Center the loader (SPINNER) */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  // border-top: 16px solid #3498db;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-right: 16px solid yellow;
+  border-left: 16px solid pink;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+
+
+
+div#loading {
+    display: none;
+	position: absolute;
+	left: 50%;
+    top: 50%;
+    z-index: 700;
+	width: 270px;
+	height: 270px;
+	 margin: -76px 0 0 -76px;
+    background: url(/static/loadingimage_TPL.gif) no-repeat;
+    cursor: wait;
+ }
+ 
+ /* Button changing color when clicked */
+ input.btn_color:active { background:yellow; } 
+
+ 
+	.btn_TPL {width: 70%;
+		  height:50px;
+		  font-size: 20px;
+		  font-weight: bold;
+		  text-align: center;
+		  color:black}
+		  
+		  
+     .btn_CSA {width: 70%;
+		  height:50px;
+		  font-size: 20px;
+		  font-weight: bold;
+		  text-align: center;
+		  color:black}
+ 
+ 
+     /* custom primary buttons */
+    
+    .btn-primary {
+        color: #212529;
+        background-color: white ;
+        border-color: #5bc2c2
+    }
+	
+	
+	.btn-primary_routing {
+        color: #212529;
+        background-color: blue ;
+        border-color: #5bc2c2
+    }
+	
+	
+    
+    .btn-primary:hover {
+        color: #212529;
+        background-color: #52bebe;
+        border-color: #8ad3d3
+    }
+    
+    .btn-primary:focus,
+    .btn-primary.focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+    
+    .btn-primary.disabled,
+    .btn-primary:disabled {
+        color: #212529;
+        background-color: #7cc;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active,
+    .btn-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #9cdada;
+        border-color: #2e7c7c
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active:focus,
+    .btn-primary:not(:disabled):not(.disabled).active:focus,
+    .show>.btn-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+    
+    .btn-outline-primary {
+        color: #000000;
+        background-color: yellow;
+        background-image: none;
+        border-color: #7cc;
+    }
+    
+    .btn-outline-primary:hover {
+        color: #222;
+        background-color: #8ad3d3;
+        border-color: #7cc
+    }
+    
+    .btn-outline-primary:focus,
+    .btn-outline-primary.focus {
+        box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+    }
+    
+    .btn-outline-primary.disabled,
+    .btn-outline-primary:disabled {
+        color: #7cc;
+        background-color: transparent
+    }
+    
+    .btn-outline-primary:not(:disabled):not(.disabled):active,
+    .btn-outline-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-outline-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #8ad3d3;
+        border-color: #7cc
+    }
+    
+    .btn-outline-primary:not(:disabled):not(.disabled):active:focus,
+    .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
+    .show>.btn-outline-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+    }
+
+
+.btn_heatmaps {border: none;
+			  background-color: blue;
+			  padding: 12px 48px 12px 24px;
+			  border-radius: 4px;
+			  color: #fff;
+			  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7.41' height='12' viewBox='0 0 7.41 12'%3E%3Cpath d='M10,6,8.59,7.41,13.17,12,8.59,16.59,10,18l6-6Z' transform='translate(-8.59 -6)' fill='%23fff'/%3E%3C/svg%3E");
+			  background-repeat: no-repeat;
+			  background-position: right 24px center;
+			  font-size: 20px;
+			  font-weight: bold;
+			  text-align: center;
+			   left: 80%;
+			   top: 85%;}
+		   
+.btn_animation {width: 45%;
+	  height:50px;
+	  font-size: 18px;
+	  font-weight: bold;
+	  text-align: center;
+	  color:blue}
+	   
+		   
+
+   .select{
+		width:  15%;
+		height: 30px;
+		font-size: 18px;
+		font-weight: bold;}
+		
+		
+ 
+
+ 
+ #form-wrapper {
+  width: 80%;
+  height: 65%;
+  margin: 0 auto;
+  overflow-y:scroll;
+  text-align: center;
+  display:flex;
+}
+#form1 {
+  width: 50%;
+  display: inline-block;
+  min-width:200px;
+}
+#form2 {
+  width: 50%;
+  display: inline-block;
+  min-width:200px;
+   background: #66b266;
+  height:100%;
+}
+
+.flex {
+   display: flex;
+   flex-direction: row;
+}
+
+div.c {
+	  text-align: center;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+ 
+ 
+ input[type="radio"] {
+  -ms-transform: scale(1.5); /* IE 9 */
+  -webkit-transform: scale(1.5); /* Chrome, Safari, Opera */
+  transform: scale(1.5);
+}
+	
+
+
+</style>
+
+
+
+
+
+
+
+
+
+</head>
+  <meta name="description" content="Leaflet Template">
+  <title>RdS-ENEA</title>
+  <!--meta name="viewport" content="initial-scale=1.0"-->
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+ </head>
+ 
+ 
+ <!--start the SPINNER or LOADER-->
+<div id="loader"></div>
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+
+
+
+<body>
+<div id="loading"></div>
+
+<main class="inline-block-center">
+
+
+	<!--insert new line-->
+	<!--br-->
+	
+	 <h2 style="font-weight: bold; line-height: 1em;">TPL Emissions,</h2> 
+	 <h2 style="font-weight: bold; line-height: 1em;">Energy Consumption and Costs</h2> 
+	<!--insert new line-->
+	<!--br-->
+	
+		<div class="break_line_1"></div>
+
+
+
+ <div id="form-wrapper">
+    <div id="form1" class="c">
+	
+	
+	
+ <h3 style="font-weight: bold">Fleet Type:</h3>
+	<form method="POST" action="/fleet_selector/">	
+	<select class="tipo_alimentazione" name="bus_fleet_type" id="registration_fleet_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="99">--- choose ---</option>
+			<option value="100">rm1</option>
+	</select>
+	</form>
+	
+	
+	
+ <h3 style="font-weight: bold">Load:</h3>
+	<form method="POST" action="/load_selector/">	
+	<select class="tipo_alimentazione" name="bus_load" id="registration_bus_load" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="99">--- choose ---</option>
+			<option value="50">rm1</option>
+	</select>
+	</form>
+	
+	<br>
+
+	
+	
+	<h3 style="font-weight: bold">Energy & Pollutant:</h3>
+	<form method="POST" action="/emission_type_selector_tpl/">	
+	<select class="tipo_alimentazione" name="emission_type" id="registration_emission_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="11">Energy Consumption</option>
+			<option value="12">Energy Cons.(Wtt)</option>
+			<option value="13">NOx</option>
+			<option value="14">nmVOC</option>
+			<option value="15">PM</option>
+			<option value="16">PM (tyres & brakes)</option>
+			<option value="17">CO2 eq.</option>
+			<option value="18">CO2 eq (Well-to-Tank)</option>
+			<!--option value="19">Heat Index</option-->
+			<option value="20">Temperature (°C)</option>
+			<option value="21">AC cons</option>
+			<option value="22">Heating cons</option>
+	</select>
+	</form>
+  <br>
+  
+  
+   <!--h2 style="font-weight: bold; line-height: 1em;">--------------- ---------------</h2--> 
+
+  
+  
+  
+	
+	 <!--h2 style="font-weight: bold; line-height: 1em;">Hypothetical Fleet Configuration</h2> 
+	
+	 <br>
+
+ <h3 style="font-weight: bold">Fuel Type:</h3>
+	<form method="POST" action="/fuel_type_selector/">	
+	<select class="tipo_alimentazione" name="fuel_type" id="registration_fuel_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="101">--- choose ---</option>
+			<option value="102">Diesel</option>
+			<option value="103">CNG</option>
+			<option value="104">Electricity</option>
+	</select>
+	</form-->
+ 
+
+  
+ 
+<!--DIESEL A-->
+
+<!--
+ {% if session["fuel_type"]=='102' and (session["euro_type"] =='11' or session["euro_type"] =='12') %}
+
+ <h3 style="font-weight: bold">Euro Standard:</h3>
+	<form method="POST" action="/euro_standard_selector/">	
+	<select class="tipo_alimentazione" name="euro_type" id="registration_euro_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="11">EURO 3</option>
+			<option value="12">EURO 4</option>
+			<option value="13">EURO 5</option>
+			<option value="14">EURO 6</option>
+	</select>
+	</form>
+	
+	<br>
+	
+
+<form method="POST" action="/segment_selector/">	
+	<h3 style="font-weight: bold">Segment:</h3>
+	<select class="staypoints_type" name="segment_type" id="registration_segment_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="21">Standard</option>
+		</select>
+	</form>
+	
+	<br>
+	
+<form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="30">monofuel</option>
+		</select>
+	</form>
+		
+	<br>
+{% endif %}
+
+-->
+	
+
+
+  
+<!--DIESEL B-->
+
+<!--
+ {% if session["fuel_type"]=='102' and (session["euro_type"] =='13') and (session["engine_type"]=='30' or session["engine_type"]=='31') and (session["segment_type"]=='22') %}
+
+ <h3 style="font-weight: bold">Euro Standard:</h3>
+	<form method="POST" action="/euro_standard_selector/">	
+	<select class="tipo_alimentazione" name="euro_type" id="registration_euro_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="11">EURO 3</option>
+			<option value="12">EURO 4</option>
+			<option value="13">EURO 5</option>
+			<option value="14">EURO 6</option>
+	</select>
+	</form>
+	
+	<br>
+
+
+
+<form method="POST" action="/segment_selector/">	
+	<h3 style="font-weight: bold">Segment:</h3>
+	<select class="staypoints_type" name="segment_type" id="registration_segment_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="21">Standard</option>
+			<option value="22">Articulated</option>
+		</select>
+	</form>
+	
+	<br>
+	
+<form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="30">monofuel</option>
+			<option value="31">phev</option>
+		</select>
+	</form>
+		
+	<br>
+{% endif %}
+	
+-->
+	
+	
+	
+
+<!--DIESEL B1-->
+<!--
+ {% if session["fuel_type"]=='102' and (session["euro_type"] =='14')  and (session["engine_type"]=='30') and (session["segment_type"]=='22' or session["segment_type"]=='23' or session["segment_type"]=='21' ) %}
+
+ <h3 style="font-weight: bold">Euro Standard:</h3>
+	<form method="POST" action="/euro_standard_selector/">	
+	<select class="tipo_alimentazione" name="euro_type" id="registration_euro_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="11">EURO 3</option>
+			<option value="12">EURO 4</option>
+			<option value="13">EURO 5</option>
+			<option value="14">EURO 6</option>
+	</select>
+	</form>
+	
+	<br>
+
+
+
+<form method="POST" action="/segment_selector/">	
+	<h3 style="font-weight: bold">Segment:</h3>
+	<select class="staypoints_type" name="segment_type" id="registration_segment_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="21">Standard</option>
+			<option value="22">Articulated</option>
+			<option value="23">midi</option>
+		</select>
+	</form>
+	
+	<br>
+	
+ {% if (session["segment_type"]=='21') %}
+<form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="30">monofuel</option>
+			<option value="31">phev</option>
+		</select>
+	</form>
+		
+	<br>
+{% endif %}	
+	
+ {% if (session["segment_type"]=='22' or  session["segment_type"]=='23') %}
+ <form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="30">monofuel</option>
+		</select>
+	</form>
+<br>
+{% endif %}	
+
+{% endif %}	
+-->
+
+
+
+<!--DIESEL C1-->
+<!--
+ {% if session["fuel_type"]=='102' and (session["euro_type"] =='14') and (session["engine_type"]=='31')  and (session["segment_type"]=='21' ) %}
+
+ <h3 style="font-weight: bold">Euro Standard:</h3>
+	<form method="POST" action="/euro_standard_selector/">	
+	<select class="tipo_alimentazione" name="euro_type" id="registration_euro_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="11">EURO 3</option>
+			<option value="12">EURO 4</option>
+			<option value="13">EURO 5</option>
+			<option value="14">EURO 6</option>
+	</select>
+	</form>
+	
+	<br>
+
+
+
+<form method="POST" action="/segment_selector/">	
+	<h3 style="font-weight: bold">Segment:</h3>
+	<select class="staypoints_type" name="segment_type" id="registration_segment_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="21">Standard</option>
+			<option value="22">Articulated</option>
+			<option value="23">midi</option>
+		</select>
+	</form>
+	
+	<br>
+	
+<form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="31">phev</option>
+		</select>
+	</form>
+		
+	<br>
+{% endif %}
+-->
+
+  
+  
+<!--DIESEL C-->
+<!--
+ {% if session["fuel_type"]=='102' and (session["euro_type"] =='13') and (session["engine_type"]=='30' or session["engine_type"]=='31') and (session["segment_type"]=='21' or session["segment_type"]=='23') %}
+
+ <h3 style="font-weight: bold">Euro Standard:</h3>
+	<form method="POST" action="/euro_standard_selector/">	
+	<select class="tipo_alimentazione" name="euro_type" id="registration_euro_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="11">EURO 3</option>
+			<option value="12">EURO 4</option>
+			<option value="13">EURO 5</option>
+			<option value="14">EURO 6</option>
+	</select>
+	</form>
+	
+	<br>
+
+
+
+<form method="POST" action="/segment_selector/">	
+	<h3 style="font-weight: bold">Segment:</h3>
+	<select class="staypoints_type" name="segment_type" id="registration_segment_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="21">Standard</option>
+			<option value="22">Articulated</option>
+			<option value="23">midi</option>
+		</select>
+	</form>
+	
+	<br>
+	
+<form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="30">monofuel</option>
+		</select>
+	</form>
+		
+	<br>
+{% endif %}
+	
+-->	
+  
+
+  
+<!--CNG-->
+<!--
+ {% if session["fuel_type"]=='103' %}
+
+ <h3 style="font-weight: bold">Euro Standard:</h3>
+	<form method="POST" action="/euro_standard_selector/">	
+	<select class="tipo_alimentazione" name="euro_type" id="registration_euro_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="12">EURO 4</option>
+			<option value="13">EURO 5</option>
+			<option value="14">EURO 6</option>
+	</select>
+	</form>
+	
+	<br>
+	
+
+<form method="POST" action="/segment_selector/">	
+	<h3 style="font-weight: bold">Segment:</h3>
+	<select class="staypoints_type" name="segment_type" id="registration_segment_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="21">Standard</option>
+		</select>
+	</form>
+	
+	<br>
+	
+<form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="30">monofuel</option>
+		</select>
+	</form>
+		
+	<br>
+{% endif %}
+
+-->
+
+  
+<!--ELECTRICITY-->
+<!--
+ {% if session["fuel_type"]=='104' %}
+
+ <h3 style="font-weight: bold">Euro Standard:</h3>
+	<form method="POST" action="/euro_standard_selector/">	
+	<select class="tipo_alimentazione" name="euro_type" id="registration_euro_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="14">EURO 6</option>
+	</select>
+	</form>
+	
+	<br>
+	
+
+<form method="POST" action="/segment_selector/">	
+	<h3 style="font-weight: bold">Segment:</h3>
+	<select class="staypoints_type" name="segment_type" id="registration_segment_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="23">midi</option>
+		</select>
+	</form>
+	
+	<br>
+	
+<form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="30">monofuel</option>
+		</select>
+	</form>
+		
+	<br>
+{% endif %}
+-->
+	
+
+	
+	
+ </div>
+  </div>
+ <!--br-->
+ 
+ 
+
+	<!--body  onload="aaa(); "></body-->
+	
+
+		<div class="break_line_1"></div>
+		
+	<form method="POST" action="/tpl_emissions_legs_hour_selector/">	
+	<span style= "font-size: 20px;" class="label tpl_line">Hour:</span>
+	<select style="margin-top: -10px;" class="tpl_emissions_legs_hour_selector" name="GTFS_hour" id="registrationhour" aria-haspopup="true" aria-expanded="false" onchange="this.form.submit()";>
+			<option value="0">00:00</option>
+			<option value="1">01:00</option>
+			<option value="2">02:00</option>
+			<option value="3">03:00</option>
+			<option value="4">04:00</option>
+			<option value="5">05:00</option>
+			<option value="6">06:00</option>
+			<option value="7">07:00</option>
+			<option value="8">08:00</option>
+			<option value="9">09:00</option>
+			<option value="10">10:00</option>
+			<option value="11">11:00</option>
+			<option value="12">12:00</option>
+			<option value="13">13:00</option>
+			<option value="14">14:00</option>
+			<option value="15">15:00</option>
+			<option value="16">16:00</option>
+			<option value="17">17:00</option>
+			<option value="18">18:00</option>
+			<option value="19">19:00</option>
+			<option value="20">20:00</option>
+			<option value="21">21:00</option>
+			<option value="22">22:00</option>
+			<option value="23">23:00</option>
+		</select>
+	</form>
+	
+			<div class="break_line_1"></div>
+		
+	
+ <form method="POST" action="/tpl_tod_selector/">
+	 <h4 style="margin-top: -1px; margin-left:-195px;" class="label tpl_line">Day type:</h4>
+        <h4 style="margin-top: -50px;" class="tpl_tod_selector" onchange="this.form.submit()";> </h4>
+		
+		 <input type="radio" name="GTFS_tod" style="margin-left:20px; font-weight: bold;" id="registration_tod" value="9" ></label>
+		<label class="tpl_tod_selector" onchange="this.form.submit();"> 
+		
+        <input type="radio" name="GTFS_tod" style="margin-left:-19px;  margin-top: 15px;" id="registration_tod" value="6">   Working day</label><br>
+        <label class="tpl_tod_selector" onchange="this.form.submit()";>  
+        <input type="radio" name="GTFS_tod" style="margin-left:12px;" id="registration_tod" value="7" >  Pre-Holiday</label><br>
+        <label class="tpl_tod_selector" onchange="this.form.submit()";>
+        <input type="radio" name="GTFS_tod"  style="margin-left:-18px;" id="registration_tod" value="8"  >  Holiday</label>
+		 <label class="tpl_tod_selector" onchange="this.form.submit()";>
+   </form>
+
+	
+	
+	
+   <form action="/bus_type_selector/" method="POST">
+		 <div class="break_line"></div>
+		 <br>
+		<input class="btn_CSA btn-lg btn-primary mr-1" style="margin-left: 0%; margin-top: -10%; color:black; background-color: yellow;" type="submit" value="refresh">
+	</p>
+    </form>
+	
+
+	
+	 
+</main>
+
+
+
+
+<nav role='navigation'>
+  <a class="col_home" href="/home_page/">Home</a>
+  <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
+  <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
+  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
+  <a class="col_impatti" href="/impacts_page/">Impacts</a>
+    <a class="col_best" onclick="$('#loading').show();" href="/best_page/">Best</a>
+</nav>  
+
+
+
+<!--link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/src/leaflet.draw.css"/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin = "anonymous" referrerpolicy = "no-referrer"> </script-->
+
+  
+<!-- Load data .geojson -->
+<!-- ZMU zones with population data -->
+<script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script>
+<!-- POINTS of INTERESTS (PARKINGs) -->
+<!--script src="{{ url_for('static', filename='POIS_parking.geojson') }}" /></script-->
+<!-- POINTS of INTERESTS (all AMENITIES) -->
+<!--script src="{{ url_for('static', filename='layer_POIS_amenities.geojson') }}" /></script-->
+<!-- POINTS of INTERESTS (all BUILDINGS) -->
+<!--script src="{{ url_for('static', filename='layer_POIS_residential.geojson') }}" /></script-->
+<!-- ALL POINTS of INTERESTS (all BUILDINGS and AMENITIES) -->
+<!--script src="{{ url_for('static', filename='zmu_POIS_ROMA_2011.geojson') }}" /></script-->
+
+ <!--script src="{{ url_for('static', filename='leaflet.motion.min.js') }}" /></script-->  
+ 
+ 
+ <!-- load custom polygons and border of custom polygon-->
+<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script> 
+  <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+  <script src="{{ url_for('static', filename='AnimatedMarker.js') }}" /></script-->
+
+  
+  
+   <!--link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+   <link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/src/leaflet.draw.css"/>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script-->
+
+  <!--script src="{{ url_for('static', filename='leaflet.motion.min.js') }}" /></script-->  
+  <script src="{{ url_for('static', filename='lista_coords_GTFS.txt') }}" /></script>
+  
+  <!--script src="{{ url_for('static', filename='gtfs_stops_emiss_tod.geojson') }}" /></script-->
+  <!--script src="{{ url_for('static', filename='gtfs_emiss_LEGS.geojson') }}" /></script-->
+   
+   
+<!--script src="{{ url_for('static', filename='heatmap.js') }}" /></script>
+<script src="{{ url_for('static', filename='leaflet-heatmap.js') }}" /></script-->
+
+<!--script src="{{ url_for('static', filename='gridded_emissions_n_buses.txt') }}" /></script-->	
+<!--script src="{{ url_for('static', filename='gridded_emissions.txt') }}" /></script-->	
+<!--script src="{{ url_for('static', filename='min_emiss_bus.txt') }}" /></script>	
+<script src="{{ url_for('static', filename='max_emiss_bus.txt') }}" /></script-->	
+
+
+<!--script src="{{ url_for('static', filename='aggregated_tpl_emission.geojson') }}" /></script-->	
+ 
+ 
+ 
+   <div id="heatmapContainerWrapper">
+      <div id="heatmapContainer">
+	  
+	  
+	</div>
+      <!--div id="heatmapLegend_N_buses">
+        <h2 style="font-size: 20px;  font-family: Arial; font-weight: bold;">emiss / cons</h2>
+        <span id="min_emiss"></span>
+        <span id="max_emiss"></span>
+        <img id="gradient" src="" style="width:100%" />
+      </div-->
+    </div>
+
+	
+<!--we are inside the area of the map-->
+<div id="map">  </div>
+
+
+
+  <script>
+
+     // ----------------------------------------------------
+
+
+	 
+      // Hack to autoset the iframe height.
+      window.addEventListener("load", function() {
+        window.setTimeout(function() {
+          setFrameHeight(document.documentElement.clientHeight)
+        }, 0);
+      });
+	  
+
+
+
+	var fleet_type = "{{ session['bus_fleet_type']}}"
+	// alert(fleet_type);
+    document.addEventListener("DOMContentLoaded", function(){
+	var fleet_type_selezionata = fleet_type;
+	// alert(fleet_type_selezionata);
+	document.getElementById('registration_fleet_type').value = fleet_type_selezionata;  
+	});
+
+
+
+
+	var bus_load = "{{ session['bus_load']}}"
+	// alert(bus_load);
+    document.addEventListener("DOMContentLoaded", function(){
+	var bus_load_selezionata = bus_load;
+	// alert(bus_load_selezionata);
+	document.getElementById('registration_bus_load').value = bus_load_selezionata;  
+	});
+
+
+
+
+
+	
+	
+	var fuel_type = "{{ session['fuel_type']}}"
+	// alert(fuel_type);
+    document.addEventListener("DOMContentLoaded", function(){
+	var fueltype_selezionata = fuel_type;
+	// alert(fueltype_selezionata);
+	document.getElementById('registration_fuel_type').value = fueltype_selezionata;  
+	});
+	 
+	 
+	var euro_type = "{{ session['euro_type']}}"
+	// alert(euro_type);
+    document.addEventListener("DOMContentLoaded", function(){
+	var eurtype_selezionata = euro_type;
+	// alert(eurtype_selezionata);
+	document.getElementById('registration_euro_type').value = eurtype_selezionata;  
+	});
+
+
+	var segment_type = "{{ session['segment_type']}}"
+	// alert(segment_type);
+    document.addEventListener("DOMContentLoaded", function(){
+	var segmentype_selezionata = segment_type;
+	// alert(segmentype_selezionata);
+	document.getElementById('registration_segment_type').value = segmentype_selezionata;  
+	});
+	
+	 
+	 
+	var engine_type = "{{ session['engine_type']}}"
+	// alert(engine_type);
+    document.addEventListener("DOMContentLoaded", function(){
+	var enginetype_selezionata = engine_type;
+	// alert(enginetype_selezionata);
+	document.getElementById('registration_engine_type').value = enginetype_selezionata;  
+	});
+	
+	
+	
+
+	var TYPE_data_emission = "{{session['emission_type']}}"	
+	// alert(TYPE_data_emission);
+	document.addEventListener("DOMContentLoaded", function(){
+	var emission_type_selezionata =  TYPE_data_emission;
+	// alert(emission_type_selezionata);
+	document.getElementById('registration_emission_type').value = emission_type_selezionata;   
+	});
+	 
+	  
+
+	var gtfs_tod = "{{ session['GTFS_tod']}}"
+    document.addEventListener("DOMContentLoaded", function(){
+	var tod_selezionata =  gtfs_tod;
+	document.getElementById('registration_tod').value = tod_selezionata;  
+	// alert(tod_selezionata);
+	});
+	
+
+	
+	$('form select').on('change', function(){
+		$(this).closest('form').submit()
+		$('#loading').show();
+	});
+
+
+	
+	 
+	 
+	var number = "{{ session['GTFS_tod']}}";
+	 $('input[name=GTFS_tod][value=' + number + ']').prop('checked',true);
+	 
+
+	var TYPE_data = "{{session['GTFS_type']}}"	
+	document.addEventListener("DOMContentLoaded", function(){
+	var data_type_selezionata =  TYPE_data;
+	//alert(data_type_selezionata);
+	document.getElementById('registration_data_type').value = data_type_selezionata;   
+	});
+	 
+
+
+	
+	var GTFS_hour = "{{ session['GTFS_hour']}}"
+	// alert(zmu_hour);
+	
+
+	
+    document.addEventListener("DOMContentLoaded", function(){
+	// var ora_selezionata =  selected_hour_ZMU;
+	var ora_selezionata =  GTFS_hour;
+	// alert(ora_selezionata);
+	document.getElementById('registrationhour').value = ora_selezionata;  
+	});
+	
+	var stop_emissions_buses = JSON.parse({{ session_stop_emissions_buses | tojson | safe}});
+	var gtfs_hour = JSON.parse({{ session_emissions_LEGS_gtfs | tojson | safe}});
+	//alert(LEGS_gtfs);
+	
+	
+	var aggregated_tpl_emissions_zmu = JSON.parse({{ session_aggregated_tpl_emissions_oring_zones | tojson | safe}});
+
+//alert("---- I am here ----");
+//alert(aggregated_tpl_emissions_zmu);
+	
+	 ///////////////////////////---------------------------------------------------------------------/////////////////////////////////////////////
+	  ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+	   ///////////////////////////---------------------------------------------------------------------///////////////////////////////////////////
+	    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+		///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+        ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+      ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+	 
+	  
+	// ADD Leaflet map
+	
+		
+		const osm  = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		})
+		
+		
+		 
+         
+	    var carto = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+         });
+		 
+	 	
+	
+	// control that shows state info on hover
+	const info = L.control(); 
+	
+	info.onAdd = function (map) {
+	this._div = L.DomUtil.create('div', 'info');
+	this.update();
+	return this._div;
+	};
+		
+	
+	
+		
+	function getColor_census(d) {
+		return d > 20000 ? '#800026' :
+			d > 10000  ? '#97001e' :
+			d > 5000  ? '#BD0026' :
+			d > 3000  ? '#E31A1C' :
+			d > 2000  ? '#FC4E2A' :
+			d > 1000   ? '#FD8D3C' :
+			d > 300   ? '#FEB24C' :
+			d > 50   ? '#FED976' : '#FFEDA0';
+				}
+	
+
+		
+	
+
+ if (TYPE_data_emission == '11') {
+  
+			plot_factor_ec = 1.5
+			//alert("EC");
+	
+	
+	function getColor_zmu_origin_destinations(d) {
+		  return d >= 200/plot_factor_ec ? '#071a4f' :
+			d > 100/plot_factor_ec  ? '#384772' :
+			d > 50/plot_factor_ec  ? '#6a7595' :
+			d > 30/plot_factor_ec  ? '#b4baca' :
+			d > 20/plot_factor_ec  ? '#7fcdbb' :
+			d > 10/plot_factor_ec  ? '#c7e9b4' :
+			d > 5/plot_factor_ec  ? '#d5df9f' :
+			d >= 0/plot_factor_ec   ? '#fdfdbf' : '#fdfdbf';
+			}  
+			
+			
+		plot_factor_co2_eq_cost = 1
+	  function getColor_zmu_origin_destinations_cost(d) {
+			return d >= 50/plot_factor_co2_eq_cost ? '#071a4f' :
+			d > 20/plot_factor_co2_eq_cost  ? '#384772' :
+			d > 10/plot_factor_co2_eq_cost  ? '#6a7595' :
+			d > 5/plot_factor_co2_eq_cost  ? '#b4baca' :
+			d > 1/plot_factor_co2_eq_cost  ? '#7fcdbb' :
+			d > 0.5/plot_factor_co2_eq_cost  ? '#c7e9b4' :
+			d > 0.1/plot_factor_co2_eq_cost  ? '#d5df9f' :
+			d >= 0/plot_factor_co2_eq_cost   ? '#fdfdbf' : '#fdfdbf';
+			}  
+			
+				
+			
+  //alert("---- I am here ------");
+  
+  
+  
+
+	} else if (TYPE_data_emission == '12')  {
+      
+			plot_factor_ec_wtt = 1.5	
+  
+ function getColor_zmu_origin_destinations(d) {
+		  return d >= 100/plot_factor_ec_wtt ? '#071a4f' :
+		    //d > 1000/plot_factor_ec_wtt  ? '#0c2c84' :
+		    //d > 2000/plot_factor_ec_wtt  ? '#071a4f' : 
+			//d > 1000/plot_factor_ec_wtt  ? '#384772' :
+			d > 50/plot_factor_ec_wtt  ? '#6a7595' :
+			d > 10/plot_factor_ec_wtt  ? '#b4baca' :
+			d > 5/plot_factor_ec_wtt  ? '#c7e9b4' :  //c7e9b4
+			d > 1/plot_factor_ec_wtt  ? '#d5df9f' :
+			d > 0.5/plot_factor_ec_wtt  ? '#c7e9b4' :
+			d >= 0/plot_factor_ec_wtt   ? '#fdfdbf' : '#fdfdbf';
+			} 
+			
+			
+		
+			
+	
+	plot_factor_co2_eq_wtt_cost = 1;
+  function getColor_zmu_origin_destinations_cost(d) {
+			return d >= 50/plot_factor_co2_eq_wtt_cost ? '#071a4f' :
+			d > 20/plot_factor_co2_eq_wtt_cost  ? '#384772' :
+			d > 10/plot_factor_co2_eq_wtt_cost  ? '#6a7595' :
+			d > 5/plot_factor_co2_eq_wtt_cost  ? '#b4baca' :
+			d > 1/plot_factor_co2_eq_wtt_cost  ? '#7fcdbb' :
+			d > 0.2/plot_factor_co2_eq_wtt_cost  ? '#c7e9b4' :
+			d > 0.1/plot_factor_co2_eq_wtt_cost  ? '#d5df9f' :
+			d >= 0/plot_factor_co2_eq_wtt_cost   ? '#fdfdbf' : '#fdfdbf';
+			}  
+			
+			
+			
+   	} else if (TYPE_data_emission == '13')  {
+  // alert("------------gotta NOx----------");
+  
+			plot_factor_nox = 1.5
+	
+
+    function getColor_zmu_origin_destinations(d) {		
+		  return d >= 100/plot_factor_nox ? '#071a4f' :
+		    //d > 1000/plot_factor_nox  ? '#0c2c84' :
+		    //d > 2000/plot_factor_nox  ? '#071a4f' : 
+			//d > 1000/plot_factor_nox  ? '#384772' :
+			d > 50/plot_factor_nox  ? '#6a7595' :
+			d > 10/plot_factor_nox  ? '#b4baca' :
+			d > 5/plot_factor_nox  ? '#c7e9b4' :  //c7e9b4
+			d > 1/plot_factor_nox  ? '#d5df9f' :
+			d > 0.5/plot_factor_nox  ? '#c7e9b4' :
+			d >= 0/plot_factor_nox   ? '#fdfdbf' : '#fdfdbf';
+			} 
+			
+			
+	plot_factor_nox_cost = 1
+	function getColor_zmu_origin_destinations_cost(d) {
+		  return d >= 40/plot_factor_nox_cost ? '#071a4f' :
+			d > 20/plot_factor_nox_cost  ? '#d5df9f' : 
+			d > 10/plot_factor_nox_cost  ?  '#6a7595' :  
+			d > 1/plot_factor_nox_cost  ? '#b4baca' :
+			d > 0.5/plot_factor_nox_cost  ? '#c7e9b4' :
+			d >= 0/plot_factor_nox_cost   ? '#fdfdbf' : '#fdfdbf';
+			} 
+  
+				 
+			
+			
+   	} else if (TYPE_data_emission == '14')  {
+  // alert("------------gotta nmvoc----------");
+
+			plot_factor_nmvoc = 1.5
+	
+  
+   function getColor_zmu_origin_destinations(d) {		
+			return d >= 5/plot_factor_nmvoc ? '#071a4f' :
+			d > 1/plot_factor_nmvoc  ? '#384772' :
+			d > 0.5/plot_factor_nmvoc  ? '#6a7595' :
+			d > 0.3/plot_factor_nmvoc  ? '#b4baca' :
+			d > 0.2/plot_factor_nmvoc  ? '#7fcdbb' :
+			d > 0.1/plot_factor_nmvoc  ? '#d5df9f' :
+			d > 0.05/plot_factor_nmvoc  ? '#c7e9b4' :
+			d >= 0/plot_factor_nmvoc   ? '#fdfdbf' : '#fdfdbf';
+			} 
+			
+			
+		
+
+	plot_factor_nmvoc_cost = 1
+	 function getColor_zmu_origin_destinations_cost(d) {
+		  return d >= 0.1/plot_factor_nmvoc_cost ? '#071a4f' :
+			d > 0.05/plot_factor_nmvoc_cost  ? '#6a7595' :
+			d > 0.03/plot_factor_nmvoc_cost  ? '#b4baca' :
+			d > 0.02/plot_factor_nmvoc_cost  ? '#d5df9f' :
+			d > 0.01/plot_factor_nmvoc_cost  ? '#c7e9b4' :
+			d >= 0/plot_factor_nmvoc_cost   ? '#fdfdbf' : '#fdfdbf';
+			} 
+			
+			
+			
+		
+			
+			
+		
+ 	} else if (TYPE_data_emission == '15')  {
+  // alert("------------gotta PM----------");
+  
+  
+			plot_factor_pm = 1.5
+	
+  function getColor_zmu_origin_destinations(d) {		
+			return d >= 0.5/plot_factor_pm ? '#071a4f' :
+		    //d > 1000/plot_factor_pm  ? '#0c2c84' :
+		    //d > 10/plot_factor_pm  ? '#071a4f' : 
+			//d > 10/plot_factor_pm  ? '#384772' :
+			//d > 5/plot_factor_pm  ? '#6a7595' :
+			d > 0.1/plot_factor_pm  ?  '#6a7595' :
+			d > 0.05/plot_factor_pm  ? '#b4baca' :
+			d > 0.03/plot_factor_pm  ?   '#d5df9f' : 
+			d > 0.01/plot_factor_pm  ?   '#c7e9b4' :
+			d >= 0/plot_factor_pm   ? '#fdfdbf' : '#fdfdbf';
+			}    
+			
+			
+		plot_factor_pm_cost = 1
+	   function getColor_zmu_origin_destinations_cost(d) {		
+			return d >= 10/plot_factor_pm_cost ? '#071a4f' :
+			d > 5/plot_factor_pm_cost  ? '#384772' :
+			d > 1/plot_factor_pm_cost  ? '#b4baca' :
+			d > 0.5/plot_factor_pm_cost  ? '#c7e9b4' :
+			d >= 0/plot_factor_pm_cost   ? '#fdfdbf' : '#fdfdbf';
+			}  
+				 
+			
+			
+				
+			  
+			
+			
+	} else if (TYPE_data_emission == '16')  {
+  // alert("------------gotta PM tyres and brakes----------");
+  
+   
+			plot_factor_pm_nexh = 1.5
+	
+  
+  function getColor_zmu_origin_destinations(d) {		
+		 return d >= 10/plot_factor_pm_nexh ? '#071a4f' :
+		    //d > 1000/plot_factor_pm_nexh  ? '#0c2c84' :
+		    //d > 2000/plot_factor_pm_nexh  ? '#071a4f' : 
+			//d > 1000/plot_factor_pm_nexh  ? '#384772' :
+			d > 5/plot_factor_pm_nexh  ? '#6a7595' :
+			d > 2/plot_factor_pm_nexh  ? '#b4baca' :
+			d > 1/plot_factor_pm_nexh  ? '#c7e9b4' :  //c7e9b4
+			d > 0.5/plot_factor_pm_nexh  ? '#d5df9f' :
+			d > 0.1/plot_factor_pm_nexh  ? '#c7e9b4' :
+			d >= 0/plot_factor_pm_nexh   ? '#fdfdbf' : '#fdfdbf';
+			} 
+			 
+
+
+
+plot_factor_pm_nexh_cost = 1;
+   function getColor_zmu_origin_destinations_cost(d) {		
+			return d >= 5/plot_factor_pm_nexh_cost ? '#071a4f' :
+			d > 1/plot_factor_pm_nexh_cost  ? '#384772' :
+			d > 0.5/plot_factor_pm_nexh_cost  ? '#b4baca' :
+			d > 0.1/plot_factor_pm_nexh_cost  ? '#c7e9b4' :
+			d >= 0/plot_factor_pm_nexh_cost   ? '#fdfdbf' : '#fdfdbf';
+			} 			
+			
+			
+				
+      
+  
+
+
+	} else if (TYPE_data_emission == '17')  {
+  // alert("------------gotta CO2 eq----------");
+  
+  
+			plot_factor_co2_eq = 1
+
+  
+  function getColor_zmu_origin_destinations(d) {
+			return d >= 10000/plot_factor_co2_eq ? '#071a4f' :
+		    //d > 80000/plot_factor_co2_eq  ? '#0c2c84' :
+		    //d > 40000/plot_factor_co2_eq  ? '#071a4f' : 
+			d > 5000/plot_factor_co2_eq  ? '#384772' :
+			d > 3000/plot_factor_co2_eq  ? '#6a7595' :
+			d > 2000/plot_factor_co2_eq  ? '#b4baca' :
+			d > 1000/plot_factor_co2_eq  ? '#7fcdbb' :
+			d > 500/plot_factor_co2_eq  ? '#c7e9b4' :
+			d > 100/plot_factor_co2_eq  ? '#d5df9f' :
+			d >= 0/plot_factor_co2_eq   ? '#fdfdbf' : '#fdfdbf';
+			}  
+			
+			
+			
+	plot_factor_co2_eq_cost = 1
+	  function getColor_zmu_origin_destinations_cost(d) {
+			return d >= 50/plot_factor_co2_eq_cost ? '#071a4f' :
+			d > 20/plot_factor_co2_eq_cost  ? '#384772' :
+			d > 10/plot_factor_co2_eq_cost  ? '#6a7595' :
+			d > 5/plot_factor_co2_eq_cost  ? '#b4baca' :
+			d > 1/plot_factor_co2_eq_cost  ? '#7fcdbb' :
+			d > 0.5/plot_factor_co2_eq_cost  ? '#c7e9b4' :
+			d > 0.1/plot_factor_co2_eq_cost  ? '#d5df9f' :
+			d >= 0/plot_factor_co2_eq_cost   ? '#fdfdbf' : '#fdfdbf';
+			}  
+			
+			
+			
+			  
+			
+	} else if (TYPE_data_emission == '18')  {
+  // alert("------------gotta CO2 eq well-to-tank----------");
+  
+    
+			plot_factor_co2_eq_wtt = 1
+	
+  
+  function getColor_zmu_origin_destinations(d) {
+			return d >= 20000/plot_factor_co2_eq ? '#071a4f' :
+		    //d > 80000/plot_factor_co2_eq  ? '#0c2c84' :
+		    //d > 40000/plot_factor_co2_eq  ? '#071a4f' : 
+			//d > 2000/plot_factor_co2_eq  ? '#384772' :
+			d > 1500/plot_factor_co2_eq  ? '#6a7595' :
+			d > 1000/plot_factor_co2_eq  ? '#b4baca' :
+			d > 500/plot_factor_co2_eq  ? '#7fcdbb' :
+			d > 200/plot_factor_co2_eq  ? '#c7e9b4' :
+			d > 100/plot_factor_co2_eq  ? '#d5df9f' :
+			d >= 0/plot_factor_co2_eq   ? '#fdfdbf' : '#fdfdbf';
+			}  
+			
+			
+			
+plot_factor_co2_eq_wtt_cost = 1;
+  function getColor_zmu_origin_destinations_cost(d) {
+			return d >= 50/plot_factor_co2_eq_wtt_cost ? '#071a4f' :
+			d > 20/plot_factor_co2_eq_wtt_cost  ? '#384772' :
+			d > 10/plot_factor_co2_eq_wtt_cost  ? '#6a7595' :
+			d > 5/plot_factor_co2_eq_wtt_cost  ? '#b4baca' :
+			d > 1/plot_factor_co2_eq_wtt_cost  ? '#7fcdbb' :
+			d > 0.2/plot_factor_co2_eq_wtt_cost  ? '#c7e9b4' :
+			d > 0.1/plot_factor_co2_eq_wtt_cost  ? '#d5df9f' :
+			d >= 0/plot_factor_co2_eq_wtt_cost   ? '#fdfdbf' : '#fdfdbf';
+			}  
+			
+			
+			
+			
+			
+	} else if (TYPE_data_emission == '20')  {  
+	 // alert("------------gotta heat index----------");
+    
+			plot_factor_temp = 1.5
+	
+  
+  function getColor_zmu_origin_destinations(d) {
+			return d >= 35/plot_factor_temp ? '#071a4f' :
+		    //d > 80000/plot_factor_temp  ? '#0c2c84' :
+		    //d > 40000/plot_factor_temp  ? '#071a4f' : 
+			//d > 2000/plot_factor_temp  ? '#384772' :
+			d > 30/plot_factor_temp  ? '#6a7595' :
+			d > 20/plot_factor_temp  ? '#b4baca' :
+			d > 10/plot_factor_temp  ? '#7fcdbb' :
+			d > 5/plot_factor_temp  ? '#c7e9b4' :
+			d > 0/plot_factor_temp  ? '#d5df9f' :
+			d >= -5/plot_factor_temp   ? '#fdfdbf' : '#fdfdbf';
+			}  
+			
+
+
+	} else if (TYPE_data_emission == '21')  {  
+	 // alert("------------gotta AC consumption----------");
+    
+			plot_factor_AC = 1.5
+	
+  
+  function getColor_zmu_origin_destinations(d) {
+			return d >= 35/plot_factor_AC ? '#071a4f' :
+		    //d > 80000/plot_factor_AC  ? '#0c2c84' :
+		    //d > 40000/plot_factor_AC  ? '#071a4f' : 
+			//d > 2000/plot_factor_AC  ? '#384772' :
+			d > 30/plot_factor_AC  ? '#6a7595' :
+			d > 20/plot_factor_AC  ? '#b4baca' :
+			d > 10/plot_factor_AC  ? '#7fcdbb' :
+			d > 5/plot_factor_AC  ? '#c7e9b4' :
+			d > 0.5/plot_factor_AC  ? '#d5df9f' :
+			d >= 0/plot_factor_AC   ? '#fdfdbf' : '#fdfdbf';
+			}  
+			
+
+
+
+	} else if (TYPE_data_emission == '22')  {  
+	 // alert("------------gotta HEAT consumption----------");
+    
+			plot_factor_HEAT = 1.5
+	
+  
+  function getColor_zmu_origin_destinations(d) {
+			return d >= 20/plot_factor_HEAT ? '#071a4f' :
+		    //d > 80000/plot_factor_HEAT  ? '#0c2c84' :
+		    d > 10/plot_factor_HEAT  ? '#071a4f' : 
+			d > 5/plot_factor_HEAT  ? '#384772' :
+			d > 2/plot_factor_HEAT  ? '#6a7595' :
+			d > 1/plot_factor_HEAT  ? '#b4baca' :
+			d > 0.5/plot_factor_HEAT  ? '#7fcdbb' :
+			d > 0.3/plot_factor_HEAT  ? '#c7e9b4' :
+			d > 0.2/plot_factor_HEAT  ? '#d5df9f' :
+			d >= 0/plot_factor_HEAT   ? '#fdfdbf' : '#fdfdbf';
+			}  
+			
+			
+			
+
+			
+}
+
+	
+
+
+
+	//////////* LEGEND USED FOR ZMU DATA  (number of vehicles at destination ////////////  
+		  if (TYPE_data_emission == '11') {
+			// alert("------------gotta ec----------");
+			
+			var legend_ZMU = L.control({position: 'bottomright'});
+		
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+				
+				   const labels=["from 0 to 5",
+								"from 5 to 10",
+								"from 10 to 20",
+								"from 20 to 30",
+								"from 30 to 50",
+								"from 50 to 100",
+								"from 100 to 200",
+								" > 200"];
+				 const grades = [0, 5, 10, 20, 30, 50, 100,200];
+				div.innerHTML='<div><b>Energy Consumption [MJ]</div';
+				
+				
+			
+		
+		
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+            
+			
+			
+			
+			
+			
+				} else if (TYPE_data_emission == '12')  {
+			// alert("------------gotta ec well-to-tank----------");
+			
+			
+				var legend_ZMU = L.control({position: 'bottomright'});
+		
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				  // divided by 20
+				  
+				 
+				  const labels=["from 0 to 0.5",
+								"from 0.5 to 1",
+								"from 1 to 5",
+								"from 5 to 10",
+								"from 10 to 50",
+								"from 50 to 100",
+								" > 100"];
+				 const grades = [0, 0.5, 5, 10, 20, 50, 100];
+				 
+				
+                div.innerHTML='<div><b>Energy Consumption [MJ]</div';
+		
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+			
+			
+			
+			
+				} else if (TYPE_data_emission == '13')  {
+			// alert("------------gotta NOx----------");
+			
+			var legend_ZMU = L.control({position: 'bottomright'});
+		
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				// divided by 30
+				   const labels=["from 0 to 0.5",
+								"from 0.5 to 1",
+								"from 1 to 5",
+								"from 5 to 10",
+								"from 10 to 50",
+								"from 50 to 100",
+								" > 100"];
+				 const grades = [0, 0.5, 5, 10, 20, 50, 100];
+				 
+				 
+			
+
+                div.innerHTML='<div><b>NOx Emission [grams]</div';
+		
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+			
+			
+			
+			
+			
+			
+			
+			} else if (TYPE_data_emission == '14')  {
+			// alert("------------gotta nmvoc----------");
+			
+			
+			
+				var legend_ZMU = L.control({position: 'bottomright'});
+		
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   // divided by 30
+					   const labels=["from 0 to 0.05",
+								"from 0.05 to 0.1",
+								"from 0.1 to 0.2",
+								"from 0.2 to 0.3",
+								"from 0.3 to 0.5",
+								"from 0.5 to 1",
+							     "from 1 to 5",
+								" > 5"];
+				 const grades = [0, 0.05, 0.1, 0.2, 0.3,0.5, 1, 5];
+			
+
+                div.innerHTML='<div><b>nmVOC Emission [grams]</div';
+		
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+			
+			
+			
+					} else if (TYPE_data_emission == '15')  {
+			// alert("------------gotta PM----------");
+			
+			
+			var legend_ZMU = L.control({position: 'bottomright'});
+		
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+				
+        
+				const labels=["from 0 to 0.01",
+								"from 0.01 to 0.03",
+								"from 0.03 to 0.05",
+								"from 0.05 to 0.1",
+								"from 0.1 to 0.5",
+								" > 0.5"];
+				 const grades = [0, 0.01, 0.03, 0.05, 0.1, 0.5];	
+				 
+			
+				 
+				 
+				  div.innerHTML='<div><b>PM Emission [grams]</div';	
+
+				for(var i=0; i <grades.length; i++){
+						div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+				 }				  
+				    return div;
+                }
+			
+			
+			
+			
+				} else if (TYPE_data_emission == '16')  {
+			// alert("------------gotta PM tyres and brakes----------");
+			
+			
+			
+				var legend_ZMU = L.control({position: 'bottomright'});
+		
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 0.1",
+								"from 0.1 to 0.5",
+								"from 0.5 to 1",
+								"from 1 to 2",
+								"from 2 to 5",
+								"from 5 to 10",
+								" > 10"];
+				 const grades = [0, 0.1, 0.5, 1, 2, 5, 10];
+				 
+	
+                div.innerHTML='<div><b>PM(nonEx) Emission [grams]</div';
+		
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+			
+			
+			
+			
+				} else if (TYPE_data_emission == '17')  {
+			// alert("------------gotta co2 eq----------");
+			
+		
+				var legend_ZMU = L.control({position: 'bottomright'});
+		
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 100",
+								"from 100 to 2",
+								"from 500 to 1000",
+								"from 1000 to 2000",
+								"from 2000 to 3000",
+								"from 3000 to 5000",
+								"from 5000 to 10000",
+								" > 10000"];
+				  const grades = [0, 100, 500, 1000, 2000, 3000, 5000, 10000];
+				 
+	
+			
+				 
+
+                div.innerHTML='<div><b>CO2 eq. Emission [grams]</div';
+		
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+			
+			
+			
+				} else if (TYPE_data_emission == '18')  {
+			// alert("------------gotta co2 eq well-to-tank----------");
+			
+			
+			
+				var legend_ZMU = L.control({position: 'bottomright'});
+		
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 100",
+								"from 100 to 200",
+								"from 200 to 500",
+								"from 500 to 1000",
+								"from 1000 to 1500",
+								"from 1500 to 2000",
+								" > 2000"];
+				  const grades = [0, 100, 200, 1000, 1000, 1500, 2000];
+				 
+	
+			
+				 
+
+                div.innerHTML='<div><b>CO2 eq. (wtt) Emission [grams]</div';
+		
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+			}	
+				
+            } else if (TYPE_data_emission == '20')  {
+			// alert("------------gotta temperature----------");
+			
+			
+			
+				var legend_ZMU = L.control({position: 'bottomright'});
+		
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from -5 to 0",
+								"from 0 to 5",
+								"from 5 to 10",
+								"from 10 to 20",
+								"from 20 to 30",
+								"from 30 to 35",
+								" > 35"];
+				  const grades = [-5, 0, 5, 10, 20, 30, 35];
+				 
+	
+                div.innerHTML='<div><b>Temperature [°C]</div';
+		
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+
+
+
+        } else if (TYPE_data_emission == '21')  {
+			// alert("------------gotta AC consumption----------");
+			
+			
+			
+				var legend_ZMU = L.control({position: 'bottomright'});
+		
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 0.5",
+								"from 0.5 to 5",
+								"from 5 to 10",
+								"from 10 to 20",
+								"from 20 to 30",
+								"from 30 to 35",
+								" > 35"];
+				  const grades = [0, 0.5, 5, 10, 20, 30, 35];
+				 
+	
+                div.innerHTML='<div><b>AC Cons.[]</div';
+		
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+			
+			
+			
+			
+	     } else if (TYPE_data_emission == '22')  {
+			// alert("------------gotta HEATING consumption----------");
+			
+			
+			
+				var legend_ZMU = L.control({position: 'bottomright'});
+		
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 0.2",
+								"from 0.2 to 0.5",
+								"from 0.5 to 1",
+								"from 1 to 2",
+								"from 2 to 5",
+								"from 5 to 10",
+								"from 10 to 20",
+								" > 20"];
+				  const grades = [0, 0.2, 0.5, 1, 2, 5, 10, 20];
+				 
+	
+                div.innerHTML='<div><b>HEAT Cons.[]</div';
+		
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+
+}		
+				
+	
+	
+	info.update = function (props) {
+		const contents = props ? `<b>${props.POP_TOT_ZMU}</b> people` : 'Hover over a traffic zone';
+		this._div.innerHTML = `<h4>Total Population Number</h4>${contents}`;
+	};
+	
+	
+
+		
+		const selectedStyle = {
+		  color: 'orange',
+		  weight: 7
+		} 
+			
+			
+		const selectedStyle_highlight = {
+		  color: 'black',
+		  weight: 3,
+		  opacity: 0.9,
+		}
+		
+		
+	
+		
+		const selectedStyle_mouseout = {
+		  color: 'black',
+		  weight: 0.5,
+		  opacity: 0.3,
+		}
+		
+	
+	
+		const selectedStyle_mouseover = {
+		  weight: 2,
+		  opacity: 1,
+		  color: 'black'
+		}
+				
+				
+		
+		
+		
+		function style_colors_zmu(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+				// fillColor: getColor_zmu_origin_destinations(feature.properties.counts)
+				fillColor: feature.properties.color_hex
+			};
+		}
+		
+		
+	
+		
+	    // used to color ZMU zones with POPULATION data 2011
+		function style_pop(feature) {
+			return {
+				weight: 0.8,
+				opacity: 1,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.5,
+				fillColor: getColor_census(feature.properties.POP_TOT_ZMU)
+			};
+		}
+		
+		
+		function highlightFeature(e) {
+			const layer = e.target;
+			layer.setStyle({
+				weight: 3,
+				color: '#666',
+				dashArray: '',
+				fillOpacity: 0.9
+			});
+
+			layer.bringToFront();
+
+			info.update(layer.feature.properties);
+		}
+		
+		
+		
+		
+        
+		
+		const censuary_default = L.geoJson(zmu_counts, {
+				style: style_pop,
+				onEachFeature
+			});
+				
+		
+		function onEachFeature(feature, layer) {
+			layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout); 
+					info.update(layer.feature.properties);
+				});
+				
+                 
+                layer.on('mouseover', function (e) {
+					layer.setStyle(selectedStyle_mouseover); 
+				});	
+		}
+		
+			 
+		
+		
+	//alert("...I AM HERE...");
+		
+		
+		
+	    /*------------DEFAULT LAYER -----------------*/
+	   // const censuary_Layer = L.layerGroup();
+	//	censuary_Layer.addLayer(censuary_default);		
+	 
+	 
+	 
+	 
+	 	
+		/// add ZMU zones  borders  /////////////////////////////////////////////////////
+		var censuary_default_bis = L.geoJSON(zmu_counts, { style: style_pop, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupText = '';
+					popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupText += (feature.properties.n_charging_stations) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n. charging stations: ' + feature.properties.n_charging_stations : '' ;	
+					popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';		        	
+                    popupText += (feature.properties.Available_Power) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Power (Watt): ' + feature.properties.Available_Power : '' ;						
+					layer.bindTooltip(popupText);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+			
+		
+		
+	 //alert("...I AM HERE...");
+		
+		
+	 	    /*------------DEFAULT LAYER -----------------*/
+	    const censuary_Layer = L.layerGroup();
+		censuary_Layer.addLayer(censuary_default_bis);		
+	 
+
+	
+
+		
+		  
+      
+		
+	
+
+		
+		//// ----- ZMU zones -----------------------------////
+		function style_colors_ZMU_zones(feature) {
+			return {
+				weight: 1,
+				opacity: 0.6,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.0,
+				fillColor: 'white'
+			};
+		}
+		
+		
+		const selectedStyle_highlight_ZONES = {
+		  color: 'black',
+		  weight: 3,
+		  opacity: 0.5,
+		}
+		
+		
+	    const selectedStyle_mouseout_ZONES = {
+		  color: 'gray',
+		  weight: 1,
+		  opacity: 0.2,
+		}
+		
+		
+		
+		/// add ZMU zones  borders  /////////////////////////////////////////////////////
+		var ZMU_zones = L.geoJSON(charging_data, { style: style_colors_ZMU_zones, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupText = '';
+					popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupText += (feature.properties.n_charging_stations) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n. charging stations: ' + feature.properties.n_charging_stations : '' ;	
+					popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';		        	
+                    popupText += (feature.properties.Available_Power) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Power (Watt): ' + feature.properties.Available_Power : '' ;						
+					layer.bindTooltip(popupText);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+
+	
+		const ZMU_zones_Layer = L.layerGroup();
+		ZMU_zones_Layer.addLayer(ZMU_zones);
+
+
+
+     /////// ****************************************************************** ////////////////////
+	 /////// ******************************************************************* ///////////////////
+	 
+	
+	  function getColor_nbuses(d) {
+		return d >= 30 ? '#FC5E02' :   //Vivid Orange
+			d > 20  ? '#FA9E03' :     //  RYB Orange
+			d > 10  ? '#FDDB6D' :    //  Crayola's Dandelion
+			d > 6  ? '#1CBFD8' :    // Battery Charged Blue
+			d >= 4  ? '#1D7ED4' :    //Bright Navy Blue
+			d >= 1   ? '#195ECA' : '#195ECA';    //denim
+			} 
+
+		//////////* LEGEND USED FOR GTFS data LEGS  (kwh/km)*//////////// 
+		
+			var legend_ZMU_heat = L.control({position: 'bottomright'});
+            legend_ZMU_heat.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 1 to 4",
+								"from 4 to 6",
+								"from 6 to 10",
+								"from 10 to 20",
+								"from 20 to 30",
+								" > 30"];
+				 const grades = [1, 4, 6, 10, 20, 30];
+
+                div.innerHTML='<div><b>kWh/km</b></div';
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_nbuses(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+			
+			
+			
+				
+
+        function GTFS_trips_style(feature) {
+			return {
+				//color: "black",
+				weight: 3,
+				opacity: 1,
+				color: getColor_nbuses(feature.properties.counts),
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'black'
+				// fillColor: getColor_nbuses(feature.properties.consumption)
+			};
+		 }	
+
+		 
+
+
+		/////////------ ADD default TPL STOPS -------------------/////////////////////////////////
+		var TPL_stops = L.geoJSON(stop_emissions_buses, {
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">stop name: '+feature.properties.to_stop_name+'<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n.buses: '+feature.properties.counts);
+		},
+
+		pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					radius: 3,
+					//radius: feature.properties.counts*0.2,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		const TPL_stops_layer = L.layerGroup();
+		TPL_stops_layer.addLayer(TPL_stops);
+		
+	//alert("---- I am here ----");	
+
+		
+	
+		
+/////////------ ADD default TPL LEGS (from STOP to STOP) -------------------/////////////////////////////////
+var TPL_lines = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+	  onEachFeature: function (feature, layer) {
+	  layer.on('mouseover', function () {
+	   layer.setStyle(selectedStyle);
+	  });
+		// layer.bindTooltip('<h3><p>trip:   '+feature.properties.trip_LEG_name+'</p>');
+	   layer.bindTooltip('<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">from: '+feature.properties.from 
+						 +'<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">to: '+feature.properties.to);
+						 // + '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">  <br> '
+						 // + '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Energy Consumption[MJ]: '+feature.properties.ec +
+						  // '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Energy Cons.(well-to-tank)[MJ]: '+feature.properties.ec_wtt+ 
+						   // '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">NOx[grams]: '+feature.properties.nox +
+							// '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">nmVOC[grams]: '+feature.properties.nmvoc +
+							 // '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">PM [grams]: '+feature.properties.pm +
+							  // '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">PM (tyres & brakes)[grams]: '+feature.properties.pm_nexh +
+							   // '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">CO2 eq.[grams]: '+feature.properties.co2_eq +
+								// '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">CO2 eq.(well-to-tank)[grams]: '+feature.properties.co2_eq_wtt +
+								 //  '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Temperature [°C]: '+feature.properties.temperature +
+								  // '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">AC cons.[]: '+feature.properties.AC_cons +
+								  // '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Heating cons.[]: '+feature.properties.heating_cons);
+		layer.on('mouseout', function (e) {
+		layer.setStyle({
+			weight: 4,
+			opacity: 1,
+			// color: 'black',
+			color: getColor_nbuses(feature.properties.consumption),
+			// dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: '#00000000'}); 
+			});
+			}
+			});
+	
+const TPL_lines_layer = L.layerGroup();
+TPL_lines_layer.addLayer(TPL_lines);
+		
+
+
+ 
+	
+	//////////////////////////-------------------------------////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	//////// ----- ADD HEATMAP data //////////////////////////////////////////////////////////////////
+	 
+	   window.onload = function() {
+        // helper function
+        function $(id) {
+          return document.getElementById(id);
+        };
+		 	
+   
+		
+	
+
+
+
+        plot_factor_ec = 1.5
+		
+		function style_colors_zmu_ec(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+			    fillColor: getColor_zmu_origin_destinations(feature.properties.ec/plot_factor_ec)
+			};
+		}
+
+
+     plot_factor_ec_wtt = 1.5
+		
+		function style_colors_zmu_ec_wtt(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+			    fillColor: getColor_zmu_origin_destinations(feature.properties.ec_wtt/plot_factor_ec_wtt)
+			};
+		}
+		
+		
+		
+	   plot_factor_nox = 1.5
+		
+		function style_colors_zmu_nox(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+			    fillColor: getColor_zmu_origin_destinations(feature.properties.nox/plot_factor_nox)
+			};
+		}
+		
+		
+	   plot_factor_nmvoc = 1
+		
+		function style_colors_zmu_nmvoc(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+			    fillColor: getColor_zmu_origin_destinations(feature.properties.nmvoc/plot_factor_nmvoc)
+			};
+		}
+		
+		
+		
+	   
+	   plot_factor_pm = 1
+		
+		function style_colors_zmu_pm(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+			    fillColor: getColor_zmu_origin_destinations(feature.properties.pm/plot_factor_pm)
+			};
+		}
+		
+		
+		
+		plot_factor_pm_nexh = 1
+		
+		function style_colors_zmu_pm_nexh(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+			    fillColor: getColor_zmu_origin_destinations(feature.properties.pm_nexh/plot_factor_pm_nexh)
+			};
+		}
+
+
+
+
+
+      plot_factor_co2_eq = 1
+		
+		function style_colors_zmu_co2eq(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+			    fillColor: getColor_zmu_origin_destinations(feature.properties.co2eq/plot_factor_co2_eq)
+			};
+		}
+		
+		
+		
+	   plot_factor_co2eq_wtt = 1
+		
+		function style_colors_zmu_co2eq_wtt(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+			    fillColor: getColor_zmu_origin_destinations(feature.properties.co2eq_wtt/plot_factor_co2eq_wtt)
+			};
+		}
+
+
+	   plot_factor_temp = 1.5
+		
+		function style_colors_zmu_temp(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+			    fillColor: getColor_zmu_origin_destinations(feature.properties.t/plot_factor_temp)
+			};
+		}
+
+
+
+
+	   plot_factor_AC = 1.5
+		
+		function style_colors_zmu_AC(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+			    fillColor: getColor_zmu_origin_destinations(feature.properties.ac_cons/plot_factor_AC)
+			};
+		}
+		
+		
+		
+      plot_factor_HEAT = 1.5
+		
+		function style_colors_zmu_HEAT(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+			    fillColor: getColor_zmu_origin_destinations(feature.properties.he_cons/plot_factor_HEAT)
+			};
+		}
+
+
+		
+		///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+		/////// ----- EC  (energy consumption TPL)---------------------------------------------------------------------------------///////////////////////////////////////////////////////////
+		
+		
+			var aggregated_zmu_by_hour_ec = L.geoJSON(aggregated_tpl_emissions_zmu, { style: style_colors_zmu_ec, 	
+			  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		   var popupText = '';
+					popupText += (feature.properties.ec) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Energy Consumption[MJ]:' + feature.properties.ec : '';
+				popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popupText += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				popupText += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+						
+					layer.bindTooltip(popupText);		
+		   layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+
+	
+		const aggregated_Layer_zmu_ec = L.layerGroup();
+		aggregated_Layer_zmu_ec.addLayer(aggregated_zmu_by_hour_ec);
+		
+   ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+		
+
+
+		///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+		/////// ----- EC Well-to-Tank  (energy consumption TPL)---------------------------------------------------------------------------------///////////////////////////////////////////////////////////
+		
+		
+			var aggregated_zmu_by_hour_ec_wtt = L.geoJSON(aggregated_tpl_emissions_zmu, { style: style_colors_zmu_ec_wtt, 	
+			  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		   var popupText = '';
+				popupText += (feature.properties.ec_wtt) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Energy Cons.[MJ] Well-to-Tank:' + feature.properties.ec_wtt : '';
+				popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popupText += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				popupText += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+						
+					layer.bindTooltip(popupText);		
+		   layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+		
+		const aggregated_Layer_zmu_ec_wtt = L.layerGroup();
+		aggregated_Layer_zmu_ec_wtt.addLayer(aggregated_zmu_by_hour_ec_wtt);
+		
+   ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+
+
+
+    ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+	/////// ----- NOx  (TPL)---------------------------------------------------------------------------------///////////////////////////////////////////////////////////
+		
+		
+			var aggregated_zmu_by_hour_nox = L.geoJSON(aggregated_tpl_emissions_zmu, { style: style_colors_zmu_nox, 	
+			  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		   var popupText = '';
+				popupText += (feature.properties.nox) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">NOx[grams]:' + feature.properties.nox : '';
+				popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popupText += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				popupText += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+						
+					layer.bindTooltip(popupText);		
+		   layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+		
+		const aggregated_Layer_zmu_nox = L.layerGroup();
+		aggregated_Layer_zmu_nox.addLayer(aggregated_zmu_by_hour_nox);
+		
+   ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+
+	
+	
+	
+
+    ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+	/////// ----- nmVOC  (TPL)---------------------------------------------------------------------------------///////////////////////////////////////////////////////////
+		
+		
+			var aggregated_zmu_by_hour_nmvoc = L.geoJSON(aggregated_tpl_emissions_zmu, { style: style_colors_zmu_nmvoc, 	
+			  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		   var popupText = '';
+				popupText += (feature.properties.nmvoc) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">nmVOC[grams]:' + feature.properties.nmvoc : '';
+				popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popupText += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				popupText += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+						
+					layer.bindTooltip(popupText);		
+		   layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+		
+		const aggregated_Layer_zmu_nmvoc = L.layerGroup();
+		aggregated_Layer_zmu_nmvoc.addLayer(aggregated_zmu_by_hour_nmvoc);
+		
+   ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+
+	
+	
+	
+
+    ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+	/////// ----- PM (TPL)---------------------------------------------------------------------------------///////////////////////////////////////////////////////////
+		
+		
+			var aggregated_zmu_by_hour_pm = L.geoJSON(aggregated_tpl_emissions_zmu, { style: style_colors_zmu_pm, 	
+			  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		   var popupText = '';
+				popupText += (feature.properties.pm) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">PM[grams]:' + feature.properties.pm : '';
+				popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popupText += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				popupText += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+						
+					layer.bindTooltip(popupText);		
+		   layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+		
+		const aggregated_Layer_zmu_pm = L.layerGroup();
+		aggregated_Layer_zmu_pm.addLayer(aggregated_zmu_by_hour_pm);
+		
+   ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+
+	
+		
+
+    ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+	/////// ----- PMnexh (TPL)---------------------------------------------------------------------------------///////////////////////////////////////////////////////////
+		
+		
+			var aggregated_zmu_by_hour_pm_nexh = L.geoJSON(aggregated_tpl_emissions_zmu, { style: style_colors_zmu_pm_nexh, 	
+			  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		   var popupText = '';
+				popupText += (feature.properties.pm_nexh) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">PM non exhaust[grams]:' + feature.properties.pm_nexh : '';
+				popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popupText += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				popupText += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+						
+					layer.bindTooltip(popupText);		
+		   layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+		
+		const aggregated_Layer_zmu_pm_nexh = L.layerGroup();
+		aggregated_Layer_zmu_pm_nexh.addLayer(aggregated_zmu_by_hour_pm_nexh);
+		
+   ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+
+
+
+
+
+    ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+	/////// ----- CO2eq (TPL)---------------------------------------------------------------------------------///////////////////////////////////////////////////////////
+		
+		
+			var aggregated_zmu_by_hour_co2_eq = L.geoJSON(aggregated_tpl_emissions_zmu, { style: style_colors_zmu_co2eq, 	
+			  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		   var popupText = '';
+				popupText += (feature.properties.co2eq) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">CO2 eq.[grams]:' + feature.properties.co2eq : '';
+				popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popupText += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				popupText += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+						
+					layer.bindTooltip(popupText);		
+		   layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+		
+		const aggregated_Layer_zmu_co2_eq = L.layerGroup();
+		aggregated_Layer_zmu_co2_eq.addLayer(aggregated_zmu_by_hour_co2_eq);
+		
+   ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+
+	
+	
+	
+	
+    ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+	/////// ----- CO2eq WTT (TPL)---------------------------------------------------------------------------------///////////////////////////////////////////////////////////
+		
+		
+			var aggregated_zmu_by_hour_co2_eq_wtt = L.geoJSON(aggregated_tpl_emissions_zmu, { style: style_colors_zmu_co2eq_wtt, 	
+			  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		   var popupText = '';
+				popupText += (feature.properties.co2eq_wtt) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">CO2 eq. Wtt [grams]:' + feature.properties.co2eq_wtt : '';
+				popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popupText += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				popupText += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+						
+					layer.bindTooltip(popupText);		
+		   layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+		
+		const aggregated_Layer_zmu_co2_eq_wtt = L.layerGroup();
+		aggregated_Layer_zmu_co2_eq_wtt.addLayer(aggregated_zmu_by_hour_co2_eq_wtt);
+		
+   ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+
+
+
+
+    ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+	/////// ----- Temperature (TPL)---------------------------------------------------------------------------------///////////////////////////////////////////////////////////
+		
+		
+			var aggregated_zmu_by_hour_temp = L.geoJSON(aggregated_tpl_emissions_zmu, { style: style_colors_zmu_temp, 	
+			  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		   var popupText = '';
+				popupText += (feature.properties.t) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Temperature[°C]:' + feature.properties.t : '';
+				popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popupText += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				popupText += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+						
+					layer.bindTooltip(popupText);		
+		   layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+		
+		const aggregated_Layer_zmu_temp = L.layerGroup();
+		aggregated_Layer_zmu_temp.addLayer(aggregated_zmu_by_hour_temp);
+		
+   ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+
+
+
+
+	
+    ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+	/////// ----- AC consumption (TPL)---------------------------------------------------------------------------------///////////////////////////////////////////////////////////
+		
+		
+			var aggregated_zmu_by_hour_AC = L.geoJSON(aggregated_tpl_emissions_zmu, { style: style_colors_zmu_AC, 	
+			  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		   var popupText = '';
+				popupText += (feature.properties.ac_cons) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">AC Cons.[ ]:' + feature.properties.ac_cons : '';
+				popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popupText += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				popupText += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+						
+					layer.bindTooltip(popupText);		
+		   layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+		
+		const aggregated_Layer_zmu_AC = L.layerGroup();
+		aggregated_Layer_zmu_AC.addLayer(aggregated_zmu_by_hour_AC);
+		
+   ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+
+
+
+
+
+	
+    ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+	/////// ----- HEATING consumption (TPL)---------------------------------------------------------------------------------///////////////////////////////////////////////////////////
+		
+		
+			var aggregated_zmu_by_hour_HEAT = L.geoJSON(aggregated_tpl_emissions_zmu, { style: style_colors_zmu_HEAT, 	
+			  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		   var popupText = '';
+				popupText += (feature.properties.he_cons) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">HEAT Cons.[ ]:' + feature.properties.he_cons : '';
+				popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popupText += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				popupText += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+						
+					layer.bindTooltip(popupText);		
+		   layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+		
+		const aggregated_Layer_zmu_HEAT = L.layerGroup();
+		aggregated_Layer_zmu_HEAT.addLayer(aggregated_zmu_by_hour_HEAT);
+		
+   ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+
+
+
+
+
+if (TYPE_data_emission == '11') {
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+	 
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			layers: [carto, ZMU_zones_Layer, aggregated_Layer_zmu_ec]  //osm , heatmapLayer_n_buses, TPL_lines_layer
+		});
+
+		
+	 legend_ZMU.addTo(map);
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+			
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		
+		const overlays = {
+		    'TPL stops': TPL_stops_layer,
+			//'TPL stops HeatMap': heatmapLayer_n_buses,
+		    'TPL network': TPL_lines_layer,
+			'Traffic Zones': ZMU_zones_Layer,
+			 "<span style='color:black; font-size: 20px;'>Energy Cons.@Origin</span>": aggregated_Layer_zmu_ec,
+			'Traffic Zones (by population)': censuary_Layer
+			//'POIS & Residences': POIS_Layer_zmu,
+			//'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			//'POIS_Residentials': POIS_RESIDENTIALS			
+		};
+	
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+	
+	  };	
+	  
+	  
+	  
+	  
+	  
+	  
+if (TYPE_data_emission == '12') {
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+	 
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			layers: [carto, ZMU_zones_Layer, aggregated_Layer_zmu_ec_wtt]  //osm , heatmapLayer_n_buses, TPL_lines_layer
+		});
+		
+	legend_ZMU.addTo(map);
+	
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+			
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		
+		const overlays = {
+		    'TPL stops': TPL_stops_layer,
+			//'TPL stops HeatMap': heatmapLayer_n_buses,
+		    'TPL network': TPL_lines_layer,
+			'Traffic Zones': ZMU_zones_Layer,
+			 "<span style='color:black; font-size: 20px;'>Energy Cons. Wtt@Origin</span>": aggregated_Layer_zmu_ec_wtt,
+			'Traffic Zones (by population)': censuary_Layer
+			//'POIS & Residences': POIS_Layer_zmu,
+			//'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			//'POIS_Residentials': POIS_RESIDENTIALS			
+		};
+	
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+	
+	  };	
+
+
+
+
+
+if (TYPE_data_emission == '13') {
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+	 
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			layers: [carto, ZMU_zones_Layer, aggregated_Layer_zmu_nox]  //osm , heatmapLayer_n_buses, TPL_lines_layer
+		});
+	
+		
+	legend_ZMU.addTo(map);
+	
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+			
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		
+		const overlays = {
+		    'TPL stops': TPL_stops_layer,
+			//'TPL stops HeatMap': heatmapLayer_n_buses,
+		    'TPL network': TPL_lines_layer,
+			'Traffic Zones': ZMU_zones_Layer,
+			 "<span style='color:black; font-size: 20px;'>NOx @Origin</span>": aggregated_Layer_zmu_nox,
+			'Traffic Zones (by population)': censuary_Layer
+			//'POIS & Residences': POIS_Layer_zmu,
+			//'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			//'POIS_Residentials': POIS_RESIDENTIALS			
+		};
+	
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+	
+	  };	
+
+
+
+
+
+if (TYPE_data_emission == '14') {
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+	 
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			layers: [carto, ZMU_zones_Layer, aggregated_Layer_zmu_nmvoc]  //osm , heatmapLayer_n_buses, TPL_lines_layer
+		});
+		
+ 
+     
+		
+	legend_ZMU.addTo(map);
+	
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+			
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		
+		const overlays = {
+		    'TPL stops': TPL_stops_layer,
+			//'TPL stops HeatMap': heatmapLayer_n_buses,
+		    'TPL network': TPL_lines_layer,
+			'Traffic Zones': ZMU_zones_Layer,
+			 "<span style='color:black; font-size: 20px;'>nmVOC @Origin</span>": aggregated_Layer_zmu_nmvoc,
+			'Traffic Zones (by population)': censuary_Layer
+			//'POIS & Residences': POIS_Layer_zmu,
+			//'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			//'POIS_Residentials': POIS_RESIDENTIALS			
+		};
+	
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+	
+	  };	
+	  
+	  
+	  
+
+if (TYPE_data_emission == '15') {
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+	 
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			layers: [carto, ZMU_zones_Layer, aggregated_Layer_zmu_pm]  //osm , heatmapLayer_n_buses, TPL_lines_layer
+		});
+		
+ 
+    
+	legend_ZMU.addTo(map);
+	
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+			
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		
+		const overlays = {
+		    'TPL stops': TPL_stops_layer,
+			//'TPL stops HeatMap': heatmapLayer_n_buses,
+		    'TPL network': TPL_lines_layer,
+			'Traffic Zones': ZMU_zones_Layer,
+			 "<span style='color:black; font-size: 20px;'>PM @Origin</span>": aggregated_Layer_zmu_pm,
+			'Traffic Zones (by population)': censuary_Layer
+			//'POIS & Residences': POIS_Layer_zmu,
+			//'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			//'POIS_Residentials': POIS_RESIDENTIALS			
+		};
+	
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+	
+	  };		  
+
+
+
+
+if (TYPE_data_emission == '16') {
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+	 
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			layers: [carto, ZMU_zones_Layer, aggregated_Layer_zmu_pm_nexh]  //osm , heatmapLayer_n_buses, TPL_lines_layer
+		});
+		
+ 
+	legend_ZMU.addTo(map);
+	
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+			
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		
+		const overlays = {
+		    'TPL stops': TPL_stops_layer,
+			//'TPL stops HeatMap': heatmapLayer_n_buses,
+		    'TPL network': TPL_lines_layer,
+			'Traffic Zones': ZMU_zones_Layer,
+			 "<span style='color:black; font-size: 20px;'>PM non exh @Origin</span>": aggregated_Layer_zmu_pm_nexh,
+			'Traffic Zones (by population)': censuary_Layer
+			//'POIS & Residences': POIS_Layer_zmu,
+			//'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			//'POIS_Residentials': POIS_RESIDENTIALS			
+		};
+	
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+	
+	  };		  
+
+
+
+
+if (TYPE_data_emission == '17') {
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+	 
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			layers: [carto, ZMU_zones_Layer, aggregated_Layer_zmu_co2_eq]  //osm , heatmapLayer_n_buses, TPL_lines_layer
+		});
+		
+ 
+		
+	legend_ZMU.addTo(map);
+	
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+			
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		
+		const overlays = {
+		    'TPL stops': TPL_stops_layer,
+			//'TPL stops HeatMap': heatmapLayer_n_buses,
+		    'TPL network': TPL_lines_layer,
+			'Traffic Zones': ZMU_zones_Layer,
+			 "<span style='color:black; font-size: 20px;'>CO2 eq @Origin</span>": aggregated_Layer_zmu_co2_eq,
+			'Traffic Zones (by population)': censuary_Layer
+			//'POIS & Residences': POIS_Layer_zmu,
+			//'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			//'POIS_Residentials': POIS_RESIDENTIALS			
+		};
+	
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+	
+	  };		  
+
+
+
+
+if (TYPE_data_emission == '18') {
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+	 
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			layers: [carto, ZMU_zones_Layer, aggregated_Layer_zmu_co2_eq_wtt]  //osm , heatmapLayer_n_buses, TPL_lines_layer
+		});
+
+		
+	legend_ZMU.addTo(map);
+	
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+			
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		
+		const overlays = {
+		    'TPL stops': TPL_stops_layer,
+			//'TPL stops HeatMap': heatmapLayer_n_buses,
+		    'TPL network': TPL_lines_layer,
+			'Traffic Zones': ZMU_zones_Layer,
+			 "<span style='color:black; font-size: 20px;'>CO2 eq.Wtt @Origin</span>": aggregated_Layer_zmu_co2_eq_wtt,
+			'Traffic Zones (by population)': censuary_Layer
+			//'POIS & Residences': POIS_Layer_zmu,
+			//'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			//'POIS_Residentials': POIS_RESIDENTIALS			
+		};
+	
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+	
+	  };		  
+
+
+
+if (TYPE_data_emission == '20') {
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+	 
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			layers: [carto, ZMU_zones_Layer, aggregated_Layer_zmu_temp]  //osm , heatmapLayer_n_buses, TPL_lines_layer
+		});
+
+		
+	legend_ZMU.addTo(map);
+	
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+			
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		
+		const overlays = {
+		    'TPL stops': TPL_stops_layer,
+			//'TPL stops HeatMap': heatmapLayer_n_buses,
+		    'TPL network': TPL_lines_layer,
+			'Traffic Zones': ZMU_zones_Layer,
+			 "<span style='color:black; font-size: 20px;'>Temperature (°C) @Origin</span>": aggregated_Layer_zmu_temp,
+			'Traffic Zones (by population)': censuary_Layer
+		};
+	
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+	
+	  };	
+	  
+	  
+	  
+	  if (TYPE_data_emission == '21') {
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+	 
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			layers: [carto, ZMU_zones_Layer, aggregated_Layer_zmu_AC]  //osm , heatmapLayer_n_buses, TPL_lines_layer
+		});
+
+		
+	legend_ZMU.addTo(map);
+	
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+			
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		
+		const overlays = {
+		    'TPL stops': TPL_stops_layer,
+			//'TPL stops HeatMap': heatmapLayer_n_buses,
+		    'TPL network': TPL_lines_layer,
+			'Traffic Zones': ZMU_zones_Layer,
+			 "<span style='color:black; font-size: 20px;'>AC Cons. @Origin</span>": aggregated_Layer_zmu_AC,
+			'Traffic Zones (by population)': censuary_Layer
+		};
+	
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+	
+	  };	
+	  
+	  
+	  
+	  
+	  
+	  if (TYPE_data_emission == '22') {
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+	 
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			layers: [carto, ZMU_zones_Layer, aggregated_Layer_zmu_HEAT]  //osm , heatmapLayer_n_buses, TPL_lines_layer
+		});
+
+		
+	legend_ZMU.addTo(map);
+	
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+			
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		
+		const overlays = {
+		    'TPL stops': TPL_stops_layer,
+			//'TPL stops HeatMap': heatmapLayer_n_buses,
+		    'TPL network': TPL_lines_layer,
+			'Traffic Zones': ZMU_zones_Layer,
+			 "<span style='color:black; font-size: 20px;'>HEAT Cons. @Origin</span>": aggregated_Layer_zmu_HEAT,
+			'Traffic Zones (by population)': censuary_Layer
+		};
+	
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+	
+	  };	
+	  
+
+
+};	
+	
+
+	
+
+
+
+
+	
+	window.addEventListener('resize', 
+	() => map.getViewPort().resize());
+	
+
+  </script>
+</body>
+</html>

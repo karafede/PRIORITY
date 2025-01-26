@@ -1,0 +1,1809 @@
+
+<!doctype html>
+<html lang="en">
+
+<style type="text/css">
+    body {
+            padding: 0;
+            margin: 0;
+			font-family: Arial, Helvetica, sans-serif;
+        }
+   
+	#map {
+	  height: 100%;
+	}
+	
+	/* Optional: Makes the sample page fill the window. */
+	html, body {
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	}
+
+
+	//.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	//.legend { text-align: left; line-height: 13px; color: #555; font-size: 1.075em} .legend i { width: 12px; height: 12px; float: left; margin-right: 5px; opacity: 0.7; } 
+	//.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+	// .legend_ZMU { text-align: left; line-height: 15px; color: #555;  font-size: 12px} 
+	
+	
+	
+	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	.legend { text-align: left; line-height: 25px; color: #555; font-size: 22px} .legend i { width: 23px; height: 23px; float: left; margin-right: 6px; opacity: 0.7; } 
+	.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+	
+	
+	#refreshButton {
+	  position: absolute;
+	  top: 60px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #000000;
+	  background-color:#FFFF00;
+	}
+	
+	
+	#home_locations {
+	  position: absolute;
+	  width: 100%;
+	  top: 60px;
+	  margin-top: 40px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #ffffff ;
+	  background-color:#000099;
+	}
+	
+	#refreshButton:hover{
+		opacity: 0.8;
+		cursor: pointer;
+    }
+	
+
+
+	  html, body,  #map {
+        width : 100%;
+        height : 100%;
+      }
+	.box{	  
+		width:15px;
+		height:15px;
+		border-radius:25px;
+		display: inline-block;
+		}
+	
+
+     /** sidebar menu **/
+	.innerDiv{
+		position: absolute;
+		width: 10%;
+		height: 15%;
+		background-color: #b2b2ff;
+		opacity: 0.8;
+		margin-top:  1%;
+		margin-left: 5%;
+		z-index: 800;
+		padding-top: 1%;
+		text-overflow:ellipsis;
+        overflow:hidden;
+		
+	}
+	
+
+	
+
+ .button {
+	    position: absolute;
+		left: 2%;
+		top: 80%;
+		height: 8%;
+		width: 7%
+        min-width: 7%;
+		margin-top: 30%;
+		margin-left: 50%;
+		z-index: 500;
+	    border: none;
+	    color: white;
+	    padding: 20px;
+	    text-align: center;
+	    display: inline-block;
+	    font-size: 1.5em;
+	    margin: 10px 20px;		
+	}
+
+		
+		
+  header, nav {
+    left: 2%;
+	top: 85%;
+  	z-index: 700;
+	position: absolute;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	border-spacing: 5px;
+  }
+
+	nav a {
+	  text-decoration: none;
+	  background: #000000;  /* Black */
+	  border-radius: 5px;
+	  font-size: 1.5em;
+	  color: white;
+	  padding: 3px 8px;
+	  display: table-cell;
+	}
+	
+	
+	nav .col_home {
+		background-color: #6b0000;
+	}
+	
+	nav .col_privata {
+		background-color: #4CAF50;
+	}
+	
+	
+	nav .col_collettivo {
+		background-color: #0000ff ;
+	}
+	
+	nav .col_scenari {
+		background-color: #ffa500 ;
+	}
+	
+	
+	nav .col_impatti {
+		background-color: #76a5af ;
+	}
+	
+	
+	nav .IEA_statistics {
+		background-color: #ededed ;
+		color: blue;
+	}
+	
+	
+	nav .col_best {background-color: #326bbb ;<!--color: blue;-->}
+	
+		
+
+  /** submit lat lon and input text to Python **/
+   main {
+		background-color: rgba(51, 170, 51, .3); 
+		left: 2%;
+		top: 3%;
+		z-index: 700;
+		position: absolute;
+		margin: 2px 0;
+		padding: 5px;
+		text-overflow:ellipsis;
+        overflow:hidden;
+    width: 400px;
+    height: 400px
+	}
+
+	main div {
+	  background: transparent; 
+	  color: white;
+	  padding: 1px;
+	  margin: 5px auto;
+	}
+	
+
+	main div:nth-child(1) {
+	  width: 270px;
+	  height: 0px;
+	   background: transparent;
+	}
+	
+	
+    main div:nth-child(2) {
+	  width: 270px;
+	  height: 0px;
+	   background: #326bbb;
+	}
+	
+
+	main div:nth-child(3) {
+      width: 170px;
+	 background: transparent;
+	}
+	
+	main div:nth-child(4) {
+	  width: 270px;
+	   height: 0px;
+	   background: #326bbb;
+	   float: center;
+	}
+	
+	main div:nth-child(5) {
+	  width: 270px;
+	 background: transparent;
+	}
+	
+	main div:nth-child(6) {
+	   width: 270px;
+	    background: transparent;
+	}
+	
+
+	.inline-block-center {
+	  text-align: center;
+	}
+	
+	.flex-center {
+	  display: flex;
+	  justify-content: center;
+	}
+	
+
+	h2 {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+	line-height: 0.5em;
+	}
+	
+	
+	h3 {
+    margin: 0;
+    padding: 0;
+	display: inline;
+	}
+	
+	
+	
+	
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: absolute; /* Stay in place */
+	  z-index: 700; /* Sit on top */
+	  
+	  position: absolute;
+	   left: 20%;
+		top: 4%;
+	  width: 50%; /* Full width */
+	  height: 70%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+
+	/* Modal Content/Box */
+	.modal-content {
+	  z-index: 700;
+	  top: 5%;
+	  background-color: #fefefe;
+	  margin: 5% auto; /* 15% from the top and centered */
+	  padding: 1%;
+	  border: 1px solid #888;
+	  width: 100%; /* Could be more or less, depending on screen size */
+	}
+
+	/* The Close Button */
+	.close {
+	  color: #aaa;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+	  color: black;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+	
+	
+
+
+.animation_link {
+  font-size: 130%;
+  color: blue;
+  font-weight: bold;
+}
+
+.animation_link_heatmap {
+  font-size: 130%;
+  color: red;
+  font-weight: bold;
+}
+
+.animation_link_IEA_STATS {
+  font-size: 130%;
+  color: #0f45d2;
+  font-weight: bold;
+}
+
+
+	
+	
+</style>
+
+<style>
+
+.label {
+  color: black;
+  padding: 8px;
+  font-family: Arial Black;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+
+#.tpl_line {background-color: #2196F3;} /* Blue */
+
+
+table, th, td {
+  border:1px solid black;
+   left: 20%;
+}
+
+
+table.center_table {
+  margin-left: -15%; 
+  //margin-left: 20%;
+}
+
+
+
+/* Center the loader (SPINNER) */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  // border-top: 16px solid #3498db;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-right: 16px solid yellow;
+  border-left: 16px solid pink;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+
+
+
+div#loading {
+    display: none;
+	position: absolute;
+	left: 50%;
+    top: 50%;
+    z-index: 700;
+	width: 270px;
+	height: 270px;
+	 margin: -76px 0 0 -76px;
+    background: url(/static/loadingimage_TPL.gif) no-repeat;
+    cursor: wait;
+ }
+ 
+ /* Button changing color when clicked */
+ input.btn_color:active { background:yellow; } 
+ 
+ 
+     /* custom primary buttons */
+    
+    .btn-primary {
+        color: #212529;
+        background-color: white ;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary:hover {
+        color: #212529;
+        background-color: #52bebe;
+        border-color: #8ad3d3
+    }
+    
+    .btn-primary:focus,
+    .btn-primary.focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+    
+    .btn-primary.disabled,
+    .btn-primary:disabled {
+        color: #212529;
+        background-color: #7cc;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active,
+    .btn-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #9cdada;
+        border-color: #2e7c7c
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active:focus,
+    .btn-primary:not(:disabled):not(.disabled).active:focus,
+    .show>.btn-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+    
+    .btn-outline-primary {
+        color: #000000;
+        background-color: yellow;
+        background-image: none;
+        border-color: #7cc;
+    }
+    
+    .btn-outline-primary:hover {
+        color: #222;
+        background-color: #8ad3d3;
+        border-color: #7cc
+    }
+    
+    .btn-outline-primary:focus,
+    .btn-outline-primary.focus {
+        box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+    }
+    
+    .btn-outline-primary.disabled,
+    .btn-outline-primary:disabled {
+        color: #7cc;
+        background-color: transparent
+    }
+    
+    .btn-outline-primary:not(:disabled):not(.disabled):active,
+    .btn-outline-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-outline-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #8ad3d3;
+        border-color: #7cc
+    }
+    
+    .btn-outline-primary:not(:disabled):not(.disabled):active:focus,
+    .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
+    .show>.btn-outline-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+    }
+
+
+.btn_heatmaps {border: none;
+			  background-color: blue;
+			  padding: 12px 48px 12px 24px;
+			  border-radius: 4px;
+			  color: #fff;
+			  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7.41' height='12' viewBox='0 0 7.41 12'%3E%3Cpath d='M10,6,8.59,7.41,13.17,12,8.59,16.59,10,18l6-6Z' transform='translate(-8.59 -6)' fill='%23fff'/%3E%3C/svg%3E");
+			  background-repeat: no-repeat;
+			  background-position: right 24px center;
+			  font-size: 20px;
+			  font-weight: bold;
+			  text-align: center;
+			   left: 80%;
+			   top: 85%;}
+		   
+.btn_animation {width: 45%;
+	  height:50px;
+	  font-size: 18px;
+	  font-weight: bold;
+	  text-align: center;
+	  color:blue}
+	   
+		   
+
+   .select{
+		width:  15%;
+		height: 30px;
+		font-size: 18px;
+		font-weight: bold;}
+		
+		
+ 
+ 
+ #form-wrapper {
+  width: 60%;
+  height: 22%;
+  margin: 0 auto;
+  text-align: center;
+  display:flex;
+}
+#form1 {
+  width: 50%;
+  display: inline-block;
+  min-width:200px;
+}
+#form2 {
+  width: 50%;
+  display: inline-block;
+  min-width:200px;
+   background: #66b266;
+  height:100%;
+}
+
+.flex {
+   display: flex;
+   flex-direction: row;
+}
+
+div.c {
+	  text-align: center;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+ 
+ 
+ input[type="radio"] {
+  -ms-transform: scale(1.5); /* IE 9 */
+  -webkit-transform: scale(1.5); /* Chrome, Safari, Opera */
+  transform: scale(1.5);
+}
+	
+
+
+</style>
+
+
+
+
+
+
+
+
+
+</head>
+  <meta name="description" content="Leaflet Template">
+  <title>RdS-ENEA</title>
+  <!--meta name="viewport" content="initial-scale=1.0"-->
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <meta charset="utf-8">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+ </head>
+ 
+ 
+ <!--start the SPINNER or LOADER-->
+<div id="loader"></div>
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+
+
+
+<body>
+<div id="loading"></div>
+
+<main class="inline-block-center">
+
+
+<!--div style="display:none;" id="myDiv" class="animate-bottom">
+  <h2>Tada!</h2>
+  <p>Some text in my newly loaded page..</p>
+</div-->
+
+	<!--insert new line-->
+	<br>
+	
+	 <h2 style="font-weight: bold; line-height: 1em;">O-D matrix estimations</h2> 
+	  <h2 style="font-weight: bold; line-height: 1em;">(Public Transport)</h2> 
+	<!--insert new line-->
+	<!--br-->
+
+   
+ <div id="form-wrapper">
+    <div id="form1" class="c">
+ <h3 style="font-weight: bold">Day type:</h3>
+	<form method="POST" action="/day_type_selector/">	
+	<!--select class="tipo_alimentazione" name="FUEL_type" id="fuel_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange="this.form.submit()";  onclick="alert('verifica inserimento data odierna...')"-->
+	<select class="tipo_giorno" name="day_type" id="registration_day_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="11">Feriale</option>
+			<option value="12">Week-End</option>
+	</select>
+		<!--input class="btn btn-primary btn-sm" type="submit" value="Select hour"  onclick="$('#loading').show();"-->
+	</form>
+ </div>
+  </div>
+ <br>
+ 
+ 	<div class="break_line_1"></div>
+
+ 
+		
+	
+	
+	<form method="POST" action="/OD_pub_hour_selector/">	
+	<span class="label tpl_line">Hour:</span>
+	<select class="OD_pub_hour_selector" name="GTFS_hour" id="registrationhour" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange="this.form.submit()";>
+			<option value="5">05:00</option>
+			<option value="6">06:00</option>
+			<option value="7">07:00</option>
+			<option value="8">08:00</option>
+			<option value="9">09:00</option>
+			<option value="10">10:00</option>
+			<option value="11">11:00</option>
+			<option value="12">12:00</option>
+			<option value="13">13:00</option>
+			<option value="14">14:00</option>
+			<option value="15">15:00</option>
+			<option value="16">16:00</option>
+			<option value="17">17:00</option>
+			<option value="18">18:00</option>
+			<option value="19">19:00</option>
+			<option value="20">20:00</option>
+			<option value="21">21:00</option>
+			<option value="22">22:00</option>
+			<option value="23">23:00</option>
+		</select>
+	</form>
+	
+		
+
+
+<!-- send user coordinates to the Python console-->
+	<form action="/points_interest/" method="POST">
+		  <div>	
+			<input   type='hidden' id='lat' name='lat'  /> <br />
+		  </div>
+		  <div>
+			<input type='hidden' id='lng' name='lng'  /> <br />
+		  </div>
+		  <div class="break_line_1"></div>
+		  <h3 style="font-weight: bold">Find Points of Interest</h3>
+		  <div>
+		   <input type="text" style="margin-left: -1px;" onfocus="this.value=''"  name="tag" value='-- insert dist(m) (>=1000) --'><button type="submit" class="btn btn-default">find</button>
+		    <div class="break_line_1"></div>
+		  </div>
+	</form>
+	<!--br-->
+	
+
+	
+	<br>
+	<div class="break_line_1"></div>
+
+	
+
+	 
+</main>
+
+
+
+
+<nav role='navigation'>
+  <a class="col_home" href="/home_page/">Home</a>
+  <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
+  <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
+  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
+  <a class="col_impatti" href="/public_transport_page/">Impacts</a>
+  <a class="col_best" onclick="$('#loading').show();" href="/best_page/">Best</a>
+  <!--a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a-->
+</nav>  
+
+
+
+
+
+	
+<!--we are inside the area of the map-->
+<div id="map">  </div>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/src/leaflet.draw.css"/>
+<!--link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/-->
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin = "anonymous" referrerpolicy = "no-referrer"> </script>
+
+  
+<!-- Load data .geojson -->
+<!--script src="{{ url_for('static', filename='hexagons_aggr_POP_ROMA_2011.geojson') }}" /></script-->
+<!-- ZMU zones with population data -->
+<!--script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script-->
+<!-- aggregation by zmu -->
+<!--script src="{{ url_for('static', filename='aggregated_zmu_filtered.geojson') }}" /></script-->
+<script src="{{ url_for('static', filename='selected_test_generation_attraction.geojson') }}" /></script>
+
+<!-- aggregation by zmu -->
+<script src="{{ url_for('static', filename='aggregated_gdf_OD_GTFS.geojson') }}" /></script>
+
+<!-- POINTS of INTERESTS (PARKINGs) -->
+<script src="{{ url_for('static', filename='POIS_parking.geojson') }}" /></script>
+<!-- POINTS of INTERESTS (all AMENITIES) -->
+<script src="{{ url_for('static', filename='layer_POIS_amenities.geojson') }}" /></script>
+<!-- POINTS of INTERESTS (all BUILDINGS) -->
+<script src="{{ url_for('static', filename='layer_POIS_residential.geojson') }}" /></script>
+<!-- ALL POINTS of INTERESTS (all BUILDINGS and AMENITIES) -->
+<script src="{{ url_for('static', filename='zmu_POIS_ROMA_2011.geojson') }}" /></script>
+
+ <script src="{{ url_for('static', filename='leaflet.motion.min.js') }}" /></script>  
+ 
+ 
+ <!-- load custom polygons and border of custom polygon-->
+<!--script src="{{ url_for('static', filename='ZMUs_custom_selected.geojson') }}" /></script-->
+<!--script src="{{ url_for('static', filename='BORDER_selected_ZMUs.geojson') }}" /></script-->
+<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
+<script src="{{ url_for('static', filename='chargers_OCM.geojson') }}" /></script>
+<!--script src="{{ url_for('static', filename='home_work_selected_idterm_4053589.geojson') }}" /></script-->
+<!--script src="{{ url_for('static', filename='home_work_selected_idterm_4398901.geojson') }}" /></script-->
+
+<!--script src="{{ url_for('static', filename='home_locations_roma_2019.geojson') }}" /></script>
+<script src="{{ url_for('static', filename='work_locations_roma_2019.geojson') }}" /></script>
+
+<script src="{{ url_for('static', filename='home_locations_roma_2022.geojson') }}" /></script>
+<script src="{{ url_for('static', filename='work_locations_roma_2022.geojson') }}" /></script-->
+
+<script src="{{ url_for('static', filename='staypoints_tod.geojson') }}" /></script>
+
+<!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script-->
+
+
+  <script>
+
+     // ----------------------------------------------------
+	
+
+      // Hack to autoset the iframe height.
+      window.addEventListener("load", function() {
+        window.setTimeout(function() {
+          setFrameHeight(document.documentElement.clientHeight)
+        }, 0);
+      });
+	  
+
+
+	var TYPE_day = "{{session['day_type']}}"	
+	document.addEventListener("DOMContentLoaded", function(){
+	var day_type_selezionato =  TYPE_day;
+	// alert(data_type_selezionata);
+	document.getElementById('registration_day_type').value = day_type_selezionato;   
+	});
+	 
+	 
+	 
+	
+  	var GTFS_hour = "{{ session['GTFS_hour']}}"
+	// alert(zmu_hour);
+	
+
+	
+    document.addEventListener("DOMContentLoaded", function(){
+	// var ora_selezionata =  selected_hour_ZMU;
+	var ora_selezionata =  GTFS_hour;
+	// alert(ora_selezionata);
+	document.getElementById('registrationhour').value = ora_selezionata;  
+	});
+	
+
+	
+	$('form select').on('change', function(){
+		$(this).closest('form').submit()
+		$('#loading').show();
+	});
+
+
+
+ 
+	
+	 ///////////////////////////---------------------------------------------------------------------/////////////////////////////////////////////
+	  ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+	   ///////////////////////////---------------------------------------------------------------------///////////////////////////////////////////
+	    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+		///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+        ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+      ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+	 
+	  
+	// ADD Leaflet map
+	
+		
+		const osm  = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		})
+         
+	    var carto = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+         });
+		 
+	
+	/*
+	// control that shows state info on hover
+	const info = L.control(); 
+	
+	
+	info.onAdd = function (map) {
+	this._div = L.DomUtil.create('div', 'info');
+	this.update();
+	return this._div;
+	};*/
+		
+	
+   
+	function getColor_hex_traffic(d) {
+		return d >= 40 ? '#0c2c84' :
+			d > 30  ? '#225ea8' :
+			d > 15  ? '#1d91c0' :
+			d > 12.5  ? '#41b6c4' :
+			d > 10  ? '#7fcdbb' :
+			d > 7.5  ? '#c7e9b4' :
+			d > 5  ? '#edf8b1' :
+			d >= 0   ? '#fdfdbf' : '#fdfdbf';
+			} 
+			
+	function getColor_population_hex(d) {
+		return d >= 100 ? '#2d2d4c' :
+		    d > 95 ? '#3d3d66' :
+		    d > 90 ? '#4c4c7f' :
+		    d > 85 ? '#5b5b99' :
+			d > 80 ? '#6b6bb2' :
+			d > 75 ? '#7a7acc' :	
+			d > 70 ? '#8989e5' :
+		    d > 65 ? '#9999ff' :
+		    d > 60 ? '#a3a3ff' :
+			d > 55 ? '#adadff' :			
+			d > 50 ? '#b7b7ff' :
+			d > 45 ? '#c1c1ff' :
+		    d > 40  ? '#ccccff' :  
+		    d > 30  ? '#d6d6ff' :
+			d > 20  ? '#e0e0ff' :
+			d > 10  ? '#eaeaff' :
+			d >= 0   ? '#f4f4ff' : '#ffffff';
+			}
+			
+		
+			
+			
+	function getColor_zmu_origin_destinations(d) {
+		return d >= 2000 ? '#071a4f' :
+		    d > 1000  ? '#0c2c84' :
+		    d > 500  ? '#225ea8' : 
+			d > 300  ? '#546ba8' :
+			d > 75  ? '#1d91c0' :
+			d > 30  ? '#41b6c4' :
+			d > 20  ? '#7fcdbb' :
+			d > 10  ? '#c7e9b4' :
+			d > 3  ? '#d5df9f' :
+			d >= 0.5   ? '#fdfdbf' : '#fdfdbf';
+			}    
+			
+			
+	function getColor_census(d) {
+		return d > 20000 ? '#800026' :
+			d > 10000  ? '#97001e' :
+			d > 5000  ? '#BD0026' :
+			d > 3000  ? '#E31A1C' :
+			d > 2000  ? '#FC4E2A' :
+			d > 1000   ? '#FD8D3C' :
+			d > 300   ? '#FEB24C' :
+			d > 50   ? '#FED976' : '#FFEDA0';
+				}
+	
+	
+	function getColor_legend(d) {
+		return d >= 15000 ? '#2d2d4c' :
+		    d > 6000 ? '#3d3d66' :	
+		    d > 3500 ? '#4c4c7f' :
+			d > 2500 ? '#5b5b99' :
+			d > 1500 ? '#6b6bb2' :				
+			d > 1300 ? '#7a7acc' :	
+		    d > 1000 ? '#8989e5' :	
+		    d > 800 ? '#9999ff' :			
+		    d > 600 ? '#a3a3ff' :	
+            d > 500 ? '#adadff' :
+			d > 300 ? '#b7b7ff' :
+			d > 250 ? '#c1c1ff' :
+		    d > 200 ? '#ccccff' :
+			d > 100 ? '#d6d6ff' :
+			d > 50   ? '#e0e0ff' :
+			d > 20   ? '#eaeaff' :
+			d >= 0   ? '#f4f4ff' : '#ffffff';
+			}
+	
+	
+	    /* LEGEND USED FOR THE HEXAGONAL TESSELLATION */
+		var legend = L.control({position: 'bottomright'});
+		
+            legend.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 20",
+								"from 20 to 50",
+								"from 50 to 100",
+								"from 100 to 200",
+								"from 200 to 250",
+								"from 250 to 300",
+								"from 300 to 500",
+								"from 500 to 600",
+								"from 600 to 800",
+								"from 800 to 1000",
+								"from 1000 to 1300",
+								"from 1300 to 1500",
+								"from 1500 to 2500",
+								"from 2500 to 3500",
+								"from 3500 to 6000",
+								"from 6000 to 15000",
+								" > 15000"];
+				 const grades = [0, 20, 50, 100, 200 ,250 , 300, 500, 600, 800, 1000, 1300, 1500, 2500, 3500, 6000, 15000];
+
+                div.innerHTML='<div><b>Population(hex)</b></div';
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_legend(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+			
+			
+			
+			
+			
+			
+		//////////* LEGEND USED FOR ZMU DATA  (number of vehicles at destination per 1000 population)*////////////  
+			var legend_ZMU = L.control({position: 'bottomright'});
+		
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 0.5",
+								"from 0.5 to 3",
+								"from 3 to 10",
+								"from 10 to 20",
+								"from 20 to 30",
+								"from 30 to 75",
+								"from 75 to 300",
+								"from 300 to 500",
+								"from 500 to 1000",
+								"from 1000 to 2000",
+								" > 2000"];
+				 const grades = [0, 0.5, 3, 10, 20, 30, 75, 300, 500, 1000, 2000];
+
+                div.innerHTML='<div><b>N. TRIPS</b></div';
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+            
+            
+		
+		
+			
+		
+	
+/*
+	info.update = function (props) {
+		const contents = props ? `<b>${props.POP_TOT_ZMU}</b> people` : 'Hover over a traffic zone';
+		this._div.innerHTML = `<h4>Total Population Number</h4>${contents}`;
+	};
+	*/
+	
+	
+		const selectedStyle = {
+		  color: '#000000',
+		  weight: 0.1,
+		  opacity: 0.1,
+		}
+			
+			
+		const selectedStyle_highlight = {
+		  color: 'black',
+		  weight: 3,
+		  opacity: 0.9,
+		}
+		
+		
+	
+		
+		const selectedStyle_mouseout = {
+		  color: 'black',
+		  weight: 0.5,
+		  opacity: 0.3,
+		}
+		
+	
+	
+		const selectedStyle_mouseover = {
+		  weight: 2,
+		  opacity: 1,
+		  color: 'black'
+		}
+				
+				
+		
+	// get color depending on population number value
+
+			function style_colors(feature) {
+				return {
+					weight: 0.1,
+					opacity: 0.1,
+					color: '#ffffff',
+					dashArray: '2',
+					fillOpacity: 0.7,
+					fillColor: getColor_population_hex(feature.properties.percentile)
+				};
+			}
+			
+			
+		function style_colors_matched(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: getColor_hex_traffic(feature.properties.load)
+			};
+		}
+		
+		
+		
+		function style_colors_zmu(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+				fillColor: getColor_zmu_origin_destinations(feature.properties.n_spostamenti_res)
+				// fillColor: feature.properties.color_hex
+			};
+		}
+		
+		
+		function style_colors_POIS_ZMU(feature) {
+			return {
+				weight: 3,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.1,
+				fillColor: 'blue'
+			};
+		}
+		
+		
+		
+		
+		
+		function style_colors_POIS(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'blue'
+			};
+		}
+		
+		
+		
+		function style_colors_POIS_amenities(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'red'
+			};
+		}
+		
+		
+		function style_colors_POIS_residential(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'yellow'
+			};
+		}
+		
+		
+				
+		
+	    // used to color ZMU zones with POPULATION data 2011
+		function style_pop(feature) {
+			return {
+				weight: 0.8,
+				opacity: 1,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.5,
+				fillColor: getColor_census(feature.properties.POP_TOT_ZMU)
+			};
+		}
+		
+		
+		// used to color ZMU zones with RESIDENCE data 2011
+		function style_homes(feature) {
+			return {
+				weight: 0.8,
+				opacity: 1,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.5,
+				fillColor: getColor_census(feature.properties.RES_TOT_ZMU)
+			};
+		}
+		
+		
+		
+		
+	
+	
+	
+/*
+		function highlightFeature(e) {
+			const layer = e.target;
+			layer.setStyle({
+				weight: 3,
+				color: '#666',
+				dashArray: '',
+				fillOpacity: 0.9
+			});
+
+			layer.bringToFront();
+
+			info.update(layer.feature.properties);
+		}*/
+		
+		
+         /*
+		const censuary_default = L.geoJson(zmu_counts, {
+				style: style_pop,
+				onEachFeature
+			});
+			*/
+		
+		function resetHighlight(e) {
+			censuary_default.resetStyle(e.target);
+			info.update();
+		}
+
+		function zoomToFeature(e) {
+			map.fitBounds(e.target.getBounds());
+		}
+
+		function onEachFeature(feature, layer) {
+			layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				//click: zoomToFeature
+			});
+		}
+		
+		
+		
+		
+	 // alert("...I AM HERE...");
+		
+		
+		
+	    /*------------DEFAULT LAYER -----------------*/
+	    //const censuary_Layer = L.layerGroup();
+		//censuary_Layer.addLayer(censuary_default);		
+	 
+
+	
+			
+		
+		  
+
+         /////////----------- Points of Interest (POIS) in ZMUs -------/////////////////////////////////////////	
+		 
+			 var POIS_ZMU = L.geoJSON(zmu_POIS_counts, { style: style_colors_POIS_ZMU, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight);
+				  });
+				  
+					var popupText = '';
+					popupText += (feature.properties.apartments) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Apartments: ' + feature.properties.apartments : '';
+					popupText += (feature.properties.church) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Church: ' + feature.properties.church : ''
+					popupText += (feature.properties.residential) ?  '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Residential: ' + feature.properties.residential : '';
+					popupText += (feature.properties.hotel) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hotel: ' + feature.properties.hotel : ''
+					popupText += (feature.properties.office) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Office: ' + feature.properties.office : ''
+					popupText += (feature.properties.basilica) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hotel: ' + feature.properties.basilica : ''
+					popupText += (feature.properties.house) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">House: ' + feature.properties.house : ''
+					popupText += (feature.properties.public) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Public: ' + feature.properties.public : ''
+					popupText += (feature.properties.market) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Market: ' + feature.properties.market : ''
+					popupText += (feature.properties.detached) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Detached: ' + feature.properties.detached : ''
+					popupText += (feature.properties.synagogue) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Synagogue: ' + feature.properties.synagogue : ''
+					popupText += (feature.properties.roof) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Roof: ' + feature.properties.roof : ''
+					popupText += (feature.properties.supermarket) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Supermarket: ' + feature.properties.supermarket : '';
+					popupText += (feature.properties.retail) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Retail: ' + feature.properties.retail : ''
+					popupText += (feature.properties.congress_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Congress centre: ' + feature.properties.congress_centre : ''
+					popupText += (feature.properties.government) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Government: ' + feature.properties.government : ''
+					popupText += (feature.properties.commercial) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Commercial: ' + feature.properties.commercial : ''
+					popupText += (feature.properties.semidetached_house) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Semidetached house: ' + feature.properties.semidetached_house : ''
+					
+					popupText += (feature.properties.arts_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Arts centre: ' + feature.properties.arts_centre : ''
+					popupText += (feature.properties.bus_station) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bus station: ' + feature.properties.bus_station : ''
+					popupText += (feature.properties.cafe) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Cafe: ' + feature.properties.cafe : ''
+					popupText += (feature.properties.fast_food) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Fast food: ' + feature.properties.fast_food : ''
+					popupText += (feature.properties.pharmacy) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Pharmacy: ' + feature.properties.pharmacy : ''
+					popupText += (feature.properties.parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Parking: ' + feature.properties.parking : ''
+					popupText += (feature.properties.place_of_worship) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Place of worship: ' + feature.properties.place_of_worship : ''
+					popupText += (feature.properties.restaurant) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Restaurant: ' + feature.properties.restaurant : ''
+					popupText += (feature.properties.bar) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bar: ' + feature.properties.bar : ''
+					popupText += (feature.properties.bicycle_parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bicycle parking: ' + feature.properties.bicycle_parking : ''
+					popupText += (feature.properties.charging_station) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Charging station: ' + feature.properties.charging_station : ''
+					popupText += (feature.properties.theatre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Theatre: ' + feature.properties.theatre : ''
+					popupText += (feature.properties.cinema) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Cinema: ' + feature.properties.cinema : ''
+					popupText += (feature.properties.library) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Library: ' + feature.properties.library : ''
+					popupText += (feature.properties.marketplace) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Marketplace: ' + feature.properties.marketplace : ''
+					popupText += (feature.properties.motorcycle_parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Motorcycle parking: ' + feature.properties.motorcycle_parking : ''
+					popupText += (feature.properties.parking_entrance) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Parking entrance: ' + feature.properties.parking_entrance : ''
+					popupText += (feature.properties.police) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Police: ' + feature.properties.police : ''
+					popupText += (feature.properties.public_building) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Public building: ' + feature.properties.public_building : ''
+					popupText += (feature.properties.school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">School: ' + feature.properties.school : ''
+					popupText += (feature.properties.social_facility) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Social facility: ' + feature.properties.social_facility : ''
+					popupText += (feature.properties.car_sharing) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Car sharing: ' + feature.properties.car_sharing : ''
+					popupText += (feature.properties.pub) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Pub: ' + feature.properties.pub : ''
+					popupText += (feature.properties.taxi) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Taxi: ' + feature.properties.taxi : ''
+					popupText += (feature.properties.university) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">University: ' + feature.properties.university : ''
+					popupText += (feature.properties.college) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">College: ' + feature.properties.college : ''
+					popupText += (feature.properties.community_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Community centre: ' + feature.properties.community_centre : ''
+					popupText += (feature.properties.doctors) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Doctors: ' + feature.properties.doctors : ''
+					popupText += (feature.properties.townhall) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Townhall: ' + feature.properties.townhall : ''
+					popupText += (feature.properties.parking_space) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">parking space: ' + feature.properties.parking_space : ''		
+					popupText += (feature.properties.hospital) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hospital: ' + feature.properties.hospital : '';
+					popupText += (feature.properties.music_school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Music school: ' + feature.properties.music_school : '';
+					popupText += (feature.properties.fuel) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Fuel: ' + feature.properties.fuel : '';
+					popupText += (feature.properties.car_rental) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Car rental: ' + feature.properties.car_rental : '';
+					popupText += (feature.properties.dentist) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Dentist: ' + feature.properties.dentist : '';
+					popupText += (feature.properties.clinic) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Clinic: ' + feature.properties.clinic : '';
+					popupText += (feature.properties.social_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Social centre: ' + feature.properties.social_centre : '';
+					popupText += (feature.properties.events_venue) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Events venue: ' + feature.properties.events_venue : '';
+					popupText += (feature.properties.research_institute) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Research institute: ' + feature.properties.research_institute : '';
+					popupText += (feature.properties.ferry_terminal) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Ferry terminal: ' + feature.properties.ferry_terminal : '';
+					popupText += (feature.properties.language_school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Language school: ' + feature.properties.language_school : '';
+					popupText += (feature.properties.kindergarten) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Kindergarten: ' + feature.properties.kindergarten : '';
+					popupText += (feature.properties.conference_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Conference centre: ' + feature.properties.conference_centre : '';
+					popupText += (feature.properties.courthouse) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Courthouse: ' + feature.properties.courthouse : '';
+					popupText += (feature.properties.tourism) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Tourism: ' + feature.properties.tourism : '';
+					popupText += (feature.properties.weighbridge) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Weighbridge: ' + feature.properties.weighbridge : '';
+					popupText += (feature.properties.childcare) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Childcare: ' + feature.properties.childcare : '';
+					popupText += (feature.properties.nursing_home) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Nursing home: ' + feature.properties.nursing_home : '';
+					popupText += (feature.properties.coworking_space) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Coworking space: ' + feature.properties.coworking_space : '';
+					popupText += (feature.properties.casino) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Casino: ' + feature.properties.casino : '';
+					popupText += (feature.properties.community_centres) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Community centres: ' + feature.properties.community_centres : '';
+										
+					layer.bindTooltip(popupText);
+					
+					
+					
+			layer.on('mouseout', function (e) {
+						layer.setStyle(selectedStyle_mouseout); 
+					});	
+				}
+				});
+				
+		const POIS_Layer_zmu = L.layerGroup();
+		POIS_Layer_zmu.addLayer(POIS_ZMU);
+		
+
+		
+		
+		
+		
+		/////////----- ADD POINTS of INTERESTS (PARKINGS) nearby chosen location -----------////////////////////////
+		var POIS_PARKING = L.geoJSON(POIS_parking, { style: style_colors_POIS, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>amenity: '+feature.properties.amenity+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer = L.layerGroup();
+		POIS_Layer.addLayer(POIS_PARKING);
+		
+		
+		
+	    /////////----- ADD POINTS of INTERESTS (all AMENITIES) nearby chosen location -----------////////////////////////
+		var POIS_AMENITIES = L.geoJSON(POIS_amenities, { style: style_colors_POIS_amenities, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>amenity: '+feature.properties.amenity+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS_amenities); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer_amenities = L.layerGroup();
+		POIS_Layer_amenities.addLayer(POIS_AMENITIES);
+		
+		
+		
+		/////////----- ADD POINTS of INTERESTS (all residential) nearby chosen location -----------////////////////////////
+		var POIS_RESIDENTIALS = L.geoJSON(POIS_residential, { style: style_colors_POIS_residential, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>building: '+feature.properties.building+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS_residential); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer_residential = L.layerGroup();
+		POIS_Layer_residential.addLayer(POIS_RESIDENTIALS);
+	
+
+     
+		
+		////-------------------------------------------------------------------------------------------//////////////////////////////// 
+		////-------------------------------------------------------------------------------------------//////////////////////////////// 
+       
+
+        /*
+        ////---------------------------------------------------------------------------------------------////////////////////////////// 
+		////---------------------------------------------------------------------------------------------////////////////////////////// 
+		/////////----- ADD ALL HOME locations ----------------------------------------------------------------/////////////////////////		
+		////-------------------------------------------------------------------------------------------//////////////////////////////// 
+		////-------------------------------------------------------------------------------------------//////////////////////////////// 
+		var home_points_2022 = L.geoJSON(home_locations_2022, {
+		   onEachFeature: function (feature, layer) {
+			// layer.bindTooltip('<h2>'+feature.properties.latitude + '; ' + feature.properties.longitude +'</p>');
+			layer.bindTooltip('<h3><p>number of nights: '+feature.properties.n_notti+'</p>');
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					radius: 3,
+					fillColor: 'black',
+					color: 'black',
+					weight: 1,
+					opacity: 0.7,
+					fillOpacity: 0.7
+				});
+			}
+		});
+				
+		const home_points_Layer_2022 = L.layerGroup();
+		home_points_Layer_2022.addLayer(home_points_2022);
+		
+		
+		
+		
+	    var home_points_2019 = L.geoJSON(home_locations_2019, {
+		   onEachFeature: function (feature, layer) {
+			// layer.bindTooltip('<h2>'+feature.properties.latitude + '; ' + feature.properties.longitude +'</p>');
+			layer.bindTooltip('<h3><p>number of nights: '+feature.properties.n_notti+'</p>');
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					radius: 2,
+					fillColor: 'red',
+					color: 'red',
+					weight: 1,
+					opacity: 0.7,
+					fillOpacity: 0.7
+				});
+			}
+		});
+				
+		const home_points_Layer_2019 = L.layerGroup();
+		home_points_Layer_2019.addLayer(home_points_2019);
+		
+		
+		
+		////-------------------------------------------------------------------------------------------////////////////////////////// 
+		////-------------------------------------------------------------------------------------------////////////////////////////// 
+		
+		
+		
+		////---------------------------------------------------------------------------------------------///////////////////////////// 
+		////---------------------------------------------------------------------------------------------///////////////////////////// 
+		/////////----- ADD ALL WORK locations ----------------------------------------------------------/////////////////////////////		
+		////-------------------------------------------------------------------------------------------////////////////////////////// 
+		////-------------------------------------------------------------------------------------------////////////////////////////// 
+		var work_points_2022 = L.geoJSON(work_locations_2022, {
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3><p>number of working days: '+feature.properties.n_working_days+'</p>');
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					radius: 5,
+					fillColor: 'red',
+					color: 'red',
+					weight: 1,
+					opacity: 0.7,
+					fillOpacity: 0.7
+				});
+			}
+		});
+				
+		const work_points_Layer_2022 = L.layerGroup();
+		work_points_Layer_2022.addLayer(work_points_2022);
+		
+		
+		
+		
+		var work_points_2019 = L.geoJSON(work_locations_2019, {
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3><p>number of working days: '+feature.properties.n_working_days+'</p>');
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					radius: 2,
+					fillColor: 'blue',
+					color: 'blue',
+					weight: 1,
+					opacity: 0.7,
+					fillOpacity: 0.7
+				});
+			}
+		});
+				
+		const work_points_Layer_2019 = L.layerGroup();
+		work_points_Layer_2019.addLayer(work_points_2019);
+		
+		////-------------------------------------------------------------------------------------------////////////////////////////// 
+		////-------------------------------------------------------------------------------------------////////////////////////////// 
+       */
+
+		
+		
+		// -------->show TIMESERIES of mean "Number of Vehicles", "triptime", "tripdistance" and "stoptime" @ DESTINATION zone in Plotly within the tooltip...---------------------/////////////////////
+		// const time_series_counts = '<iframe src="{{ url_for('figure_plotly1') }}" width="325" height="225"></iframe>'
+		// const time_series_tripdistance = '<iframe src="{{ url_for('figure_plotly2') }}" width="325" height="225"></iframe>'
+		// const time_series_triptime = '<iframe src="{{ url_for('figure_plotly3') }}" width="325" height="225"></iframe>'
+		// const time_series_stoptime = '<iframe src="{{ url_for('figure_plotly4') }}" width="325" height="225"></iframe>'
+		
+		const time_series_visits_TPL = '<iframe src="{{ url_for('figure_plotly5') }}" width="325" height="225"></iframe>'
+		
+		
+		
+		/////////----------- AGGREGATED TRAFFIC DATA in ZMUs areas by HOURS -------/////////////////////////////////////////	
+	    var matched_zmu_by_hour = L.geoJSON(aggregated_OD_zmu, { style: style_colors_zmu, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('click', function () {
+			   layer.setStyle(selectedStyle_highlight);
+			   	var feature_variable = layer.feature.properties.index_zmu;
+				 // alert("The variable named x1 has value:  " + feature_variable);
+				 
+				 //----> send layer.feature.properties.zmu to python
+				 fetch('/process_zmu_index', {
+					  method: 'POST',
+					  headers: {
+						'Content-Type': 'application/json'
+					  },
+					  body: JSON.stringify({data: feature_variable})
+					})
+					.then(response => response.text())
+					.then(result => {
+					  console.log(result);
+					})
+					.catch(error => {
+					  console.error('Error:', error);
+					});
+				 
+			  });
+				// layer.bindPopup('<h3>Counts: '+feature.properties.counts  + time_series_counts + time_series_tripdistance + time_series_triptime + '<p>',{maxWidth : 860});
+				
+				var popup_zmu = '';
+				// popup_zmu += time_series_counts;
+				// popup_zmu += time_series_tripdistance;
+				// popup_zmu += time_series_triptime;
+				// popup_zmu += time_series_stoptime;
+				popup_zmu +=time_series_visits_TPL
+				popup_zmu += (feature.properties.n_spostamenti_res) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Number of trips: ' + feature.properties.n_spostamenti_res : '';
+				popup_zmu += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popup_zmu += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popup_zmu += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				popup_zmu += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				popup_zmu += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';			
+				
+				layer.bindPopup(popup_zmu ,{maxWidth : 670}); 
+				layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout); 
+				});
+                 
+                layer.on('mouseover', function (e) {
+					layer.setStyle(selectedStyle_mouseover); 
+				});				 
+			}
+				
+			});
+		
+			
+		const mapmatched_Layer_zmu = L.layerGroup();
+		mapmatched_Layer_zmu.addLayer(matched_zmu_by_hour);
+		
+		
+	
+
+		
+		//// ----- ZMU zones -----------------------------////
+		function style_colors_ZMU_zones(feature) {
+			return {
+				weight: 1,
+				opacity: 0.6,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.0,
+				fillColor: 'white'
+			};
+		}
+		
+		
+		const selectedStyle_highlight_ZONES = {
+		  color: 'orange',
+		  weight: 3,
+		  opacity: 0.9,
+		}
+		
+		
+	    const selectedStyle_mouseout_ZONES = {
+		  color: 'black',
+		  weight: 1,
+		  opacity: 0.6,
+		}
+		
+		
+		
+		/// add ZMU zones  borders  /////////////////////////////////////////////////////
+		var ZMU_zones = L.geoJSON(charging_data, { style: style_colors_ZMU_zones, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupText = '';
+					popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupText += (feature.properties.n_charging_stations) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n. charging stations: ' + feature.properties.n_charging_stations : '' ;	
+					popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';		        	
+                    popupText += (feature.properties.Available_Power) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Power (Watt): ' + feature.properties.Available_Power : '' ;						
+					layer.bindTooltip(popupText);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+
+	
+		const ZMU_zones_Layer = L.layerGroup();
+		ZMU_zones_Layer.addLayer(ZMU_zones);	
+		
+		
+		
+		
+		
+		
+		 
+	 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	 //////// -------- add STAYPOINTS  ------------------------------////////////////////////////////////////////////////
+	 
+
+		var stay_points = L.geoJSON(points_staypoints, {
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">type of stay: '+feature.properties.id_stay_type+'<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n.points: '+feature.properties.n_points);
+		},
+
+		pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					radius: 3,
+					//radius: feature.properties.n_points*0.2,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+
+		const stay_points_layer = L.layerGroup();
+		stay_points_layer.addLayer(stay_points);
+		
+		
+		
+		
+		
+	/// ------------ load OPEN CHARGE MAP LAYER ---------- //////
+	  const OCM_Layer = L.layerGroup();
+				
+		
+	////------------------------------------------------------------////////////////////////////// 
+	////------------------------------------------------------------////////////////////////////// 
+	var EV_charging_layer_OCM = L.geoJSON(EV_chargers_OCM, {
+	   onEachFeature: function (feature, layer) {
+		//layer.bindTooltip('<h2>'+feature.properties.OperatorInfo+'</h2><p>n.points: '+feature.properties.NumberOfPoints +'<br>power(kW):'+feature.properties.Power+'</p>');
+		
+		var popupTextt = '';
+					popupTextt += (feature.properties.OperatorInfo) ? '<h2 style="font-size: 20px;  font-family: Arial; font-weight: bold;">Operator: ' + feature.properties.OperatorInfo : '</h2>';
+					popupTextt += (feature.properties.NumberOfPoints) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n.points: ' + feature.properties.NumberOfPoints : '</h2>' ;	
+					popupTextt += (feature.properties.Power) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">power(kW): ' + feature.properties.Power : '</h2>';		        						
+					layer.bindTooltip(popupTextt);	
+	},
+
+		pointToLayer(feature, latlng) {
+			return L.circleMarker(latlng, {
+				radius: 6,
+				// radius: feature.properties.n_buses*1,
+				fillColor: "brown", //'#ff7800',
+				color: '#000',
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 1
+			});
+		}
+	}).addTo(OCM_Layer);
+					
+
+
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+		
+
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 10,
+			layers: [carto, ZMU_zones_Layer, mapmatched_Layer_zmu]   //osm
+		});
+		
+		// legend.addTo(map);
+		// legend_censuary.addTo(map);
+		legend_ZMU.addTo(map);
+		//info.addTo(map);
+		
+		
+		
+		
+
+		
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+		
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		const overlays = {
+			//'Traffic Zones': ZMU_zones_Layer,
+			//'Traffic Zones & Censuary': censuary_Layer,
+			//'number of RESIDENTIAL TRIPS from ORIGIN': mapmatched_Layer_zmu,
+			 "<span style='color:black; font-size: 20px;'>number of RESIDENTIAL TRIPS @ORIGIN</span>": mapmatched_Layer_zmu,
+		    "<span style='color:black; font-size: 20px;'>Traffic Zones</span>": ZMU_zones_Layer,
+			'Staypoints': stay_points_layer,
+			'Charging Stations (Open Charge Map)': OCM_Layer,
+			'POIS & Residences': POIS_Layer_zmu,
+			'POIS_Parking': POIS_PARKING,
+			'POIS_Amenities': POIS_AMENITIES,
+			'POIS_Residentials': POIS_RESIDENTIALS,
+			//'Home locations_2022': home_points_Layer_2022,
+			//'Home locations_2019': home_points_Layer_2019,
+			//'Work locations_2022': work_points_Layer_2022,
+			//'Work locations_2019': work_points_Layer_2019
+			//'Home & Work location': home_work_points_Layer
+		};
+		
+		
+		const layerControl = L.control.layers(baseLayers, overlays ,{collapsed:false,}).addTo(map);	
+			
+		//const aggregated_pop = L.layerGroup([hex_all]);
+		const cens_layer = L.layerGroup([censuary_default]);
+		
+		
+		const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+		layerControl.addBaseLayer(satellite, 'Satellite');
+		// layerControl.addOverlay(hex_all, 'aggregated population (hex)');
+		layerControl.addOverlay(POIS_PARKING, 'parkings');
+		layerControl.addOverlay(POIS_AMENITIES, 'amenities');
+		layerControl.addOverlay(POIS_RESIDENTIALS, 'buildings')
+		
+		
+	
+	
+	window.addEventListener('resize', 
+	() => map.getViewPort().resize());
+	
+	
+
+  </script>
+</body>
+</html>
