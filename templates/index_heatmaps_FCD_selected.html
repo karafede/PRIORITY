@@ -1,0 +1,2200 @@
+<!doctype html>
+<html lang="en">
+
+<style type="text/css">
+    body {
+            padding: 0;
+            margin: 0;
+			font-family: Arial, Helvetica, sans-serif;
+        }
+   
+	#map {
+	  height: 100%;
+	}
+	
+	/* Optional: Makes the sample page fill the window. */
+	html, body {
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	}
+
+
+
+	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	.legend { text-align: left; line-height: 16px; color: #555; font-size: 1.275em} .legend i { width: 15px; height: 15px; float: left; margin-right: 6px; opacity: 0.7; } 
+	.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+	
+	
+	#heatmapContainerWrapper { width:100%; height:100%; position:absolute; background:rgba(0,0,0,.1);}
+	#heatmapContainer { width:10%; height:10%; z-index: 700;}
+	
+
+	#heatmapLegend_N_vehicles { background:white; position:absolute; bottom:33%; right:0; padding:10px;  z-index: 700; font-size: 18px;}
+	#min_vehicles { float:left; }
+	#max_vehicles { float:right; }
+	#heatmapLegend_stoptime { background:white; position:absolute; bottom:23%; right:0; padding:10px;  z-index: 700; font-size: 18px;}
+	#min_stop_time { float:left; }
+	#max_stop_time { float:right; }
+	#heatmapLegend_tripdistance { background:white; position:absolute; bottom:13%; right:0; padding:10px;  z-index: 700; font-size: 18px;}
+	#min_trip_distance { float:left; }
+	#max_trip_distance { float:right; }
+	#heatmapLegend_triptime { background:white; position:absolute; bottom:3%; right:0; padding:10px;  z-index: 700; font-size: 18px;}
+	#min_trip_time { float:left; }
+	#max_trip_time { float:right; }
+	
+	
+	
+	
+	#refreshButton {
+	  position: absolute;
+	  top: 60px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #000000;
+	  background-color:#FFFF00;
+	}
+	
+	
+	#home_locations {
+	  position: absolute;
+	  width: 100%;
+	  top: 60px;
+	  margin-top: 40px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #ffffff ;
+	  background-color:#000099;
+	}
+	
+	#refreshButton:hover{
+		opacity: 0.8;
+		cursor: pointer;
+    }
+	
+
+
+	  html, body,  #map {
+        width : 100%;
+        height : 100%;
+      }
+	.box{	  
+		width:15px;
+		height:15px;
+		border-radius:25px;
+		display: inline-block;
+		}
+	
+
+     /** sidebar menu **/
+	.innerDiv{
+		position: absolute;
+		width: 10%;
+		height: 15%;
+		background-color: #b2b2ff;
+		opacity: 0.8;
+		margin-top:  1%;
+		margin-left: 5%;
+		z-index: 800;
+		padding-top: 1%;
+		text-overflow:ellipsis;
+        overflow:hidden;
+		
+	}
+	
+
+	
+
+ .button {
+	    position: absolute;
+		left: 2%;
+		top: 80%;
+		height: 8%;
+		width: 7%
+        min-width: 7%;
+		margin-top: 30%;
+		margin-left: 50%;
+		z-index: 500;
+	    border: none;
+	    color: white;
+	    padding: 20px;
+	    text-align: center;
+	    display: inline-block;
+	    font-size: 1.5em;
+	    margin: 10px 20px;		
+	}
+
+		
+		
+   header, nav {
+    left: 2%;
+	top: 85%;
+  	z-index: 700;
+	position: absolute;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	border-spacing: 5px;
+  }
+
+	header, nav {
+    left: 2%;
+	top: 85%;
+  	z-index: 700;
+	position: absolute;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	border-spacing: 5px;
+  }
+
+	nav a {
+	  text-decoration: none;
+	  background: #000000;  /* Black */
+	  border-radius: 5px;
+	  font-size: 1.4em;
+	  color: white;
+	  padding: 3px 8px;
+	  display: table-cell;
+	}
+	
+	
+	nav .col_home {
+		background-color: #6b0000;
+	}
+	
+	nav .col_privata {
+		background-color: #4CAF50;
+	}
+	
+	
+	nav .col_collettivo {
+		background-color: #0000ff ;
+	}
+	
+	nav .col_scenari {
+		background-color: #ffa500 ;
+	}
+	
+	
+	nav .col_impatti {
+		background-color: #76a5af ;
+	}
+	
+	
+	nav .IEA_statistics {
+		background-color: #ededed ;
+		color: blue;
+	}
+	
+	
+	nav .col_best {background-color: #326bbb ;<!--color: blue;-->}
+	
+	
+	
+	
+		
+
+  /** submit lat lon and input text to Python **/
+   main {
+		background-color: rgba(51, 170, 51, .3); 
+		left: 2%;
+		top: 3%;
+		z-index: 700;
+		position: absolute;
+		margin: 2px 0;
+		padding: 5px;
+		text-overflow:ellipsis;
+        overflow:hidden;
+    width: 350px;
+    height: 600px
+	}
+
+	main div {
+	  background: transparent; 
+	  color: white;
+	  padding: 1px;
+	  margin: 5px auto;
+	}
+	
+
+	main div:nth-child(1) {
+	  width: 270px;
+	  height: 0px;
+	   background: transparent;
+	}
+	
+	
+    main div:nth-child(2) {
+	  width: 270px;
+	  height: 0px;
+	   background: #326bbb;
+	}
+	
+
+	main div:nth-child(3) {
+      width: 170px;
+	 background: transparent;
+	}
+	
+	main div:nth-child(4) {
+	  width: 270px;
+	   height: 0px;
+	   background: #326bbb;
+	   float: center;
+	}
+	
+	main div:nth-child(5) {
+	  width: 270px;
+	 background: transparent;
+	}
+	
+	main div:nth-child(6) {
+	   width: 270px;
+	    background: transparent;
+	}
+	
+
+	.inline-block-center {
+	  text-align: center;
+	}
+	
+	.flex-center {
+	  display: flex;
+	  justify-content: center;
+	}
+	
+
+	h2 {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+	line-height: 0.5em;
+	}
+	
+	
+	h3 {
+    margin: 0;
+    padding: 0;
+	display: inline;
+	}
+	
+	
+	
+	
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: absolute; /* Stay in place */
+	  z-index: 700; /* Sit on top */
+	  
+	  position: absolute;
+	   left: 20%;
+		top: 4%;
+	  width: 50%; /* Full width */
+	  height: 70%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+
+	/* Modal Content/Box */
+	.modal-content {
+	  z-index: 700;
+	  top: 5%;
+	  background-color: #fefefe;
+	  margin: 5% auto; /* 15% from the top and centered */
+	  padding: 1%;
+	  border: 1px solid #888;
+	  width: 100%; /* Could be more or less, depending on screen size */
+	}
+
+	/* The Close Button */
+	.close {
+	  color: #aaa;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+	  color: black;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+	
+	
+
+
+.animation_link {
+  font-size: 130%;
+  color: blue;
+  font-weight: bold;
+}
+
+.animation_link_heatmap {
+  font-size: 130%;
+  color: red;
+  font-weight: bold;
+}
+
+.animation_link_IEA_STATS {
+  font-size: 130%;
+  color: #0f45d2;
+  font-weight: bold;
+}
+
+
+	
+	
+</style>
+
+<style>
+
+.label {
+  color: black;
+  padding: 8px;
+  font-family: Arial Black;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+
+#.tpl_line {background-color: #2196F3;} /* Blue */
+
+
+table, th, td {
+  border:1px solid black;
+   left: 20%;
+}
+
+
+table.center_table {
+  margin-left: -15%; 
+  //margin-left: 20%;
+}
+
+
+
+/* Center the loader (SPINNER) */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  // border-top: 16px solid #3498db;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-right: 16px solid yellow;
+  border-left: 16px solid pink;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+
+
+
+div#loading {
+    display: none;
+	position: absolute;
+	left: 50%;
+    top: 50%;
+    z-index: 700;
+	width: 270px;
+	height: 270px;
+	 margin: -76px 0 0 -76px;
+    background: url(/static/loadingimage_TPL.gif) no-repeat;
+    cursor: wait;
+ }
+ 
+ /* Button changing color when clicked */
+ input.btn_color:active { background:yellow; } 
+ 
+ 
+     /* custom primary buttons */
+    
+    .btn-primary {
+        color: black;
+        background-color: yellow ;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary:hover {
+        color: #212529;
+        background-color: #52bebe;
+        border-color: #8ad3d3
+    }
+    
+    .btn-primary:focus,
+    .btn-primary.focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+    
+    .btn-primary.disabled,
+    .btn-primary:disabled {
+        color: #212529;
+        background-color: #7cc;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active,
+    .btn-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #9cdada;
+        border-color: #2e7c7c
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active:focus,
+    .btn-primary:not(:disabled):not(.disabled).active:focus,
+    .show>.btn-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+    
+    .btn-outline-primary {
+        color: #000000;
+        background-color: yellow;
+        background-image: none;
+        border-color: #7cc;
+    }
+    
+    .btn-outline-primary:hover {
+        color: #222;
+        background-color: #8ad3d3;
+        border-color: #7cc
+    }
+    
+    .btn-outline-primary:focus,
+    .btn-outline-primary.focus {
+        box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+    }
+    
+    .btn-outline-primary.disabled,
+    .btn-outline-primary:disabled {
+        color: #7cc;
+        background-color: transparent
+    }
+    
+    .btn-outline-primary:not(:disabled):not(.disabled):active,
+    .btn-outline-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-outline-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #8ad3d3;
+        border-color: #7cc
+    }
+    
+    .btn-outline-primary:not(:disabled):not(.disabled):active:focus,
+    .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
+    .show>.btn-outline-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+    }
+
+
+.btn_heatmaps {border: none;
+			  background-color: blue;
+			  padding: 12px 48px 12px 24px;
+			  border-radius: 4px;
+			  color: #fff;
+			  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7.41' height='12' viewBox='0 0 7.41 12'%3E%3Cpath d='M10,6,8.59,7.41,13.17,12,8.59,16.59,10,18l6-6Z' transform='translate(-8.59 -6)' fill='%23fff'/%3E%3C/svg%3E");
+			  background-repeat: no-repeat;
+			  background-position: right 24px center;
+			  font-size: 20px;
+			  font-weight: bold;
+			  text-align: center;
+			   left: 80%;
+			   top: 85%;}
+		   
+.btn_animation {width: 45%;
+	  height:50px;
+	  font-size: 18px;
+	  font-weight: bold;
+	  text-align: center;
+	  color:black}
+	   
+		   
+
+   .select{
+		width:  15%;
+		height: 30px;
+		font-size: 18px;
+		font-weight: bold;}
+		
+		
+ 
+ 
+ #form-wrapper {
+  width: 60%;
+  height: 12%;
+  margin: 0 auto;
+  text-align: center;
+  display:flex;
+}
+#form1 {
+  width: 50%;
+  display: inline-block;
+  min-width:200px;
+}
+#form2 {
+  width: 50%;
+  display: inline-block;
+  min-width:200px;
+   background: #66b266;
+  height:100%;
+}
+
+.flex {
+   display: flex;
+   flex-direction: row;
+}
+
+div.c {
+	  text-align: center;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+ 
+ 
+ input[type="radio"] {
+  -ms-transform: scale(1.5); /* IE 9 */
+  -webkit-transform: scale(1.5); /* Chrome, Safari, Opera */
+  transform: scale(1.5);
+}
+	
+
+
+</style>
+
+
+
+
+
+
+
+
+
+</head>
+  <meta name="description" content="Leaflet Template">
+  <title>RdS-ENEA</title>
+  <!--meta name="viewport" content="initial-scale=1.0"-->
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <meta charset="utf-8">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+ </head>
+ 
+ 
+ <!--start the SPINNER or LOADER-->
+<div id="loader"></div>
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+
+
+
+<body>
+<div id="loading"></div>
+
+<main class="inline-block-center">
+
+
+	<br>
+	
+  <h2 style="font-weight: bold; line-height: 1em;">Heatmaps</h2> 
+    <h2 style="font-weight: bold; line-height: 1em;">(private mobility)</h2> 
+
+<br>
+	
+
+	
+
+	
+	
+	<form id="mainform" action="/FCD_heatmap_day_selector" method="POST" >
+	   <input type="text" id="daterange"  name="daterange" onchange="myFunction_daterange(event)" value="     ___from___to___" />
+	   <button type="submit">enter</button><br><br>
+	</form>
+	
+
+		
+ <form method="POST" action="/tod_heatmap_selector/">
+	 <h4 style="margin-top: -1px; margin-left:-195px;" class="label tpl_line">Day type:</h4>
+        <h4 style="margin-top: -50px;" class="tod_heatmap_selector" onchange="this.form.submit()";> </h4>
+		
+		 <input type="radio" name="ZMU_tod" style="margin-left:20px; font-weight: bold;" id="registration_tod" value="9" onclick="$('#loading').show();"></label>
+		<label class="tod_heatmap_selector" onchange="this.form.submit();"> 
+		
+        <input type="radio" name="ZMU_tod" style="margin-left:-19px;  margin-top: 15px;" id="registration_tod" value="6" onclick="$('#loading').show();">   Working day</label><br>
+        <label class="tod_heatmap_selector" onchange="this.form.submit()";>  
+        <input type="radio" name="ZMU_tod" style="margin-left:14px;" id="registration_tod" value="7" onclick="$('#loading').show();">  Pre-Holiday</label><br>
+        <label class="tod_heatmap_selector" onchange="this.form.submit()";>
+        <input type="radio" name="ZMU_tod"  style="margin-left:-18px;" id="registration_tod" value="8"  onclick="$('#loading').show();">  Holiday</label>
+		 <label class="tod_heatmap_selector" onchange="this.form.submit()";>
+   </form>
+		
+	<div class="break_line_1"></div>
+	
+	
+	
+	<form method="POST" action="/FCD_heatmap_hourrange_selector/">	
+	<span class="label tpl_line">Hour range:</span>
+	<select class="FCD_heatmap_hourrange_selector" name="ZMU_hourrange" id="registrationhourrange" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange="$('#loading').show();">
+			<option value="999">--choose--</option>
+			<option value="0">00:00 ---> 07:00</option>
+			<option value="1">07:00 ---> 10:00</option>
+			<option value="2">10:00 ---> 14:00</option>
+			<option value="3">14:00 ---> 16:00</option>
+			<option value="4">16:00 ---> 20:00</option>
+			<option value="5">20:00 ---> 24:00</option>
+		</select>
+	</form>
+	
+	
+	<br>
+	
+	
+	
+
+<!-- send user coordinates to the Python console-->
+	<form action="/points_interest/" method="POST">
+		  <div>	
+			<input   type='hidden' id='lat' name='lat'  /> <br />
+		  </div>
+		  <div>
+			<input type='hidden' id='lng' name='lng'  /> <br />
+		  </div>
+		  <div class="break_line_1"></div>
+		  <h3 style="font-weight: bold">Find Points of Interest</h3>
+		  <div>
+		   <input type="text" style="margin-left: -1px;" onfocus="this.value=''"  name="tag" value='-- insert dist(m) (>=1000) --'><button type="submit" class="btn btn-default">find</button>
+		    <div class="break_line_1"></div>
+			  <div class="break_line_1"></div>
+		  </div>
+	</form>
+	<br>
+	
+	
+	
+	
+	   <!-- MAKE a REFRESH BUTTON-->
+	<form action="/heatmaps_FCD/" method="POST">
+		<input class="btn_animation btn-lg btn-primary mr-1; color:black; background-color: yellow; margin-left: 2%;" type="submit" value="refresh">
+     </form>
+	 
+	
+	
+	 
+</main>
+
+
+
+
+<nav role='navigation'>
+  <a class="col_home" href="/home_page/">Home</a>
+  <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
+  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
+  <a class="col_impatti" href="/impacts_page/">Impacts</a>
+  <a class="col_best" onclick="$('#loading').show();" href="/best_page/">Best</a>
+</nav>  
+
+
+
+
+
+  <div id="heatmapContainerWrapper">
+      <div id="heatmapContainer">
+
+
+      </div>
+      <div id="heatmapLegend_N_vehicles">
+		<h2 style="font-size: 16px;  font-family: Arial; font-weight: bold;">Number of Trips</h2>
+        <span id="min_vehicles"></span>
+        <span id="max_vehicles"></span>
+        <img id="gradient" src="" style="width:100%" />
+      </div>
+    </div>
+	
+	
+	</div>
+      <div id="heatmapLegend_stoptime">
+		 <h2 style="font-size: 16px;  font-family: Arial; font-weight: bold;">Stop Time (min)</h2>
+        <span id="min_stop_time"></span>
+        <span id="max_stop_time"></span>
+        <img id="gradient_stoptime" src="" style="width:100%" />
+      </div>
+    </div>
+	
+	
+	 </div>
+      <div id="heatmapLegend_tripdistance">
+		<h2 style="font-size: 16px;  font-family: Arial; font-weight: bold;">Trip Distance (km)</h2>
+        <span id="min_trip_distance"></span>
+        <span id="max_trip_distance"></span>
+        <img id="gradient_tripdistance" src="" style="width:100%" />
+      </div>
+    </div>
+	
+	
+	
+	 </div>
+      <div id="heatmapLegend_triptime">
+		<h2 style="font-size: 16px;  font-family: Arial; font-weight: bold;">Trip Time (min)</h2>
+        <span id="min_trip_time"></span>
+        <span id="max_trip_time"></span>
+        <img id="gradient_triptime" src="" style="width:100%" />
+      </div>
+    </div>
+		  
+
+
+
+ 
+	
+<!--we are inside the area of the map-->
+<div id="map">  </div>
+
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/src/leaflet.draw.css"/>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin = "anonymous" referrerpolicy = "no-referrer"> </script>
+
+  
+<!-- Load data .geojson -->
+<!-- ZMU zones with population data -->
+<script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script>
+<!-- aggregation by zmu -->
+<!-- aggregation by zmu -->
+<script src="{{ url_for('static', filename='aggregated_zmu_filtered.geojson') }}" /></script>
+
+<!-- POINTS of INTERESTS (PARKINGs) -->
+<script src="{{ url_for('static', filename='POIS_parking.geojson') }}" /></script>
+<!-- POINTS of INTERESTS (all AMENITIES) -->
+<script src="{{ url_for('static', filename='layer_POIS_amenities.geojson') }}" /></script>
+<!-- POINTS of INTERESTS (all BUILDINGS) -->
+<script src="{{ url_for('static', filename='layer_POIS_residential.geojson') }}" /></script>
+<!-- ALL POINTS of INTERESTS (all BUILDINGS and AMENITIES) -->
+<script src="{{ url_for('static', filename='zmu_POIS_ROMA_2011.geojson') }}" /></script>
+
+ <script src="{{ url_for('static', filename='leaflet.motion.min.js') }}" /></script>  
+ 
+ 
+ <!-- load custom polygons and border of custom polygon-->
+<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
+<script src="{{ url_for('static', filename='chargers_OCM.geojson') }}" /></script>
+
+
+<script src="{{ url_for('static', filename='heatmap.js') }}" /></script>
+<script src="{{ url_for('static', filename='heatmap_triptime.js') }}" /></script>
+<script src="{{ url_for('static', filename='heatmap_stoptime.js') }}" /></script>
+<script src="{{ url_for('static', filename='heatmap_tripdistance.js') }}" /></script>
+
+<script src="{{ url_for('static', filename='leaflet-heatmap.js') }}" /></script>
+<script src="{{ url_for('static', filename='leaflet-heatmap_triptime.js') }}" /></script>
+<script src="{{ url_for('static', filename='leaflet-heatmap_stoptime.js') }}" /></script>
+<script src="{{ url_for('static', filename='leaflet-heatmap_tripdistance.js') }}" /></script>
+
+<
+
+  <script>
+
+     // ----------------------------------------------------
+     
+	
+     // Hack to autoset the iframe height.
+      window.addEventListener("load", function() {
+        window.setTimeout(function() {
+          setFrameHeight(document.documentElement.clientHeight)
+        }, 0);
+      });
+	  
+
+	  
+
+	//  date range picker //
+	$(function() {
+	  $('input[name="daterange"]').daterangepicker({
+		opens: 'left'
+	  }, function(start, end, label) {
+		  //alert("A new date range was chosen: " + start.format('MM-DD-YYYY') + ' to ' + end.format('MM-DD-YYYY'));
+		  var daterange_ZMU = start.format('MM-DD-YYYY');
+		  // alert(daterange_ZMU);
+	  });
+	});
+	
+	
+
+    var form = document.getElementById("mainform")
+      var input = document.getElementById("daterange")
+      form.addEventListener('submit', function(e){
+        input.value = daterange_ZMU
+        form.submit()
+      })
+
+
+
+	var input = document.getElementById('daterange');
+	var ___from___to___ = "{{ session['input_data_range']}}";
+	input.value = ___from___to___;
+
+	var myFunction_daterange = function (e) {
+	  console.log(e.target.value);
+	}
+
+
+
+	
+	var zmu_day_start = "{{ session['ZMU_day_start']}}"
+	// alert(zmu_day_start);
+		 
+	var zmu_day_start = zmu_day_start.slice(0, 10);
+	// alert(zmu_day_start);
+		 
+	document.addEventListener("DOMContentLoaded", function(){
+    // var data_selezionata = "{{ session['ZMU_day_start'] }}";
+	var data_selezionata_start = zmu_day_start;
+	//alert(data_selezionata);
+	document.getElementById('registrationday_start').value = data_selezionata_start;  
+	});
+	
+	
+	
+	
+	var zmu_day_end = "{{ session['ZMU_day_end']}}"
+	//alert(zmu_day_end);
+		 
+	var zmu_day_end = zmu_day_end.slice(0, 10);
+	// alert(zmu_day_end);
+		 
+	document.addEventListener("DOMContentLoaded", function(){
+    // var data_selezionata_end = "{{ session['ZMU_day_end'] }}";
+	var data_selezionata_end = zmu_day_end;
+	// alert(data_selezionata);
+	document.getElementById('registrationday_end').value = data_selezionata_end;  
+	});
+	
+	
+
+	
+    var zmu_hourrange = "{{ session['ZMU_hourrange']}}"
+	// alert(zmu_hourrange);
+    document.addEventListener("DOMContentLoaded", function(){
+	var range_ora_selezionata = zmu_hourrange;
+	// alert(range_ora_selezionata);
+	document.getElementById('registrationhourrange').value = range_ora_selezionata;  
+	});
+	
+
+	
+	
+	var zmu_tod = "{{ session['ZMU_tod']}}"
+    document.addEventListener("DOMContentLoaded", function(){
+	var tod_selezionata =  zmu_tod;
+	document.getElementById('registration_tod').value = tod_selezionata;  
+	// alert(tod_selezionata);
+	});
+	
+	
+	/*
+	$('form select').on('change', function(){
+		$(this).closest('form').submit()
+		$('#loading').show();
+	});*/
+
+
+
+	var number = "{{ session['ZMU_tod']}}";
+	 $('input[name=ZMU_tod][value=' + number + ']').prop('checked',true);
+	
+ 
+
+
+	
+	
+	var gridded_destination_data = JSON.parse(JSON.stringify({{session_n_vehicles_destination | tojson | safe}}));
+	var gridded_destination_data = eval(gridded_destination_data );
+	
+
+	var gridded_destination_triptime = JSON.parse(JSON.stringify({{session_triptime_destination | tojson | safe}}));
+	var gridded_destination_triptime = eval(gridded_destination_triptime );
+
+	
+	var gridded_destination_stoptime = JSON.parse(JSON.stringify({{session_stoptime_destination | tojson | safe}}));
+	var gridded_destination_stoptime = eval(gridded_destination_stoptime );
+	
+	var gridded_destination_tripdistance = JSON.parse(JSON.stringify({{session_tripdistance_destination | tojson | safe}}));
+	var gridded_destination_tripdistance = eval(gridded_destination_tripdistance );
+	
+	
+	
+	  window.onload = function() {
+	// helper function
+	function $(id) {
+	  return document.getElementById(id);
+	};
+		
+	
+	
+	var min_n_vehicles = "{{ session['min_n_vehicles']}}";
+	var max_n_vehicles = "{{ session['max_n_vehicles']}}";
+	
+	var min_triptime  = "{{ session['min_triptime']}}";
+	var max_triptime  = "{{ session['max_triptime']}}";
+	
+	var min_stoptime = "{{ session['min_stoptime']}}";
+	var max_stoptime = "{{ session['max_stoptime']}}";
+	
+	var min_tripdistance  = "{{ session['min_tripdistance']}}";
+	var max_tripdistance  = "{{ session['max_tripdistance']}}";
+	
+	
+	  
+	  
+///////////////////////////---------------------------------------------------------------------/////////////////////////////////////////////
+	  ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+	   ///////////////////////////---------------------------------------------------------------------///////////////////////////////////////////
+	    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+		///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+        ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+      ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+	 
+	  
+	// ADD Leaflet map
+	
+		
+		const osm  = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		})
+         
+	    var carto = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+         });
+		 
+	
+	
+	// control that shows state info on hover
+	const info = L.control(); 
+	
+	info.onAdd = function (map) {
+	this._div = L.DomUtil.create('div', 'info');
+	this.update();
+	return this._div;
+	};
+		
+	
+   
+	function getColor_hex_traffic(d) {
+		return d >= 40 ? '#0c2c84' :
+			d > 30  ? '#225ea8' :
+			d > 15  ? '#1d91c0' :
+			d > 12.5  ? '#41b6c4' :
+			d > 10  ? '#7fcdbb' :
+			d > 7.5  ? '#c7e9b4' :
+			d > 5  ? '#edf8b1' :
+			d >= 0   ? '#fdfdbf' : '#fdfdbf';
+			} 
+			
+	
+			
+		
+			
+			
+	function getColor_zmu_origin_destinations(d) {
+		return d >= 2000 ? '#071a4f' :
+		    d > 1000  ? '#0c2c84' :
+		    d > 500  ? '#225ea8' : 
+			d > 300  ? '#546ba8' :
+			d > 75  ? '#1d91c0' :
+			d > 30  ? '#41b6c4' :
+			d > 20  ? '#7fcdbb' :
+			d > 10  ? '#c7e9b4' :
+			d > 3  ? '#d5df9f' :
+			d >= 0.5   ? '#fdfdbf' : '#fdfdbf';
+			}    
+			
+			
+	function getColor_census(d) {
+		return d > 20000 ? '#800026' :
+			d > 10000  ? '#97001e' :
+			d > 5000  ? '#BD0026' :
+			d > 3000  ? '#E31A1C' :
+			d > 2000  ? '#FC4E2A' :
+			d > 1000   ? '#FD8D3C' :
+			d > 300   ? '#FEB24C' :
+			d > 50   ? '#FED976' : '#FFEDA0';
+				}
+	
+	
+	function getColor_legend(d) {
+		return d >= 15000 ? '#2d2d4c' :
+		    d > 6000 ? '#3d3d66' :	
+		    d > 3500 ? '#4c4c7f' :
+			d > 2500 ? '#5b5b99' :
+			d > 1500 ? '#6b6bb2' :				
+			d > 1300 ? '#7a7acc' :	
+		    d > 1000 ? '#8989e5' :	
+		    d > 800 ? '#9999ff' :			
+		    d > 600 ? '#a3a3ff' :	
+            d > 500 ? '#adadff' :
+			d > 300 ? '#b7b7ff' :
+			d > 250 ? '#c1c1ff' :
+		    d > 200 ? '#ccccff' :
+			d > 100 ? '#d6d6ff' :
+			d > 50   ? '#e0e0ff' :
+			d > 20   ? '#eaeaff' :
+			d >= 0   ? '#f4f4ff' : '#ffffff';
+			}
+	
+	
+	    /* LEGEND USED FOR THE HEXAGONAL TESSELLATION */
+		var legend = L.control({position: 'bottomright'});
+		
+            legend.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 20",
+								"from 20 to 50",
+								"from 50 to 100",
+								"from 100 to 200",
+								"from 200 to 250",
+								"from 250 to 300",
+								"from 300 to 500",
+								"from 500 to 600",
+								"from 600 to 800",
+								"from 800 to 1000",
+								"from 1000 to 1300",
+								"from 1300 to 1500",
+								"from 1500 to 2500",
+								"from 2500 to 3500",
+								"from 3500 to 6000",
+								"from 6000 to 15000",
+								" > 15000"];
+				 const grades = [0, 20, 50, 100, 200 ,250 , 300, 500, 600, 800, 1000, 1300, 1500, 2500, 3500, 6000, 15000];
+
+                div.innerHTML='<div><b>Population(hex)</b></div';
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_legend(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+			
+			
+			//////* LEGEND USED FOR CENSUARY DATA *//////////
+			
+			/*
+			var legend_censuary = L.control({position: 'bottomright'});
+		
+            legend_censuary.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 50",
+								"from 50 to 300",
+								"from 300 to 1000",
+								"from 1000 to 2000",
+								"from 2000 to 3000",
+								"from 3000 to 5000",
+								"from 5000 to 10000",
+								"from 10000 to 20000",
+								" > 20000"];
+				 const grades = [0, 50, 300, 1000, 2000, 3000, 5000, 10000, 20000];
+
+                div.innerHTML='<div><b>Population(zmu)</b></div';
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_census(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+			*/
+			
+			
+			
+		//////////* LEGEND USED FOR ZMU DATA  (number of vehicles at destination per 1000 population)*////////////  
+			var legend_ZMU = L.control({position: 'bottomright'});
+		
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 0.5",
+								"from 0.5 to 3",
+								"from 3 to 10",
+								"from 10 to 20",
+								"from 20 to 30",
+								"from 30 to 75",
+								"from 75 to 300",
+								"from 300 to 500",
+								"from 500 to 1000",
+								"from 1000 to 2000",
+								" > 2000"];
+				 const grades = [0, 0.5, 3, 10, 20, 30, 75, 300, 500, 1000, 2000];
+
+                div.innerHTML='<div><b>N vehicles per 1000 habit.</b></div';
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+            
+            
+		
+		
+			
+		
+	
+
+	info.update = function (props) {
+		const contents = props ? `<b>${props.POP_TOT_ZMU}</b> people` : 'Hover over a traffic zone';
+		this._div.innerHTML = `<h4>Total Population Number</h4>${contents}`;
+	};
+	
+	
+	
+		const selectedStyle = {
+		  color: '#000000',
+		  weight: 0.1,
+		  opacity: 0.1,
+		}
+			
+			
+		const selectedStyle_highlight = {
+		  color: 'black',
+		  weight: 3,
+		  opacity: 0.9,
+		}
+		
+		
+	
+		
+		const selectedStyle_mouseout = {
+		  color: 'black',
+		  weight: 0.5,
+		  opacity: 0.3,
+		}
+		
+	
+	
+		const selectedStyle_mouseover = {
+		  weight: 2,
+		  opacity: 1,
+		  color: 'black'
+		}
+				
+				
+		
+	// get color depending on population number value
+
+		
+			
+			
+		
+		
+		function style_colors_zmu(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+				fillColor: getColor_zmu_origin_destinations(feature.properties.counts)
+				// fillColor: feature.properties.color_hex
+			};
+		}
+		
+		
+		function style_colors_POIS_ZMU(feature) {
+			return {
+				weight: 3,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.1,
+				fillColor: 'blue'
+			};
+		}
+		
+		
+		
+		
+		
+		function style_colors_POIS(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'blue'
+			};
+		}
+		
+		
+		
+		function style_colors_POIS_amenities(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'red'
+			};
+		}
+		
+		
+		function style_colors_POIS_residential(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'yellow'
+			};
+		}
+		
+		
+				
+		
+	    // used to color ZMU zones with POPULATION data 2011
+		function style_pop(feature) {
+			return {
+				weight: 0.8,
+				opacity: 1,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.5,
+				fillColor: getColor_census(feature.properties.POP_TOT_ZMU)
+			};
+		}
+		
+		
+		// used to color ZMU zones with RESIDENCE data 2011
+		function style_homes(feature) {
+			return {
+				weight: 0.8,
+				opacity: 1,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.5,
+				fillColor: getColor_census(feature.properties.RES_TOT_ZMU)
+			};
+		}
+		
+		
+		
+		
+	
+	
+
+		function highlightFeature(e) {
+			const layer = e.target;
+			layer.setStyle({
+				weight: 3,
+				color: '#666',
+				dashArray: '',
+				fillOpacity: 0.9
+			});
+
+			layer.bringToFront();
+
+			info.update(layer.feature.properties);
+		}
+		
+		
+         
+		const censuary_default = L.geoJson(zmu_counts, {
+				style: style_pop,
+				onEachFeature
+			});
+			
+		
+		function resetHighlight(e) {
+			censuary_default.resetStyle(e.target);
+			info.update();
+		}
+
+		function zoomToFeature(e) {
+			map.fitBounds(e.target.getBounds());
+		}
+
+		function onEachFeature(feature, layer) {
+			layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				//click: zoomToFeature
+			});
+		}
+		
+		
+		
+		
+	 // alert("...I AM HERE...");
+		
+		
+		
+	    /*------------DEFAULT LAYER -----------------*/
+	    const censuary_Layer = L.layerGroup();
+		censuary_Layer.addLayer(censuary_default);		
+	 
+
+	
+			
+		
+		  
+
+         /////////----------- Points of Interest (POIS) in ZMUs -------/////////////////////////////////////////	
+		 
+			 var POIS_ZMU = L.geoJSON(zmu_POIS_counts, { style: style_colors_POIS_ZMU, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight);
+				  });
+				  
+					var popupText = '';
+					popupText += (feature.properties.apartments) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Apartments: ' + feature.properties.apartments : '';
+					popupText += (feature.properties.church) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Church: ' + feature.properties.church : ''
+					popupText += (feature.properties.residential) ?  '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Residential: ' + feature.properties.residential : '';
+					popupText += (feature.properties.hotel) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hotel: ' + feature.properties.hotel : ''
+					popupText += (feature.properties.office) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Office: ' + feature.properties.office : ''
+					popupText += (feature.properties.basilica) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hotel: ' + feature.properties.basilica : ''
+					popupText += (feature.properties.house) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">House: ' + feature.properties.house : ''
+					popupText += (feature.properties.public) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Public: ' + feature.properties.public : ''
+					popupText += (feature.properties.market) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Market: ' + feature.properties.market : ''
+					popupText += (feature.properties.detached) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Detached: ' + feature.properties.detached : ''
+					popupText += (feature.properties.synagogue) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Synagogue: ' + feature.properties.synagogue : ''
+					popupText += (feature.properties.roof) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Roof: ' + feature.properties.roof : ''
+					popupText += (feature.properties.supermarket) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Supermarket: ' + feature.properties.supermarket : '';
+					popupText += (feature.properties.retail) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Retail: ' + feature.properties.retail : ''
+					popupText += (feature.properties.congress_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Congress centre: ' + feature.properties.congress_centre : ''
+					popupText += (feature.properties.government) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Government: ' + feature.properties.government : ''
+					popupText += (feature.properties.commercial) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Commercial: ' + feature.properties.commercial : ''
+					popupText += (feature.properties.semidetached_house) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Semidetached house: ' + feature.properties.semidetached_house : ''
+					
+					popupText += (feature.properties.arts_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Arts centre: ' + feature.properties.arts_centre : ''
+					popupText += (feature.properties.bus_station) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bus station: ' + feature.properties.bus_station : ''
+					popupText += (feature.properties.cafe) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Cafe: ' + feature.properties.cafe : ''
+					popupText += (feature.properties.fast_food) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Fast food: ' + feature.properties.fast_food : ''
+					popupText += (feature.properties.pharmacy) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Pharmacy: ' + feature.properties.pharmacy : ''
+					popupText += (feature.properties.parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Parking: ' + feature.properties.parking : ''
+					popupText += (feature.properties.place_of_worship) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Place of worship: ' + feature.properties.place_of_worship : ''
+					popupText += (feature.properties.restaurant) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Restaurant: ' + feature.properties.restaurant : ''
+					popupText += (feature.properties.bar) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bar: ' + feature.properties.bar : ''
+					popupText += (feature.properties.bicycle_parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bicycle parking: ' + feature.properties.bicycle_parking : ''
+					popupText += (feature.properties.charging_station) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Charging station: ' + feature.properties.charging_station : ''
+					popupText += (feature.properties.theatre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Theatre: ' + feature.properties.theatre : ''
+					popupText += (feature.properties.cinema) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Cinema: ' + feature.properties.cinema : ''
+					popupText += (feature.properties.library) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Library: ' + feature.properties.library : ''
+					popupText += (feature.properties.marketplace) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Marketplace: ' + feature.properties.marketplace : ''
+					popupText += (feature.properties.motorcycle_parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Motorcycle parking: ' + feature.properties.motorcycle_parking : ''
+					popupText += (feature.properties.parking_entrance) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Parking entrance: ' + feature.properties.parking_entrance : ''
+					popupText += (feature.properties.police) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Police: ' + feature.properties.police : ''
+					popupText += (feature.properties.public_building) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Public building: ' + feature.properties.public_building : ''
+					popupText += (feature.properties.school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">School: ' + feature.properties.school : ''
+					popupText += (feature.properties.social_facility) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Social facility: ' + feature.properties.social_facility : ''
+					popupText += (feature.properties.car_sharing) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Car sharing: ' + feature.properties.car_sharing : ''
+					popupText += (feature.properties.pub) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Pub: ' + feature.properties.pub : ''
+					popupText += (feature.properties.taxi) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Taxi: ' + feature.properties.taxi : ''
+					popupText += (feature.properties.university) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">University: ' + feature.properties.university : ''
+					popupText += (feature.properties.college) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">College: ' + feature.properties.college : ''
+					popupText += (feature.properties.community_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Community centre: ' + feature.properties.community_centre : ''
+					popupText += (feature.properties.doctors) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Doctors: ' + feature.properties.doctors : ''
+					popupText += (feature.properties.townhall) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Townhall: ' + feature.properties.townhall : ''
+					popupText += (feature.properties.parking_space) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">parking space: ' + feature.properties.parking_space : ''		
+					popupText += (feature.properties.hospital) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hospital: ' + feature.properties.hospital : '';
+					popupText += (feature.properties.music_school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Music school: ' + feature.properties.music_school : '';
+					popupText += (feature.properties.fuel) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Fuel: ' + feature.properties.fuel : '';
+					popupText += (feature.properties.car_rental) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Car rental: ' + feature.properties.car_rental : '';
+					popupText += (feature.properties.dentist) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Dentist: ' + feature.properties.dentist : '';
+					popupText += (feature.properties.clinic) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Clinic: ' + feature.properties.clinic : '';
+					popupText += (feature.properties.social_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Social centre: ' + feature.properties.social_centre : '';
+					popupText += (feature.properties.events_venue) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Events venue: ' + feature.properties.events_venue : '';
+					popupText += (feature.properties.research_institute) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Research institute: ' + feature.properties.research_institute : '';
+					popupText += (feature.properties.ferry_terminal) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Ferry terminal: ' + feature.properties.ferry_terminal : '';
+					popupText += (feature.properties.language_school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Language school: ' + feature.properties.language_school : '';
+					popupText += (feature.properties.kindergarten) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Kindergarten: ' + feature.properties.kindergarten : '';
+					popupText += (feature.properties.conference_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Conference centre: ' + feature.properties.conference_centre : '';
+					popupText += (feature.properties.courthouse) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Courthouse: ' + feature.properties.courthouse : '';
+					popupText += (feature.properties.tourism) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Tourism: ' + feature.properties.tourism : '';
+					popupText += (feature.properties.weighbridge) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Weighbridge: ' + feature.properties.weighbridge : '';
+					popupText += (feature.properties.childcare) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Childcare: ' + feature.properties.childcare : '';
+					popupText += (feature.properties.nursing_home) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Nursing home: ' + feature.properties.nursing_home : '';
+					popupText += (feature.properties.coworking_space) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Coworking space: ' + feature.properties.coworking_space : '';
+					popupText += (feature.properties.casino) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Casino: ' + feature.properties.casino : '';
+					popupText += (feature.properties.community_centres) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Community centres: ' + feature.properties.community_centres : '';
+										
+					layer.bindTooltip(popupText);
+					
+					
+					
+			layer.on('mouseout', function (e) {
+						layer.setStyle(selectedStyle_mouseout); 
+					});	
+				}
+				});
+				
+		const POIS_Layer_zmu = L.layerGroup();
+		POIS_Layer_zmu.addLayer(POIS_ZMU);
+		
+
+		
+		
+		
+		
+		/////////----- ADD POINTS of INTERESTS (PARKINGS) nearby chosen location -----------////////////////////////
+		var POIS_PARKING = L.geoJSON(POIS_parking, { style: style_colors_POIS, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>amenity: '+feature.properties.amenity+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer = L.layerGroup();
+		POIS_Layer.addLayer(POIS_PARKING);
+		
+		
+		
+	    /////////----- ADD POINTS of INTERESTS (all AMENITIES) nearby chosen location -----------////////////////////////
+		var POIS_AMENITIES = L.geoJSON(POIS_amenities, { style: style_colors_POIS_amenities, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>amenity: '+feature.properties.amenity+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS_amenities); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer_amenities = L.layerGroup();
+		POIS_Layer_amenities.addLayer(POIS_AMENITIES);
+		
+		
+		
+		/////////----- ADD POINTS of INTERESTS (all residential) nearby chosen location -----------////////////////////////
+		var POIS_RESIDENTIALS = L.geoJSON(POIS_residential, { style: style_colors_POIS_residential, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>building: '+feature.properties.building+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS_residential); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer_residential = L.layerGroup();
+		POIS_Layer_residential.addLayer(POIS_RESIDENTIALS);
+		
+		
+		
+		
+		
+		
+		
+
+	 
+		//////////////////////////-------------------------------////////////////////////////////////////
+	   //////////////////////////////////////////////////////////////////////////////////////////////////
+	  //////////////////////////////////////////////////////////////////////////////////////////////////
+	 //////// ----- ADD HEATMAP data //////////////////////////////////////////////////////////////////
+	 
+	       
+		var baseLayer = L.tileLayer(
+          'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{
+            attribution:'&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            maxZoom: 18
+          }
+        );  
+		
+		
+		
+       ////---------------------------------------------////////////////////////////////
+	  //--------------------- NUMBER OF VEHICLES--------////////////////////////////////
+	  
+	
+	   var N_destination_vehicles = {
+		  data: gridded_destination_data
+        }; 
+		
+		
+		///// --------------------------------------------------------------////////
+		///// -------------------- legend code ---------------------------- ////////
+        // we want to display the gradient, so we have to draw it
+		
+		
+        var legendCanvas_vehicles = document.createElement('canvas');
+        legendCanvas_vehicles.width = 100;
+        legendCanvas_vehicles.height = 10;
+
+        var legendCtx_vehicles = legendCanvas_vehicles.getContext('2d');
+        var gradientCfg_vehicles = {};
+
+        function updateLegend_vehicles(data) {
+          // the onExtremaChange callback gives us min, max, and the gradientConfig
+          // so we can update the legend
+          $('min_vehicles').innerHTML = data.min;
+          $('max_vehicles').innerHTML = data.max;
+          // regenerate gradient image
+          if (data.gradient != gradientCfg_vehicles) {
+            gradientCfg_vehicles = data.gradient;
+            var gradient = legendCtx_vehicles.createLinearGradient(0, 0, 100, 1);
+            for (var key in gradientCfg_vehicles) {
+              gradient.addColorStop(key, gradientCfg_vehicles[key]);
+            }
+
+            legendCtx_vehicles.fillStyle = gradient;
+            legendCtx_vehicles.fillRect(0, 0, 100, 10);
+            $('gradient').src = legendCanvas_vehicles.toDataURL();
+          }
+        };
+		
+		 // create a heatmap instance This is for Number of Vehicles
+        var heatmap_vehicles = h337.create({
+          container: document.getElementById('heatmapContainer'),
+          maxOpacity: .5,
+          radius: 10,
+          blur: .75,
+          // update the legend whenever there's an extrema change
+          onExtremaChange: function onExtremaChange(data) {
+            updateLegend_vehicles(data);
+          }
+        }); 
+		
+		
+		
+		
+		///////////--------------------------------------------/////////////////////////////
+		///////////--------------------------------------------/////////////////////////////
+		
+	   ////---------------------------------------------////////////////////////////////
+	  //////--------------------- TRIP TIME-------------////////////////////////////////
+		
+		var triptime = {
+		  data: gridded_destination_triptime
+        }; 
+		
+		
+		var legendCanvas_triptime = document.createElement('canvas');
+        legendCanvas_triptime.width = 100;
+        legendCanvas_triptime.height = 10;
+
+        var legendCtx_triptime = legendCanvas_triptime.getContext('2d');
+        var gradientCfg_triptime = {};
+		
+		
+		function updateLegend_triptime(data) {
+          // the onExtremaChange callback gives us min, max, and the gradientConfig
+          // so we can update the legend
+          $('min_trip_time').innerHTML = data.min;
+          $('max_trip_time').innerHTML = data.max;
+          // regenerate gradient image
+          if (data.gradient != gradientCfg_triptime) {
+            gradientCfg_triptime = data.gradient;
+            var gradient = legendCtx_triptime.createLinearGradient(0, 0, 100, 1);
+            for (var key in gradientCfg_triptime) {
+              gradient.addColorStop(key, gradientCfg_triptime[key]);
+            }
+
+            legendCtx_triptime.fillStyle = gradient;
+            legendCtx_triptime.fillRect(0, 0, 100, 10);
+            $('gradient_triptime').src = legendCanvas_triptime.toDataURL();
+          }
+        };
+		
+		
+		 var heatmap_triptime = h337_triptime.create({
+          container: document.getElementById('heatmapContainer'),
+          maxOpacity: .5,
+          radius: 10,
+          blur: .75,
+          // update the legend whenever there's an extrema change
+          onExtremaChange: function onExtremaChange(data) {
+            updateLegend_triptime(data);
+          }
+        }); 
+		
+		
+		
+	
+		///////////--------------------------------------------/////////////////////////////
+		///////////--------------------------------------------/////////////////////////////
+		
+	   ////---------------------------------------------////////////////////////////////
+	  //////--------------------- STOP TIME-------------////////////////////////////////
+		
+		var stoptime = {
+		  data: gridded_destination_stoptime
+        }; 
+		
+			
+		
+		var legendCanvas_stoptime = document.createElement('canvas');
+        legendCanvas_stoptime.width = 100;
+        legendCanvas_stoptime.height = 10;
+
+
+        var legendCtx_stoptime = legendCanvas_stoptime.getContext('2d');
+        var gradientCfg_stoptime = {};
+		
+		
+		function updateLegend_stoptime(data) {
+          // the onExtremaChange callback gives us min, max, and the gradientConfig
+          // so we can update the legend
+          $('min_stop_time').innerHTML = data.min;
+          $('max_stop_time').innerHTML = data.max;
+          // regenerate gradient image
+          if (data.gradient != gradientCfg_stoptime) {
+            gradientCfg_stoptime = data.gradient;
+            var gradient = legendCtx_stoptime.createLinearGradient(0, 0, 100, 1);
+            for (var key in gradientCfg_stoptime) {
+              gradient.addColorStop(key, gradientCfg_stoptime[key]);
+            }
+
+            legendCtx_stoptime.fillStyle = gradient;
+            legendCtx_stoptime.fillRect(0, 0, 100, 10);
+            $('gradient_stoptime').src = legendCanvas_stoptime.toDataURL();
+          }
+        };
+		
+		
+		
+		 var heatmap_stoptime = h337_stoptime.create({
+          container: document.getElementById('heatmapContainer'),
+          maxOpacity: .5,
+          radius: 10,
+          blur: .75,
+          // update the legend whenever there's an extrema change
+          onExtremaChange: function onExtremaChange(data) {
+            updateLegend_stoptime(data);
+          }
+        }); 
+		
+		
+		
+		///////////--------------------------------------------/////////////////////////////
+		///////////--------------------------------------------/////////////////////////////
+		
+	   ////---------------------------------------------////////////////////////////////
+	  //////--------------------- TRIP DISTANCE-------------////////////////////////////
+		
+		var tripdistance = {
+		  data: gridded_destination_tripdistance
+        }; 
+		
+			
+	
+		var legendCanvas_tripdistance = document.createElement('canvas');
+        legendCanvas_tripdistance.width = 100;
+        legendCanvas_tripdistance.height = 10;
+
+	
+        var legendCtx_tripdistance = legendCanvas_tripdistance.getContext('2d');
+        var gradientCfg_tripdistance = {};
+		
+	
+		function updateLegend_tripdistance(data) {
+          // the onExtremaChange callback gives us min, max, and the gradientConfig
+          // so we can update the legend
+          $('min_trip_distance').innerHTML = data.min;
+          $('max_trip_distance').innerHTML = data.max;
+          // regenerate gradient image
+          if (data.gradient != gradientCfg_tripdistance) {
+            gradientCfg_tripdistance = data.gradient;
+            var gradient = legendCtx_tripdistance.createLinearGradient(0, 0, 100, 1);
+            for (var key in gradientCfg_tripdistance) {
+              gradient.addColorStop(key, gradientCfg_tripdistance[key]);
+            }
+
+            legendCtx_tripdistance.fillStyle = gradient;
+            legendCtx_tripdistance.fillRect(0, 0, 100, 10);
+            $('gradient_tripdistance').src = legendCanvas_tripdistance.toDataURL();
+          }
+        };
+		
+		
+		
+		 var heatmap_tripdistance = h337_tripdistance.create({
+          container: document.getElementById('heatmapContainer'),
+          maxOpacity: .5,
+          radius: 10,
+          blur: .75,
+          // update the legend whenever there's an extrema change
+          onExtremaChange: function onExtremaChange(data) {
+            updateLegend_tripdistance(data);
+          }
+        }); 
+     
+
+	  //////////-------------------------------------------------/////////////////////	
+	  //////////-------------------------------------------------/////////////////////
+		
+		
+	
+		
+
+        var cfg_n_vehicles = {
+          // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+          "radius": 0.02,
+          "maxOpacity": .8, 
+          // scales the radius based on map zoom
+          "scaleRadius": true, 
+          // if set to false the heatmap uses the global maximum for colorization
+          // if activated: uses the data maximum within the current map boundaries 
+          //   (there will always be a red spot with useLocalExtremas true)
+          "useLocalExtrema": true,
+          // which field name in your data represents the latitude - default "lat"
+          latField: 'lat',
+          // which field name in your data represents the longitude - default "lng"
+          lngField: 'lng',
+          // which field name in your data represents the data value - default "value"
+          valueField: 'count'
+        };
+		
+		
+		var cfg_triptime = {
+          // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+          "radius": 0.02,
+          "maxOpacity": .8, 
+          // scales the radius based on map zoom
+          "scaleRadius": true, 
+          // if set to false the heatmap uses the global maximum for colorization
+          // if activated: uses the data maximum within the current map boundaries 
+          //   (there will always be a red spot with useLocalExtremas true)
+          "useLocalExtrema": true,
+          // which field name in your data represents the latitude - default "lat"
+          latField: 'lat',
+          // which field name in your data represents the longitude - default "lng"
+          lngField: 'lng',
+          // which field name in your data represents the data value - default "value"
+          valueField: 'triptime'
+        };
+		
+		var cfg_stoptime = {
+          // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+          "radius": 0.012,
+          "maxOpacity": .8, 
+          // scales the radius based on map zoom
+          "scaleRadius": true, 
+          // if set to false the heatmap uses the global maximum for colorization
+          // if activated: uses the data maximum within the current map boundaries 
+          //   (there will always be a red spot with useLocalExtremas true)
+          "useLocalExtrema": true,
+          // which field name in your data represents the latitude - default "lat"
+          latField: 'lat',
+          // which field name in your data represents the longitude - default "lng"
+          lngField: 'lng',
+          // which field name in your data represents the data value - default "value"
+          valueField: 'stoptime'
+        };
+		
+		
+	    var cfg_tripdistance = {
+          // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+          "radius": 0.02,
+          "maxOpacity": .8, 
+          // scales the radius based on map zoom
+          "scaleRadius": true, 
+          // if set to false the heatmap uses the global maximum for colorization
+          // if activated: uses the data maximum within the current map boundaries 
+          //   (there will always be a red spot with useLocalExtremas true)
+          "useLocalExtrema": true,
+          // which field name in your data represents the latitude - default "lat"
+          latField: 'lat',
+          // which field name in your data represents the longitude - default "lng"
+          lngField: 'lng',
+          // which field name in your data represents the data value - default "value"
+          valueField: 'tripdistance'
+        };
+
+
+        var heatmapLayer_n_vehicles = new HeatmapOverlay(cfg_n_vehicles);
+		var heatmapLayer_triptime = new HeatmapOverlay_triptime(cfg_triptime);
+		var heatmapLayer_stoptime = new HeatmapOverlay_stoptime(cfg_stoptime);
+		var heatmapLayer_tripdistance = new HeatmapOverlay_tripdistance(cfg_tripdistance);
+
+       
+	   
+       //////------------ to be used for the legend  of Number of Vehicles----------////////////////////
+		var width = 50
+		var height = 50
+		var max_vehicles = max_n_vehicles;
+		var min_vehicles = min_n_vehicles;
+		
+			
+	  heatmap_vehicles.setData({
+		min: min_vehicles,
+		max: max_vehicles,
+		data: gridded_destination_data
+	  });  
+	  ////////////---------------------------------------------------------------- ////////////////////
+	  
+	  
+	  //////------------ to be used for legend of trip time -----------------------------//////////////
+		var width = 50
+		var height = 50
+		var max_trip_time = max_triptime;
+		var min_trip_time = min_triptime;
+		
+			
+	  heatmap_triptime.setData({
+		min: min_trip_time,
+		max: max_trip_time,
+		data: gridded_destination_triptime
+	  });  
+	 ////////////---------------------------------------------------------------- ////////////////////
+	 
+	 
+	   //////------------ to be used for legend of stop time -----------------------------//////////////
+		var width = 50
+		var height = 50
+		var max_stop_time = max_stoptime;
+		var min_stop_time = min_stoptime;
+		
+			
+	  heatmap_stoptime.setData({
+		min: min_stop_time,
+		max: max_stop_time,
+		data: gridded_destination_stoptime
+	  });  
+	 ////////////---------------------------------------------------------------- ////////////////////
+	 
+	 
+	 //////------------ to be used for legend of trip distance --------------------------//////////////
+		var width = 50
+		var height = 50
+		var max_trip_distance = max_tripdistance;
+		var min_trip_distance = min_tripdistance;
+		
+			
+	  heatmap_tripdistance.setData({
+		min: min_trip_distance,
+		max: max_trip_distance,
+		data: gridded_destination_tripdistance
+	  });  
+	 ////////////---------------------------------------------------------------- ////////////////////
+	 
+	 
+	  
+     
+
+
+
+	
+		
+
+		
+		// -------->show TIMESERIES of mean "Number of Vehicles", "triptime", "tripdistance" and "stoptime" @ DESTINATION zone in Plotly within the tooltip...---------------------/////////////////////
+		const time_series_counts = '<iframe src="{{ url_for('figure_plotly1') }}" width="325" height="225"></iframe>'
+		const time_series_tripdistance = '<iframe src="{{ url_for('figure_plotly2') }}" width="325" height="225"></iframe>'
+		const time_series_triptime = '<iframe src="{{ url_for('figure_plotly3') }}" width="325" height="225"></iframe>'
+		const time_series_stoptime = '<iframe src="{{ url_for('figure_plotly4') }}" width="325" height="225"></iframe>'
+		
+		
+		
+		/////////----------- AGGREGATED TRAFFIC DATA in ZMUs areas by HOURS -------/////////////////////////////////////////	
+	    var matched_zmu_by_hour = L.geoJSON(aggregated_matched_routes_zmu, { style: style_colors_zmu, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('click', function () {
+			   layer.setStyle(selectedStyle_highlight);
+			   	var feature_variable = layer.feature.properties.index_zmu;
+				 // alert("The variable named x1 has value:  " + feature_variable);
+				 
+				 //----> send layer.feature.properties.zmu to python
+				 fetch('/process_zmu_index', {
+					  method: 'POST',
+					  headers: {
+						'Content-Type': 'application/json'
+					  },
+					  body: JSON.stringify({data: feature_variable})
+					})
+					.then(response => response.text())
+					.then(result => {
+					  console.log(result);
+					})
+					.catch(error => {
+					  console.error('Error:', error);
+					});
+				 
+			  });
+				// layer.bindPopup('<h3>Counts: '+feature.properties.counts  + time_series_counts + time_series_tripdistance + time_series_triptime + '<p>',{maxWidth : 860});
+				
+				var popup_zmu = '';
+				popup_zmu += time_series_counts;
+				popup_zmu += time_series_tripdistance;
+				popup_zmu += time_series_triptime;
+				popup_zmu += time_series_stoptime;
+				popup_zmu += (feature.properties.counts) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Number of vehicles/1000 inhab.: ' + feature.properties.counts : '';
+				popup_zmu += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popup_zmu += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popup_zmu += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				popup_zmu += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				popup_zmu += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+				
+				layer.bindPopup(popup_zmu ,{maxWidth : 670}); 
+				layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout); 
+				});
+                 
+                layer.on('mouseover', function (e) {
+					layer.setStyle(selectedStyle_mouseover); 
+				});				 
+			}
+				
+			});
+		
+			
+		const mapmatched_Layer_zmu = L.layerGroup();
+		mapmatched_Layer_zmu.addLayer(matched_zmu_by_hour);
+		
+		
+	
+
+		
+		//// ----- ZMU zones -----------------------------////
+		function style_colors_ZMU_zones(feature) {
+			return {
+				weight: 1,
+				opacity: 0.6,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.0,
+				fillColor: 'white'
+			};
+		}
+		
+		
+		const selectedStyle_highlight_ZONES = {
+		  color: 'orange',
+		  weight: 3,
+		  opacity: 0.9,
+		}
+		
+		
+	    const selectedStyle_mouseout_ZONES = {
+		  color: 'black',
+		  weight: 1,
+		  opacity: 0.6,
+		}
+		
+		
+		
+		/// add ZMU zones  borders  /////////////////////////////////////////////////////
+		var ZMU_zones = L.geoJSON(charging_data, { style: style_colors_ZMU_zones, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupText = '';
+					popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupText += (feature.properties.n_charging_stations) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n. charging stations: ' + feature.properties.n_charging_stations : '' ;	
+					popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';		        	
+                    popupText += (feature.properties.Available_Power) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Power (Watt): ' + feature.properties.Available_Power : '' ;						
+					layer.bindTooltip(popupText);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+
+	
+		const ZMU_zones_Layer = L.layerGroup();
+		ZMU_zones_Layer.addLayer(ZMU_zones);	
+		
+		
+		
+		
+		
+
+		
+		
+		
+	/// ------------ load OPEN CHARGE MAP LAYER ---------- //////
+	  const OCM_Layer = L.layerGroup();
+				
+		
+	////------------------------------------------------------------////////////////////////////// 
+	////------------------------------------------------------------////////////////////////////// 
+	var EV_charging_layer_OCM = L.geoJSON(EV_chargers_OCM, {
+	   onEachFeature: function (feature, layer) {
+		
+		var popupTextt = '';
+					popupTextt += (feature.properties.OperatorInfo) ? '<h2 style="font-size: 20px;  font-family: Arial; font-weight: bold;">Operator: ' + feature.properties.OperatorInfo : '</h2>';
+					popupTextt += (feature.properties.NumberOfPoints) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n.points: ' + feature.properties.NumberOfPoints : '</h2>' ;	
+					popupTextt += (feature.properties.Power) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">power(kW): ' + feature.properties.Power : '</h2>';		        						
+					layer.bindTooltip(popupTextt);	
+	},
+
+		pointToLayer(feature, latlng) {
+			return L.circleMarker(latlng, {
+				radius: 6,
+				// radius: feature.properties.n_buses*1,
+				fillColor: "brown", //'#ff7800',
+				color: '#000',
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 1
+			});
+		}
+	}).addTo(OCM_Layer);
+					
+
+
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+		
+
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			layers: [carto, heatmapLayer_n_vehicles, ZMU_zones_Layer]  //osm 
+		});
+
+		info.addTo(map);
+		
+		heatmapLayer_n_vehicles.setData(N_destination_vehicles);
+		heatmapLayer_triptime.setData(triptime);
+		heatmapLayer_stoptime.setData(stoptime);
+	    heatmapLayer_tripdistance.setData(tripdistance);
+		
+		
+		
+		
+	
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+		
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		const overlays = {
+			'Traffic Zones': ZMU_zones_Layer,
+			'Traffic Zones & Censuary': censuary_Layer,
+			 "<span style='color:black; font-size: 20px;'>num. of trips @DESTINATION</span>": heatmapLayer_n_vehicles,
+			  "<span style='color:black; font-size: 20px;'>stop time (min) @DESTINATION</span>": heatmapLayer_stoptime,
+			   "<span style='color:black; font-size: 20px;'>trip distance (km) @DESTINATION</span>": heatmapLayer_tripdistance,
+			    "<span style='color:black; font-size: 20px;'>trip time (min) @DESTINATION</span>": heatmapLayer_triptime,
+			'Charging Stations (Open Charge Map)': OCM_Layer,
+			'POIS & Residences': POIS_Layer_zmu,
+			'POIS_Parking': POIS_PARKING,
+			'POIS_Amenities': POIS_AMENITIES,
+			'POIS_Residentials': POIS_RESIDENTIALS,
+		};
+		
+		
+		const layerControl = L.control.layers(baseLayers, overlays ,{collapsed:false,}).addTo(map);	
+			
+		const cens_layer = L.layerGroup([censuary_default]);
+		
+	
+	window.addEventListener('resize', 
+	() => map.getViewPort().resize());
+		
+
+
+
+};
+
+  </script>
+</body>
+</html>

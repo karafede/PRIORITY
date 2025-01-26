@@ -1,0 +1,1250 @@
+
+<!doctype html>
+<html lang="en">
+
+<style type="text/css">
+    body {
+            padding: 0;
+            margin: 0;
+			font-family: Arial, Helvetica, sans-serif;
+        }
+   
+	#map {
+	  height: 100%;
+	}
+	
+	/* Optional: Makes the sample page fill the window. */
+	html, body {
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	}
+
+
+	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	.legend { text-align: left; line-height: 25px; color: #555; font-size: 22px} .legend i { width: 23px; height: 23px; float: left; margin-right: 6px; opacity: 0.7; } 
+	.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+	.legend_ZMU { text-align: left; line-height: 15px; color: #555;  font-size: 12px} 
+	
+	#refreshButton {
+	  position: absolute;
+	  top: 60px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #000000;
+	  background-color:#FFFF00;
+	}
+	
+	
+	#home_locations {
+	  position: absolute;
+	  width: 100%;
+	  top: 60px;
+	  margin-top: 40px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #ffffff ;
+	  background-color:#000099;
+	}
+	
+	#refreshButton:hover{
+		opacity: 0.8;
+		cursor: pointer;
+    }
+	
+
+
+	  html, body,  #map {
+        width : 100%;
+        height : 100%;
+      }
+	.box{	  
+		width:15px;
+		height:15px;
+		border-radius:25px;
+		display: inline-block;
+		}
+	
+
+     /** sidebar menu **/
+	.innerDiv{
+		position: absolute;
+		width: 10%;
+		height: 15%;
+		background-color: #b2b2ff;
+		opacity: 0.8;
+		margin-top:  1%;
+		margin-left: 5%;
+		z-index: 800;
+		padding-top: 1%;
+		text-overflow:ellipsis;
+        overflow:hidden;
+		
+	}
+	
+
+	
+
+ .button {
+	    position: absolute;
+		left: 2%;
+		top: 80%;
+		height: 8%;
+		width: 7%
+        min-width: 7%;
+		margin-top: 30%;
+		margin-left: 50%;
+		z-index: 500;
+	    border: none;
+	    color: white;
+	    padding: 20px;
+	    text-align: center;
+	    display: inline-block;
+	    font-size: 1.5em;
+	    margin: 10px 20px;		
+	}
+
+		
+		
+  header, nav {
+    left: 2%;
+	top: 85%;
+  	z-index: 700;
+	position: absolute;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	border-spacing: 5px;
+  }
+
+	nav a {
+	  text-decoration: none;
+	  background: #000000;  /* Black */
+	  border-radius: 5px;
+	  font-size: 1.4em;
+	  color: white;
+	  padding: 3px 8px;
+	  display: table-cell;
+	}
+	
+	
+	nav .col_home {
+		background-color: #6b0000;
+	}
+	
+	nav .col_privata {
+		background-color: #4CAF50;
+	}
+	
+	
+	nav .col_collettivo {
+		background-color: #0000ff ;
+	}
+	
+	nav .col_scenari {
+		background-color: #ffa500 ;
+	}
+	
+	
+	nav .col_impatti {
+		background-color: #76a5af ;
+	}
+	
+	
+	nav .IEA_statistics {
+		background-color: #ededed ;
+		color: blue;
+	}
+	
+	
+nav .col_best {background-color: #326bbb ;<!--color: blue;-->}
+		
+
+  /** submit lat lon and input text to Python **/
+   main {
+		background-color: rgba(51, 170, 51, .3); 
+		left: 2%;
+		top: 3%;
+		z-index: 700;
+		position: absolute;
+		margin: 2px 0;
+		padding: 5px;
+		text-overflow:ellipsis;
+        overflow:hidden;
+    width: 350px;
+    height: 480px
+	}
+
+	main div {
+	  background: #326bbb; 
+	  color: white;
+	  padding: 1px;
+	  width: 270px;
+	  height: 0px;
+	  margin: 5px auto;
+	}
+	
+
+	main div:nth-child(1) {
+	  width: 270px;
+	  height: 0px;
+	   background: transparent;
+	}
+	
+	
+    main div:nth-child(2) {
+	  width: 270px;
+	  height: 0px;
+	   background: #326bbb;
+	}
+	
+
+	main div:nth-child(3) {
+      width: 170px;
+	 background: transparent;
+	}
+	
+	main div:nth-child(4) {
+	  width: 270px;
+	   height: 0px;
+	   background: #326bbb;
+	   float: center;
+	}
+	
+	main div:nth-child(5) {
+	  width: 270px;
+	 background: transparent;
+	}
+	
+	main div:nth-child(6) {
+	   width: 270px;
+	    background: transparent;
+	}
+	
+
+	.inline-block-center {
+	  text-align: center;
+	}
+	
+	.flex-center {
+	  display: flex;
+	  justify-content: center;
+	}
+	
+
+	h2 {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+	line-height: 0.5em;
+	}
+	
+	
+	h3 {
+    margin: 0;
+    padding: 0;
+	display: inline;
+	}
+	
+	
+	
+	
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: absolute; /* Stay in place */
+	  z-index: 700; /* Sit on top */
+	  
+	  position: absolute;
+	   left: 20%;
+		top: 4%;
+	  width: 50%; /* Full width */
+	  height: 70%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+
+	/* Modal Content/Box */
+	.modal-content {
+	  z-index: 700;
+	  top: 5%;
+	  background-color: #fefefe;
+	  margin: 5% auto; /* 15% from the top and centered */
+	  padding: 1%;
+	  border: 1px solid #888;
+	  width: 100%; /* Could be more or less, depending on screen size */
+	}
+
+	/* The Close Button */
+	.close {
+	  color: #aaa;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+	  color: black;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+	
+	
+
+
+.animation_link {
+  font-size: 130%;
+  color: blue;
+  font-weight: bold;
+}
+
+.animation_link_heatmap {
+  font-size: 130%;
+  color: red;
+  font-weight: bold;
+}
+
+.animation_link_IEA_STATS {
+  font-size: 130%;
+  color: #0f45d2;
+  font-weight: bold;
+}
+
+
+	
+	
+</style>
+
+<style>
+
+.label {
+  color: black;
+  padding: 8px;
+  font-family: Arial Black;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+
+#.tpl_line {background-color: #2196F3;} /* Blue */
+
+
+table, th, td {
+  border:1px solid black;
+   left: 20%;
+}
+
+
+table.center_table {
+  margin-left: -15%; 
+  //margin-left: 20%;
+}
+
+
+
+/* Center the loader (SPINNER) */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  // border-top: 16px solid #3498db;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-right: 16px solid yellow;
+  border-left: 16px solid pink;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+
+
+
+div#loading {
+    display: none;
+	position: absolute;
+	left: 50%;
+    top: 50%;
+    z-index: 700;
+	width: 270px;
+	height: 270px;
+	 margin: -76px 0 0 -76px;
+    background: url(/static/loadingimage_TPL.gif) no-repeat;
+    cursor: wait;
+ }
+ 
+ /* Button changing color when clicked */
+ input.btn_color:active { background:yellow; } 
+ 
+ 
+     /* custom primary buttons */
+    
+    .btn-primary {
+        color: #212529;
+        background-color: white ;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary:hover {
+        color: #212529;
+        background-color: #52bebe;
+        border-color: #8ad3d3
+    }
+    
+    .btn-primary:focus,
+    .btn-primary.focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+    
+    .btn-primary.disabled,
+    .btn-primary:disabled {
+        color: #212529;
+        background-color: #7cc;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active,
+    .btn-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #9cdada;
+        border-color: #2e7c7c
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active:focus,
+    .btn-primary:not(:disabled):not(.disabled).active:focus,
+    .show>.btn-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+    
+    .btn-outline-primary {
+        color: #000000;
+        background-color: yellow;
+        background-image: none;
+        border-color: #7cc;
+    }
+    
+    .btn-outline-primary:hover {
+        color: #222;
+        background-color: #8ad3d3;
+        border-color: #7cc
+    }
+    
+    .btn-outline-primary:focus,
+    .btn-outline-primary.focus {
+        box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+    }
+    
+    .btn-outline-primary.disabled,
+    .btn-outline-primary:disabled {
+        color: #7cc;
+        background-color: transparent
+    }
+    
+    .btn-outline-primary:not(:disabled):not(.disabled):active,
+    .btn-outline-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-outline-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #8ad3d3;
+        border-color: #7cc
+    }
+    
+    .btn-outline-primary:not(:disabled):not(.disabled):active:focus,
+    .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
+    .show>.btn-outline-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+    }
+
+
+.btn_heatmaps {border: none;
+			  background-color: blue;
+			  padding: 12px 48px 12px 24px;
+			  border-radius: 4px;
+			  color: #fff;
+			  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7.41' height='12' viewBox='0 0 7.41 12'%3E%3Cpath d='M10,6,8.59,7.41,13.17,12,8.59,16.59,10,18l6-6Z' transform='translate(-8.59 -6)' fill='%23fff'/%3E%3C/svg%3E");
+			  background-repeat: no-repeat;
+			  background-position: right 24px center;
+			  font-size: 20px;
+			  font-weight: bold;
+			  text-align: center;
+			   left: 80%;
+			   top: 85%;}
+		   
+.btn_animation {width: 45%;
+	  height:50px;
+	  font-size: 18px;
+	  font-weight: bold;
+	  text-align: center;
+	  color:blue}
+	   
+		   
+
+   .select{
+		width:  15%;
+		height: 30px;
+		font-size: 18px;
+		font-weight: bold;}
+		
+		
+ 
+ 
+ #form-wrapper {
+  width: 60%;
+  height: 22%;
+  margin: 0 auto;
+  text-align: center;
+  display:flex;
+}
+#form1 {
+  width: 50%;
+  display: inline-block;
+  min-width:200px;
+}
+#form2 {
+  width: 50%;
+  display: inline-block;
+  min-width:200px;
+   background: #66b266;
+  height:100%;
+}
+
+.flex {
+   display: flex;
+   flex-direction: row;
+}
+
+div.c {
+	  text-align: center;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+ 
+
+</style>
+
+</head>
+  <meta name="description" content="Leaflet Template">
+  <title>RdS-ENEA</title>
+  <!--meta name="viewport" content="initial-scale=1.0"-->
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+ </head>
+ 
+ 
+ <!--start the SPINNER or LOADER-->
+<div id="loader"></div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+
+<body>
+<div id="loading"></div>
+
+<main class="inline-block-center">
+
+
+	<br>
+	
+	<h3 style="font-weight: bold; line-height: 1em; text-align: center;">Connected Traffic Zones</h3> 
+	<h3 style="font-weight: bold; line-height: 1em; text-align: center;">by day & time</h3>
+	
+	<br>
+	<br>
+	
+
+	<form id="mainform" action="/ZMU_paths_day_selector" method="POST" >
+	   <input type="text" id="daterange"  name="daterange" onchange="myFunction_daterange(event)" value="     ___from___to___" />
+	   <button type="submit">enter</button><br><p>
+	</form>
+	
+	
+<div id="form-wrapper">
+<div id="form1" class="c">
+ <h3 style="font-weight: bold">Type of Data:</h3>
+	<form method="POST" action="/ZMU_paths_data_type/">	
+	<select class="tipo_alimentazione" name="data_type" id="registration_data_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="11">FCD</option>
+			<option value="12">Synthetic</option>
+	</select>
+	</form>
+ </div>
+  </div>
+ <br>
+ 
+	
+	
+  <form method="POST" action="/ZMU_paths_hour_selector/">	
+	<span class="label tpl_line">Hour range:</span>
+	<select class="ZMU_paths_hour_selector" name="ZMU_hourrange" id="registrationhourrange" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange="this.form.submit()";>
+			<option value="999">--choose--</option>
+			<option value="0">00:00 ---> 07:00</option>
+			<option value="1">07:00 ---> 10:00</option>
+			<option value="2">10:00 ---> 14:00</option>
+			<option value="3">14:00 ---> 16:00</option>
+			<option value="4">16:00 ---> 20:00</option>
+			<option value="5">20:00 ---> 24:00</option>
+		</select>
+	</form>
+	
+
+ <form method="POST" action="/ZMU_paths_tod_selector/">
+	 <h4 style="margin-top: -1px; margin-left:-195px;" class="label tpl_line">Day type:</h4>
+        <h4 style="margin-top: -50px;" class="ZMU_paths_tod_selector" onchange="this.form.submit()";> </h4>
+		
+		 <input type="radio" name="ZMU_tod" style="margin-left:20px; font-weight: bold;" id="registration_tod" value="9" ></label>
+		<label class="ZMU_paths_tod_selector" onchange="this.form.submit();"> 
+		
+        <input type="radio" name="ZMU_tod" style="margin-left:-19px;  margin-top: 15px;" id="registration_tod" value="6">Working day</label><br>
+        <label class="ZMU_paths_tod_selector" onchange="this.form.submit()";>  
+        <input type="radio" name="ZMU_tod" style="margin-left:10px;" id="registration_tod" value="7" >Pre-Holiday</label><br>
+        <label class="ZMU_paths_tod_selector" onchange="this.form.submit()";>
+        <input type="radio" name="ZMU_tod"  style="margin-left:-18px;" id="registration_tod" value="8"  >Holiday</label>
+		 <label class="ZMU_paths_tod_selector" onchange="this.form.submit()";>
+   </form>
+
+	
+	<br>
+	<br>
+	<h3 style="font-weight: bold; line-height: 1em; text-align: center; color: #326bbb;"><img src="/static/click.png" style="max-width: 12%;"> Click over a traffic zone</h2>
+	
+	
+	
+
+	 
+</main>
+
+
+
+
+
+<nav role='navigation'>
+  <a class="col_home" href="/home_page/">Home</a>
+  <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
+  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
+  <a class="col_impatti" href="/public_transport_page/">Impacts</a>
+  <a class="col_best" onclick="$('#loading').show();" href="/best_page/">Best</a>
+</nav>    
+
+
+
+
+
+	
+<!--we are inside the area of the map-->
+<div id="map">  </div>
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/src/leaflet.draw.css"/>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin = "anonymous" referrerpolicy = "no-referrer"> </script>
+
+  
+  
+<!-- Load data .geojson -->
+<!-- ZMU zones with population data -->
+<script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script>
+<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
+
+<script src="{{ url_for('static', filename='grouped_zmu_paths.geojson') }}" /></script>
+
+		
+
+  <script>
+
+     // ----------------------------------------------------
+
+  // Hack to autoset the iframe height.
+  window.addEventListener("load", function() {
+	window.setTimeout(function() {
+	  setFrameHeight(document.documentElement.clientHeight)
+	}, 0);
+  });
+	
+	
+	var zmu_day_start = "{{ session['ZMU_day_start']}}"
+	// alert(zmu_day_start);
+		 
+	var zmu_day_start = zmu_day_start.slice(0, 10);
+	// alert(zmu_day_start);
+		 
+	document.addEventListener("DOMContentLoaded", function(){
+    // var data_selezionata = "{{ session['ZMU_day_start'] }}";
+	var data_selezionata_start = zmu_day_start;
+	//alert(data_selezionata);
+	document.getElementById('registrationday_start').value = data_selezionata_start;  
+	});
+	
+	
+	
+	
+	var zmu_day_end = "{{ session['ZMU_day_end']}}"
+	//alert(zmu_day_end);
+		 
+	var zmu_day_end = zmu_day_end.slice(0, 10);
+	// alert(zmu_day_end);
+		 
+	document.addEventListener("DOMContentLoaded", function(){
+    // var data_selezionata_end = "{{ session['ZMU_day_end'] }}";
+	var data_selezionata_end = zmu_day_end;
+	// alert(data_selezionata);
+	document.getElementById('registrationday_end').value = data_selezionata_end;  
+	});
+	
+	
+	
+	 //  date range picker //
+	$(function() {
+	  $('input[name="daterange"]').daterangepicker({
+		opens: 'left'
+	  }, function(start, end, label) {
+		  //alert("A new date range was chosen: " + start.format('MM-DD-YYYY') + ' to ' + end.format('MM-DD-YYYY'));
+		  var daterange_ZMU = start.format('MM-DD-YYYY');
+		  //  alert(start_daterange);
+	  });
+	});
+	
+	
+	
+	
+	
+    var form = document.getElementById("mainform")
+      var input = document.getElementById("daterange")
+      form.addEventListener('submit', function(e){
+        input.value = daterange_ZMU
+        form.submit()
+      })
+
+
+
+	var input = document.getElementById('daterange');
+	var ___from___to___ = "{{ session['input_data_range']}}";
+	input.value = ___from___to___;
+
+	var myFunction_daterange = function (e) {
+	  console.log(e.target.value);
+	}
+
+	
+	
+		
+    var zmu_hourrange = "{{ session['ZMU_hourrange']}}"
+    document.addEventListener("DOMContentLoaded", function(){
+	var range_ora_selezionata = zmu_hourrange;
+	// alert(range_ora_selezionata);
+	document.getElementById('registrationhourrange').value = range_ora_selezionata;  
+	});
+	
+	
+	
+	var number = "{{ session['ZMU_tod']}}";
+	 $('input[name=ZMU_tod][value=' + number + ']').prop('checked',true);
+	 
+
+	var TYPE_data = "{{session['data_type']}}"	
+	document.addEventListener("DOMContentLoaded", function(){
+	var data_type_selezionata =  TYPE_data;
+	// alert(data_type_selezionata);
+	document.getElementById('registration_data_type').value = data_type_selezionata;   
+	});
+	 
+	
+	$('form select').on('change', function(){
+		$(this).closest('form').submit()
+		$('#loading').show();
+	});
+
+	
+
+
+
+	
+	 ///////////////////////////---------------------------------------------------------------------/////////////////////////////////////////////
+	  ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+	   ///////////////////////////---------------------------------------------------------------------///////////////////////////////////////////
+	    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+		///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+        ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+      ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+	 
+	  
+	// ADD Leaflet map
+	
+		
+		const osm  = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		})
+         
+	    var carto = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+         });
+		 
+	
+	
+	// control that shows state info on hover
+	const info = L.control(); 
+	
+	info.onAdd = function (map) {
+	this._div = L.DomUtil.create('div', 'info');
+	this.update();
+	return this._div;
+	};
+		
+	
+	function getColor_zmu_origin_destinations(d) {
+		return d >= 200 ? '#071a4f' :
+		    d > 100  ? '#225ea8' : 
+		    d > 50  ?   '#0c2c84' :
+			d > 40  ? '#546ba8' :
+			d > 30  ? '#1d91c0' :
+			d > 20  ? '#41b6c4' :  
+			d > 10  ? '#7fcdbb' :
+			d > 5   ? '#c7e9b4' :
+			d > 2  ? '#d5df9f' :
+			d >= 1   ? '#fdfdbf' : '#fdfdbf';
+			}    
+			
+			
+			
+	function getColor_census(d) {
+		return d > 20000 ? '#800026' :
+			d > 10000  ? '#97001e' :
+			d > 5000  ? '#BD0026' :
+			d > 3000  ? '#E31A1C' :
+			d > 2000  ? '#FC4E2A' :
+			d > 1000   ? '#FD8D3C' :
+			d > 300   ? '#FEB24C' :
+			d > 50   ? '#FED976' : '#FFEDA0';
+				}
+	
+	
+			
+			
+		//////////* LEGEND USED FOR ZMU DATA  (number of trips)*////////////  
+			var legend_ZMU = L.control({position: 'bottomright'});
+		
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				     const labels=["from 1 to 2",
+								"from 2 to 5",
+								"from 5 to 10",
+								"from 10 to 20",
+								"from 20 to 30",
+								"from 30 to 40",
+								"from 40 to 50",
+								"from 50 to 100",
+								"from 100 to 200",
+								" > 200"];
+				 const grades = [1, 2,5, 10, 20, 30, 40, 50, 100, 200];
+
+                div.innerHTML='<div><b>Number of Trips</b></div';
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+            
+            
+
+	info.update = function (props) {
+		const contents = props ? `<b>${props.POP_TOT_ZMU}</b> people` : 'Hover over a traffic zone';
+		this._div.innerHTML = `<h4>Total Population Number</h4>${contents}`;
+	};
+	
+	
+	
+		const selectedStyle = {
+		  color: '#000000',
+		  weight: 0.1,
+		  opacity: 0.1,
+		}
+			
+			
+		const selectedStyle_highlight = {
+		  color: 'black',
+		  weight: 3,
+		  opacity: 0.9,
+		}
+		
+		
+	
+		
+		const selectedStyle_mouseout = {
+		  color: 'black',
+		  weight: 2,
+		  opacity: 0.1,
+		}
+		
+		function style_colors_zmu(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: getColor_zmu_origin_destinations(feature.properties.counts)
+			};
+		}
+		
+		
+		
+	    // used to color ZMU zones with POPULATION data 2011
+		function style_pop(feature) {
+			return {
+				weight: 0.8,
+				opacity: 1,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.5,
+				fillColor: getColor_census(feature.properties.POP_TOT_ZMU)
+			};
+		}
+		
+		
+		// used to color ZMU zones with RESIDENCE data 2011
+		function style_homes(feature) {
+			return {
+				weight: 0.8,
+				opacity: 1,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.5,
+				fillColor: getColor_census(feature.properties.RES_TOT_ZMU)
+			};
+		}
+		
+		
+	
+
+		function highlightFeature(e) {
+			const layer = e.target;
+			layer.setStyle({
+				weight: 3,
+				color: '#666',
+				dashArray: '',
+				fillOpacity: 0.9
+			});
+
+			layer.bringToFront();
+
+			info.update(layer.feature.properties);
+		}
+		
+	
+		
+		/// add ZMU zones  borders  /////////////////////////////////////////////////////
+		var censuary_default = L.geoJSON(zmu_counts, { style: style_pop, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupText = '';
+					popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupText += (feature.properties.n_charging_stations) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n. charging stations: ' + feature.properties.n_charging_stations : '' ;	
+					popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';		        	
+                    popupText += (feature.properties.Available_Power) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Power (Watt): ' + feature.properties.Available_Power : '' ;						
+					layer.bindTooltip(popupText);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+			
+		
+
+		
+	    /*------------DEFAULT LAYER -----------------*/
+	    const censuary_Layer = L.layerGroup();
+		censuary_Layer.addLayer(censuary_default);		
+	
+	
+        
+		//// ----- ZMU path zones -----------------------------////
+		function style_colors_ZMU_path_zones(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: getColor_zmu_origin_destinations(feature.properties.counts)
+			};
+		}
+		
+		const selectedStyle_mouseout_path_ZONES = {
+		  color: 'black',
+		  weight: 1,
+		  opacity: 0.6,
+		}
+		
+		
+		//// ----- ZMU zones -----------------------------////
+		function style_colors_ZMU_zones(feature) {
+			return {
+				weight: 1,
+				opacity: 0.6,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.0,
+				fillColor: 'white'
+			};
+		}
+		
+		const selectedStyle_highlight_ZONES = {
+		  color: 'orange',
+		  weight: 3,
+		  opacity: 0.9,
+		}
+		
+	    const selectedStyle_mouseout_ZONES = {
+		  color: 'black',
+		  weight: 1,
+		  opacity: 0.6,
+		}
+		
+		
+		
+		/////////----------- AGGREGATED TRAFFIC DATA in ZMUs areas by HOURS -------/////////////////////////////////////////	
+	    var matched_zmu_by_hour = L.geoJSON(charging_data, { style: style_colors_ZMU_zones, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('click', function () {
+			   layer.setStyle(selectedStyle_highlight_ZONES);
+			   path_ZMU_zones.addTo(map);
+			   	var feature_variable = layer.feature.properties.index_zmu;
+				 // alert("The variable named x1 has value:  " + feature_variable);
+				 
+				 //----> send layer.feature.properties.zmu to python
+				 fetch('/choose_zmu_index', {
+					  method: 'POST',
+					  headers: {
+						'Content-Type': 'application/json'
+					  },
+					  body: JSON.stringify({data: feature_variable})
+					})				 
+					.then(response => response.text())
+					.then(result => {
+					  console.log(result);
+					})
+					.catch(error => {
+					  console.error('Error:', error);
+					});	
+					
+					
+				
+				 fetch('/layer_ZMU_path', {
+					  method: 'POST',
+					  headers: {
+						'Content-Type': 'application/json'
+					  },
+					  body: JSON.stringify({data: feature_variable})
+					}).then(response => {
+						if (response.redirected) {
+							window.location = response.url
+						} else {
+							showLoginError()
+						}});  
+			
+			  });
+			  
+			
+			  
+				var popupText = '';			
+				popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popupText += (feature.properties.n_charging_stations) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n. charging stations: ' + feature.properties.n_charging_stations : '' ;	
+				popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';		        	
+				popupText += (feature.properties.Available_Power) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Power (Watt): ' + feature.properties.Available_Power : '' ;
+                popupText += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				popupText += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';				
+				
+				layer.bindTooltip(popupText);	
+				
+				// layer.bindPopup(popup_zmu ,{maxWidth : 670}); 
+				layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+				
+			});
+			
+		const mapmatched_Layer_zmu = L.layerGroup();
+		mapmatched_Layer_zmu.addLayer(matched_zmu_by_hour);
+		
+		
+		
+		////----- insert waiting time ------ /////////////////////////////
+		
+		
+		function sleepFor(sleepDuration){
+				var now = new Date().getTime();
+				while(new Date().getTime() < now + sleepDuration){ 
+					/* Do nothing */ 
+				}
+		}
+
+			function sleepThenAct(){
+				sleepFor(1000);   ///1 seconds
+				console.log("Hello, JavaScript sleep!");
+			}
+
+			sleepThenAct()
+			
+	
+			// alert("I am here");
+		
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    ///------------- add ZMU grouped_zmu_paths  -------------------/////////////////////////////////////////////////////
+		var path_ZMU_zones = L.geoJSON(grouped_zmu_paths, { style: style_colors_ZMU_path_zones, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupText = '';
+					popupText += (feature.properties.quartiere) ? '<h3>Quartiere: ' + feature.properties.quartiere : '';
+					popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';		    		        	
+					layer.bindTooltip(popupText);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_path_ZONES); 
+				});	
+			}
+			});
+		
+		
+	
+	    alert("----- CLICK over a chosen ZONE ------");
+		
+		
+		
+		
+		
+
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+		
+
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 10,
+			layers: [carto, mapmatched_Layer_zmu]  //osm 
+		});
+		
+		legend_ZMU.addTo(map);
+
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+		
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		const overlays = {
+			'Traffic Zones & Censuary': censuary_Layer			
+		};
+		
+		
+		const layerControl = L.control.layers(baseLayers, overlays ,{collapsed:false,}).addTo(map);	
+
+		const cens_layer = L.layerGroup([censuary_default]);
+		
+		
+	window.addEventListener('resize', 
+	() => map.getViewPort().resize());
+	
+	
+
+  </script>
+</body>
+</html>
