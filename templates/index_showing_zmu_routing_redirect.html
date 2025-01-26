@@ -1,0 +1,2816 @@
+
+<!doctype html>
+<html lang="en">
+
+<style type="text/css">
+    body {
+            padding: 0;
+            margin: 0;
+			font-family: Arial, Helvetica, sans-serif;
+        }
+   
+	#map {
+	  height: 100%;
+	}
+	
+	/* Optional: Makes the sample page fill the window. */
+	html, body {
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	}
+
+
+	//.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	//.legend { text-align: left; line-height: 13px; color: #555; font-size: 1.075em} .legend i { width: 12px; height: 12px; float: left; margin-right: 5px; opacity: 0.7; } 
+	//.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+	//.legend_ZMU { text-align: left; line-height: 15px; color: #555;  font-size: 12px} 
+	
+	
+	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	.legend { text-align: left; line-height: 25px; color: #555; font-size: 22px} .legend i { width: 23px; height: 23px; float: left; margin-right: 6px; opacity: 0.7; } 
+	.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+	.legend_ZMU { text-align: left; line-height: 15px; color: #555;  font-size: 12px} 
+	
+	#refreshButton {
+	  position: absolute;
+	  top: 60px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #000000;
+	  background-color:#FFFF00;
+	}
+	
+	
+	#home_locations {
+	  position: absolute;
+	  width: 100%;
+	  top: 60px;
+	  margin-top: 40px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #ffffff ;
+	  background-color:#000099;
+	}
+	
+	#refreshButton:hover{
+		opacity: 0.8;
+		cursor: pointer;
+    }
+	
+
+
+	  html, body,  #map {
+        width : 100%;
+        height : 100%;
+      }
+	.box{	  
+		width:15px;
+		height:15px;
+		border-radius:25px;
+		display: inline-block;
+		}
+	
+
+     /** sidebar menu **/
+	.innerDiv{
+		position: absolute;
+		width: 10%;
+		height: 15%;
+		background-color: #b2b2ff;
+		opacity: 0.8;
+		margin-top:  1%;
+		margin-left: 5%;
+		z-index: 800;
+		padding-top: 1%;
+		text-overflow:ellipsis;
+        overflow:hidden;
+		
+	}
+	
+
+	
+
+ .button {
+	    position: absolute;
+		left: 2%;
+		top: 80%;
+		height: 8%;
+		width: 7%
+        min-width: 7%;
+		margin-top: 30%;
+		margin-left: 50%;
+		z-index: 500;
+	    border: none;
+	    color: white;
+	    padding: 20px;
+	    text-align: center;
+	    display: inline-block;
+	    font-size: 1.5em;
+	    margin: 10px 20px;		
+	}
+
+		
+		
+  header, nav {
+    left: 2%;
+	top: 85%;
+  	z-index: 700;
+	position: absolute;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	border-spacing: 5px;
+  }
+
+	nav a {
+	  text-decoration: none;
+	  background: #000000;  /* Black */
+	  border-radius: 5px;
+	  font-size: 1.5em;
+	  color: white;
+	  padding: 3px 8px;
+	  display: table-cell;
+	}
+	
+	
+	nav .col_home {
+		background-color: #6b0000;
+	}
+	
+	nav .col_privata {
+		background-color: #4CAF50;
+	}
+	
+	
+	nav .col_collettivo {
+		background-color: #0000ff ;
+	}
+	
+	nav .col_scenari {
+		background-color: #ffa500 ;
+	}
+	
+	
+	nav .col_impatti {
+		background-color: #76a5af ;
+	}
+	
+	
+	nav .IEA_statistics {
+		background-color: #ededed ;
+		color: blue;
+	}
+	
+	
+	
+		
+
+  /** submit lat lon and input text to Python **/
+   main {
+		background-color: rgba(51, 170, 51, .3); 
+		left: 2%;
+		top: 3%;
+		z-index: 700;
+		position: absolute;
+		margin: 2px 0;
+		padding: 5px;
+		text-overflow:ellipsis;
+        overflow:hidden;
+    width: 350px;
+    height: 380px
+	}
+
+	main div {
+	  background: #326bbb; 
+	  color: white;
+	  padding: 1px;
+	  width: 270px;
+	  height: 0px;
+	  margin: 5px auto;
+	}
+	
+
+	main div:nth-child(1) {
+	  width: 270px;
+	  height: 0px;
+	   background: transparent;
+	}
+	
+	
+    main div:nth-child(2) {
+	  width: 270px;
+	  height: 0px;
+	   background: #326bbb;
+	}
+	
+
+	main div:nth-child(3) {
+      width: 170px;
+	 background: transparent;
+	}
+	
+	main div:nth-child(4) {
+	  width: 270px;
+	   height: 0px;
+	   background: #326bbb;
+	   float: center;
+	}
+	
+	main div:nth-child(5) {
+	  width: 270px;
+	 background: transparent;
+	}
+	
+	main div:nth-child(6) {
+	   width: 270px;
+	    background: #326bbb;
+	}
+	
+
+	.inline-block-center {
+	  text-align: center;
+	}
+	
+	.flex-center {
+	  display: flex;
+	  justify-content: center;
+	}
+	
+
+	h2 {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+	line-height: 0.5em;
+	}
+	
+	
+	h3 {
+    margin: 0;
+    padding: 0;
+	display: inline;
+	}
+	
+	
+	
+	
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: absolute; /* Stay in place */
+	  z-index: 700; /* Sit on top */
+	  
+	  position: absolute;
+	   left: 20%;
+		top: 4%;
+	  width: 50%; /* Full width */
+	  height: 70%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+
+	/* Modal Content/Box */
+	.modal-content {
+	  z-index: 700;
+	  top: 5%;
+	  background-color: #fefefe;
+	  margin: 5% auto; /* 15% from the top and centered */
+	  padding: 1%;
+	  border: 1px solid #888;
+	  width: 100%; /* Could be more or less, depending on screen size */
+	}
+
+	/* The Close Button */
+	.close {
+	  color: #aaa;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+	  color: black;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+	
+	
+
+
+.animation_link {
+  font-size: 130%;
+  color: blue;
+  font-weight: bold;
+}
+
+.animation_link_heatmap {
+  font-size: 130%;
+  color: red;
+  font-weight: bold;
+}
+
+.animation_link_IEA_STATS {
+  font-size: 130%;
+  color: #0f45d2;
+  font-weight: bold;
+}
+
+
+	
+	
+</style>
+
+<style>
+
+.label {
+  color: black;
+  padding: 8px;
+  font-family: Arial Black;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+
+#.tpl_line {background-color: #2196F3;} /* Blue */
+
+
+table, th, td {
+  border:1px solid black;
+   left: 20%;
+}
+
+
+table.center_table {
+  margin-left: -15%; 
+  //margin-left: 20%;
+}
+
+
+
+/* Center the loader (SPINNER) */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  // border-top: 16px solid #3498db;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-right: 16px solid yellow;
+  border-left: 16px solid pink;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+
+
+
+div#loading {
+    display: none;
+	position: absolute;
+	left: 50%;
+    top: 50%;
+    z-index: 700;
+	width: 270px;
+	height: 270px;
+	 margin: -76px 0 0 -76px;
+    background: url(/static/loadingimage_TPL.gif) no-repeat;
+    cursor: wait;
+ }
+ 
+ /* Button changing color when clicked */
+ input.btn_color:active { background:yellow; } 
+ 
+ 
+     /* custom primary buttons */
+    
+    .btn-primary {
+        color: #212529;
+        background-color: white ;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary:hover {
+        color: #212529;
+        background-color: #52bebe;
+        border-color: #8ad3d3
+    }
+    
+    .btn-primary:focus,
+    .btn-primary.focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+    
+    .btn-primary.disabled,
+    .btn-primary:disabled {
+        color: #212529;
+        background-color: #7cc;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active,
+    .btn-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #9cdada;
+        border-color: #2e7c7c
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active:focus,
+    .btn-primary:not(:disabled):not(.disabled).active:focus,
+    .show>.btn-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+    
+    .btn-outline-primary {
+        color: #000000;
+        background-color: yellow;
+        background-image: none;
+        border-color: #7cc;
+    }
+    
+    .btn-outline-primary:hover {
+        color: #222;
+        background-color: #8ad3d3;
+        border-color: #7cc
+    }
+    
+    .btn-outline-primary:focus,
+    .btn-outline-primary.focus {
+        box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+    }
+    
+    .btn-outline-primary.disabled,
+    .btn-outline-primary:disabled {
+        color: #7cc;
+        background-color: transparent
+    }
+    
+    .btn-outline-primary:not(:disabled):not(.disabled):active,
+    .btn-outline-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-outline-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #8ad3d3;
+        border-color: #7cc
+    }
+    
+    .btn-outline-primary:not(:disabled):not(.disabled):active:focus,
+    .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
+    .show>.btn-outline-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+    }
+
+
+.btn_heatmaps {border: none;
+			  background-color: blue;
+			  padding: 12px 48px 12px 24px;
+			  border-radius: 4px;
+			  color: #fff;
+			  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='7.41' height='12' viewBox='0 0 7.41 12'%3E%3Cpath d='M10,6,8.59,7.41,13.17,12,8.59,16.59,10,18l6-6Z' transform='translate(-8.59 -6)' fill='%23fff'/%3E%3C/svg%3E");
+			  background-repeat: no-repeat;
+			  background-position: right 24px center;
+			  font-size: 20px;
+			  font-weight: bold;
+			  text-align: center;
+			   left: 80%;
+			   top: 85%;}
+		   
+.btn_animation {width: 45%;
+	  height:50px;
+	  font-size: 18px;
+	  font-weight: bold;
+	  text-align: center;
+	  color:blue}
+	   
+		   
+
+   .select{
+		width:  15%;
+		height: 30px;
+		font-size: 18px;
+		font-weight: bold;}
+		
+		
+ 
+ 
+ #form-wrapper {
+  width: 70%;
+  height: 35%;
+  margin: 0 auto;
+  text-align: center;
+  display:flex;
+}
+#form1 {
+  width: 50%;
+  display: inline-block;
+  min-width:200px;
+}
+#form2 {
+  width: 50%;
+  display: inline-block;
+  min-width:200px;
+   background: #66b266;
+  height:100%;
+}
+
+.flex {
+   display: flex;
+   flex-direction: row;
+}
+
+div.c {
+	  text-align: center;
+}
+
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+ 
+
+</style>
+
+</head>
+  <meta name="description" content="Leaflet Template">
+  <title>RdS-ENEA</title>
+  <!--meta name="viewport" content="initial-scale=1.0"-->
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+ </head>
+ 
+ 
+ <!--start the SPINNER or LOADER-->
+<div id="loader"></div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+
+
+
+<body>
+<div id="loading"></div>
+
+<main class="inline-block-center">
+
+
+<!--div style="display:none;" id="myDiv" class="animate-bottom">
+  <h2>Tada!</h2>
+  <p>Some text in my newly loaded page..</p>
+</div-->
+
+
+	<br>
+	
+	<h2 style="font-weight: bold; line-height: 1em; text-align: center;">Routing from Origin to Destination</h2> 
+	<h3 style="font-weight: bold; line-height: 1em; text-align: center;">(Public Transport)</h3>
+	
+	<br>
+	<br>
+	
+	
+	<!--form id="mainform" action="/ZMU_paths_day_selector" method="POST">
+	   <input type="text" id="daterange"  name="daterange" onchange="myFunction_daterange(event)" value="     ___from___to___" />
+	   <button type="submit">enter</button><br><p>
+	</form-->
+	
+	
+<div id="form-wrapper">
+    <div id="form1" class="c">
+ <h3 style="font-weight: bold">Trip Indicator (TPL):</h3>
+	<form method="POST" action="/trip_indicator_routing/">	
+	<select class="indicator" name="indicator_type_TPL" id="registration_indicator_type_TPL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="101">--- choose ---</option>
+			<!--option value="102">Trip Counts</option-->
+			<option value="103">Transfers (number)</option>
+			<option value="104">Travelled distance</option>
+			<option value="105">Travel Time</option>
+			<option value="106">Travel Speed</option>
+			<option value="107">Walking Distance</option>
+			<option value="108">Walking Time</option>
+			<option value="109">On-board Time</option>
+			<option value="110">Waiting Time</option>
+	</select>
+	</form>
+ </div>
+  </div>
+ <br>
+ 
+	
+	<!--insert new line-->
+	
+	
+	<form method="POST" action="/hour_selector_routing/">	
+	<span style= "font-size: 22px;" class="label tpl_line">Hour:</span>
+	<select class="ZMU_paths_hour_selector" name="ZMU_hour" id="registrationhour" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange="this.form.submit()";>
+			<!--option value="0">00:00</option>
+			<option value="1">01:00</option>
+			<option value="2">02:00</option>
+			<option value="3">03:00</option>
+			<option value="4">04:00</option>
+			<option value="5">05:00</option-->
+			<option value="6">06:00</option>
+			<option value="7">07:00</option>
+			<option value="8">08:00</option>
+			<option value="9">09:00</option>
+			<option value="10">10:00</option>
+			<option value="11">11:00</option>
+			<option value="12">12:00</option>
+			<option value="13">13:00</option>
+			<option value="14">14:00</option>
+			<option value="15">15:00</option>
+			<option value="16">16:00</option>
+			<option value="17">17:00</option>
+			<option value="18">18:00</option>
+			<option value="19">19:00</option>
+			<option value="20">20:00</option>
+			<option value="21">21:00</option>
+			<option value="22">22:00</option>
+			<!--option value="23">23:00</option-->
+		</select>
+	</form>
+	
+
+	
+
+	 
+</main>
+
+
+
+
+
+<nav role='navigation'>
+  <a class="col_home" href="/home_page/">Home</a>
+  <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
+  <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
+  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
+  <a class="col_impatti" href="/public_transport_page/">Impacts</a>
+  <!--a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a-->
+</nav>    
+
+
+
+
+
+	
+<!--we are inside the area of the map-->
+<div id="map">  </div>
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/src/leaflet.draw.css"/>
+<!--link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/-->
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin = "anonymous" referrerpolicy = "no-referrer"> </script>
+
+  
+  
+<!-- Load data .geojson -->
+<!--script src="{{ url_for('static', filename='hexagons_aggr_POP_ROMA_2011.geojson') }}" /></script-->
+<!-- ZMU zones with population data -->
+<script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script>
+<!-- aggregation by zmu -->
+<script src="{{ url_for('static', filename='aggregated_zmu_filtered.geojson') }}" /></script>
+<!-- POINTS of INTERESTS (PARKINGs) -->
+<script src="{{ url_for('static', filename='POIS_parking.geojson') }}" /></script>
+<!-- POINTS of INTERESTS (all AMENITIES) -->
+<script src="{{ url_for('static', filename='layer_POIS_amenities.geojson') }}" /></script>
+<!-- POINTS of INTERESTS (all BUILDINGS) -->
+<script src="{{ url_for('static', filename='layer_POIS_residential.geojson') }}" /></script>
+<!-- ALL POINTS of INTERESTS (all BUILDINGS and AMENITIES) -->
+<script src="{{ url_for('static', filename='zmu_POIS_ROMA_2011.geojson') }}" /></script>
+
+ <script src="{{ url_for('static', filename='leaflet.motion.min.js') }}" /></script>  
+ 
+ 
+ <!-- load custom polygons and border of custom polygon-->
+<!--script src="{{ url_for('static', filename='ZMUs_custom_selected.geojson') }}" /></script>
+<script src="{{ url_for('static', filename='BORDER_selected_ZMUs.geojson') }}" /></script-->
+<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
+
+<!--script src="{{ url_for('static', filename='aggregated_zmu_routing_od.geojson') }}" /></script-->
+<!--script src="{{ url_for('static', filename='filtered_od_routing.geojson') }}" /></script-->
+
+
+	
+
+		
+
+ <script>
+ 
+         // ----------------------------------------------------
+
+      // Hack to autoset the iframe height.
+      window.addEventListener("load", function() {
+        window.setTimeout(function() {
+          setFrameHeight(document.documentElement.clientHeight)
+        }, 0);
+      });
+	
+	
+
+	
+	var zmu_day_start = "{{ session['ZMU_day_start']}}"
+	// alert(zmu_day_start);
+		 
+	var zmu_day_start = zmu_day_start.slice(0, 10);
+	// alert(zmu_day_start);
+		 
+	document.addEventListener("DOMContentLoaded", function(){
+    // var data_selezionata = "{{ session['ZMU_day_start'] }}";
+	var data_selezionata_start = zmu_day_start;
+	//alert(data_selezionata);
+	document.getElementById('registrationday_start').value = data_selezionata_start;  
+	});
+	
+	
+	
+	
+	var zmu_day_end = "{{ session['ZMU_day_end']}}"
+	//alert(zmu_day_end);
+		 
+	var zmu_day_end = zmu_day_end.slice(0, 10);
+	// alert(zmu_day_end);
+		 
+	document.addEventListener("DOMContentLoaded", function(){
+    // var data_selezionata_end = "{{ session['ZMU_day_end'] }}";
+	var data_selezionata_end = zmu_day_end;
+	// alert(data_selezionata);
+	document.getElementById('registrationday_end').value = data_selezionata_end;  
+	});
+	
+	
+	
+	$('form select').on('change', function(){
+		$(this).closest('form').submit()
+		$('#loading').show();
+	});
+	
+	
+
+
+
+	
+    var hour = "{{ session['ZMU_hour']}}"
+    document.addEventListener("DOMContentLoaded", function(){
+	var range_ora_selezionata = hour;
+	//alert(range_ora_selezionata);
+	document.getElementById('registrationhour').value = range_ora_selezionata;  
+	});
+	
+	
+	/*
+	var number = "{{ session['ZMU_tod']}}";
+	 $('input[name=ZMU_tod][value=' + number + ']').prop('checked',true);
+	 */
+
+	
+ 	var TRIP_indicator = "{{session['indicator_type_TPL']}}"	
+	// alert(TRIP_indicator);
+	document.addEventListener("DOMContentLoaded", function(){
+	var indicator_type_selezionata =  TRIP_indicator;
+	// alert(indicator_type_selezionata);
+	document.getElementById('registration_indicator_type_TPL').value = indicator_type_selezionata;   
+	});
+
+
+	
+	 ///////////////////////////---------------------------------------------------------------------/////////////////////////////////////////////
+	  ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+	   ///////////////////////////---------------------------------------------------------------------///////////////////////////////////////////
+	    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+		///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+        ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+      ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+	 
+	  
+// ADD Leaflet map
+	
+		
+		const osm  = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		})
+         
+	    var carto = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+         });
+		 
+	
+	
+	// control that shows state info on hover
+	const info = L.control(); 
+	
+	info.onAdd = function (map) {
+	this._div = L.DomUtil.create('div', 'info');
+	this.update();
+	return this._div;
+	};
+		
+	
+  
+
+			
+			
+	function getColor_zmu_origin_destinations(d) {
+		return d >= 200 ? '#071a4f' :
+		    d > 100  ? '#225ea8' : 
+		    d > 50  ?   '#0c2c84' :
+			d > 40  ? '#546ba8' :
+			//d > 30  ? '#1d91c0' :
+			d > 20  ? '#41b6c4' :  
+			//d > 10  ? '#7fcdbb' :
+			//d > 5   ? '#c7e9b4' :
+			d > 2  ? '#d5df9f' :
+			d >= 1   ? '#fdfdbf' : '#fdfdbf';
+			}    
+			
+			
+			
+	function getColor_census(d) {
+		return d > 20000 ? '#800026' :
+			d > 10000  ? '#97001e' :
+			d > 5000  ? '#BD0026' :
+			d > 3000  ? '#E31A1C' :
+			d > 2000  ? '#FC4E2A' :
+			d > 1000   ? '#FD8D3C' :
+			d > 300   ? '#FEB24C' :
+			d > 50   ? '#FED976' : '#FFEDA0';
+				}
+	
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+  if (TRIP_indicator == '102') {
+   //alert("------------gotta COUNTS----------");
+			plot_factor_counts = 1.5
+			
+		function getColor_zmu_origin_destinations(d) {
+		return d >= 1000/plot_factor_counts ? '#071a4f' :
+			d > 700/plot_factor_counts  ? '#546ba8' :
+			d > 500/plot_factor_counts ? '#1d91c0' :
+			d > 300/plot_factor_counts  ? '#41b6c4' :
+			d > 100/plot_factor_counts  ? '#7fcdbb' :
+			d > 50/plot_factor_counts  ? '#c7e9b4' :
+			d >= 1/plot_factor_counts   ? '#fdfdbf' : '#fdfdbf';
+			}   	 
+}   else if (TRIP_indicator == '103') {
+   // alert("------------gotta TRANSFER Number----------");
+			plot_factor_transfers = 1.3
+			
+		function getColor_zmu_origin_destinations(d) {
+		return d >= 99/plot_factor_transfers ? '#ff0000' :
+			d > 5/plot_factor_transfers  ? '#546ba8' :
+			d > 4/plot_factor_transfers ? '#1d91c0' :
+			d > 3/plot_factor_transfers  ? '#41b6c4' :
+			d > 2/plot_factor_transfers  ? '#7fcdbb' :
+			d > 1/plot_factor_transfers  ? '#c7e9b4' :
+			d >= 0/plot_factor_transfers   ? '#fdfdbf' : '#fdfdbf';
+			}   	 
+}   else if (TRIP_indicator == '104') {
+   //alert("------------gotta DISTANCE----------");
+			plot_factor_distance = 1.2
+			
+		function getColor_zmu_origin_destinations(d) {
+		return d >= 999/plot_factor_distance ? '#ff0000' :
+			d > 60/plot_factor_distance  ? '#546ba8' :
+			d > 50/plot_factor_distance ? '#1d91c0' :
+			d > 40/plot_factor_distance  ? '#41b6c4' :
+			d > 30/plot_factor_distance  ? '#7fcdbb' :
+			d > 20/plot_factor_distance  ? '#c7e9b4' :
+			d >= 0/plot_factor_distance   ? '#fdfdbf' : '#fdfdbf';
+			}   	 
+}   else if (TRIP_indicator == '105') {
+   //alert("------------gotta TRAVELTIME----------");
+			plot_factor_traveltime = 1.5
+			
+		function getColor_zmu_origin_destinations(d) {
+		return d >= 999/plot_factor_traveltime ? '#ff0000' :
+			d > 120/plot_factor_traveltime  ? '#546ba8' :
+			d > 80/plot_factor_traveltime ? '#1d91c0' :
+			d > 60/plot_factor_traveltime  ? '#41b6c4' :
+			d > 40/plot_factor_traveltime  ? '#7fcdbb' :
+			d > 20/plot_factor_traveltime  ? '#c7e9b4' :
+			d >= 0/plot_factor_traveltime   ? '#fdfdbf' : '#fdfdbf';
+			}  
+			
+		
+}   else if (TRIP_indicator == '106') {
+  // alert("------------gotta TRAVELSPEED----------");
+			plot_factor_travelspeed = 1.5
+			
+		function getColor_zmu_origin_destinations(d) {
+		return d >= 999/plot_factor_travelspeed ? '#ff0000' :
+			d > 40/plot_factor_travelspeed  ? '#546ba8' :
+			d > 25/plot_factor_travelspeed ? '#1d91c0' :
+			d > 20/plot_factor_travelspeed  ? '#41b6c4' :
+			d > 15/plot_factor_travelspeed  ? '#7fcdbb' :
+			d > 10/plot_factor_travelspeed  ? '#c7e9b4' :
+			d >= 0/plot_factor_travelspeed   ? '#fdfdbf' : '#fdfdbf';
+			}   	 
+}   else if (TRIP_indicator == '107') {
+  // alert("------------gotta WALKINGDISTANCE----------");
+			plot_factor_walkingdistance = 1.5
+			
+		function getColor_zmu_origin_destinations(d) {
+		return d >= 999/plot_factor_walkingdistance ? '#ff0000' :
+			d > 4/plot_factor_walkingdistance  ? '#546ba8' :
+			d > 2/plot_factor_walkingdistance ? '#1d91c0' :
+			d > 1.5/plot_factor_walkingdistance  ? '#41b6c4' :
+			d > 1/plot_factor_walkingdistance  ? '#7fcdbb' :
+			d > 0.5/plot_factor_walkingdistance  ? '#c7e9b4' :
+			d >= 0/plot_factor_walkingdistance   ? '#fdfdbf' : '#fdfdbf';
+			}   	 
+}   else if (TRIP_indicator == '110') {
+  // alert("------------gotta WAITING TIME----------");
+			plot_factor_waitingtime = 1.5
+			
+		function getColor_zmu_origin_destinations(d) {
+		return d >= 999/plot_factor_waitingtime ? '#ff0000' :
+			d > 60/plot_factor_waitingtime  ? '#546ba8' :
+			d > 30/plot_factor_waitingtime ? '#1d91c0' :
+			d > 15/plot_factor_waitingtime  ? '#41b6c4' :
+			d > 10/plot_factor_waitingtime  ? '#7fcdbb' :
+			d > 5/plot_factor_waitingtime  ? '#c7e9b4' :
+			d >= 1/plot_factor_waitingtime   ? '#fdfdbf' : '#fdfdbf';
+			}   	 
+}   else if (TRIP_indicator == '109') {
+  // alert("------------gotta ONBOARD TIME----------");
+			plot_factor_onboardtime = 1.5
+			
+		function getColor_zmu_origin_destinations(d) {
+		return d >= 999/plot_factor_onboardtime ? '#ff0000' :
+			d > 60/plot_factor_onboardtime  ? '#546ba8' :
+			d > 30/plot_factor_onboardtime ? '#1d91c0' :
+			d > 15/plot_factor_onboardtime  ? '#41b6c4' :
+			d > 10/plot_factor_onboardtime  ? '#7fcdbb' :
+			d > 5/plot_factor_onboardtime  ? '#c7e9b4' :
+			d >= 0/plot_factor_onboardtime   ? '#fdfdbf' : '#fdfdbf';
+			}   	 
+}   else if (TRIP_indicator == '108') {
+ //  alert("------------gotta WALKING TIME----------");
+			plot_factor_walkingtime = 1.5
+			
+		function getColor_zmu_origin_destinations(d) {
+		return d >= 999/plot_factor_walkingtime ? '#ff0000' :
+			d > 70/plot_factor_walkingtime  ? '#546ba8' :
+			d > 50/plot_factor_walkingtime ? '#1d91c0' :
+			d > 40/plot_factor_walkingtime  ? '#41b6c4' :
+			d > 30/plot_factor_walkingtime  ? '#7fcdbb' :
+			d > 15/plot_factor_walkingtime  ? '#c7e9b4' :
+			d >= 0/plot_factor_walkingtime   ? '#fdfdbf' : '#fdfdbf';
+			}   	 
+}
+	
+	
+	
+	
+	
+		
+			
+			
+		//////////* LEGEND USED FOR ZMU FCD DATA  (number of vehicles at destination per 1000 population)*////////////  
+		  if (TRIP_indicator == '102') {  // FCD
+			// alert("------------gotta COUNTS----------");
+			 
+			
+			var legend_ZMU = L.control({position: 'bottomright'});
+			
+			
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+				
+				  const labels=["from 1 to 50",
+								"from 50 to 100",
+								"from 100 to 300",
+								"from 300 to 500",
+								"from 500 to 700",
+								"from 700 to 1000",
+								" > 1000"];
+				 const grades = [1, 50, 100, 300, 500, 700, 1000];
+				 
+			
+				div.innerHTML='<div><b>N trips (TPL)</div';
+		
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+				
+                return div;
+            }
+			
+			
+			}  else if (TRIP_indicator == '103') {  // FCD
+				// alert("------------gotta TRANSFERS----------");
+			 
+			
+			var legend_ZMU = L.control({position: 'bottomright'});
+			
+			
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+				
+				  const labels=["from 0 to 1",
+								"from 1 to 2",
+								"from 2 to 3",
+								"from 3 to 4",
+								"from 4 to 5",
+								"> 5",
+								" -- ORIGIN"];
+				 const grades = [0, 1, 2, 3, 4, 5, 99];
+				 
+				 
+				
+			
+				div.innerHTML='<div><b>N. Transfers (TPL)</div';
+
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+			
+					
+					}  else if (TRIP_indicator == '104') {  
+					
+			// alert("------------gotta DISTANCES----------");
+			
+			
+			var legend_ZMU = L.control({position: 'bottomright'});
+			
+			
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+				
+				  const labels=["from 0 to 20",
+								"from 20 to 30",
+								"from 30 to 40",
+								"from 40 to 50",
+								"from 50 to 60",
+								"> 60",
+								" -- ORIGIN"];
+				 const grades = [0, 20, 30, 40, 50, 60, 999];
+				 
+				 
+				
+			
+				div.innerHTML='<div><b>Distance (Km)</div';
+
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+					
+			}  else if (TRIP_indicator == '105') {  
+		// alert("------------gotta TRAVEL TIME----------");
+			
+			var legend_ZMU = L.control({position: 'bottomright'});
+			
+			
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+				
+				  const labels=["from 0 to 20",
+								"from 20 to 40",
+								"from 40 to 60",
+								"from 60 to 80",
+								"from 80 to 120",
+								"> 120",
+								" -- ORIGIN"];
+				 const grades = [0, 20, 40, 60,80, 120, 999];
+				 
+			
+				div.innerHTML='<div><b>Travel Time (min)</div';
+
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            } 
+            
+			//alert("I am here ");
+           
+		 }  else if (TRIP_indicator == '106') {  
+			// alert("------------gotta TRAVEL SPEED----------");
+			
+			var legend_ZMU = L.control({position: 'bottomright'});
+			
+			
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+				
+				  const labels=["from 0 to 10",
+								"from 10 to 15",
+								"from 15 to 20",
+								"from 20 to 25",
+								"from 25 to 40",
+								" > 40",
+								" -- ORIGIN"];
+				 const grades = [0, 10, 15, 20, 25, 30, 999];
+				 
+			
+			
+		
+				div.innerHTML='<div><b>Travel Speed (km/h)</div';
+
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            } 
+            
+			//alert("I am here ");
+		
+		 }  else if (TRIP_indicator == '107') {  
+	// alert("------------gotta WALKING DISTANCE----------");
+			
+			var legend_ZMU = L.control({position: 'bottomright'});
+			
+			
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+				
+				  const labels=["from 0 to 0.5",
+								"from 0.5 to 1",
+								"from 1 to 1.5",
+								"from 1.5 to 2",
+								"from 2 to 4",
+								"> 4",
+								" -- ORIGIN"];
+				 const grades = [0, 0.5, 1, 1.5, 2, 3, 999];
+
+			
+		
+				div.innerHTML='<div><b>Walking Distance (km)</div';
+
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            } 
+            
+			//alert("I am here ");
+		
+		 }  else if (TRIP_indicator == '110') {  
+	// alert("------------gotta WAITING TIME----------");
+			
+			var legend_ZMU = L.control({position: 'bottomright'});
+			
+			
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+				
+				  const labels=["from 1 to 5",
+								"from 5 to 10",
+								"from 10 to 15",
+								"from 15 to 30",
+								"from 30 to 60",
+								" > 60",
+								" -- ORIGIN"];
+				 const grades = [0, 5, 10, 15, 30, 50, 999];
+
+	
+				div.innerHTML='<div><b>Waiting Time (min)</div';
+
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            } 
+            
+			//alert("I am here ");
+
+    }  else if (TRIP_indicator == '109') {  
+	// alert("------------gotta ONBOARD TIME----------");
+		
+			
+			var legend_ZMU = L.control({position: 'bottomright'});
+			
+			
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+				
+				  const labels=["from 0 to 5",
+								"from 5 to 10",
+								"from 10 to 15",
+								"from 15 to 30",
+								"from 30 to 60",
+								" > 60",
+								" -- ORIGIN"];
+				 const grades = [0, 5, 10, 15, 30, 50, 999];
+
+	
+				div.innerHTML='<div><b>On Board Time (min)</div';
+
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            } 
+            
+	//alert("I am here ");
+
+ }  else if (TRIP_indicator == '108') {  
+				// alert("------------gotta WALKING TIME----------");
+			
+			var legend_ZMU = L.control({position: 'bottomright'});
+			
+			
+            legend_ZMU.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+				
+				  const labels=["from 0 to 15",
+								"from 15 to 30",
+								"from 30 to 40",
+								"from 40 to 50",
+								"from 50 to 70",
+								"> 70",
+								"  -- ORIGIN"];
+				 const grades = [0, 15, 30, 40, 50, 70, 999];
+				 
+				 
+
+
+	
+				div.innerHTML='<div><b>Walking Time (min)</div';
+
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_origin_destinations(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            } 
+            
+	//alert("I am here ");
+
+} 
+
+          
+            
+            
+          
+		
+		
+			
+		
+	
+
+	info.update = function (props) {
+		const contents = props ? `<b>${props.POP_TOT_ZMU}</b> people` : 'Hover over a traffic zone';
+		this._div.innerHTML = `<h4>Total Population Number</h4>${contents}`;
+	};
+	
+	
+	
+		const selectedStyle = {
+		  color: '#000000',
+		  weight: 0.1,
+		  opacity: 0.1,
+		}
+			
+			
+		const selectedStyle_highlight = {
+		  color: 'black',
+		  weight: 3,
+		  opacity: 0.9,
+		}
+		
+		
+	
+		
+		const selectedStyle_mouseout = {
+		  color: 'black',
+		  weight: 2,
+		  opacity: 0.1,
+		}
+		
+	
+				
+		
+		
+		
+   
+		
+       //////// ----------- TPL routing colors ------- ////////////////////////////////////////////////////////////
+		plot_factor_counts = 1.5
+		
+		function style_colors_zmu_counts(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+				 fillColor: getColor_zmu_origin_destinations(feature.properties.counts/plot_factor_counts)
+			};
+		}
+		
+		
+	
+		plot_factor_transfers = 1.3
+		
+		function style_colors_zmu_transfers(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+				 fillColor: getColor_zmu_origin_destinations(feature.properties.transfers_number/plot_factor_transfers)
+			};
+		}
+		
+		
+		plot_factor_distance = 1.2
+		
+		function style_colors_zmu_distance(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+				 fillColor: getColor_zmu_origin_destinations(feature.properties.distance_km/plot_factor_distance)
+			};
+		}
+		
+		
+		
+		plot_factor_traveltime = 1.5
+		
+		function style_colors_zmu_traveltime(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+				 fillColor: getColor_zmu_origin_destinations(feature.properties.travel_time_min/plot_factor_traveltime)
+			};
+		}
+		
+		
+	plot_factor_travelspeed = 1.5
+		
+		function style_colors_zmu_travelspeed(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+				 fillColor: getColor_zmu_origin_destinations(feature.properties.travel_speed_km_h/plot_factor_traveltime)
+			};
+		}
+		
+		
+			
+	plot_factor_walkingdistance = 1.5
+		
+		function style_colors_zmu_walkingdistance(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+				 fillColor: getColor_zmu_origin_destinations(feature.properties.walking_distance_km/plot_factor_walkingdistance)
+			};
+		}
+		
+		
+		
+		plot_factor_waitingtime = 1.5
+		
+		function style_colors_zmu_waitingtime(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+				 fillColor: getColor_zmu_origin_destinations(feature.properties.waiting_time_min/plot_factor_waitingtime)
+			};
+		}
+		
+		
+		
+				
+		plot_factor_onboardtime = 1.5
+		
+		function style_colors_zmu_onboardtime(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+				 fillColor: getColor_zmu_origin_destinations(feature.properties.on_board_time_min/plot_factor_onboardtime)
+			};
+		}
+		
+		
+		
+			plot_factor_walkingtime = 1.5
+		
+		function style_colors_zmu_walkingtime(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+				 fillColor: getColor_zmu_origin_destinations(feature.properties.walking_time_min/plot_factor_walkingtime)
+			};
+		}
+		
+		
+	
+	/////// ------------------------------------------------- //////////////////////////////////////////////////////
+	
+		
+	 
+		
+		
+		
+		
+		function style_colors_zmu(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: getColor_zmu_origin_destinations(feature.properties.counts)
+			};
+		}
+		
+		
+		function style_colors_POIS_ZMU(feature) {
+			return {
+				weight: 3,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.1,
+				fillColor: 'blue'
+			};
+		}
+		
+		
+		
+		
+		
+		function style_colors_POIS(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'blue'
+			};
+		}
+		
+		
+		
+		function style_colors_POIS_amenities(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'red'
+			};
+		}
+		
+		
+		function style_colors_POIS_residential(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'yellow'
+			};
+		}
+		
+		
+				
+		
+	    // used to color ZMU zones with POPULATION data 2011
+		function style_pop(feature) {
+			return {
+				weight: 0.8,
+				opacity: 1,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.5,
+				fillColor: getColor_census(feature.properties.POP_TOT_ZMU)
+			};
+		}
+		
+		
+		// used to color ZMU zones with RESIDENCE data 2011
+		function style_homes(feature) {
+			return {
+				weight: 0.8,
+				opacity: 1,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.5,
+				fillColor: getColor_census(feature.properties.RES_TOT_ZMU)
+			};
+		}
+		
+		
+		
+		
+		function highlightFeature(e) {
+			const layer = e.target;
+			layer.setStyle({
+				weight: 3,
+				color: '#666',
+				dashArray: '',
+				fillOpacity: 0.9
+			});
+
+			layer.bringToFront();
+
+			info.update(layer.feature.properties);
+		}
+		
+		
+		/// add ZMU zones  borders  /////////////////////////////////////////////////////
+		var censuary_default = L.geoJSON(zmu_counts, { style: style_pop, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupText = '';
+					popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupText += (feature.properties.n_charging_stations) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n. charging stations: ' + feature.properties.n_charging_stations : '' ;	
+					popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';		        	
+                    popupText += (feature.properties.Available_Power) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Power (Watt): ' + feature.properties.Available_Power : '' ;						
+					layer.bindTooltip(popupText);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+			
+		
+		
+	 // alert("...I AM HERE...");
+		
+		
+		
+	    /*------------DEFAULT LAYER -----------------*/
+	    const censuary_Layer = L.layerGroup();
+		censuary_Layer.addLayer(censuary_default);		
+	
+	
+		
+		  
+
+         /////////----------- Points of Interest (POIS) in ZMUs -------/////////////////////////////////////////	
+		 
+			 var POIS_ZMU = L.geoJSON(zmu_POIS_counts, { style: style_colors_POIS_ZMU, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight);
+				  });
+				  
+					var popupText = '';
+					popupText += (feature.properties.apartments) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Apartments: ' + feature.properties.apartments : '';
+					popupText += (feature.properties.church) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Church: ' + feature.properties.church : ''
+					popupText += (feature.properties.residential) ?  '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Residential: ' + feature.properties.residential : '';
+					popupText += (feature.properties.hotel) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hotel: ' + feature.properties.hotel : ''
+					popupText += (feature.properties.office) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Office: ' + feature.properties.office : ''
+					popupText += (feature.properties.basilica) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hotel: ' + feature.properties.basilica : ''
+					popupText += (feature.properties.house) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">House: ' + feature.properties.house : ''
+					popupText += (feature.properties.public) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Public: ' + feature.properties.public : ''
+					popupText += (feature.properties.market) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Market: ' + feature.properties.market : ''
+					popupText += (feature.properties.detached) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Detached: ' + feature.properties.detached : ''
+					popupText += (feature.properties.synagogue) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Synagogue: ' + feature.properties.synagogue : ''
+					popupText += (feature.properties.roof) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Roof: ' + feature.properties.roof : ''
+					popupText += (feature.properties.supermarket) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Supermarket: ' + feature.properties.supermarket : '';
+					popupText += (feature.properties.retail) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Retail: ' + feature.properties.retail : ''
+					popupText += (feature.properties.congress_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Congress centre: ' + feature.properties.congress_centre : ''
+					popupText += (feature.properties.government) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Government: ' + feature.properties.government : ''
+					popupText += (feature.properties.commercial) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Commercial: ' + feature.properties.commercial : ''
+					popupText += (feature.properties.semidetached_house) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Semidetached house: ' + feature.properties.semidetached_house : ''
+					
+					popupText += (feature.properties.arts_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Arts centre: ' + feature.properties.arts_centre : ''
+					popupText += (feature.properties.bus_station) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bus station: ' + feature.properties.bus_station : ''
+					popupText += (feature.properties.cafe) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Cafe: ' + feature.properties.cafe : ''
+					popupText += (feature.properties.fast_food) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Fast food: ' + feature.properties.fast_food : ''
+					popupText += (feature.properties.pharmacy) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Pharmacy: ' + feature.properties.pharmacy : ''
+					popupText += (feature.properties.parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Parking: ' + feature.properties.parking : ''
+					popupText += (feature.properties.place_of_worship) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Place of worship: ' + feature.properties.place_of_worship : ''
+					popupText += (feature.properties.restaurant) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Restaurant: ' + feature.properties.restaurant : ''
+					popupText += (feature.properties.bar) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bar: ' + feature.properties.bar : ''
+					popupText += (feature.properties.bicycle_parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bicycle parking: ' + feature.properties.bicycle_parking : ''
+					popupText += (feature.properties.charging_station) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Charging station: ' + feature.properties.charging_station : ''
+					popupText += (feature.properties.theatre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Theatre: ' + feature.properties.theatre : ''
+					popupText += (feature.properties.cinema) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Cinema: ' + feature.properties.cinema : ''
+					popupText += (feature.properties.library) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Library: ' + feature.properties.library : ''
+					popupText += (feature.properties.marketplace) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Marketplace: ' + feature.properties.marketplace : ''
+					popupText += (feature.properties.motorcycle_parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Motorcycle parking: ' + feature.properties.motorcycle_parking : ''
+					popupText += (feature.properties.parking_entrance) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Parking entrance: ' + feature.properties.parking_entrance : ''
+					popupText += (feature.properties.police) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Police: ' + feature.properties.police : ''
+					popupText += (feature.properties.public_building) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Public building: ' + feature.properties.public_building : ''
+					popupText += (feature.properties.school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">School: ' + feature.properties.school : ''
+					popupText += (feature.properties.social_facility) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Social facility: ' + feature.properties.social_facility : ''
+					popupText += (feature.properties.car_sharing) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Car sharing: ' + feature.properties.car_sharing : ''
+					popupText += (feature.properties.pub) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Pub: ' + feature.properties.pub : ''
+					popupText += (feature.properties.taxi) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Taxi: ' + feature.properties.taxi : ''
+					popupText += (feature.properties.university) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">University: ' + feature.properties.university : ''
+					popupText += (feature.properties.college) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">College: ' + feature.properties.college : ''
+					popupText += (feature.properties.community_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Community centre: ' + feature.properties.community_centre : ''
+					popupText += (feature.properties.doctors) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Doctors: ' + feature.properties.doctors : ''
+					popupText += (feature.properties.townhall) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Townhall: ' + feature.properties.townhall : ''
+					popupText += (feature.properties.parking_space) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">parking space: ' + feature.properties.parking_space : ''		
+					popupText += (feature.properties.hospital) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hospital: ' + feature.properties.hospital : '';
+					popupText += (feature.properties.music_school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Music school: ' + feature.properties.music_school : '';
+					popupText += (feature.properties.fuel) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Fuel: ' + feature.properties.fuel : '';
+					popupText += (feature.properties.car_rental) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Car rental: ' + feature.properties.car_rental : '';
+					popupText += (feature.properties.dentist) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Dentist: ' + feature.properties.dentist : '';
+					popupText += (feature.properties.clinic) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Clinic: ' + feature.properties.clinic : '';
+					popupText += (feature.properties.social_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Social centre: ' + feature.properties.social_centre : '';
+					popupText += (feature.properties.events_venue) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Events venue: ' + feature.properties.events_venue : '';
+					popupText += (feature.properties.research_institute) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Research institute: ' + feature.properties.research_institute : '';
+					popupText += (feature.properties.ferry_terminal) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Ferry terminal: ' + feature.properties.ferry_terminal : '';
+					popupText += (feature.properties.language_school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Language school: ' + feature.properties.language_school : '';
+					popupText += (feature.properties.kindergarten) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Kindergarten: ' + feature.properties.kindergarten : '';
+					popupText += (feature.properties.conference_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Conference centre: ' + feature.properties.conference_centre : '';
+					popupText += (feature.properties.courthouse) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Courthouse: ' + feature.properties.courthouse : '';
+					popupText += (feature.properties.tourism) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Tourism: ' + feature.properties.tourism : '';
+					popupText += (feature.properties.weighbridge) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Weighbridge: ' + feature.properties.weighbridge : '';
+					popupText += (feature.properties.childcare) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Childcare: ' + feature.properties.childcare : '';
+					popupText += (feature.properties.nursing_home) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Nursing home: ' + feature.properties.nursing_home : '';
+					popupText += (feature.properties.coworking_space) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Coworking space: ' + feature.properties.coworking_space : '';
+					popupText += (feature.properties.casino) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Casino: ' + feature.properties.casino : '';
+					popupText += (feature.properties.community_centres) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Community centres: ' + feature.properties.community_centres : '';
+										
+					layer.bindTooltip(popupText);
+					
+					
+					
+			layer.on('mouseout', function (e) {
+						layer.setStyle(selectedStyle_mouseout); 
+					});	
+				}
+				});
+				
+		const POIS_Layer_zmu = L.layerGroup();
+		POIS_Layer_zmu.addLayer(POIS_ZMU);
+		
+
+		
+		
+		
+		
+		/////////----- ADD POINTS of INTERESTS (PARKINGS) nearby chosen location -----------////////////////////////
+		var POIS_PARKING = L.geoJSON(POIS_parking, { style: style_colors_POIS, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>amenity: '+feature.properties.amenity+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer = L.layerGroup();
+		POIS_Layer.addLayer(POIS_PARKING);
+		
+		
+		
+	    /////////----- ADD POINTS of INTERESTS (all AMENITIES) nearby chosen location -----------////////////////////////
+		var POIS_AMENITIES = L.geoJSON(POIS_amenities, { style: style_colors_POIS_amenities, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>amenity: '+feature.properties.amenity+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS_amenities); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer_amenities = L.layerGroup();
+		POIS_Layer_amenities.addLayer(POIS_AMENITIES);
+		
+		
+		
+		/////////----- ADD POINTS of INTERESTS (all residential) nearby chosen location -----------////////////////////////
+		var POIS_RESIDENTIALS = L.geoJSON(POIS_residential, { style: style_colors_POIS_residential, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>building: '+feature.properties.building+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS_residential); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer_residential = L.layerGroup();
+		POIS_Layer_residential.addLayer(POIS_RESIDENTIALS);
+		
+		
+	
+		
+		
+		
+        
+		//// ----- ZMU path zones -----------------------------////
+		function style_colors_ZMU_path_zones(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: getColor_zmu_origin_destinations(feature.properties.counts)
+			};
+		}
+		
+		
+		
+		const selectedStyle_mouseout_path_ZONES = {
+		  color: 'black',
+		  weight: 1,
+		  opacity: 0.6,
+		}
+		
+		
+		//// ----- ZMU zones -----------------------------////
+		function style_colors_ZMU_zones(feature) {
+			return {
+				weight: 1,
+				opacity: 0.6,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.0,
+				fillColor: 'white'
+			};
+		}
+		
+		const selectedStyle_highlight_ZONES = {
+		  color: 'orange',
+		  weight: 3,
+		  opacity: 0.9,
+		}
+		
+	    const selectedStyle_mouseout_ZONES = {
+		  color: 'black',
+		  weight: 1,
+		  opacity: 0.6,
+		}
+		
+		
+		
+		
+		
+			
+		/// add ZMU zones  borders  /////////////////////////////////////////////////////
+		var ZMU_zones = L.geoJSON(charging_data, { style: style_colors_ZMU_zones, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupText = '';
+					popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupText += (feature.properties.n_charging_stations) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n. charging stations: ' + feature.properties.n_charging_stations : '' ;	
+					popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';		        	
+                    popupText += (feature.properties.Available_Power) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Power (Watt): ' + feature.properties.Available_Power : '' ;						
+					layer.bindTooltip(popupText);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+
+	
+		const ZMU_zones_Layer = L.layerGroup();
+		ZMU_zones_Layer.addLayer(ZMU_zones);	
+		
+		
+	
+	// alert("---- I am here --------");
+	
+	
+	</script>
+
+	    
+	 <script>
+	 
+	    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    ///------------- add ZMU grouped_zmu_paths  -------------------/////////////////////////////////////////////////////
+		
+		
+		
+	var filtered_od_routing = JSON.parse(JSON.stringify({{session['filtered_od_routing'] | tojson | safe}}));
+	//alert(filtered_od_routing);
+
+	
+	////////////////////////////////////////
+	////// -------- TRANSFERS ------////////
+	////////////////////////////////////////
+	
+	if (TRIP_indicator == '103') {
+	
+	var path_ZMU_transfers = L.geoJSON(filtered_od_routing, { style: style_colors_zmu_transfers, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupTexto = '';
+					popupTexto += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupTexto += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupTexto += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+					popupTexto += String(feature.properties.transfers_number) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">N. Transfers: ' + String(feature.properties.transfers_number) : '';						
+					layer.bindTooltip(popupTexto);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_path_ZONES); 
+				});	
+			}
+			});
+			
+		
+			
+		const mapmatched_Layer_transfers = L.layerGroup();
+		mapmatched_Layer_transfers.addLayer(path_ZMU_transfers);
+			
+		
+	//alert("----- I AM REDIRECTING -----");
+		
+		
+	
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+		
+
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 10,
+			layers: [carto, ZMU_zones, mapmatched_Layer_transfers]  //osm 
+		});
+		
+		// legend.addTo(map);
+		// legend_censuary.addTo(map);
+		legend_ZMU.addTo(map);
+		//info.addTo(map);
+		
+		
+		
+		
+		
+	///// ------ add custom geometric shapes to select areas ------- ///////////////
+	var options = {
+		draw: {
+			circle: false, // Turns off this drawing tool
+			rectangle: false,
+			marker: false,
+			circlemarker: false,
+			polyline: false
+		}
+	};
+
+
+		
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+		
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		const overlays = {
+			'Traffic Zones & Censuary': censuary_Layer,
+			//'N.Transfers from ORIGIN zone': mapmatched_Layer_transfers,
+			 "<span style='color:black; font-size: 20px;'>N.Transfers from ORIGIN</span>": mapmatched_Layer_transfers,
+			'POIS & Residences': POIS_Layer_zmu,
+			'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			'POIS_Residentials': POIS_RESIDENTIALS
+			
+		};
+		
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+		
+	
+        /* ----->  ADD TITLE -----*/
+		$(".leaflet-top" + ".leaflet-right").children().eq(1).prepend('<div id="mapTitle" style="text-align: center;"><span style="font-size:16pt">Overlay Layers</span></div>');
+
+
+	}   else if (TRIP_indicator == '104') {
+	
+    // alert(TRIP_indicator);
+
+	/// --------- DISTANCES ------------------- ////////////////////
+	
+	//alert("-------------------------------- I AM HERE ----");
+	
+	var path_ZMU_distances = L.geoJSON(filtered_od_routing, { style: style_colors_zmu_distance, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupTexto = '';
+					popupTexto += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupTexto += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupTexto += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+					popupTexto += String(feature.properties.distance_km) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Distance (km) ' + String(feature.properties.distance_km) : '';						
+					layer.bindTooltip(popupTexto);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_path_ZONES); 
+				});	
+			}
+			});
+			
+		
+			
+		const mapmatched_Layer_distances = L.layerGroup();
+		mapmatched_Layer_distances.addLayer(path_ZMU_distances);
+			
+		
+	//alert("----- I AM REDIRECTING -----");
+		
+	
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+		
+
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 10,
+			layers: [carto, ZMU_zones, mapmatched_Layer_distances]  //osm 
+		});
+		
+		// legend.addTo(map);
+		// legend_censuary.addTo(map);
+		legend_ZMU.addTo(map);
+		//info.addTo(map);
+		
+		
+	//	alert("-------------------------------- I AM HERE    ---->>> DISTANCES--------");
+		
+		
+	///// ------ add custom geometric shapes to select areas ------- ///////////////
+	var options = {
+		draw: {
+			circle: false, // Turns off this drawing tool
+			rectangle: false,
+			marker: false,
+			circlemarker: false,
+			polyline: false
+		}
+	};
+
+
+		
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+		
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		const overlays = {
+			'Traffic Zones & Censuary': censuary_Layer,
+			 "<span style='color:black; font-size: 20px;'>Travel Distance from ORIGIN</span>": mapmatched_Layer_distances,
+			'POIS & Residences': POIS_Layer_zmu,
+			'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			'POIS_Residentials': POIS_RESIDENTIALS
+			
+		};
+		
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+		
+	
+        /* ----->  ADD TITLE -----*/
+		$(".leaflet-top" + ".leaflet-right").children().eq(1).prepend('<div id="mapTitle" style="text-align: center;"><span style="font-size:16pt">Overlay Layers</span></div>');
+	
+		
+		
+	
+	
+	}   else if (TRIP_indicator == '105') {
+	
+    // alert(TRIP_indicator);
+
+	/// --------- TRAVEL TIME ------------------- ////////////////////
+	
+	
+	
+	var path_ZMU_traveltime = L.geoJSON(filtered_od_routing, { style: style_colors_zmu_traveltime, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupTexto = '';
+					popupTexto += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupTexto += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupTexto += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+					popupTexto += String(feature.properties.travel_time_min) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Travel Time (km) ' + String(feature.properties.travel_time_min) : '';						
+					layer.bindTooltip(popupTexto);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_path_ZONES); 
+				});	
+			}
+			});
+			
+		
+			
+		const mapmatched_Layer_traveltime = L.layerGroup();
+		mapmatched_Layer_traveltime.addLayer(path_ZMU_traveltime);
+	
+	
+	//alert("-------------------------------- I AM HERE ----");		
+		
+	//alert("----- I AM REDIRECTING -----");
+		
+	
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+		
+
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 10,
+			layers: [carto, ZMU_zones, mapmatched_Layer_traveltime]  //osm 
+		});
+		
+		// legend.addTo(map);
+		// legend_censuary.addTo(map);
+		legend_ZMU.addTo(map);
+		//info.addTo(map);
+		
+		
+	//	alert("-------------------------------- I AM HERE    ---->>> DISTANCES--------");
+		
+		
+	///// ------ add custom geometric shapes to select areas ------- ///////////////
+	var options = {
+		draw: {
+			circle: false, // Turns off this drawing tool
+			rectangle: false,
+			marker: false,
+			circlemarker: false,
+			polyline: false
+		}
+	};
+
+
+		
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+		
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		const overlays = {
+			'Traffic Zones & Censuary': censuary_Layer,
+			 "<span style='color:black; font-size: 20px;'>Travel Travel Time from ORIGIN</span>": mapmatched_Layer_traveltime,
+			'POIS & Residences': POIS_Layer_zmu,
+			'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			'POIS_Residentials': POIS_RESIDENTIALS
+			
+		};
+		
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+		
+	
+        /* ----->  ADD TITLE -----*/
+		$(".leaflet-top" + ".leaflet-right").children().eq(1).prepend('<div id="mapTitle" style="text-align: center;"><span style="font-size:16pt">Overlay Layers</span></div>');
+	
+		
+
+		
+	
+		}   else if (TRIP_indicator == '106') {
+	
+    // alert(TRIP_indicator);
+
+	/// --------- TRAVEL SPEED ------------------- ////////////////////
+	
+
+	var path_ZMU_travelspeed = L.geoJSON(filtered_od_routing, { style: style_colors_zmu_travelspeed, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupTexto = '';
+					popupTexto += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupTexto += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupTexto += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+					popupTexto += String(feature.properties.travel_speed_km_h) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Travel Speed (km/h) ' + String(feature.properties.travel_speed_km_h) : '';						
+					layer.bindTooltip(popupTexto);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_path_ZONES); 
+				});	
+			}
+			});
+			
+		
+			
+		const mapmatched_Layer_travelspeed = L.layerGroup();
+		mapmatched_Layer_travelspeed.addLayer(path_ZMU_travelspeed);
+	
+	
+	//alert("-------------------------------- I AM HERE ----");		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+		
+
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 10,
+			layers: [carto, ZMU_zones, mapmatched_Layer_travelspeed]  //osm 
+		});
+		
+		// legend.addTo(map);
+		// legend_censuary.addTo(map);
+		legend_ZMU.addTo(map);
+		//info.addTo(map);
+			
+		
+	///// ------ add custom geometric shapes to select areas ------- ///////////////
+	var options = {
+		draw: {
+			circle: false, // Turns off this drawing tool
+			rectangle: false,
+			marker: false,
+			circlemarker: false,
+			polyline: false
+		}
+	};
+
+
+		
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+		
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		const overlays = {
+			'Traffic Zones & Censuary': censuary_Layer,
+			 "<span style='color:black; font-size: 20px;'>Travel Speed (km/h) from ORIGIN</span>": mapmatched_Layer_travelspeed,
+			'POIS & Residences': POIS_Layer_zmu,
+			'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			'POIS_Residentials': POIS_RESIDENTIALS
+			
+		};
+		
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+		
+	
+        /* ----->  ADD TITLE -----*/
+		$(".leaflet-top" + ".leaflet-right").children().eq(1).prepend('<div id="mapTitle" style="text-align: center;"><span style="font-size:16pt">Overlay Layers</span></div>');
+		
+
+
+			}   else if (TRIP_indicator == '107') {
+/// --------- WALKING DISTANCE ------------------- ////////////////////
+	
+
+	var path_ZMU_walkingdistance = L.geoJSON(filtered_od_routing, { style: style_colors_zmu_walkingdistance, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupTexto = '';
+					popupTexto += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupTexto += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupTexto += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+					popupTexto += String(feature.properties.walking_distance_km) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Walking Distance (km) ' + String(feature.properties.walking_distance_km) : '';						
+					layer.bindTooltip(popupTexto);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_path_ZONES); 
+				});	
+			}
+			});
+			
+		
+			
+		const mapmatched_Layer_walkingdistance = L.layerGroup();
+		mapmatched_Layer_walkingdistance.addLayer(path_ZMU_walkingdistance);
+	
+	
+	//alert("-------------------------------- I AM HERE ----");		
+		
+	//alert("----- I AM REDIRECTING -----");
+		
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+		
+
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 10,
+			layers: [carto, ZMU_zones, mapmatched_Layer_walkingdistance]  //osm 
+		});
+		
+		// legend.addTo(map);
+		// legend_censuary.addTo(map);
+		legend_ZMU.addTo(map);
+		//info.addTo(map);
+		
+		
+	//	alert("-------------------------------- I AM HERE    ---->>> DISTANCES--------");
+		
+		
+	///// ------ add custom geometric shapes to select areas ------- ///////////////
+	var options = {
+		draw: {
+			circle: false, // Turns off this drawing tool
+			rectangle: false,
+			marker: false,
+			circlemarker: false,
+			polyline: false
+		}
+	};
+
+
+		
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+		
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		const overlays = {
+			'Traffic Zones & Censuary': censuary_Layer,
+			 "<span style='color:black; font-size: 20px;'>Walking Distance (km) from ORIGIN</span>": mapmatched_Layer_walkingdistance,
+			'POIS & Residences': POIS_Layer_zmu,
+			'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			'POIS_Residentials': POIS_RESIDENTIALS
+			
+		};
+		
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+		
+	
+        /* ----->  ADD TITLE -----*/
+		$(".leaflet-top" + ".leaflet-right").children().eq(1).prepend('<div id="mapTitle" style="text-align: center;"><span style="font-size:16pt">Overlay Layers</span></div>');
+		
+
+
+	}   else if (TRIP_indicator == '110') {
+/// --------- WAITING TIME ------------------- ////////////////////
+	
+
+	var path_ZMU_waitingtime = L.geoJSON(filtered_od_routing, { style: style_colors_zmu_waitingtime, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupTexto = '';
+					popupTexto += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupTexto += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupTexto += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+					popupTexto += String(feature.properties.waiting_time_min) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Waiting Time (min) ' + String(feature.properties.waiting_time_min) : '';						
+					layer.bindTooltip(popupTexto);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_path_ZONES); 
+				});	
+			}
+			});
+			
+		
+			
+		const mapmatched_Layer_waitingtime = L.layerGroup();
+		mapmatched_Layer_waitingtime.addLayer(path_ZMU_waitingtime);
+	
+	
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+		
+
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 10,
+			layers: [carto, ZMU_zones, mapmatched_Layer_waitingtime]  //osm 
+		});
+		
+		// legend.addTo(map);
+		// legend_censuary.addTo(map);
+		legend_ZMU.addTo(map);
+		//info.addTo(map);
+		
+		
+	//	alert("-------------------------------- I AM HERE    ---->>> DISTANCES--------");
+		
+		
+	///// ------ add custom geometric shapes to select areas ------- ///////////////
+	var options = {
+		draw: {
+			circle: false, // Turns off this drawing tool
+			rectangle: false,
+			marker: false,
+			circlemarker: false,
+			polyline: false
+		}
+	};
+
+
+		
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+		
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		const overlays = {
+			'Traffic Zones & Censuary': censuary_Layer,
+			 "<span style='color:black; font-size: 20px;'>Waiting Time (min) from ORIGIN</span>": mapmatched_Layer_waitingtime,
+			'POIS & Residences': POIS_Layer_zmu,
+			'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			'POIS_Residentials': POIS_RESIDENTIALS
+			
+		};
+		
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+		
+	
+        /* ----->  ADD TITLE -----*/
+		$(".leaflet-top" + ".leaflet-right").children().eq(1).prepend('<div id="mapTitle" style="text-align: center;"><span style="font-size:16pt">Overlay Layers</span></div>');
+		
+		
+		
+		
+	}   else if (TRIP_indicator == '109') {
+/// --------- ON BOARD TIME ------------------- ////////////////////
+	
+
+	var path_ZMU_onboardtime = L.geoJSON(filtered_od_routing, { style: style_colors_zmu_onboardtime, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupTexto = '';
+					popupTexto += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupTexto += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupTexto += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+					popupTexto += String(feature.properties.on_board_time_min) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">On-Board Time (min) ' + String(feature.properties.on_board_time_min) : '';						
+					layer.bindTooltip(popupTexto);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_path_ZONES); 
+				});	
+			}
+			});
+			
+		
+			
+		const mapmatched_Layer_onboardtime = L.layerGroup();
+		mapmatched_Layer_onboardtime.addLayer(path_ZMU_onboardtime);
+	
+
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+		
+
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 10,
+			layers: [carto, ZMU_zones, mapmatched_Layer_onboardtime]  //osm 
+		});
+		
+		// legend.addTo(map);
+		// legend_censuary.addTo(map);
+		legend_ZMU.addTo(map);
+		//info.addTo(map);
+		
+		
+	//	alert("-------------------------------- I AM HERE    ---->>> DISTANCES--------");
+		
+		
+	///// ------ add custom geometric shapes to select areas ------- ///////////////
+	var options = {
+		draw: {
+			circle: false, // Turns off this drawing tool
+			rectangle: false,
+			marker: false,
+			circlemarker: false,
+			polyline: false
+		}
+	};
+
+
+		
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+		
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		const overlays = {
+			'Traffic Zones & Censuary': censuary_Layer,
+			 "<span style='color:black; font-size: 20px;'>On Board Time (min) from ORIGIN</span>": mapmatched_Layer_onboardtime,
+			'POIS & Residences': POIS_Layer_zmu,
+			'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			'POIS_Residentials': POIS_RESIDENTIALS
+			
+		};
+		
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+		
+	
+        /* ----->  ADD TITLE -----*/
+		$(".leaflet-top" + ".leaflet-right").children().eq(1).prepend('<div id="mapTitle" style="text-align: center;"><span style="font-size:16pt">Overlay Layers</span></div>');
+		
+
+	}   else if (TRIP_indicator == '108') {
+/// --------- WALKING TIME ------------------- ////////////////////
+	
+
+	var path_ZMU_walkingtime = L.geoJSON(filtered_od_routing, { style: style_colors_zmu_walkingtime, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupTexto = '';
+					popupTexto += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+					popupTexto += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+					popupTexto += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+					popupTexto += String(feature.properties.walking_time_min) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Walking Time (min) ' + String(feature.properties.walking_time_min) : '';						
+					layer.bindTooltip(popupTexto);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_path_ZONES); 
+				});	
+			}
+			});
+			
+		
+			
+		const mapmatched_Layer_walkingtime = L.layerGroup();
+		mapmatched_Layer_walkingtime.addLayer(path_ZMU_walkingtime);
+	
+
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+		
+
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 10,
+			layers: [carto, ZMU_zones, mapmatched_Layer_walkingtime]  //osm 
+		});
+		
+		// legend.addTo(map);
+		// legend_censuary.addTo(map);
+		legend_ZMU.addTo(map);
+		//info.addTo(map);
+		
+		
+		
+		
+	///// ------ add custom geometric shapes to select areas ------- ///////////////
+	var options = {
+		draw: {
+			circle: false, // Turns off this drawing tool
+			rectangle: false,
+			marker: false,
+			circlemarker: false,
+			polyline: false
+		}
+	};
+
+
+		
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+		
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		const overlays = {
+			'Traffic Zones & Censuary': censuary_Layer,
+			 "<span style='color:black; font-size: 20px;'>Walking Time (min) from ORIGIN</span>": mapmatched_Layer_walkingtime,
+			'POIS & Residences': POIS_Layer_zmu,
+			'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			'POIS_Residentials': POIS_RESIDENTIALS
+			
+		};
+		
+		
+		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"
+	    const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map); 
+		
+		
+	
+        /* ----->  ADD TITLE -----*/
+		$(".leaflet-top" + ".leaflet-right").children().eq(1).prepend('<div id="mapTitle" style="text-align: center;"><span style="font-size:16pt">Overlay Layers</span></div>');
+		
+	}    // this closes the IF
+				
+		
+				
+		
+
+	
+	window.addEventListener('resize', 
+	() => map.getViewPort().resize());
+	
+	
+	
+	
+	
+	
+  </script>
+</body>
+</html>

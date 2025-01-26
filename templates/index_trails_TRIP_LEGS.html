@@ -1,0 +1,777 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+<title>Leaflet AnimatedMarker Demo</title>
+<!--  Mobile Viewport Fix -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<!-- Google WebFonts -->
+<link href='http://fonts.googleapis.com/css?family=Dancing+Script:700' rel='stylesheet' type='text/css'>
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+
+
+<style>
+body {
+		padding: 0;
+		margin: 0;
+		font-family: Arial, Helvetica, sans-serif;
+	}
+
+#map {
+  height: 100%;
+}
+
+/* Optional: Makes the sample page fill the window. */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
+.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+.legend { text-align: left; line-height: 10px; color: #555; font-size: 0.875em} .legend i { width: 10px; height: 10px; float: left; margin-right: 4px; opacity: 0.7; } 
+.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+
+#start {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+  z-index: 700;
+  font-size: 40px
+}
+
+/* All of this is from cibi.me */
+
+#branding {
+  height: 0;
+  overflow: visible;
+  position: relative;
+  z-index: 700;
+  color: #fff;
+
+  background-color: #444;
+
+  background-image: linear-gradient(bottom, rgb(68,68,68) 0%, rgb(102,102,102) 100%);
+  background-image: -o-linear-gradient(bottom, rgb(68,68,68) 0%, rgb(102,102,102) 100%);
+  background-image: -moz-linear-gradient(bottom, rgb(68,68,68) 0%, rgb(102,102,102) 100%);
+  background-image: -webkit-linear-gradient(bottom, rgb(68,68,68) 0%, rgb(102,102,102) 100%);
+  background-image: -ms-linear-gradient(bottom, rgb(68,68,68) 0%, rgb(102,102,102) 100%);
+
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(68,68,68)),
+    color-stop(1, rgb(102,102,102))
+  );
+}
+
+/* the logo */
+#logo {
+  position: absolute;
+  top: 1.5em;
+  right: 0;
+  margin-top: -15px;
+  overflow: hidden;
+  padding: 10px 0 10px 3.5em;
+}
+#logo .ribbon {
+  position: relative;
+  height: 4em;
+  right: -10px;
+  padding: 0 10px 0 1.5em;
+  border-top: 1px solid #529be6;
+  border-bottom: 1px solid #2a65a1;
+
+  background-color: #68aff7;
+
+  background-image: linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -o-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -moz-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -webkit-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -ms-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(86,162,238)),
+    color-stop(1, rgb(120,185,255))
+  );
+
+     -moz-box-shadow: inset -2px 1px 1px rgba(255,255,255,0.5);
+  -webkit-box-shadow: inset -2px 1px 1px rgba(255,255,255,0.5);
+          box-shadow: inset -2px 1px 1px rgba(255,255,255,0.5);
+}
+#logo .ribbon:before,
+#logo .ribbon:after {
+  content: "\0020";
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  z-index: -1;
+  border: 1px solid #2a65a1;
+  border-top: 1px solid #529be6;
+  border-left: 2px solid #498fd7;
+
+  background-color: #68aff7;
+
+  background-image: linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -o-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -moz-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -webkit-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -ms-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(86,162,238)),
+    color-stop(1, rgb(120,185,255))
+  );
+
+          transform: skew(45deg,0deg);
+      -ms-transform: skew(45deg,0deg);
+  -webkit-transform: skew(45deg,0deg);
+       -o-transform: skew(45deg,0deg);
+     -moz-transform: skew(45deg,0deg);
+
+     -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+             border-radius: 8px;
+
+     -moz-box-shadow: -5px 0 15px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255,255,255,0.5);
+  -webkit-box-shadow: -5px 0 15px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255,255,255,0.5);
+          box-shadow: -5px 0 15px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255,255,255,0.5);
+}
+#logo .ribbon:after {
+  padding-right: 6em;
+  right: -6em;
+  margin-right: -1px;
+  border-left: 2px solid #498fd7;
+          transform: skew(-45deg,0deg);
+      -ms-transform: skew(-45deg,0deg);
+  -webkit-transform: skew(-45deg,0deg);
+       -o-transform: skew(-45deg,0deg);
+     -moz-transform: skew(-45deg,0deg);
+
+        -moz-box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(255,255,255,0.5);
+     -webkit-box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(255,255,255,0.5);
+             box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(255,255,255,0.5);
+}
+
+#site-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 3.25em;
+  margin: -0.2em 20px 0 0;
+  line-height: 1;
+}
+#site-title a {
+  text-decoration: none;
+  color: #fff;
+  text-shadow: -1px -1px 1px rgba(42,101,161,0.25),
+               -1px  1px 1px rgba(42,101,161,0.25),
+                1px -1px 1px rgba(42,101,161,0.25),
+                1px  1px 1px rgba(42,101,161,0.25)
+}
+#site-title a:hover {
+  text-shadow: -1px -1px 1px rgba(42,101,161,0.5),
+               -1px  1px 1px rgba(42,101,161,0.75),
+                1px -1px 1px rgba(42,101,161,0.25),
+                1px  1px 1px rgba(42,101,161,0.5)
+}
+#site-description {
+  color: #dfeefd;
+  font-size: 1em;
+   z-index: 700;
+  margin: 0 20px 0 0;
+  text-shadow: -1px -1px 1px rgba(42,101,161,0.25),
+               -1px  1px 1px rgba(42,101,161,0.25),
+                1px -1px 1px rgba(42,101,161,0.25),
+                1px  1px 1px rgba(42,101,161,0.25)
+}
+
+/* AddThis */
+#branding .addthis_toolbox {
+  margin: 0.5em 0 0 0.5em;
+  float: left;
+  min-width: 163px;
+}
+
+/* Navigation: Main Menu */
+#main-menu {
+  padding: .25em;
+  float: right;
+}
+#main-menu li {
+  float: left;
+}
+#main-menu a {
+  display: block;
+  color: #fff;
+  font-size: 1em;
+  font-weight: bold;
+  line-height: 1.75;
+  text-decoration: none;
+  padding: 0 0.75em;
+  position: relative;
+  z-index: 1000;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+}
+#main-menu a:hover {
+  background-color: #333;
+}
+
+/* Location Search Form */
+#branding .search {
+  padding: 1em;
+}
+#branding .search input {
+  width: 15em;
+  padding: 0.5em;
+  background: #eee;
+  border: 0;
+  font-weight: bold;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+
+  background-image: linear-gradient(bottom, rgb(229,229,229) 0%, rgb(208,208,208) 100%);
+  background-image: -o-linear-gradient(bottom, rgb(229,229,229) 0%, rgb(208,208,208) 100%);
+  background-image: -moz-linear-gradient(bottom, rgb(229,229,229) 0%, rgb(208,208,208) 100%);
+  background-image: -webkit-linear-gradient(bottom, rgb(229,229,229) 0%, rgb(208,208,208) 100%);
+  background-image: -ms-linear-gradient(bottom, rgb(229,229,229) 0%, rgb(208,208,208) 100%);
+
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(229,229,229)),
+    color-stop(1, rgb(208,208,208))
+  );
+}
+ #branding .search ::-webkit-input-placeholder { color: #777; }
+ #branding .search :-moz-placeholder { color: #777; }
+
+
+@media only screen and (min-width: 768px) {
+  #logo {
+    right: 0;
+    top: 2em;
+  }
+
+  #logo .ribbon {
+    height: 5em;
+  }
+
+  #site-title {
+    font-size: 4.25em;
+  }
+  #site-description {
+    font-size: 1.25em;
+  }
+
+  /* Map UI */
+  .leaflet-control-zoom {
+    display: block;
+  }
+  .leaflet-container .leaflet-control-attribution {
+    font-size: 10px;
+  }
+}
+
+
+  header, nav {
+    left: 2%;
+	top: 85%;
+  	z-index: 700;
+	position: absolute;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	border-spacing: 5px;
+  }
+
+	nav a {
+	  text-decoration: none;
+	  background: #000000;  /* Black */
+	  border-radius: 5px;
+	  font-size: 1.2em;
+	  color: white;
+	  padding: 3px 8px;
+	  display: table-cell;
+	}
+	
+	
+	nav .col_home {
+		background-color: #6b0000;
+	}
+	
+	nav .col_privata {
+		background-color: #4CAF50;
+	}
+	
+	
+	nav .col_collettivo {
+		background-color: #0000ff ;
+	}
+	
+	nav .col_scenari {
+		background-color: #ffa500 ;
+	}
+	
+	
+	nav .col_impatti {
+		background-color: #76a5af ;
+	}
+	
+	nav .IEA_statistics {
+		background-color: #ededed ;
+		color: blue;
+	}
+
+
+
+
+ main {
+		background-color: rgba(51, 170, 51, .2); 
+		left: 2%;
+		top: 30%;
+		z-index: 700;
+		position: absolute;
+		margin: 10px 0;
+		padding: 15px;
+		text-overflow:ellipsis;
+        overflow:hidden;
+	}
+
+	main div {
+	  background: #7f7fff;
+	  margin: 0 auto;
+	  color: white;
+	  padding: 7px;
+	  margin: 10px auto;
+	}
+	
+
+	main div:nth-child(1) {
+	  width: 270px;
+	}
+	main div:nth-child(2) {
+	  width: 270px;
+	}
+	
+	main div:nth-child(3) {
+	  width: 270px;
+	}
+	
+	main div:nth-child(4) {
+	  width: 270px;
+	}
+	
+	main div:nth-child(5) {
+	  width: 270px;
+	}
+	
+	main div:nth-child(6) {
+	  width: 270px;
+	}
+	
+	main div:nth-child(7) {
+	  width: 270px;
+	}
+	
+	main div:nth-child(8) {
+	  width: 270px;
+	}
+	
+	.inline-block-left {
+	  text-align: left;
+	}
+	
+	.flex-left {
+	  display: flex;
+	  //justify-content: center;
+	}
+	
+
+.label {
+  color: white;
+  padding: 8px;
+  font-family: Arial;
+  font-weight: bold;
+}
+.tpl_line {background-color: #2196F3;} /* Blue */
+	
+	
+table, th, td {
+  border:1px solid black;
+}
+
+table.center_table {
+  margin-left: -20%; 
+  //margin-left: 20%;
+}
+
+</style>
+
+
+
+
+<!-- SET the style of the LOADER-->
+<style>
+
+/* Center the loader (SPINNER) */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  // border-top: 16px solid #3498db;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-right: 16px solid yellow;
+  border-left: 16px solid pink;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+
+div#loading {
+    display: none;
+	position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 700;
+	width: 270px;
+	height: 270px;
+	 margin: -76px 0 0 -76px;
+    background: url(/static/loadingimage_TPL.gif) no-repeat;
+    cursor: wait;
+    }
+	
+
+.animation_link {
+  font-size: 130%;
+  color: blue;
+  font-weight: bold;
+}
+
+
+
+
+
+	
+
+</style>
+
+
+</head>
+
+
+<!--body-->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+<!--start the SPINNER or LOADER-->
+<!--div id="loader"></div-->
+
+
+<body>
+
+<div id="loading"></div>
+
+
+<main class="inline-block-center">
+
+
+<form method="POST" action="/FCD_day_selector/">
+<span class="label tpl_line">Day:</span>
+  <input type="date" value="2019-10-09" id="FCD-day" name="FCD_day">
+  <input type="submit">
+</form>
+
+<!--insert new line-->
+<br>
+
+
+<form method="POST" action="/FCD_hour_selector/">	
+<span class="label tpl_line">hour:</span>
+<select class="FCD_hour_selector" name="FCD_hour" id="choose" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<option value="0">00:00</option>
+		<option value="1">01:00</option>
+		<option value="2">02:00</option>
+		<option value="3">03:00</option>
+		<option value="4">04:00</option>
+		<option value="5">05:00</option>
+		<option value="6">06:00</option>
+		<option value="7">07:00</option>
+		<option value="8">08:00</option>
+		<option value="9">09:00</option>
+		<option value="10">10:00</option>
+		<option value="11">11:00</option>
+		<option value="12">12:00</option>
+		<option value="13">13:00</option>
+		<option value="14">14:00</option>
+		<option value="15">15:00</option>
+		<option value="16">16:00</option>
+		<option value="17">17:00</option>
+		<option value="18">18:00</option>
+		<option value="19">19:00</option>
+		<option value="20">20:00</option>
+		<option value="21">21:00</option>
+		<option value="22">22:00</option>
+		<option value="23">23:00</option>
+	</select>
+	<input class="btn btn-primary btn-sm" type="submit" value="Select hour", onclick="$('#loading').show();">
+</form>
+
+  
+
+
+<ul>
+{% for item in data_trails %}
+<table class="center_table" style="width:100%">
+<tr>
+    <th>Day</th>
+    <th>hour</th>
+  </tr>
+  <tr>
+    <td>{{item.FCD_day}}</td>
+    <td>{{item.hour}}</td>
+  </tr>
+</table>
+{% endfor %}
+</ul>
+
+
+<p><i><b>Displaying 10% of records</i></b></p>
+
+</main>	
+	
+
+
+
+
+<nav role='navigation'>
+  <a class="col_home" href="/home_page/">Home</a>
+  <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
+  <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
+  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
+  <a class="col_impatti" href="/public_transport_page/">Impacts</a>
+  <a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a>
+</nav> 
+
+
+  <div id="map"></div>
+
+  <button id="start">Start Animation</button>
+
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+  <script src="{{ url_for('static', filename='AnimatedMarker.js') }}" /></script>
+  <script src="{{ url_for('static', filename='selected_trip_path_FCD.txt') }}" /></script>
+  <script src="{{ url_for('static', filename='selected_trip_params_FCD.txt') }}" /></script>
+  <script src="{{ url_for('static', filename='selected_trip_destination_FCD.txt') }}" /></script>
+  
+  
+   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+   <link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/src/leaflet.draw.css"/>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+   <!--script src="https://unpkg.com/leaflet/dist/leaflet.js"></script-->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
+
+  <script src="{{ url_for('static', filename='leaflet.motion.min.js') }}" /></script>  
+  <script src="{{ url_for('static', filename='lista_coords.txt') }}" /></script>
+  <script src="{{ url_for('static', filename='lista_TRIP_LEGS.txt') }}" /></script>
+  
+<script>
+	
+var map = L.map("map").setView([41.90266120539129, 12.492052587659225], 11);
+
+			// L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+			L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+				// attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+			}).addTo(map);
+
+			var options = {
+		        draw: {
+		            circle: false, // Turns off this drawing tool
+		            rectangle: false,
+		            marker: false,
+					circlemarker: false
+		        }
+		    };
+
+			var drawControl = new L.Control.Draw(options);
+		    map.addControl(drawControl);
+
+		    map.on(L.Draw.Event.CREATED, function (e) {
+		        var type = e.layerType,
+		            layer = e.layer;
+
+				if (type === "polyline") {
+					var line = L.motion.polyline(layer.getLatLngs(), {
+						color: "orange"
+					}, {
+						auto: true,
+						easing: L.Motion.Ease.swing
+					}).motionSpeed(100000).addTo(map);
+				}
+
+				if (type === "polygon") {
+					L.motion.polygon(layer.getLatLngs(), {
+						color: "red",
+						fill: true,
+						fillOpacity: 0.4
+					},{
+						auto: true
+					}, {
+						removeOnEnd: true,
+						icon: L.divIcon({className:"red", html: "<i class='fa fa-superpowers fa-spin fa-2x' aria-hidden='true' motion-base='0'></i>", iconSize: L.point(24, 24), iconAnchor: L.point(5, 22)})
+					}).motionDuration(10000).addTo(map);
+				}
+		    });
+
+			
+			// var trackRoute = lista_coords_FCD; 
+			 
+			//var trackRoute = JSON.parse('[{"lat": 41.786308, "lon": 12.330203}, {"lat": 41.786274, "lon": 12.330261}, {"lat": 41.786235999999995, "lon": 12.330325}, {"lat": 41.785484000000004, "lon": 12.330675999999999}, {"lat": 41.78302, "lon": 12.326130000000001}, {"lat": 41.784209999999995, "lon": 12.324583}, {"lat": 41.784206, "lon": 12.324591999999999}]');
+			//var shipRoute = JSON.parse('[{"lat":50.921966522212145,"lng":0.9651490766555072},{"lat":50.926120475839824,"lng":1.0437014233320954},{"lat":50.94965276094792,"lng":1.1008302960544827},{"lat":50.96210622406778,"lng":1.184326456859708},{"lat":50.98700308620511,"lng":1.2678226176649334},{"lat":51.014650625032424,"lng":1.3710940349847078},{"lat":51.018796350737,"lng":1.4677737560123207},{"lat":51.062994180347005,"lng":1.5600588452070954},{"lat":51.07265684948244,"lng":1.65234393440187},{"lat":51.08093750173957,"lng":1.7358400952070954},{"lat":51.11680330181327,"lng":1.7973634321242573},{"lat":51.136104124419646,"lng":1.8940431531518698},{"lat":51.137482451626596,"lng":2.0126956980675463},{"lat":51.18845145219318,"lng":2.1203612443059687},{"lat":51.1898282161464,"lng":2.2412108536809687},{"lat":51.18569780089507,"lng":2.335693342611194},{"lat":51.207632884080915,"lng":2.427429333329201},{"lat":51.18836197273001,"lng":2.519714422523976},{"lat":51.1677055637131,"lng":2.618591375648976},{"lat":51.129466960517135,"lng":2.6630860380828385}]');
+			//var carRoute = JSON.parse('[{"lat":51.129466960517135,"lng":2.6630860380828385},{"lat":51.07664802198799,"lng":2.738342452794314},{"lat":51.055941653758396,"lng":2.749328780919314},{"lat":51.00067931792692,"lng":2.7778932172805075},{"lat":50.943967078334666,"lng":2.826233077794314},{"lat":50.89794502437422,"lng":2.867431640625},{"lat":50.846655509682435,"lng":2.9003906250000004},{"lat":50.824458803489804,"lng":2.9619141295552254},{"lat":50.79669804718136,"lng":3.0190430022776127},{"lat":50.76475273687021,"lng":3.1025391630828385},{"lat":50.72444284265441,"lng":3.1772460602223873},{"lat":50.65207604172236,"lng":3.282714877277613},{"lat":50.60469890778924,"lng":3.357421942055226},{"lat":50.562855920362125,"lng":3.425537142902613},{"lat":50.5181824559931,"lng":3.495849743485451},{"lat":50.47905843134065,"lng":3.570556808263064},{"lat":50.47626260659788,"lng":3.629882913082838},{"lat":50.492339146862776,"lng":3.772155828773976},{"lat":50.514693454200405,"lng":3.903991766273976},{"lat":50.510502790942944,"lng":3.9633178710937504},{"lat":50.49792872905663,"lng":4.024841375648976},{"lat":50.48185790425272,"lng":4.073730502277614},{"lat":50.47347053735934,"lng":4.133056774735452},{"lat":50.4776644868276,"lng":4.20336937531829},{"lat":50.479062245100565,"lng":4.231933560222388}]');
+			//var planeRoute1 = JSON.parse('[{"lat":50.48445898955202,"lng":4.251709654927255},{"lat":50,"lng":0}]');
+			//var planeRoute2 = JSON.parse('[{"lat":50,"lng":0},{"lat":51.15815239612826,"lng":-2.2055053710937504}]');
+
+           
+			// var seqGroup = L.motion.seq([ motion_polyline_route_FCD
+			var seqGroup = L.motion.seq( motion_polyline_route_FCD
+			         // ---- ADD TRIP LEGS ----- //
+					 //var seqGroup = L.motion.seq( motion_TRIP_LEGS
+		 
+			
+			
+			        //L.motion.polyline(JSON.parse('[{"lat": 41.675018, "lon": 12.773463000000001}, {"lat": 41.674973, "lon": 12.7736}, {"lat": 41.674519000000004, "lon": 12.772761000000001}, {"lat": 41.673939000000004, "lon": 12.775030000000001}, {"lat": 41.674709, "lon": 12.775806}, {"lat": 41.677634999999995, "lon": 12.776628}, {"lat": 41.680962, "lon": 12.77702}, {"lat": 41.682865, "lon": 12.777942}, {"lat": 41.684235, "lon": 12.7762}, {"lat": 41.68438, "lon": 12.77453}, {"lat": 41.684371999999996, "lon": 12.774536999999999}]'), {easing: L.Motion.Ease.easeInOutQuad}, {removeOnEnd: true}).motionDuration(5000),
+					//L.motion.polyline(JSON.parse('[{"lat": 41.7509, "lon": 12.914992}, {"lat": 41.75053, "lon": 12.915111}, {"lat": 41.747153999999995, "lon": 12.915361}, {"lat": 41.746109000000004, "lon": 12.91461}, {"lat": 41.746071, "lon": 12.914411}]'), {easing: L.Motion.Ease.easeInOutQuad}, {removeOnEnd: true}).motionDuration(10000),
+					//L.motion.polyline(JSON.parse('[{"lat": 41.795303000000004, "lon": 12.401831}, {"lat": 41.795319, "lon": 12.401839}, {"lat": 41.795288, "lon": 12.401864}, {"lat": 41.795319, "lon": 12.401622999999999}, {"lat": 41.793125, "lon": 12.405174}, {"lat": 41.792297, "lon": 12.406102}]'), {easing: L.Motion.Ease.easeInOutQuad}, {removeOnEnd: true}).motionDuration(5000),
+					//L.motion.polyline(JSON.parse('[{"lat": 41.917881, "lon": 12.600636}, {"lat": 41.917877000000004, "lon": 12.600585}, {"lat": 41.918003000000006, "lon": 12.6007}]'), {easing: L.Motion.Ease.easeInOutQuad}, {removeOnEnd: true}).motionDuration(10000),
+					// L.motion.polyline(JSON.parse('[{"lat": 41.843105, "lon": 12.54337}, {"lat": 41.843323, "lon": 12.542786999999999}, {"lat": 41.84362, "lon": 12.543151}, {"lat": 41.843792, "lon": 12.546353}, {"lat": 41.843765000000005, "lon": 12.546389999999999}, {"lat": 41.844231, "lon": 12.548957000000001}, {"lat": 41.844303000000004, "lon": 12.549004}, {"lat": 41.844303000000004, "lon": 12.549004}, {"lat": 41.844288, "lon": 12.549002999999999}, {"lat": 41.844406, "lon": 12.549021}]'), {easing: L.Motion.Ease.easeInOutQuad}, {removeOnEnd: true}).motionDuration(5000),
+					
+					
+					/*
+			        L.motion.polyline(JSON.parse('[{"lat": 41.786308, "lon": 12.330203}, {"lat": 41.786274, "lon": 12.330261}, {"lat": 41.786235999999995, "lon": 12.330325}, {"lat": 41.785484000000004, "lon": 12.330675999999999}, {"lat": 41.78302, "lon": 12.326130000000001}, {"lat": 41.784209999999995, "lon": 12.324583}, {"lat": 41.784206, "lon": 12.324591999999999}]'), {
+					// color: "orangered"
+					}, {
+						easing: L.Motion.Ease.easeInOutQuad
+					}, {
+						removeOnEnd: true,
+						// icon: L.divIcon({html: "<i class='fa fa-car fa-2x fa-flip-horizontal' aria-hidden='true'></i>", iconSize: L.point(27.5, 24)})
+					}).motionDuration(8000),
+					
+					L.motion.polyline(shipRoute, {
+						color: "steelblue"
+					}, {
+						easing: L.Motion.Ease.easeInOutQuart
+					}, {
+						removeOnEnd: true,
+						showMarker: true,
+						icon: L.divIcon({html: "<i class='fa fa-ship fa-2x' aria-hidden='true'></i>", iconSize: L.point(27.5, 24)})
+					}).motionDuration(9000),
+					
+					L.motion.polyline(carRoute, {
+						colors: "SlateGrey"
+					}, {
+						easing: L.Motion.Ease.easeInOutElastic
+					}, {
+						removeOnEnd: true,
+						icon: L.divIcon({html: "<i class='fa fa-car fa-2x' aria-hidden='true'></i>", iconSize: L.point(27.5, 24)})
+					}).motionDuration(7000), 
+					*/
+
+
+                   
+					
+				/*	L.motion.seq([L.motion.polyline(planeRoute1, {
+									color:"indigo"
+								}, null, {
+									removeOnEnd: false,
+									icon: L.divIcon({html: "<i class='fa fa-plane fa-2x' aria-hidden='true' motion-base='-43'></i>", iconSize: L.point(19, 24)})
+								}).motionDuration(5000),
+								L.motion.polyline(planeRoute2, {
+									color:"khaki"
+								}, null).motionDuration(7000)
+							])  */
+							
+				// ]).addTo(map);
+                ).addTo(map);
+
+			seqGroup.on("click", function(){
+				seqGroup.motionStart();
+			});
+
+			seqGroup.on("dblclick", function(e){
+				seqGroup.motionToggle();
+			});
+
+			setTimeout(function () {
+				seqGroup.motionStart();
+			}, 1000);
+
+</script>
+
+   
+   
+</body>
+</html>

@@ -1,0 +1,1390 @@
+
+<!doctype html>
+<html lang="en">
+
+<style type="text/css">
+    body {
+            padding: 0;
+            margin: 0;
+			font-family: Arial, Helvetica, sans-serif;
+        }
+   
+	#map {
+	  height: 100%;
+	}
+	
+	/* Optional: Makes the sample page fill the window. */
+	html, body {
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	}
+
+
+	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	.legend { text-align: left; line-height: 10px; color: #555; font-size: 0.875em} .legend i { width: 10px; height: 10px; float: left; margin-right: 4px; opacity: 0.7; } 
+	.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+	
+	#refreshButton {
+	  position: absolute;
+	  top: 60px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #000000;
+	  background-color:#FFFF00;
+	}
+	
+	
+	#home_locations {
+	  position: absolute;
+	  width: 100%;
+	  top: 60px;
+	  margin-top: 40px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #ffffff ;
+	  background-color:#000099;
+	}
+	
+	#refreshButton:hover{
+		opacity: 0.8;
+		cursor: pointer;
+    }
+	
+
+
+	  html, body,  #map {
+        width : 100%;
+        height : 100%;
+      }
+	.box{	  
+		width:15px;
+		height:15px;
+		border-radius:25px;
+		display: inline-block;
+		}
+	
+
+     /** sidebar menu **/
+	.innerDiv{
+		position: absolute;
+		width: 10%;
+		height: 15%;
+		background-color: #b2b2ff;
+		opacity: 0.8;
+		margin-top:  1%;
+		margin-left: 5%;
+		z-index: 800;
+		padding-top: 1%;
+		text-overflow:ellipsis;
+        overflow:hidden;
+		
+	}
+	
+
+	
+
+    .button {
+	    position: absolute;
+		left: 2%;
+		top: 80%;
+		height: 8%;
+		width: 7%
+        min-width: 7%;
+		margin-top: 30%;
+		margin-left: 50%;
+		z-index: 500;
+	    border: none;
+	    color: white;
+	    padding: 20px;
+	    text-align: center;
+	    display: inline-block;
+	    font-size: 1.5em;
+	    margin: 10px 20px;		
+	}
+
+		
+		
+  header, nav {
+    left: 2%;
+	top: 85%;
+  	z-index: 700;
+	position: absolute;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	 border-spacing: 5px;
+	
+  }
+
+	nav a {
+	  text-decoration: none;
+	  background: #000000;  /* Black */
+	  border-radius: 5px;
+	  font-size: 1.2em;
+	  color: white;
+	  padding: 3px 8px;
+	  display: table-cell;
+	 
+	}
+	
+	
+	nav .col_home {
+		background-color: #6b0000;
+	}
+	
+	nav .col_privata {
+		background-color: #4CAF50;
+	}
+	
+	
+	nav .col_collettivo {
+		background-color: #0000ff ;
+	}
+	
+	nav .col_scenari {
+		background-color: #ffa500 ;
+	}
+	
+	
+	nav .col_impatti {
+		background-color: #76a5af ;
+	}
+	
+	
+	nav .IEA_statistics {
+		background-color: #ededed ;
+		color: blue;
+	}
+	
+	
+	
+		
+
+  /** submit lat lon and input text to Python **/
+    main {
+		background:  rgba(0, 128, 0, 0.3); /* Green background with 30% opacity */
+		left: 2%;
+		top: 30%;
+		z-index: 700;
+		position: absolute;
+		margin: 15px;
+		padding: 5px;
+		text-overflow:ellipsis;
+        overflow:hidden;
+		width: 200px;
+		height: 230px;
+	}
+
+	main div {
+	  background: transparent;
+	  margin: 20px;
+	  color: white;
+	  padding: 2px;
+	  margin: 5px auto;
+	}
+	
+
+	main div:nth-child(1) {
+	  width: 0px;
+	  height: 0px;
+	   background: transparent;
+	}
+	main div:nth-child(2) {
+	  width: 0px;
+	  height: 0px;
+	   background: transparent;
+	}
+	
+	main div:nth-child(3) {
+	  width: 170px;
+	}
+	
+	main div:nth-child(4) {
+	  width: 170px;
+	  background: transparent;
+	}
+	
+	main div:nth-child(5) {
+	  width: 170px;
+	}
+	
+	main div:nth-child(6) {
+	  width: 170px;
+	}
+	
+	main div:nth-child(7) {
+	  width: 170px;
+	}
+	
+	main div:nth-child(8) {
+	  width: 170px;
+	}
+	
+	.inline-block-center {
+	  text-align: center;
+	}
+	
+	.flex-center {
+	  display: flex;
+	  justify-content: center;
+	}
+	
+
+.animation_link {
+  font-size: 110%;
+  color: blue;
+  font-weight: bold;
+}
+
+	
+	.inline-block-center {
+	  text-align: center;
+	}
+	
+	.flex-center {
+	  display: flex;
+	  justify-content: center;
+	}
+	
+
+	h2 {
+    margin: 0;
+    padding: 0;
+	}
+	
+	
+	h3 {
+    margin: 0;
+    padding: 0;
+	}
+	
+	
+	
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: absolute; /* Stay in place */
+	  z-index: 700; /* Sit on top */
+	  
+	  position: absolute;
+	   left: 20%;
+		top: 4%;
+	  width: 50%; /* Full width */
+	  height: 70%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+
+	/* Modal Content/Box */
+	.modal-content {
+	  z-index: 700;
+	  top: 5%;
+	  background-color: #fefefe;
+	  margin: 5% auto; /* 15% from the top and centered */
+	  padding: 1%;
+	  border: 1px solid #888;
+	  width: 100%; /* Could be more or less, depending on screen size */
+	}
+
+	/* The Close Button */
+	.close {
+	  color: #aaa;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+	  color: black;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+	
+	
+	.video-wrapper {
+	  position: relative;
+	  height: 0;
+	  padding-bottom: 56.25%;
+	}
+
+	.video-wrapper iframe {
+	   position: absolute;
+	   width: 100%;
+	   height: 100%;
+	   top: 0;
+	   left: 0;
+	}
+
+
+.animation_link {
+  font-size: 100%;
+  color: blue;
+  font-weight: bold;
+}
+
+.animation_link_heatmap {
+  font-size: 130%;
+  color: red;
+  font-weight: bold;
+}
+
+
+	
+	
+</style>
+
+<style>
+
+.label {
+  color: white;
+  padding: 8px;
+  font-family: Arial;
+  font-weight: bold;
+}
+.tpl_line {background-color: #2196F3;} /* Blue */
+
+
+table, th, td {
+  border:1px solid black;
+   left: 20%;
+}
+
+
+table.center_table {
+  margin-left: auto; 
+  //margin-left: 20%;
+}
+
+
+
+/* Center the loader (SPINNER) */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  // border-top: 16px solid #3498db;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-right: 16px solid yellow;
+  border-left: 16px solid pink;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+
+
+
+div#loading {
+    display: none;
+	position: absolute;
+	left: 50%;
+    top: 50%;
+    z-index: 700;
+	width: 270px;
+	height: 270px;
+	 margin: -76px 0 0 -76px;
+    background: url(/static/loadingimage_TPL.gif) no-repeat;
+    cursor: wait;
+ }
+ 
+ 
+  
+ [type=submit]{
+    margin-left: auto;
+    margin-top: 19px;
+    width: 100%;
+    height: 40px;   
+    font-size:14px;
+    font-weight:700;
+	color: blue;
+}
+	
+	
+
+</style>
+
+</head>
+  <meta name="description" content="Leaflet Template">
+  <title>RdS-ENEA</title>
+  <!--meta name="viewport" content="initial-scale=1.0"-->
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+ </head>
+ 
+
+
+<!--start the SPINNER or LOADER-->
+<div id="loader"></div>
+
+
+
+<body>
+
+<div id="loading"></div>
+
+
+<main class="inline-block-center">
+	<br>
+	<h3>Simulated path</h3>	
+    <br>
+	{% for item in data_path %}
+		<table class="center_table" style="width:100%">
+		<tr>
+			<th>Journey length (km)</th>
+			<th>Travel time (h)</th>
+			<th>Mean speed (km/h)</th>
+		  </tr>
+		  <tr>
+			<td>{{item.Journey_length}}</td>
+			<td>{{item.Travel_time}}</td>
+			<td>{{item.Mean_speed}}</td>
+		  </tr>
+		</table>
+		{% endfor %}
+		</ul>
+
+
+<!-- MAKE a REFRESH BUTTON-->
+		<form action="/OD_path_vehicle/" method="POST">
+		
+			   <input class="btn btn-primary btn-sm" type="submit" value="--refresh--" onclick="$('#loading').show();">
+		</form>
+	
+</main>
+
+
+<header>
+  
+</header>
+
+
+
+<nav role='navigation'>
+  <a class="col_home" href="/home_page/">Home</a>
+  <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
+  <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
+  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
+  <a class="col_impatti" href="/public_transport_page/">Impacts</a>
+  <a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a>
+</nav>  
+
+	
+<!--we are inside the area of the map-->
+<div id="map">
+
+</div>
+
+
+  
+<!-- Load data .geojson --> 
+<script src="{{ url_for('static', filename='chargers_OCM.geojson') }}" /></script>
+<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
+
+
+<!-- ZMU zones with population data -->
+<script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script>
+<!-- POINTS of INTERESTS (PARKINGs) -->
+<script src="{{ url_for('static', filename='POIS_parking.geojson') }}" /></script>
+<!-- POINTS of INTERESTS (all AMENITIES) -->
+<script src="{{ url_for('static', filename='layer_POIS_amenities.geojson') }}" /></script>
+<!-- POINTS of INTERESTS (all BUILDINGS) -->
+<script src="{{ url_for('static', filename='layer_POIS_residential.geojson') }}" /></script>
+<!-- ALL POINTS of INTERESTS (all BUILDINGS and AMENITIES) -->
+<script src="{{ url_for('static', filename='zmu_POIS_ROMA_2011.geojson') }}" /></script>
+
+<script src="{{ url_for('static', filename='heatmap.js') }}" /></script>
+<script src="{{ url_for('static', filename='leaflet-heatmap.js') }}" /></script>
+<script src="{{ url_for('static', filename='gridded_n_vehicles_destination.txt') }}" /></script>	
+<!--script src="{{ url_for('static', filename='edges_shortest_route_cost.geojson') }}" /></script-->
+
+		  
+
+  <script>
+
+     // ----------------------------------------------------
+     
+
+      // Hack to autoset the iframe height.
+      window.addEventListener("load", function() {
+        window.setTimeout(function() {
+          setFrameHeight(document.documentElement.clientHeight)
+        }, 0);
+      });
+	  
+	  
+	var ORIGIN_point = JSON.parse({{ session_ORIGIN_point | tojson | safe}});
+	var DESTINATION_point = JSON.parse({{ session_DESTINATION_point | tojson | safe}});
+	var shortest_route_car = JSON.parse({{ session_route_cost | tojson | safe}});
+	  
+	 ///////////////////////////---------------------------------------------------------------------/////////////////////////////////////////////
+	  ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+	   ///////////////////////////---------------------------------------------------------------------///////////////////////////////////////////
+	    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+	 
+	// ADD Leaflet map
+	
+		
+		const osm  = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		})
+         
+	    var carto = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+         });
+		 
+		//const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+		//const mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+		//const streets = L.tileLayer(mbUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+
+	
+	 /// ------------ load OPEN CHARGE MAP LAYER ---------- //////
+	  const OCM_Layer = L.layerGroup();
+				
+		
+	////------------------------------------------------------------////////////////////////////// 
+	////------------------------------------------------------------////////////////////////////// 
+	var EV_charging_layer_OCM = L.geoJSON(EV_chargers_OCM, {
+	   onEachFeature: function (feature, layer) {
+		layer.bindTooltip('<h2>'+feature.properties.OperatorInfo+'</h2><p>n.points: '+feature.properties.NumberOfPoints +'<br>power(kW):'+feature.properties.Power+'</p>');
+	},
+
+		pointToLayer(feature, latlng) {
+			return L.circleMarker(latlng, {
+				radius: 6,
+				// radius: feature.properties.n_buses*1,
+				fillColor: '#ff7800',
+				color: '#000',
+				weight: 1,
+				opacity: 1,
+				fillOpacity: 0.8
+			});
+		}
+	}).addTo(OCM_Layer);
+			
+		
+		
+		
+	
+			
+			
+			
+		
+	
+	// control that shows state info on hover
+	const info = L.control(); 
+	
+	info.onAdd = function (map) {
+	this._div = L.DomUtil.create('div', 'info');
+	this.update();
+	return this._div;
+	};
+		
+	
+   
+	function getColor_hex_traffic(d) {
+		return d >= 40 ? '#0c2c84' :
+			d > 30  ? '#225ea8' :
+			d > 15  ? '#1d91c0' :
+			d > 12.5  ? '#41b6c4' :
+			d > 10  ? '#7fcdbb' :
+			d > 7.5  ? '#c7e9b4' :
+			d > 5  ? '#edf8b1' :
+			d >= 0   ? '#fdfdbf' : '#fdfdbf';
+			} 
+			
+	function getColor_population_hex(d) {
+		return d >= 100 ? '#2d2d4c' :
+		    d > 95 ? '#3d3d66' :
+		    d > 90 ? '#4c4c7f' :
+		    d > 85 ? '#5b5b99' :
+			d > 80 ? '#6b6bb2' :
+			d > 75 ? '#7a7acc' :	
+			d > 70 ? '#8989e5' :
+		    d > 65 ? '#9999ff' :
+		    d > 60 ? '#a3a3ff' :
+			d > 55 ? '#adadff' :			
+			d > 50 ? '#b7b7ff' :
+			d > 45 ? '#c1c1ff' :
+		    d > 40  ? '#ccccff' :  
+		    d > 30  ? '#d6d6ff' :
+			d > 20  ? '#e0e0ff' :
+			d > 10  ? '#eaeaff' :
+			d >= 0   ? '#f4f4ff' : '#ffffff';
+			}
+			
+		
+			
+			
+	function getColor_zmu_origin_destinations(d) {
+		return d >= 2000 ? '#071a4f' :
+		    d > 1000  ? '#0c2c84 ' :
+		    d > 500  ? '#225ea8' : 
+			d > 300  ? '#546ba8' :
+			d > 100  ? '#1d91c0' :
+			d > 70  ? '#41b6c4' :
+			d > 45  ? '#7fcdbb' :
+			d > 30  ? '#c7e9b4' :
+			d > 15  ? '#d5df9f ' :
+			d >= 5   ? '#fdfdbf' : '#fdfdbf';
+			}  
+			
+			
+	function getColor_census(d) {
+		return d > 20000 ? '#800026' :
+			d > 10000  ? '#97001e' :
+			d > 5000  ? '#BD0026' :
+			d > 3000  ? '#E31A1C' :
+			d > 2000  ? '#FC4E2A' :
+			d > 1000   ? '#FD8D3C' :
+			d > 300   ? '#FEB24C' :
+			d > 50   ? '#FED976' : '#FFEDA0';
+				}
+	
+	
+	function getColor_legend(d) {
+		return d >= 15000 ? '#2d2d4c' :
+		    d > 6000 ? '#3d3d66' :	
+		    d > 3500 ? '#4c4c7f' :
+			d > 2500 ? '#5b5b99' :
+			d > 1500 ? '#6b6bb2' :				
+			d > 1300 ? '#7a7acc' :	
+		    d > 1000 ? '#8989e5' :	
+		    d > 800 ? '#9999ff' :			
+		    d > 600 ? '#a3a3ff' :	
+            d > 500 ? '#adadff' :
+			d > 300 ? '#b7b7ff' :
+			d > 250 ? '#c1c1ff' :
+		    d > 200 ? '#ccccff' :
+			d > 100 ? '#d6d6ff' :
+			d > 50   ? '#e0e0ff' :
+			d > 20   ? '#eaeaff' :
+			d >= 0   ? '#f4f4ff' : '#ffffff';
+			}
+	
+	
+	    /* LEGEND USED FOR THE HEXAGONAL TESSELLATION */
+		var legend = L.control({position: 'bottomright'});
+		
+            legend.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 20",
+								"from 20 to 50",
+								"from 50 to 100",
+								"from 100 to 200",
+								"from 200 to 250",
+								"from 250 to 300",
+								"from 300 to 500",
+								"from 500 to 600",
+								"from 600 to 800",
+								"from 800 to 1000",
+								"from 1000 to 1300",
+								"from 1300 to 1500",
+								"from 1500 to 2500",
+								"from 2500 to 3500",
+								"from 3500 to 6000",
+								"from 6000 to 15000",
+								" > 15000"];
+				 const grades = [0, 20, 50, 100, 200 ,250 , 300, 500, 600, 800, 1000, 1300, 1500, 2500, 3500, 6000, 15000];
+
+                div.innerHTML='<div><b>Population(hex)</b></div';
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_legend(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+			
+			
+			/* LEGEND USED FOR CENSUARY DATA */
+			var legend_censuary = L.control({position: 'bottomright'});
+		
+            legend_censuary.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 50",
+								"from 50 to 300",
+								"from 300 to 1000",
+								"from 1000 to 2000",
+								"from 2000 to 3000",
+								"from 3000 to 5000",
+								"from 5000 to 10000",
+								"from 10000 to 20000",
+								" > 20000"];
+				 const grades = [0, 50, 300, 1000, 2000, 3000, 5000, 10000, 20000];
+
+                div.innerHTML='<div><b>Population(zmu)</b></div';
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_census(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+            
+		
+		
+			
+		
+	
+
+	info.update = function (props) {
+		const contents = props ? `<b>${props.POP_TOT_ZMU}</b> people` : 'Hover over a traffic zone';
+		this._div.innerHTML = `<h4>Total Population Number</h4>${contents}`;
+	};
+	
+	
+	
+		const selectedStyle = {
+		  color: '#000000',
+		  weight: 0.1,
+		  opacity: 0.1,
+		}
+			
+			
+		const selectedStyle_highlight = {
+		  color: 'black',
+		  weight: 3,
+		  opacity: 0.9,
+		}
+		
+		
+		const selectedStyle_highlight_ZONES = {
+		  color: 'orange',
+		  weight: 4,
+		  opacity: 1,
+		}
+		
+		
+	
+		
+		const selectedStyle_mouseout = {
+		  color: 'black',
+		  weight: 2,
+		  opacity: 0.1,
+		}
+		
+		const selectedStyle_mouseout_ZONES = {
+		  color: 'black',
+		  weight: 1,
+		  opacity: 0.9,
+		}
+		
+	
+				
+				
+		
+	// get color depending on population number value
+
+			function style_colors(feature) {
+				return {
+					weight: 0.1,
+					opacity: 0.1,
+					color: '#ffffff',
+					dashArray: '2',
+					fillOpacity: 0.7,
+					fillColor: getColor_population_hex(feature.properties.percentile)
+				};
+			}
+			
+	
+		
+		
+		
+		function style_colors_zmu(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: getColor_zmu_origin_destinations(feature.properties.counts)
+			};
+		}
+		
+		
+		function style_colors_POIS_ZMU(feature) {
+			return {
+				weight: 2,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.1,
+				fillColor: 'blue'
+			};
+		}
+		
+		
+		
+			function style_colors_ZMU_zones(feature) {
+			return {
+				weight: 1,
+				opacity: 0.9,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.0,
+				fillColor: 'white'
+			};
+		}
+		
+		
+		
+		
+		
+		function style_colors_POIS(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'blue'
+			};
+		}
+		
+		
+		
+		function style_colors_POIS_amenities(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'red'
+			};
+		}
+		
+		
+		function style_colors_POIS_residential(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'yellow'
+			};
+		}
+		
+		
+				
+		
+	    // used to color ZMU zones with population data 2011
+		function style_pop(feature) {
+			return {
+				weight: 0.8,
+				opacity: 1,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.5,
+				fillColor: getColor_census(feature.properties.POP_TOT_ZMU)
+			};
+		}
+		
+		
+		// used to highlight ZMU zones with population data 2011
+		function style_ZMU_zones(feature) {
+			return {
+				weight: 0.8,
+				opacity: 1,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.0,
+				fillColor: getColor_census(feature.properties.POP_TOT_ZMU)
+			};
+		}
+		
+		
+
+		function highlightFeature(e) {
+			const layer = e.target;
+			layer.setStyle({
+				weight: 3,
+				color: '#666',
+				dashArray: '',
+				fillOpacity: 0.9
+			});
+
+			layer.bringToFront();
+
+			info.update(layer.feature.properties);
+		}
+		
+		
+			
+		function onEachFeature(feature, layer) {
+			layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				//click: zoomToFeature
+			});
+		}
+		
+		function resetHighlight(e) {
+			censuary_default.resetStyle(e.target);
+			info.update();
+		}
+
+		function zoomToFeature(e) {
+			map.fitBounds(e.target.getBounds());
+		}
+		
+		
+		function path_OD_style(feature) {
+		return {
+			color: "blue",
+			weight: 4,
+			opacity: 1,
+			dashArray: '3',
+			fillOpacity: 0.7,
+			fillColor: 'black'
+			};
+		}
+		 
+
+
+		
+		/// add ZMU zones  borders  /////////////////////////////////////////////////////
+		var ZMU_zones = L.geoJSON(charging_data, { style: style_colors_ZMU_zones, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight_ZONES);
+				  });
+		var popupText = '';
+					popupText += (feature.properties.quartiere) ? '<h3>Quartiere: ' + feature.properties.quartiere : '';
+					popupText += (feature.properties.n_charging_stations) ? '<h3>n. charging stations: ' + feature.properties.n_charging_stations : '' ;	
+					popupText += (feature.properties.POP_TOT_ZMU) ? '<h3>Population: ' + feature.properties.POP_TOT_ZMU : '';		        	
+                    popupText += (feature.properties.Available_Power) ? '<h3>Power (Watt): ' + feature.properties.Available_Power : '' ;						
+					layer.bindTooltip(popupText);		
+		layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout_ZONES); 
+				});	
+			}
+			});
+
+		
+		
+	 // alert("...I AM HERE...");
+		
+		
+		
+	
+		const ZMU_zones_Layer = L.layerGroup();
+		ZMU_zones_Layer.addLayer(ZMU_zones);	
+			
+	 
+	
+
+         /////////----------- Points of Interest (POIS) in ZMUs -------/////////////////////////////////////////	
+		 
+			 var POIS_ZMU = L.geoJSON(zmu_POIS_counts, { style: style_colors_POIS_ZMU, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight);
+				  });
+				  
+					var popupText = '';
+					popupText += (feature.properties.apartments) ? '<h3>Apartments: ' + feature.properties.apartments : '';
+					popupText += (feature.properties.church) ? '<h3>Church: ' + feature.properties.church : ''
+					popupText += (feature.properties.residential) ?  '<h3>Residential: ' + feature.properties.residential : '';
+					popupText += (feature.properties.hotel) ? '<h3>Hotel: ' + feature.properties.hotel : ''
+					popupText += (feature.properties.office) ? '<h3>Office: ' + feature.properties.office : ''
+					popupText += (feature.properties.basilica) ? '<h3>Hotel: ' + feature.properties.basilica : ''
+					popupText += (feature.properties.house) ? '<h3>House: ' + feature.properties.house : ''
+					popupText += (feature.properties.public) ? '<h3>Public: ' + feature.properties.public : ''
+					popupText += (feature.properties.market) ? '<h3>Market: ' + feature.properties.market : ''
+					popupText += (feature.properties.detached) ? '<h3>Detached: ' + feature.properties.detached : ''
+					popupText += (feature.properties.synagogue) ? '<h3>Synagogue: ' + feature.properties.synagogue : ''
+					popupText += (feature.properties.roof) ? '<h3>Roof: ' + feature.properties.roof : ''
+					popupText += (feature.properties.supermarket) ? '<h3>Supermarket: ' + feature.properties.supermarket : '';
+					popupText += (feature.properties.retail) ? '<h3>Retail: ' + feature.properties.retail : ''
+					popupText += (feature.properties.congress_centre) ? '<h3>Congress centre: ' + feature.properties.congress_centre : ''
+					popupText += (feature.properties.government) ? '<h3>Government: ' + feature.properties.government : ''
+					popupText += (feature.properties.commercial) ? '<h3>Commercial: ' + feature.properties.commercial : ''
+					popupText += (feature.properties.semidetached_house) ? '<h3>Semidetached house: ' + feature.properties.semidetached_house : ''
+					
+					popupText += (feature.properties.arts_centre) ? '<h3>Arts centre: ' + feature.properties.arts_centre : ''
+					popupText += (feature.properties.bus_station) ? '<h3>Bus station: ' + feature.properties.bus_station : ''
+					popupText += (feature.properties.cafe) ? '<h3>Cafe: ' + feature.properties.cafe : ''
+					popupText += (feature.properties.fast_food) ? '<h3>Fast food: ' + feature.properties.fast_food : ''
+					popupText += (feature.properties.pharmacy) ? '<h3>Pharmacy: ' + feature.properties.pharmacy : ''
+					popupText += (feature.properties.parking) ? '<h3>Parking: ' + feature.properties.parking : ''
+					popupText += (feature.properties.place_of_worship) ? '<h3>Place of worship: ' + feature.properties.place_of_worship : ''
+					popupText += (feature.properties.restaurant) ? '<h3>Restaurant: ' + feature.properties.restaurant : ''
+					popupText += (feature.properties.bar) ? '<h3>Bar: ' + feature.properties.bar : ''
+					popupText += (feature.properties.bicycle_parking) ? '<h3>Bicycle parking: ' + feature.properties.bicycle_parking : ''
+					popupText += (feature.properties.charging_station) ? '<h3>Charging station: ' + feature.properties.charging_station : ''
+					popupText += (feature.properties.theatre) ? '<h3>Theatre: ' + feature.properties.theatre : ''
+					popupText += (feature.properties.cinema) ? '<h3>Cinema: ' + feature.properties.cinema : ''
+					popupText += (feature.properties.library) ? '<h3>Library: ' + feature.properties.library : ''
+					popupText += (feature.properties.marketplace) ? '<h3>Marketplace: ' + feature.properties.marketplace : ''
+					popupText += (feature.properties.motorcycle_parking) ? '<h3>Motorcycle parking: ' + feature.properties.motorcycle_parking : ''
+					popupText += (feature.properties.parking_entrance) ? '<h3>Parking entrance: ' + feature.properties.parking_entrance : ''
+					popupText += (feature.properties.police) ? '<h3>Police: ' + feature.properties.police : ''
+					popupText += (feature.properties.public_building) ? '<h3>Public building: ' + feature.properties.public_building : ''
+					popupText += (feature.properties.school) ? '<h3>School: ' + feature.properties.school : ''
+					popupText += (feature.properties.social_facility) ? '<h3>Social facility: ' + feature.properties.social_facility : ''
+					popupText += (feature.properties.car_sharing) ? '<h3>Car sharing: ' + feature.properties.car_sharing : ''
+					popupText += (feature.properties.pub) ? '<h3>Pub: ' + feature.properties.pub : ''
+					popupText += (feature.properties.taxi) ? '<h3>Taxi: ' + feature.properties.taxi : ''
+					popupText += (feature.properties.university) ? '<h3>University: ' + feature.properties.university : ''
+					popupText += (feature.properties.college) ? '<h3>College: ' + feature.properties.college : ''
+					popupText += (feature.properties.community_centre) ? '<h3>Community centre: ' + feature.properties.community_centre : ''
+					popupText += (feature.properties.doctors) ? '<h3>Doctors: ' + feature.properties.doctors : ''
+					popupText += (feature.properties.townhall) ? '<h3>Townhall: ' + feature.properties.townhall : ''
+					popupText += (feature.properties.parking_space) ? '<h3>parking space: ' + feature.properties.parking_space : ''		
+					popupText += (feature.properties.hospital) ? '<h3>Hospital: ' + feature.properties.hospital : '';
+					popupText += (feature.properties.music_school) ? '<h3>Music school: ' + feature.properties.music_school : '';
+					popupText += (feature.properties.fuel) ? '<h3>Fuel: ' + feature.properties.fuel : '';
+					popupText += (feature.properties.car_rental) ? '<h3>Car rental: ' + feature.properties.car_rental : '';
+					popupText += (feature.properties.dentist) ? '<h3>Dentist: ' + feature.properties.dentist : '';
+					popupText += (feature.properties.clinic) ? '<h3>Clinic: ' + feature.properties.clinic : '';
+					popupText += (feature.properties.social_centre) ? '<h3>Social centre: ' + feature.properties.social_centre : '';
+					popupText += (feature.properties.events_venue) ? '<h3>Events venue: ' + feature.properties.events_venue : '';
+					popupText += (feature.properties.research_institute) ? '<h3>Research institute: ' + feature.properties.research_institute : '';
+					popupText += (feature.properties.ferry_terminal) ? '<h3>Ferry terminal: ' + feature.properties.ferry_terminal : '';
+					popupText += (feature.properties.language_school) ? '<h3>Language school: ' + feature.properties.language_school : '';
+					popupText += (feature.properties.kindergarten) ? '<h3>Kindergarten: ' + feature.properties.kindergarten : '';
+					popupText += (feature.properties.conference_centre) ? '<h3>Conference centre: ' + feature.properties.conference_centre : '';
+					popupText += (feature.properties.courthouse) ? '<h3>Courthouse: ' + feature.properties.courthouse : '';
+					popupText += (feature.properties.tourism) ? '<h3>Tourism: ' + feature.properties.tourism : '';
+					popupText += (feature.properties.weighbridge) ? '<h3>Weighbridge: ' + feature.properties.weighbridge : '';
+					popupText += (feature.properties.childcare) ? '<h3>Childcare: ' + feature.properties.childcare : '';
+					popupText += (feature.properties.nursing_home) ? '<h3>Nursing home: ' + feature.properties.nursing_home : '';
+					popupText += (feature.properties.coworking_space) ? '<h3>Coworking space: ' + feature.properties.coworking_space : '';
+					popupText += (feature.properties.casino) ? '<h3>Casino: ' + feature.properties.casino : '';
+					popupText += (feature.properties.community_centres) ? '<h3>Community centres: ' + feature.properties.community_centres : '';
+										
+					layer.bindTooltip(popupText);
+					
+					
+					
+			layer.on('mouseout', function (e) {
+						layer.setStyle(selectedStyle_mouseout); 
+					});	
+				}
+				});
+				
+		const POIS_Layer_zmu = L.layerGroup();
+		POIS_Layer_zmu.addLayer(POIS_ZMU);
+		
+
+		
+		
+		
+		
+		/////////----- ADD POINTS of INTERESTS (PARKINGS) nearby chosen location -----------////////////////////////
+		var POIS_PARKING = L.geoJSON(POIS_parking, { style: style_colors_POIS, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>amenity: '+feature.properties.amenity+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer = L.layerGroup();
+		POIS_Layer.addLayer(POIS_PARKING);
+		
+		
+		
+	    /////////----- ADD POINTS of INTERESTS (all AMENITIES) nearby chosen location -----------////////////////////////
+		var POIS_AMENITIES = L.geoJSON(POIS_amenities, { style: style_colors_POIS_amenities, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>amenity: '+feature.properties.amenity+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS_amenities); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer_amenities = L.layerGroup();
+		POIS_Layer_amenities.addLayer(POIS_AMENITIES);
+		
+		
+		
+		/////////----- ADD POINTS of INTERESTS (all residential) nearby chosen location -----------////////////////////////
+		var POIS_RESIDENTIALS = L.geoJSON(POIS_residential, { style: style_colors_POIS_residential, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>building: '+feature.properties.building+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS_residential); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer_residential = L.layerGroup();
+		POIS_Layer_residential.addLayer(POIS_RESIDENTIALS);
+		
+		
+	  
+	  //////// ----- ADD HEATMAP data /////////////////////////////////////////
+		
+	   var testData = {
+          //max: 24,
+		  data: gridded_destination_data
+        }; 
+
+        
+		var baseLayer = L.tileLayer(
+          'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{
+            attribution:'&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            maxZoom: 18
+          }
+        );  
+		
+		
+
+        var cfg = {
+          // radius should be small ONLY if scaleRadius is true (or small radius is intended)
+          "radius": 0.02,
+          "maxOpacity": .8, 
+          // scales the radius based on map zoom
+          "scaleRadius": true, 
+          // if set to false the heatmap uses the global maximum for colorization
+          // if activated: uses the data maximum within the current map boundaries 
+          //   (there will always be a red spot with useLocalExtremas true)
+          "useLocalExtrema": true,
+          // which field name in your data represents the latitude - default "lat"
+          latField: 'lat',
+          // which field name in your data represents the longitude - default "lng"
+          lngField: 'lng',
+          // which field name in your data represents the data value - default "value"
+          valueField: 'count'
+        };
+
+
+        var heatmapLayer = new HeatmapOverlay(cfg);
+		
+		
+		
+		
+		
+		
+		
+	 const roads_Layer = L.layerGroup();	
+	 
+	 
+	 	/// add ORIGIN point
+		const ORIGIN_Layer = L.geoJSON( ORIGIN_point, {
+				onEachFeature(feature, layer) {
+			if (feature.properties && feature.properties.popupContent) {
+				popupContent += feature.properties.popupContent;
+			}
+			layer.bindPopup('<h2>Origin</h2></p>');
+		},
+
+			pointToLayer(feature, latlng) {
+			
+				return L.circleMarker(latlng, {
+					radius: 8,
+					fillColor: 'black',
+					color: '#000',
+					weight: 1,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		}).addTo(roads_Layer);
+		
+		
+		
+	/// add DESTINATION point
+		const DESTINATION_Layer = L.geoJSON( DESTINATION_point, {
+				onEachFeature(feature, layer) {
+			if (feature.properties && feature.properties.popupContent) {
+				popupContent += feature.properties.popupContent;
+			}
+			layer.bindPopup('<h2>Destination</h2></p>');
+		},
+
+			pointToLayer(feature, latlng) {
+			
+				return L.circleMarker(latlng, {
+					radius: 8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 1,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		}).addTo(roads_Layer);
+		
+		
+		
+		
+		
+		/////////------ ADD ORIGIN - DEESTINATION PATH -------------------/////////////////////////////////
+		var path_OD = L.geoJSON(shortest_route_car, { style: path_OD_style, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				// layer.bindTooltip('<h3><p>trip:   '+feature.properties.trip_LEG_name+'</p>');
+				// layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				
+				layer.on('mouseout', function (e) {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: 'blue',
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					}); 
+					} 
+					});
+			
+		const OD_path_layer = L.layerGroup();
+		OD_path_layer.addLayer(path_OD);
+		
+		
+
+
+		
+		
+
+		
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+    /////////---------------------------------/////////////////////////////////////////	
+		
+	  var map = new L.Map('map', {
+          center: new L.LatLng(41.8946, 12.4873),
+          zoom: 11,
+          layers: [baseLayer, ZMU_zones_Layer, roads_Layer, OD_path_layer]   //heatmapLayer   OCM_Layer
+        });
+
+        heatmapLayer.setData(testData);
+			
+
+		
+		// legend.addTo(map);
+		// legend_censuary.addTo(map);
+		// info.addTo(map);
+		
+		
+	
+	//------------------------- choose location on the map manually...
+
+	 map.on('click', 
+			function(e){
+				document.getElementById('lat').value = e.latlng.lat;
+				document.getElementById('lng').value = e.latlng.lng;
+				var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+		
+		
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+		
+		
+		
+		const baseLayers = {
+			//'Streets': streets,
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		const overlays = {
+		    'Charging Stations (Open Charge Map)': OCM_Layer,
+			'Traffic Zones': ZMU_zones_Layer,
+			// 'Vehicles @DESTINATION': heatmapLayer,
+			'POIS & Residences': POIS_Layer_zmu,
+			'POIS_Parking': POIS_PARKING,
+			'POIS_Amenities': POIS_AMENITIES,
+			'POIS_Residentials': POIS_RESIDENTIALS
+			
+		};
+		
+		
+
+
+		const layerControl = L.control.layers(baseLayers, overlays ,{collapsed:false,}).addTo(map);	
+
+		const cens_layer = L.layerGroup([censuary_default]);	
+		const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+		layerControl.addBaseLayer(satellite, 'Satellite');
+		layerControl.addOverlay(POIS_PARKING, 'parkings');
+		layerControl.addOverlay(POIS_AMENITIES, 'amenities');
+		layerControl.addOverlay(POIS_RESIDENTIALS, 'buildings')
+		
+		
+	
+	
+	window.addEventListener('resize', 
+	() => map.getViewPort().resize());
+	
+	
+
+  </script>
+</body>
+</html>
