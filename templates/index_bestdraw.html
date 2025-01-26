@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="en">
+
+<style type="text/css">
+    body { padding: 0; margin: 0; font-family: Arial, Helvetica, sans-serif;}
+	#map {height: 100%;}
+	
+	/* Optional: Makes the sample page fill the window. */
+	html, body {height: 100%;margin: 0;padding: 0;}
+
+	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	.legend { text-align: left; line-height: 10px; color: #555; font-size: 0.875em} .legend i { width: 10px; height: 10px; float: left; margin-right: 4px; opacity: 0.7; } 
+	.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+
+	html, body,  #map {width : 100%;height : 100%;}
+	.box{width:15px;height:15px;border-radius:25px;display: inline-block;}
+
+     /** sidebar menu **/
+	.innerDiv{position: absolute;width: 10%;height: 15%;background-color: #b2b2ff;opacity: 0.8;margin-top:  1%;
+		margin-left: 5%;z-index: 700;padding-top: 1%;text-overflow:ellipsis;overflow:hidden;}
+
+    .button {position: absolute;left: 2%;top: 80%;height: 8%;width: 7%; min-width: 7%;margin-top: 30%;margin-left: 50%;
+		z-index: 500;border: none;color: white;padding: 20px;text-align: left;display: inline-block;font-size: 1.5em;
+	    margin: 10px 20px;}
+
+  header, nav {
+    left: 2%;
+	top: 85%;
+  	z-index: 700;
+	position: absolute;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	
+	border-spacing: 5px;
+  }
+
+	nav a {
+	  text-decoration: none;
+	  background: #000000;  /* Black */
+	  border-radius: 5px;
+	  font-size: 1.2em;
+	  color: white;
+	  padding: 3px 8px;
+	  
+	  display: table-cell;
+	}
+	
+
+	nav .col_home {background-color: #6b0000;}
+	
+	nav .col_privata {background-color: #4CAF50;}
+
+	nav .col_collettivo {background-color: #0000ff ;}
+	
+	nav .col_scenari {background-color: #ffa500 ;}
+
+	nav .col_impatti {background-color: #76a5af ;}
+	
+	nav .IEA_statistics {background-color: #ededed ;color: blue;}
+	
+	nav .col_best {background-color: #326bbb ;<!--color: blue;-->}
+
+ /** submit lat lon and input text to Python **/
+    main {background-color: rgba(51, 170, 51, .3); left: 2%;top: 11%;z-index: 700;position: absolute;margin: 2px 0;
+		padding: 5px;text-overflow:ellipsis;overflow:hidden; width:400px; height: 250px}
+
+	main div {
+	  width: 500px;
+	  background: black; 
+	  color: white;
+	  padding: 1px;
+	  margin: 5px auto;
+	}
+	
+
+	main div:nth-child(1) {
+	  width: 370px;
+	  height: 0px;
+	   background: transparent;
+	}
+	
+	
+    main div:nth-child(2) {
+	  width: 370px;
+	  height: 0px;
+	   background: blue;
+	}
+	
+
+	main div:nth-child(3) {
+      width: 170px;
+	 background: transparent;
+	}
+	
+	main div:nth-child(4) {
+	  width: 270px;
+	   height: 0px;
+	   background: transparent;
+	   float: center;
+	}
+	
+	main div:nth-child(5) {
+	  width: 270px;
+	 background: yellow;
+	}
+	
+	main div:nth-child(6) {
+	   width: 500px;
+	    background: #326bbb;
+	}
+	
+	.inline-block-center {text-align: left;}
+	
+	.flex-center {display: flex;justify-content: left;}
+
+	h2 {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+	line-height: 0.5em;
+	}
+	
+	
+	h3 {
+    margin: 0;
+    padding: 0;
+	display: inline;
+	}
+	
+
+	.animation_link {font-size: 130%;color: blue;font-weight: bold;}
+
+.label {
+  color: black;
+  padding: 8px;
+  font-family: Arial Black;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+// .tpl_line {background-color: #2196F3; width: 150px} /* Blue */
+
+/* Center the loader (SPINNER) */
+#loader {position: absolute;left: 50%;top: 50%;z-index: 1;width: 120px;height: 120px;margin: -76px 0 0 -76px;border: 16px solid #f3f3f3;
+  border-radius: 50%;// border-top: 16px solid #3498db;border-top: 16px solid blue;border-right: 16px solid green;
+  border-bottom: 16px solid red;border-right: 16px solid yellow;border-left: 16px solid pink;-webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@-webkit-keyframes animatebottom {from { bottom:-100px; opacity:0 } to { bottom:0px; opacity:1 }}
+
+@keyframes animatebottom { from{ bottom:-100px; opacity:0 } to{ bottom:0; opacity:1 }}
+
+#myDiv {display: none;text-align: center;}
+
+
+   /* custom primary buttons */
+    
+    .btn-primary {
+        color: #212529;
+        background-color: white ;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary:hover {
+        color: #212529;
+        background-color: #52bebe;
+        border-color: #8ad3d3
+    }
+    
+    .btn-primary:focus,
+    .btn-primary.focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+    
+    .btn-primary.disabled,
+    .btn-primary:disabled {
+        color: #212529;
+        background-color: #7cc;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active,
+    .btn-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #9cdada;
+        border-color: #2e7c7c
+    }
+    
+    .btn-primary:not(:disabled):not(.disabled):active:focus,
+    .btn-primary:not(:disabled):not(.disabled).active:focus,
+    .show>.btn-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+	
+	
+	
+	 .btn-primary_bis {
+        color: #212529;
+        background-color: #fefdab ;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary_bis:hover {
+        color: #212529;
+        background-color: #52bebe;
+        border-color: #8ad3d3
+    }
+    
+    .btn-primary_bis:focus,
+    .btn-primary_bis.focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+    
+    .btn-primary_bis.disabled,
+    .btn-primary_bis:disabled {
+        color: #212529;
+        background-color: #7cc;
+        border-color: #5bc2c2
+    }
+    
+    .btn-primary_bis:not(:disabled):not(.disabled):active,
+    .btn-primary_bis:not(:disabled):not(.disabled).active,
+    .show>.primary.dropdown-toggle {
+        color: #212529;
+        background-color: #9cdada;
+        border-color: #2e7c7c
+    }
+    
+    .btn-primary_bis:not(:disabled):not(.disabled):active:focus,
+    .btn-primary_bis:not(:disabled):not(.disabled).active:focus,
+    .show>.primary_bis.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(91, 194, 194, 0.5)
+    }
+	
+	
+	
+	
+    
+    .btn-outline-primary {
+        color: #000000;
+        background-color: yellow;
+        background-image: none;
+        border-color: #7cc;
+    }
+    
+    .btn-outline-primary:hover {
+        color: #222;
+        background-color: #8ad3d3;
+        border-color: #7cc
+    }
+    
+    .btn-outline-primary:focus,
+    .btn-outline-primary.focus {
+        box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+    }
+    
+    .btn-outline-primary.disabled,
+    .btn-outline-primary:disabled {
+        color: #7cc;
+        background-color: transparent
+    }
+    
+    .btn-outline-primary:not(:disabled):not(.disabled):active,
+    .btn-outline-primary:not(:disabled):not(.disabled).active,
+    .show>.btn-outline-primary.dropdown-toggle {
+        color: #212529;
+        background-color: #8ad3d3;
+        border-color: #7cc
+    }
+    
+    .btn-outline-primary:not(:disabled):not(.disabled):active:focus,
+    .btn-outline-primary:not(:disabled):not(.disabled).active:focus,
+    .show>.btn-outline-primary.dropdown-toggle:focus {
+        box-shadow: 0 0 0 .2rem rgba(119, 204, 204, 0.5)
+    }
+	
+	
+	.btn_costi {width: 60%;
+	  height:50px;
+	  font-size: 20px;
+	  font-weight: bold;
+	  text-align: center;
+	  color:black}
+	
+	
+	.blink {
+            font-family: Arial;
+			font-weight: bold;
+			animation: blinker 2.5s linear infinite;
+            color: blue;
+            font-size: 1.5em;
+            /* Larger, responsive font size */
+            margin-bottom: 20px;
+        }
+
+	@keyframes blinker {
+		50% {
+			opacity: 0;
+		}
+	}
+	
+
+
+/* Center the loader (SPINNER) */
+#loader {position: absolute;left: 50%;top: 50%;z-index: 1;width: 120px;height: 120px;margin: -76px 0 0 -76px;border: 16px solid #f3f3f3;
+  border-radius: 50%;// border-top: 16px solid #3498db;border-top: 16px solid blue;border-right: 16px solid green;
+  border-bottom: 16px solid red;border-right: 16px solid yellow;border-left: 16px solid pink;-webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@-webkit-keyframes animatebottom {from { bottom:-100px; opacity:0 } to { bottom:0px; opacity:1 }}
+
+@keyframes animatebottom { from{ bottom:-100px; opacity:0 } to{ bottom:0; opacity:1 }}
+
+#myDiv {display: none;text-align: center;}
+
+div#loading {
+    display: none;
+                position: absolute;
+                left: 50%;
+    top: 50%;
+    z-index: 700;
+                width: 270px;
+                height: 270px;
+                margin: -76px 0 0 -76px;
+    background: url(/static/loadingimage_TPL.gif) no-repeat;
+    cursor: wait;
+}
+
+.leaflet-popup-content {width:auto !important;}
+
+
+
+</style>
+
+</head>
+  <meta name="description" content="Leaflet Template">
+  <title>RdS-ENEA</title>
+  <!--meta name="viewport" content="initial-scale=1.0"-->
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+ </head>
+ 
+ <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<script type="text/javascript" src=http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js></script>
+<script src=https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js></script>
+<script src=https://unpkg.com/leaflet@1.0.2/dist/leaflet.js></script>
+
+<div id="loader"></div>
+
+<body>
+
+<div id="loading"></div>
+
+<main class="inline-block-center">
+	
+	<h3 style="font-weight: bold; line-height: 1em; text-align: center; font-size:180%; margin-left: 100px;">Best Draw Maps</h3>
+		<!--insert new line-->
+	<br>
+
+	<!--<form method="POST" action="/GTFS_chooser/<sumw>">
+		<body onload="selectGTFS('gtfs1');selectGTFS('gtfs2');selectGTFS('gtfs3');selectGTFS('gtfs4');selectGTFS('gtfs5');selectGTFS('gtfs6');selectdate('datesw');selectdate('datesp');selectdate('datesh');selectdate('dateww');selectdate('datewp');selectdate('datewh');"></body>
+		<span class="label tpl_line">Summer wr:</span>
+		<select class="GTFS_selector" name="gtfs1" id="gtfs1">
+			<option value="">selectGTFS</option>
+		</select>
+	</form>
+	<form method="POST" action="/date_chooser/<datesw>" style='display: inline-block;'>
+		<select class="date_selector" name="datesw" id="datesw">
+			<option value="">select Data</option>
+		</select>
+	</form><br>-->
+
+    <div class="break_line_1"></div><br>
+
+	<form method="POST" action="/capolinea/" style='display: inline-block;'>
+        <body onload="selectlist('output')"></body>
+        <label class="label tpl_line" for="cselect">Nome città: </label>
+		<select class="GTFS_selector" name="cselect" id="cselect">
+			<option value="">select city</option>
+			<option value="Rome">Rome</option>
+		</select><br>
+        <label class="label tpl_line" for="fselect">Nome output: </label>
+		<select class="GTFS_selector" name="fselect" id="fselect">
+			<option value="">select output</option>
+		</select><br><br>
+        <input style="margin-left: 100px;" class="btn btn-primary btn-sm" type="submit" value="Disegna mappa capolinea" onclick="$('#loading').show();">
+	</form>
+
+		<nav style="margin-left: 12px; margin-top: -25px;" role='navigation'>
+	    <a class="col_best" href="/best_page/">GTFS</a>
+        <a class="col_best" href="/best_prep/">PreProc</a>
+	    <a class="col_best" href="/best_run/">Best</a>
+        <a class="col_best" href="/best_page/">Scat</a>
+	    <a class="col_best" href="/best_draw/">Map</a><!--</nobr>-->
+	</nav>
+<!-- Trigger/Open Popup window to show the movie -->
+<!--button id="myBtn">Open Traffic Flow movie</button-->
+
+</main>
+
+<header>
+  
+</header>
+
+<nav role='navigation'>
+    <a class="col_home" href="/home_page/">Home</a>
+  <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
+  <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
+  <a class="col_scenari" href="/TRIP_LEGS/">Scenari</a>
+  <a href="/charging_infrastructure_OSM/">Charging Profile</a>
+  <a class="col_impatti" href="/public_transport_page/">Impatti</a>
+  <a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a>
+  <a class="col_best" href="/best_page/">Best</a>
+</nav>
+
+<!--we are inside the area of the map-->
+<div id="map">
+
+</div>
+
+<!-- Load data .geojson -->
+<!--script src="{{ url_for('static', filename='hexagons_aggr_POP_ROMA_2011.geojson') }}" /></script-->
+<script src="{{ url_for('static', filename='zone_censuarie_POP_ROMA_2011.geojson') }}" /></script>
+<!--script src="{{ url_for('static', filename='aggregated_matched_routes_ROMA_2019_10_09.geojson') }}" /></script-->
+<!--script src="{{ url_for('static', filename='gtfs_trips_by_routes.geojson') }}" /></script-->
+<!--script src="{{ url_for('static', filename='gtfs_stops_by_routes.geojson') }}" /></script-->
+<!--script src="{{ url_for('static', filename='selected_timelines.geojson') }}" /></script-->
+<!--script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script-->
+<!--<script src="{{ url_for('static', filename='gtfs_trips_by_routes_filtered.geojson') }}" /></script>-->
+<script src="{{ url_for('static', filename='best/best_stops.geojson') }}" /></script>
+
+<script src="{{ url_for('static', filename='best/load.txt') }}" /></script>
+
+<script src="{{ url_for('static', filename='best/mymap.html') }}" /></script>
+
+
+<!--load zmu zones with their attributes and charging infrastructure data-->
+<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
+
+<script>
+var llist3 = new Array(); llist3 = loadlist3;
+function selectlist(wh) {
+	if (wh === 'output') {var newOptions=llist3; newValues=llist3; win1='fselect'; win2='fselect1';}
+	selectField = document.getElementById(win1); selectField.options.length = 0;
+	for (j=0; j<newOptions.length; j++){selectField.options[selectField.length] = new Option(newOptions[j], newValues[j]);}
+	selectField1 = document.getElementById(win2); selectField1.options.length = 0;
+	for (j=0; j<newOptions.length; j++){selectField1.options[selectField1.length] = new Option(newOptions[j], newValues[j]);}
+}
+//$('form select').on('change', function(){$(this).closest('form').submit();});
+</script>
+
+<script>
+
+     // ----------------------------------------------------
+     
+
+      // Hack to autoset the iframe height.
+      window.addEventListener("load", function() {
+        window.setTimeout(function() {
+          setFrameHeight(document.documentElement.clientHeight)
+        }, 0);
+      });
+	  
+	 ///////////////////////////---------------------------------------------------------------------/////////////////////////////////////////////
+	  ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+	   ///////////////////////////---------------------------------------------------------------------///////////////////////////////////////////
+	    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+		///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+        ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+      ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+	 
+	  
+	// ADD Leaflet map
+
+		const osm  = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		})
+         
+		 var carto = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+         });
+
+	// control that shows state info on hover
+	const info = L.control(); 
+
+	info.onAdd = function (map) {
+	this._div = L.DomUtil.create('div', 'info');
+	this.update();
+	return this._div;
+	};
+
+	function getColor_nbuses(d) {
+		return d >= 30 ? '#2e122d' :
+			d > 20  ? '#2e122d' :
+			d > 10  ? '#530332' :
+			d > 6  ? '#581845' :
+			d > 4  ? '#900c3f' :
+			d > 3  ? '#c70039' :
+			d >= 2  ? '#ff5733' :
+			d >= 1   ? '#ffc300' : '#ffc300';
+			}  
+
+	function getColor_census(d) {
+		return d >= 1000 ? '#800026' :
+			d > 500  ? '#BD0026' :
+			d > 200  ? '#E31A1C' :
+			d > 100  ? '#FC4E2A' :
+			d > 50   ? '#FD8D3C' :
+			d > 20   ? '#FEB24C' :
+			d > 10   ? '#FED976' : '#FFEDA0';
+			}
+
+			/* LEGEND USED FOR CENSUARY DATA */
+			var legend_censuary = L.control({position: 'bottomright'});
+		
+            legend_censuary.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 10",
+								"from 10 to 20",
+								"from 20 to 50",
+								"from 50 to 100",
+								"from 100 to 200",
+								"from 200 to 500",
+								"from 500 to 1000",
+								" > 1000"];
+				 const grades = [0, 10, 20, 50, 100, 200, 500, 1000];
+
+                div.innerHTML='<div><b>Population/Residences</b></div';
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_census(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+
+	info.update = function (props) {
+		const contents = props ? `<b>${props.P1}</b> people` : 'Hover over a censuary zone';
+		this._div.innerHTML = `<h4>Total Population Number</h4>${contents}`;
+	};
+
+		const selectedStyle = {color: 'yellow',weight: 5}
+
+		function getColor_census(d) {
+					return d > 1000 ? '#800026' :
+						d > 500  ? '#BD0026' :
+						d > 200  ? '#E31A1C' :
+						d > 100  ? '#FC4E2A' :
+						d > 50   ? '#FD8D3C' :
+						d > 20   ? '#FEB24C' :
+						d > 10   ? '#FED976' : '#FFEDA0';
+				}
+
+		function style_pop(feature) {
+			return {
+				weight: 0.6,
+				opacity: 0.9,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.5,
+				fillColor: getColor_census(feature.properties.P1)
+			};
+		}
+
+	function GTFS_trips_style(feature) {
+			return {
+				//color: "black",
+				weight: 4,
+				opacity: 1,
+				color: getColor_nbuses(feature.properties.n_buses),
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'black'
+				// fillColor: getColor_nbuses(feature.properties.n_buses)
+			};
+		 }
+
+		function highlightFeature(e) {
+			const layer = e.target;
+
+			layer.setStyle({
+				weight: 3,
+				color: '#666',
+				dashArray: '',
+				fillOpacity: 0.9
+			});
+
+			layer.bringToFront();
+
+			info.update(layer.feature.properties);
+		}
+
+		const censuary_default = L.geoJson(censuary_Roma, {style: style_pop,onEachFeature});
+
+		function resetHighlight(e) {censuary_default.resetStyle(e.target);info.update();}
+
+		function zoomToFeature(e) {map.fitBounds(e.target.getBounds());}
+
+		function onEachFeature(feature, layer) {
+			layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				//click: zoomToFeature
+			});
+		}
+
+	    /*------------DEFAULT LAYER -----------------*/
+	    const censuary_Layer = L.layerGroup();
+		censuary_Layer.addLayer(censuary_default);		
+
+
+	/////////------ ADD default TPL STOPS -------------------/////////////////////////////////
+		var TPL_stops_default_zero = L.geoJSON(stop_best_bus, {
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*1,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		const TPL_stops_layer_bis = L.layerGroup();
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_zero);
+
+		/////////------ ADD default TPL TRIPS -------------------/////////////////////////////////
+		//var TPL_default = L.geoJSON(gtfs_hour, { style: GTFS_trips_style,
+		//	  onEachFeature: function (feature, layer) {
+		//	  layer.on('mouseover', function () {
+		//	   layer.setStyle(selectedStyle);
+		//	  });
+		//		// layer.bindTooltip('<h3><p>trip:   '+feature.properties.trip_LEG_name+'</p>');
+		//		layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+		//		layer.on('mouseout', function (e) {
+		//		layer.setStyle({
+		//			weight: 5,
+		//			opacity: 1,
+		//			// color: 'black',
+		//			color: getColor_nbuses(feature.properties.n_buses),
+		//			dashArray: '3',
+		//			fillOpacity: 0.7,
+		//			fillColor: '#00000000'});
+		//			});
+		//			}
+		//			});
+
+			
+		//const TPL_layer = L.layerGroup();
+		//TPL_layer.addLayer(TPL_default);
+		
+		//// ----- ZMU zones -----------------------------////
+        function style_colors_ZMU_zones(feature) {
+			return {
+				weight: 1,
+				opacity: 0.6,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.0,
+				fillColor: 'white'
+			};
+		}
+		
+		
+		const selectedStyle_highlight_ZONES = {
+		  color: 'blue',
+		  weight: 3,
+		  opacity: 0.9,
+		}
+		
+		
+	    const selectedStyle_mouseout_ZONES = {
+		  color: 'black',
+		  weight: 1,
+		  opacity: 0.6,
+		}
+		
+		
+		
+		
+	/// add ZMU zones  borders  /////////////////////////////////////////////////////
+	var ZMU_zones = L.geoJSON(charging_data, { style: style_colors_ZMU_zones, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle_highlight_ZONES);
+			  });
+	var popupText = '';
+				popupText += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				popupText += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popupText += (feature.properties.n_charging_stations) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n. charging stations: ' + feature.properties.n_charging_stations : '' ;	
+				popupText += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';		        	
+				popupText += (feature.properties.Available_Power) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Power (Watt): ' + feature.properties.Available_Power : '' ;						
+				layer.bindTooltip(popupText);		
+	layer.on('mouseout', function (e) {
+				layer.setStyle(selectedStyle_mouseout_ZONES); 
+			});	
+		}
+		});
+
+	
+	const ZMU_zones_Layer = L.layerGroup();
+	ZMU_zones_Layer.addLayer(ZMU_zones);	
+
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			//layers: [osm, TPL_layer]
+			layers: [carto, ZMU_zones_Layer]
+		});
+
+
+		
+function onEachFeatu(feature, layer) {
+    // does this feature have a property named popupContent?
+    if (feature.properties && feature.properties.popupContent) {
+        layer.bindPopup(feature.properties.popupContent);
+    }
+}
+
+var MyIcon = L.icon({
+    iconUrl: '../static/bus_stop.png',
+    iconSize:     [36, 36], // size of the icon
+    shadowSize:   [48, 48], // size of the shadow
+    iconAnchor:   [18, 18], // point of the icon which will correspond to marker's location
+    shadowAnchor: [36, 36],  // the same for the shadow
+    popupAnchor:  [0, 0] // point from which the popup should open relative to the iconAnchor
+});
+
+	L.geoJSON(stop_best_bus,{onEachFeature: onEachFeatu, pointToLayer: function(feature,latlng){
+      return L.marker(latlng,{icon: MyIcon});
+    }}).addTo(map)
+
+		legend_censuary.addTo(map);
+		info.addTo(map);
+
+		  //------------------------- choose location on the map manually...
+
+		 map.on('click', 
+				function(e){
+					document.getElementById('lat').value = e.latlng.lat;
+					document.getElementById('lng').value = e.latlng.lng;
+					var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+			});
+
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+
+		const baseLayers = {
+			'OpenStreetMap': osm,
+			'Carto': carto
+		};
+		
+		const overlays = {
+		    //'TPL network': TPL_layer,
+			'Traffic Zones': ZMU_zones_Layer,
+			'TPL stops': TPL_stops_layer_bis,
+			'Censuary data': censuary_Layer
+		};
+
+
+		const layerControl = L.control.layers(baseLayers, overlays ,{collapsed:false,}).addTo(map);				
+
+	window.addEventListener('resize', 
+	() => map.getViewPort().resize());
+
+  </script>
+</body>
+</html>

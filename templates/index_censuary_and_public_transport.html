@@ -1,0 +1,2878 @@
+
+<!doctype html>
+<html lang="en">
+
+<style type="text/css">
+    body {
+            padding: 0;
+            margin: 0;
+			font-family: Arial, Helvetica, sans-serif;
+        }
+   
+	#map {
+	  height: 100%;
+	}
+	
+	/* Optional: Makes the sample page fill the window. */
+	html, body {
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	}
+
+
+	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	.legend { text-align: left; line-height: 10px; color: #555; font-size: 0.875em} .legend i { width: 10px; height: 10px; float: left; margin-right: 4px; opacity: 0.7; } 
+	.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+	
+	#refreshButton {
+	  position: absolute;
+	  top: 60px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #000000;
+	  background-color:#FFFF00;
+	}
+	
+	
+	#home_locations {
+	  position: absolute;
+	  width: 100%;
+	  top: 60px;
+	  margin-top: 40px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #ffffff ;
+	  background-color:#000099;
+	}
+	
+	#refreshButton:hover{
+		opacity: 0.8;
+		cursor: pointer;
+    }
+	
+
+
+	  html, body,  #map {
+        width : 100%;
+        height : 100%;
+      }
+	.box{	  
+		width:15px;
+		height:15px;
+		border-radius:25px;
+		display: inline-block;
+		}
+	
+
+     /** sidebar menu **/
+	.innerDiv{
+		position: absolute;
+		width: 10%;
+		height: 15%;
+		background-color: #b2b2ff;
+		opacity: 0.8;
+		margin-top:  1%;
+		margin-left: 5%;
+		z-index: 800;
+		padding-top: 1%;
+		text-overflow:ellipsis;
+        overflow:hidden;
+		
+	}
+	
+
+	
+
+    .button {
+	    position: absolute;
+		left: 2%;
+		top: 80%;
+		height: 8%;
+		width: 7%
+        min-width: 7%;
+		margin-top: 30%;
+		margin-left: 50%;
+		z-index: 500;
+	    border: none;
+	    color: white;
+	    padding: 20px;
+	    text-align: center;
+	    display: inline-block;
+	    font-size: 1.5em;
+	    margin: 10px 20px;		
+	}
+
+		
+		
+  header, nav {
+    left: 2%;
+	top: 85%;
+  	z-index: 700;
+	position: absolute;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	border-spacing: 5px;
+  }
+
+	nav a {
+	  text-decoration: none;
+	  background: #000000;  /* Black */
+	  border-radius: 5px;
+	  font-size: 1.2em;
+	  color: white;
+	  padding: 3px 8px;
+	 display: table-cell;
+	}
+	
+	
+	nav .col_home {
+		background-color: #6b0000;
+	}
+	
+	nav .col_privata {
+		background-color: #4CAF50;
+	}
+	
+	
+	nav .col_collettivo {
+		background-color: #0000ff ;
+	}
+	
+	nav .col_scenari {
+		background-color: #ffa500 ;
+	}
+	
+	
+	nav .col_impatti {
+		background-color: #76a5af ;
+	}
+	
+	
+	
+		
+
+  /** submit lat lon and input text to Python **/
+    main {
+		background: #ffe4b2 ;
+		left: 2%;
+		top: 35%;
+		z-index: 700;
+		position: absolute;
+		margin: 2px 0;
+		padding: 5px;
+		text-overflow:ellipsis;
+        overflow:hidden;
+		width: 180px;
+		height: 250px;
+	}
+
+	main div {
+	  background: red;
+	  margin: 0 auto;
+	  color: white;
+	  padding: 1px;
+	  margin: 5px auto;
+	}
+
+	main div:nth-child(1) {
+	  width: 0px;
+	  height: 0px;
+	   background: transparent;
+	}
+	main div:nth-child(2) {
+	  width: 0px;
+	  height: 0px;
+	   background: transparent;
+	}
+	
+	main div:nth-child(3) {
+	  width: 170px;
+	  background: transparent;
+	}
+	
+	main div:nth-child(4) {
+	  width: 170px;
+	   background: transparent;
+	}
+	
+	main div:nth-child(5) {
+	  width: 170px;
+	}
+	
+	main div:nth-child(6) {
+	  width: 170px;
+	}
+	
+	main div:nth-child(7) {
+	  width: 170px;
+	}
+	
+	main div:nth-child(8) {
+	  width: 170px;
+	}
+	
+	.inline-block-center {
+	  text-align: center;
+	}
+	
+	.flex-center {
+	  display: flex;
+	  justify-content: center;
+	}
+	
+	
+	
+		
+		
+	.slider {
+	  -webkit-appearance: none;
+	  width: 100%;
+	  height: 25px;
+	  background: #d3d3d3;
+	  outline: none;
+	  opacity: 0.7;
+	  -webkit-transition: .2s;
+	  transition: opacity .2s;
+	}
+
+	.slider:hover {
+	  opacity: 1;
+	}
+
+	.slider::-webkit-slider-thumb {
+	  -webkit-appearance: none;
+	  appearance: none;
+	  width: 25px;
+	  height: 25px;
+	  background: #04AA6D;
+	  cursor: pointer;
+	}
+
+	.slider::-moz-range-thumb {
+	  width: 25px;
+	  height: 25px;
+	  background: #04AA6D;
+	  cursor: pointer;
+	}
+	
+	
+	h2 {
+    margin: 0;
+    padding: 0;
+	}
+	
+	
+	h3 {
+    margin: 0;
+    padding: 0;
+	}
+	
+	
+	
+	/* The Modal (background) */
+	.modal {
+	  display: none; /* Hidden by default */
+	  position: absolute; /* Stay in place */
+	  z-index: 700; /* Sit on top */
+	  
+	  position: absolute;
+	   left: 20%;
+		top: 4%;
+	  width: 50%; /* Full width */
+	  height: 70%; /* Full height */
+	  overflow: auto; /* Enable scroll if needed */
+	  background-color: rgb(0,0,0); /* Fallback color */
+	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	}
+
+	/* Modal Content/Box */
+	.modal-content {
+	  z-index: 700;
+	  top: 5%;
+	  background-color: #fefefe;
+	  margin: 5% auto; /* 15% from the top and centered */
+	  padding: 1%;
+	  border: 1px solid #888;
+	  width: 100%; /* Could be more or less, depending on screen size */
+	}
+
+	/* The Close Button */
+	.close {
+	  color: #aaa;
+	  float: right;
+	  font-size: 28px;
+	  font-weight: bold;
+	}
+
+	.close:hover,
+	.close:focus {
+	  color: black;
+	  text-decoration: none;
+	  cursor: pointer;
+	}
+	
+	
+	.video-wrapper {
+	  position: relative;
+	  height: 0;
+	  padding-bottom: 56.25%;
+	}
+
+	.video-wrapper iframe {
+	   position: absolute;
+	   width: 100%;
+	   height: 100%;
+	   top: 0;
+	   left: 0;
+	}
+	
+	
+.animation_link {
+  font-size: 130%;
+  color: blue;
+  font-weight: bold;
+}
+	
+</style>
+
+
+<!-- SET the style of the LOADER-->
+<style>
+
+/* Center the loader (SPINNER) */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  // border-top: 16px solid #3498db;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-right: 16px solid yellow;
+  border-left: 16px solid pink;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+
+</style>
+
+
+
+
+</head>
+  <meta name="description" content="Leaflet Template">
+  <title>Simple Map</title>
+  <!--meta name="viewport" content="initial-scale=1.0"-->
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+ </head>
+ 
+ 
+<!--body-->
+<!--body onload="myFunction()" style="margin:0;"-->
+
+<!--start the SPINNER or LOADER-->
+<div id="loader"></div>
+
+<body>
+
+
+
+<main class="inline-block-center">
+	<form action="/coords/" method="POST">
+		  <div>
+			<input   type='hidden' id='lat' name='lat'  /> <br />
+		  </div>
+		  <div>
+			<input type='hidden' id='lng' name='lng'  /> <br />
+		  </div>
+		  <div>
+		   <input type="text" onfocus="this.value=''" name="tag" value='insert text....'><br>
+		  </div>
+		   <div>
+		   <!--input style="color: teal; background-color: #FFFFC0; border: 3pt ridge lightgrey" type="submit" value="Submit to Python Console"-->
+		   <input type="submit" value="Submit Selected Point">
+		  </div>
+	</form>
+	
+	
+	
+	<form>
+	<!--label for"Selector">chose an option:</label-->
+       <!--select class="Selector" name="Selector"-->
+	   <!--select id="Selector" onchange="myFunction()"-->
+	   <h3>Select censuary data</h3>
+     <select class="selector">
+		<option  value="Population">Total Population</option>
+		<option value="Residences">Residential Buildings</option>
+	 </select>
+	
+	<div class="result"></div>
+	
+	<h3>TPL line by time</h3>
+	  <select class="hour_selector">
+		<option value="0">00:00</option>
+		<option value="1">01:00</option>
+		<option value="2">02:00</option>
+		<option value="3">03:00</option>
+		<option value="4">04:00</option>
+		<option value="5">05:00</option>
+		<option value="6">06:00</option>
+		<option value="7">07:00</option>
+		<option value="8">08:00</option>
+		<option value="9">09:00</option>
+		<option value="10">10:00</option>
+		<option value="11">11:00</option>
+		<option value="12">12:00</option>
+		<option value="13">13:00</option>
+		<option value="14">14:00</option>
+		<option value="15">15:00</option>
+		<option value="16">16:00</option>
+		<option value="17">17:00</option>
+		<option value="18">18:00</option>
+		<option value="19">19:00</option>
+		<option value="20">20:00</option>
+		<option value="21">21:00</option>
+		<option value="22">22:00</option>
+		<option value="23">23:00</option>
+	 </select>
+	 
+	 <div class="result_hour"></div>
+	 
+
+	 <a class="animation_link" href="/animation_TPL/">TPL animation</a></p>
+    
+		
+	<!--h1>Custom Range Slider</h1>
+	<p>Drag the slider to display the current value.</p>
+
+	<div class="slidecontainer">
+	  <input type="range" min="0" max="23" value="9" class="slider" id="myRange">
+	  <p>Value: <span id="demo"></span></p>
+	</div-->
+	
+	  <!--iframe width="320" height="240" src="/static/2019_10_09_Wednesday_aggregated_flow_ROMA.mp4" frameborder="0" allowfullscreen></iframe>
+      </iframe-->
+
+	</form>
+	
+	
+	
+<!-- Trigger/Open Popup window to show the movie -->
+<!--button id="myBtn">Open Traffic Flow movie</button-->
+
+	
+</main>
+
+
+
+
+
+<header>
+  
+</header>
+
+
+
+
+<nav role='navigation'>
+  <a class="col_home" href="/home_page/">Home</a>
+  <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
+  <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
+  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
+  <a class="col_impatti" href="/public_transport_page/">Impacts</a>
+  <a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a>
+</nav> 
+
+
+
+
+
+	
+<!--we are inside the area of the map-->
+<div id="map">
+
+
+
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <!--p>Some text in the Modal..</p-->
+	<div class='video-wrapper'>
+	 <iframe width="1020" height="640" src="/static/2019_10_09_Wednesday_aggregated_flow_ROMA.mp4" frameborder="0" scrolling="auto" onload='resizeIframe(this)'/></iframe>
+	 </div>
+  </div>
+
+</div>
+
+
+
+</div>
+
+
+<!-- Load data .geojson -->
+<script src="{{ url_for('static', filename='hexagons_aggr_POP_ROMA_2011.geojson') }}" /></script>
+<script src="{{ url_for('static', filename='zone_censuarie_POP_ROMA_2011.geojson') }}" /></script>
+<script src="{{ url_for('static', filename='aggregated_matched_routes_ROMA_2019_10_09.geojson') }}" /></script>
+<script src="{{ url_for('static', filename='gtfs_trips_by_routes.geojson') }}" /></script>
+<script src="{{ url_for('static', filename='gtfs_stops_by_routes.geojson') }}" /></script>
+  <script src="{{ url_for('static', filename='selected_timelines.geojson') }}" /></script>
+  <script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script>
+		  
+
+		
+		
+
+  <script>
+
+     // ----------------------------------------------------
+     
+
+      // Hack to autoset the iframe height.
+      window.addEventListener("load", function() {
+        window.setTimeout(function() {
+          setFrameHeight(document.documentElement.clientHeight)
+        }, 0);
+      });
+	  
+	 ///////////////////////////---------------------------------------------------------------------/////////////////////////////////////////////
+	  ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+	   ///////////////////////////---------------------------------------------------------------------///////////////////////////////////////////
+	    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+		///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+        ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+      ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+	 
+	 
+	 
+	// Get the modal
+	var modal = document.getElementById("myModal");
+
+	// Get the button that opens the modal
+	// var btn = document.getElementById("myBtn");
+
+	// Get the <span> element that closes the modal
+	var span = document.getElementsByClassName("close")[0];
+
+	// When the user clicks on the button, open the modal
+	/* btn.onclick = function() {
+	  modal.style.display = "block";
+	} */
+
+	// When the user clicks on <span> (x), close the modal
+	span.onclick = function() {
+	  modal.style.display = "none";
+	}
+
+	// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function(event) {
+	  if (event.target == modal) {
+		modal.style.display = "none";
+	  }
+	}
+	
+
+	  
+	  
+	// ADD Leaflet map
+	
+		
+		const osm  = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		})
+         
+		 var carto = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+         });
+		 
+		//const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+		//const mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+		// const streets = L.tileLayer(mbUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+
+	
+	// control that shows state info on hover
+	const info = L.control(); 
+	
+	info.onAdd = function (map) {
+	this._div = L.DomUtil.create('div', 'info');
+	this.update();
+	return this._div;
+	};
+		
+	
+		function getColor_population_hex(d) {
+		return d >= 100 ? '#2d2d4c' :
+		    d > 95 ? '#3d3d66' :
+		    d > 90 ? '#4c4c7f' :
+		    d > 85 ? '#5b5b99' :
+			d > 80 ? '#6b6bb2' :
+			d > 75 ? '#7a7acc' :	
+			d > 70 ? '#8989e5' :
+		    d > 65 ? '#9999ff' :
+		    d > 60 ? '#a3a3ff' :
+			d > 55 ? '#adadff' :			
+			d > 50 ? '#b7b7ff' :
+			d > 45 ? '#c1c1ff' :
+		    d > 40  ? '#ccccff' :  
+		    d > 30  ? '#d6d6ff' :
+			d > 20  ? '#e0e0ff' :
+			d > 10  ? '#eaeaff' :
+			d >= 0   ? '#f4f4ff' : '#ffffff';
+			}
+			
+			
+	function getColor(d) {
+		return d >= 40 ? '#0c2c84' :
+			d > 30  ? '#225ea8' :
+			d > 15  ? '#1d91c0' :
+			d > 12.5  ? '#41b6c4' :
+			d > 10  ? '#7fcdbb' :
+			d > 7.5  ? '#c7e9b4' :
+			d > 5  ? '#edf8b1' :
+			d >= 0   ? '#fdfdbf' : '#fdfdbf';
+			}
+			
+			
+	/*
+	function getColor_nbuses(d) {
+		return d >= 30 ? '#00007f' :
+			d > 20  ? '#0000b2' :
+			d > 10  ? '#0000e5' :
+			d > 6  ? '#0000ff' :
+			d > 4  ? '#3232ff' :
+			d > 3  ? '#6666ff ' :
+			d > 2  ? '#9999ff' :
+			d >= 1   ? '#ff3232' : '#ff3232';
+			} */  
+			
+			
+	function getColor_nbuses(d) {
+		return d >= 30 ? '#2e122d' :
+			d > 20  ? '#2e122d' :
+			d > 10  ? '#530332' :
+			d > 6  ? '#581845' :
+			d > 4  ? '#900c3f' :
+			d > 3  ? '#c70039' :
+			d >= 2  ? '#ff5733' :
+			d >= 1   ? '#ffc300' : '#ffc300';
+			}  
+			
+			
+	function getColor_census(d) {
+		return d >= 1000 ? '#800026' :
+			d > 500  ? '#BD0026' :
+			d > 200  ? '#E31A1C' :
+			d > 100  ? '#FC4E2A' :
+			d > 50   ? '#FD8D3C' :
+			d > 20   ? '#FEB24C' :
+			d > 10   ? '#FED976' : '#FFEDA0';
+			}
+	
+	
+	function getColor_legend(d) {
+		return d >= 15000 ? '#2d2d4c' :
+		    d > 6000 ? '#3d3d66' :	
+		    d > 3500 ? '#4c4c7f' :
+			d > 2500 ? '#5b5b99' :
+			d > 1500 ? '#6b6bb2' :				
+			d > 1300 ? '#7a7acc' :	
+		    d > 1000 ? '#8989e5' :	
+		    d > 800 ? '#9999ff' :			
+		    d > 600 ? '#a3a3ff' :	
+            d > 500 ? '#adadff' :
+			d > 300 ? '#b7b7ff' :
+			d > 250 ? '#c1c1ff' :
+		    d > 200 ? '#ccccff' :
+			d > 100 ? '#d6d6ff' :
+			d > 50   ? '#e0e0ff' :
+			d > 20   ? '#eaeaff' :
+			d >= 0   ? '#f4f4ff' : '#ffffff';
+			}
+	
+	
+	    /* LEGEND USED FOR THE HEXAGONAL TESSELLATION */
+		var legend = L.control({position: 'bottomright'});
+		
+            legend.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 20",
+								"from 20 to 50",
+								"from 50 to 100",
+								"from 100 to 200",
+								"from 200 to 250",
+								"from 250 to 300",
+								"from 300 to 500",
+								"from 500 to 600",
+								"from 600 to 800",
+								"from 800 to 1000",
+								"from 1000 to 1300",
+								"from 1300 to 1500",
+								"from 1500 to 2500",
+								"from 2500 to 3500",
+								"from 3500 to 6000",
+								"from 6000 to 15000",
+								" > 15000"];
+				 const grades = [0, 20, 50, 100, 200 ,250 , 300, 500, 600, 800, 1000, 1300, 1500, 2500, 3500, 6000, 15000];
+
+                div.innerHTML='<div><b>Population (hex)</b></div';
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_legend(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+			
+			
+			/* LEGEND USED FOR CENSUARY DATA */
+			var legend_censuary = L.control({position: 'bottomright'});
+		
+            legend_censuary.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 10",
+								"from 10 to 20",
+								"from 20 to 50",
+								"from 50 to 100",
+								"from 100 to 200",
+								"from 200 to 500",
+								"from 500 to 1000",
+								" > 1000"];
+				 const grades = [0, 10, 20, 50, 100, 200, 500, 1000];
+
+                div.innerHTML='<div><b>Population/Residences</b></div';
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_census(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+            
+		
+		
+			
+		
+	
+
+	info.update = function (props) {
+		const contents = props ? `<b>${props.P1}</b> people` : 'Hover over a censuary zone';
+		this._div.innerHTML = `<h4>Total Population Number</h4>${contents}`;
+	};
+	
+	
+	   
+		const selectedStyle = {
+		  color: 'yellow',
+		  weight: 5
+		} 
+		
+		
+		
+		
+	// get color depending on population number value
+
+			function style_colors(feature) {
+				return {
+					weight: 0.1,
+					opacity: 0.1,
+					color: '#ffffff',
+					dashArray: '2',
+					fillOpacity: 0.7,
+					fillColor: getColor_population_hex(feature.properties.percentile)
+				};
+			}
+			
+			
+		function style_colors_matched(feature) {
+			return {
+				weight: 0.1,
+				opacity: 0.1,
+				color: '#ffffff',
+				dashArray: '2',
+				fillOpacity: 0.7,
+				fillColor: getColor(feature.properties.load)
+			};
+		}
+				
+			
+		
+		function getColor_census(d) {
+					return d > 1000 ? '#800026' :
+						d > 500  ? '#BD0026' :
+						d > 200  ? '#E31A1C' :
+						d > 100  ? '#FC4E2A' :
+						d > 50   ? '#FD8D3C' :
+						d > 20   ? '#FEB24C' :
+						d > 10   ? '#FED976' : '#FFEDA0';
+				}
+
+
+			
+		function style_pop(feature) {
+			return {
+				weight: 0.6,
+				opacity: 0.9,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.5,
+				fillColor: getColor_census(feature.properties.P1)
+			};
+		}
+		
+		
+		/*
+		function myStyle_matching(feature) {
+			return {
+				weight: feature.properties.load/6,
+				opacity: 1,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: '#00000000'
+			};
+		 }
+		 
+		 
+		 const selectedStyle_matching = {
+		  color: 'orange',
+		  weight: 5
+		}
+		*/
+		
+		
+
+	function style_homes(feature) {
+			return {
+				weight: 0.6,
+				opacity: 0.9,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.5,
+				fillColor: getColor_census(feature.properties.E3)
+			};
+		}
+	
+	
+	function GTFS_trips_style(feature) {
+			return {
+				//color: "black",
+				weight: 4,
+				opacity: 1,
+				color: getColor_nbuses(feature.properties.n_buses),
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'black'
+				// fillColor: getColor_nbuses(feature.properties.n_buses)
+			};
+		 }
+		 
+		 
+
+		function highlightFeature(e) {
+			const layer = e.target;
+
+			layer.setStyle({
+				weight: 3,
+				color: '#666',
+				dashArray: '',
+				fillOpacity: 0.9
+			});
+
+			layer.bringToFront();
+
+			info.update(layer.feature.properties);
+		}
+		
+
+         
+		const censuary_default = L.geoJson(censuary_Roma, {
+				style: style_pop,
+				onEachFeature
+			});
+			
+			
+		
+		function resetHighlight(e) {
+			censuary_default.resetStyle(e.target);
+			info.update();
+		}
+
+		function zoomToFeature(e) {
+			map.fitBounds(e.target.getBounds());
+		}
+
+		function onEachFeature(feature, layer) {
+			layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				//click: zoomToFeature
+			});
+		}
+		
+		
+		
+	    /*------------DEFAULT LAYER -----------------*/
+	    const censuary_Layer = L.layerGroup();
+		censuary_Layer.addLayer(censuary_default);		
+	 
+	 
+	 
+	    const selectElement = document.querySelector('.selector');
+
+		selectElement.addEventListener('change', (event) => {
+		  const result = document.querySelector('.result');
+		  // result.textContent = `Display ${event.target.value}`;
+		  
+		  
+		 /*--------- ADD POPULATION LAYER ---------------*/
+		 if (event.target.value == 'Population') {	
+		 
+		  censuary_Layer.clearLayers();
+			map.removeLayer(censuary_Layer);
+			map.removeLayer(mapmatched_Layer);
+			
+				// alert("...P1....total population...");
+		  const censuary = L.geoJson(censuary_Roma, {
+				style: style_pop,
+				onEachFeature
+			});
+			
+		function resetHighlight(e) {
+			censuary.resetStyle(e.target);
+			//info.update();
+			info.update = function (props) {
+				const contents = props ? `<b>${props.P1}</b> people` : 'Hover over a censuary zone';
+				this._div.innerHTML = `<h4>Total Population Number</h4>${contents}`;
+			};
+		}
+
+		function zoomToFeature(e) {
+			map.fitBounds(e.target.getBounds());
+		}
+
+		function onEachFeature(feature, layer) {
+			layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				//click: zoomToFeature
+			});
+		}
+			
+		  censuary_Layer.addLayer(censuary);
+			censuary_Layer.addTo(map);
+		}
+		
+		
+		/*------ ADD RESIDENTIAL HOME LAYER ---------------*/
+		 if (event.target.value == 'Residences') {	
+		 
+		 censuary_Layer.clearLayers();
+			map.removeLayer(censuary_Layer);
+			map.removeLayer(mapmatched_Layer);
+			
+				//alert("...E3....Residential homes...");
+		  const censuary = L.geoJson(censuary_Roma, {
+				style: style_homes,
+				onEachFeature
+			});
+			
+			
+		function resetHighlight(e) {
+			censuary.resetStyle(e.target);
+			//info.update();
+			info.update = function (props) {
+				const contents = props ? `<b>${props.E3}</b> residential homes` : 'Hover over a censuary zone';
+				this._div.innerHTML = `<h4>Total Residential Homes</h4>${contents}`;
+			};
+		}
+
+		function zoomToFeature(e) {
+			map.fitBounds(e.target.getBounds());
+		}
+
+		function onEachFeature(feature, layer) {
+			layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				//click: zoomToFeature
+			});
+		}
+			
+			
+		  censuary_Layer.addLayer(censuary);
+			censuary_Layer.addTo(map);
+		}
+		  
+		});
+		
+		
+	
+		
+		
+	   /*--------- ADD AGGREGATED POPULATION LAYER ---------------*/
+	 	var hex_all = L.geoJSON(hex_counts, { style: style_colors, 	
+		  onEachFeature: function (feature, layer) {
+		  layer.on('mouseover', function () {
+           layer.setStyle(selectedStyle);
+          });
+			layer.bindTooltip('<h3><p>Population: '+feature.properties.POP_TOT_HEX+'</p>');
+			layer.on('mouseout', function (e) {
+				layer.setStyle(style_colors); 
+			});	
+		}
+		});
+		
+		  //Using a Layer Group to add/ remove data from the map.
+	     // censuary_Layer.addLayer(hex_all);
+		
+		
+		
+		
+		
+		var matched_hex_default = L.geoJSON(aggregated_matched_routes, { style: style_colors_matched, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hr == 0;
+				},
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>Load(%): '+feature.properties.load+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_matched); 
+				});	
+			}
+			});
+		
+		
+		const mapmatched_Layer = L.layerGroup();
+		mapmatched_Layer.addLayer(matched_hex_default);
+		
+		
+		
+
+		//////////----- add TPL STOPS ----------------------------//////////////////////////////////////
+		var TPL_stops_default = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 0;
+				},
+		   onEachFeature: function (feature, layer) {
+			//if (feature.properties && feature.properties.popupContent) {
+			//	popupContent += feature.properties.popupContent;
+			//}
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*3,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+
+		var TPL_stops_layer = L.layerGroup();
+		TPL_stops_layer.addLayer(TPL_stops_default);
+		
+		
+		
+		
+		var TPL_stops_default_zero = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 0;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*3,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		const TPL_stops_layer_bis = L.layerGroup();
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_zero);
+		
+		
+		
+		/////////------ ADD default TPL LAYER -------------------/////////////////////////////////
+		var TPL_default = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 0;
+				},
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				// layer.bindTooltip('<h3><p>trip:   '+feature.properties.trip_LEG_name+'</p>');
+				layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function (e) {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					// color: 'black',
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+			
+		const TPL_layer = L.layerGroup();
+		TPL_layer.addLayer(TPL_default);
+		
+		
+		
+		
+		
+		
+		//////---------- SELECT TPL routes and stops By HOUR ----------//////////////////////////
+		const selectElement_hours = document.querySelector('.hour_selector');
+
+		selectElement_hours.addEventListener('change', (event) => {
+		  const result_hour = document.querySelector('.result_hour');
+		  // result_hour.textContent = `TPL line@${event.target.value}:00`;
+		  
+		  
+		  
+		  
+		 if (event.target.value == 0) {	
+	    //alert("...hour 0....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 0;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*3,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		 TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	     TPL_stops_layer_bis.addTo(map);
+		 // TPL_layer.remove();
+		}
+		
+		
+		  
+		if (event.target.value == 0) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 00....mapmatching...");
+				var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 0;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+				});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		} 
+		
+	
+	
+	    if (event.target.value == 1) {	
+	    //alert("...hour 1....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 1;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*2,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		 if (event.target.value == 1) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 1....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 1;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  
+		
+		
+		
+
+		if (event.target.value == 2) {	
+	    //alert("...hour 2....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 2;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*2,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		 if (event.target.value == 2) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 2....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 2;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  
+		
+			
+				
+	if (event.target.value == 3) {	
+	    //alert("...hour 3....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 3;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*2,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		 if (event.target.value == 3) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 3....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 3;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  
+			
+			
+		
+			
+			
+	if (event.target.value == 4) {	
+	    //alert("...hour 4....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 4;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*2,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		 if (event.target.value == 4) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 4....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 4;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  
+			
+			
+			
+			
+			
+		if (event.target.value == 5) {	
+	    //alert("...hour 5....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 5;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		 if (event.target.value == 5) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 5....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 5;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  
+			
+			
+		
+		
+		if (event.target.value == 6) {	
+	    //alert("...hour 6....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 6;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		 if (event.target.value == 6) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 6....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 6;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  
+		
+		
+		
+		
+		if (event.target.value == 7) {	
+	    //alert("...hour 7....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 7;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		
+		 if (event.target.value == 7) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 7....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 7;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  	
+		
+		
+		
+		
+		if (event.target.value == 8) {	
+	    //alert("...hour 8....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 8;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		 if (event.target.value == 8) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 8....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 8;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  	
+		
+			
+			
+			
+			
+	 if (event.target.value == 9) {	
+	    //alert("...hour 9....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 9;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		 if (event.target.value == 9) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 8....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 9;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  	
+		
+		
+		
+			
+			
+        if (event.target.value == 10) {	
+	    //alert("...hour 10....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 10;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		 if (event.target.value == 10) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 10....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 10;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  	
+		
+		
+		
+			
+	   if (event.target.value == 11) {	
+	    //alert("...hour 11....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 11;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		 if (event.target.value == 11) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 11....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 11;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  	
+		
+		
+			
+			
+			
+		if (event.target.value == 12) {	
+	    //alert("...hour 12....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 12;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		 if (event.target.value == 12) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 12....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 12;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  	
+		
+		
+		
+		
+
+		if (event.target.value == 13) {	
+	    //alert("...hour 13....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 13;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		
+		 if (event.target.value == 13) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 13....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 13;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  	
+		
+		
+		
+			
+			
+	 if (event.target.value == 14) {	
+	    //alert("...hour 14....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 14;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		
+		 if (event.target.value == 14) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 14....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 14;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  	
+		
+		
+		
+		
+			
+	if (event.target.value == 15) {	
+	    //alert("...hour 15....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 15;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		 if (event.target.value == 15) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 15....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 15;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  	
+		
+		
+		
+		
+			
+	if (event.target.value == 16) {	
+	    //alert("...hour 16....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 16;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		
+		 if (event.target.value == 16) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 16....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 16;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  	
+		
+		
+		
+			
+		if (event.target.value == 17) {	
+	    //alert("...hour 17....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 17;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		
+		 if (event.target.value == 17) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 17....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 17;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  	
+		
+		
+		
+	
+	if (event.target.value == 18) {	
+	    //alert("...hour 18....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 18;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		
+		 if (event.target.value == 18) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 18....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 18;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  		
+	
+	
+	
+	
+	 if (event.target.value == 19) {	
+	    //alert("...hour 19....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 19;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		
+		 if (event.target.value == 19) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 19....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 19;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  	
+			
+		
+		
+		
+		if (event.target.value == 20) {	
+	    //alert("...hour 20....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 20;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		}
+		
+		
+		
+		 if (event.target.value == 20) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 20....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 20;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  	
+		
+		
+		
+			
+			
+		if (event.target.value == 21) {	
+	    //alert("...hour 21....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 21;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		};
+		
+		
+		
+		 if (event.target.value == 21) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 21....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 21;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		};  	
+		
+		
+			
+			
+			
+		if (event.target.value == 22) {	
+	    //alert("...hour 22....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 22;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		};
+		
+		
+		 if (event.target.value == 22) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 22....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 22;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		};  	
+		
+		
+			
+			
+		if (event.target.value == 23) {	
+	    //alert("...hour 23....TPL STOP!---------");
+		  TPL_stops_layer_bis.clearLayers();
+		  map.removeLayer(TPL_layer);
+			map.removeLayer(TPL_stops_layer_bis);
+			 map.removeLayer(censuary_Layer);
+		 var TPL_stops_default_bis = L.geoJSON(stop_buses, {
+		 filter: function(feature, layer) {
+					return feature.properties.hour == 23;
+				},
+		   onEachFeature: function (feature, layer) {
+			layer.bindTooltip('<h3>stop name: '+feature.properties.stop_name+'</h2>n.buses: '+feature.properties.n_buses);
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					// radius: 3,
+					radius: feature.properties.n_buses*0.8,
+					fillColor: 'red',
+					color: '#000',
+					weight: 0.5,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		});
+		TPL_stops_layer_bis.addLayer(TPL_stops_default_bis);
+	    TPL_stops_layer_bis.addTo(map);
+		// TPL_layer.remove();
+		};
+		
+		
+		
+		 if (event.target.value == 23) {	
+		  TPL_layer.clearLayers();
+			//map.removeLayer(TPL_layer);
+			//map.removeLayer(TPL_stops_layer_bis);
+			 //map.removeLayer(censuary_Layer);
+				 //alert("...hour 23....mapmatching...");
+					var TPL = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+				  filter: function(feature, layer) {
+					return feature.properties.hour == 23;
+				 },
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle);
+				  });
+					layer.bindTooltip('<h3>trip: '+feature.properties.trip_LEG_name+'</h2>n.buses: '+feature.properties.n_buses +'<br>lines:'+feature.properties.route_id_list);
+				layer.on('mouseout', function () {
+				layer.setStyle({
+					weight: 5,
+					opacity: 1,
+					color: getColor_nbuses(feature.properties.n_buses),
+					dashArray: '3',
+					fillOpacity: 0.7,
+					fillColor: '#00000000'}); 
+					});
+					}
+					});
+				TPL_layer.addLayer(TPL);
+			    TPL_layer.addTo(map);
+				TPL_stops_layer_bis.remove();
+		}  	
+				
+	});
+			
+			
+		
+		
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			layers: [osm, TPL_layer]   
+		});
+		
+		legend.addTo(map);
+		legend_censuary.addTo(map);
+		info.addTo(map);
+		
+		
+		  //------------------------- choose location on the map manually...
+
+		 map.on('click', 
+				function(e){
+					document.getElementById('lat').value = e.latlng.lat;
+					document.getElementById('lng').value = e.latlng.lng;
+					var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+			});
+				
+		
+		
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+		
+		
+		
+		const baseLayers = {
+			'OpenStreetMap': osm,
+			//'Streets': streets,
+			'Carto': carto
+		};
+		
+		const overlays = {
+		    'TPL network': TPL_layer,
+			'TPL stops': TPL_stops_layer_bis,
+			'Censuary data': censuary_Layer
+			//'Aggregated traffic loads': mapmatched_Layer,
+		};
+
+
+		const layerControl = L.control.layers(baseLayers, overlays ,{collapsed:false,}).addTo(map);	
+			
+		const aggregated_pop = L.layerGroup([hex_all]);
+		// const cens_layer = L.layerGroup([censuary_default]);
+		// const mapmatching = L.layerGroup([matched_hex_default]);
+		
+		
+		
+		const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+		layerControl.addBaseLayer(satellite, 'Satellite');
+		//layerControl.addOverlay(TPL_stops_layer, 'TPL stops');
+		layerControl.addOverlay(hex_all, 'aggregated population');
+		
+		
+		
+	window.addEventListener('resize', 
+	() => map.getViewPort().resize());
+	
+	
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,780 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+<title>RdS-ENEA</title>
+<!--  Mobile Viewport Fix -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<!-- Google WebFonts -->
+<link href='http://fonts.googleapis.com/css?family=Dancing+Script:700' rel='stylesheet' type='text/css'>
+
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+
+
+<style>
+body {
+		padding: 0;
+		margin: 0;
+		font-family: Arial, Helvetica, sans-serif;
+	}
+
+#map {
+  height: 100%;
+}
+
+/* Optional: Makes the sample page fill the window. */
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
+.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+.legend { text-align: left; line-height: 10px; color: #555; font-size: 0.875em} .legend i { width: 10px; height: 10px; float: left; margin-right: 4px; opacity: 0.7; } 
+.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+
+#start {
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+  z-index: 700;
+  font-size: 40px
+}
+
+/* All of this is from cibi.me */
+
+#branding {
+  height: 0;
+  overflow: visible;
+  position: relative;
+  z-index: 700;
+  color: #fff;
+
+  background-color: #444;
+
+  background-image: linear-gradient(bottom, rgb(68,68,68) 0%, rgb(102,102,102) 100%);
+  background-image: -o-linear-gradient(bottom, rgb(68,68,68) 0%, rgb(102,102,102) 100%);
+  background-image: -moz-linear-gradient(bottom, rgb(68,68,68) 0%, rgb(102,102,102) 100%);
+  background-image: -webkit-linear-gradient(bottom, rgb(68,68,68) 0%, rgb(102,102,102) 100%);
+  background-image: -ms-linear-gradient(bottom, rgb(68,68,68) 0%, rgb(102,102,102) 100%);
+
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(68,68,68)),
+    color-stop(1, rgb(102,102,102))
+  );
+}
+
+/* the logo */
+#logo {
+  position: absolute;
+  top: 1.5em;
+  right: 0;
+  margin-top: -15px;
+  overflow: hidden;
+  padding: 10px 0 10px 3.5em;
+}
+#logo .ribbon {
+  position: relative;
+  height: 4em;
+  right: -10px;
+  padding: 0 10px 0 1.5em;
+  border-top: 1px solid #529be6;
+  border-bottom: 1px solid #2a65a1;
+
+  background-color: #68aff7;
+
+  background-image: linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -o-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -moz-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -webkit-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -ms-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(86,162,238)),
+    color-stop(1, rgb(120,185,255))
+  );
+
+     -moz-box-shadow: inset -2px 1px 1px rgba(255,255,255,0.5);
+  -webkit-box-shadow: inset -2px 1px 1px rgba(255,255,255,0.5);
+          box-shadow: inset -2px 1px 1px rgba(255,255,255,0.5);
+}
+#logo .ribbon:before,
+#logo .ribbon:after {
+  content: "\0020";
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  z-index: -1;
+  border: 1px solid #2a65a1;
+  border-top: 1px solid #529be6;
+  border-left: 2px solid #498fd7;
+
+  background-color: #68aff7;
+
+  background-image: linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -o-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -moz-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -webkit-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+  background-image: -ms-linear-gradient(bottom, rgb(86,162,238) 0%, rgb(120,185,255) 100%);
+
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(86,162,238)),
+    color-stop(1, rgb(120,185,255))
+  );
+
+          transform: skew(45deg,0deg);
+      -ms-transform: skew(45deg,0deg);
+  -webkit-transform: skew(45deg,0deg);
+       -o-transform: skew(45deg,0deg);
+     -moz-transform: skew(45deg,0deg);
+
+     -webkit-border-radius: 8px;
+        -moz-border-radius: 8px;
+             border-radius: 8px;
+
+     -moz-box-shadow: -5px 0 15px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255,255,255,0.5);
+  -webkit-box-shadow: -5px 0 15px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255,255,255,0.5);
+          box-shadow: -5px 0 15px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255,255,255,0.5);
+}
+#logo .ribbon:after {
+  padding-right: 6em;
+  right: -6em;
+  margin-right: -1px;
+  border-left: 2px solid #498fd7;
+          transform: skew(-45deg,0deg);
+      -ms-transform: skew(-45deg,0deg);
+  -webkit-transform: skew(-45deg,0deg);
+       -o-transform: skew(-45deg,0deg);
+     -moz-transform: skew(-45deg,0deg);
+
+        -moz-box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(255,255,255,0.5);
+     -webkit-box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(255,255,255,0.5);
+             box-shadow: 5px 10px 10px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(255,255,255,0.5);
+}
+
+#site-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 3.25em;
+  margin: -0.2em 20px 0 0;
+  line-height: 1;
+}
+#site-title a {
+  text-decoration: none;
+  color: #fff;
+  text-shadow: -1px -1px 1px rgba(42,101,161,0.25),
+               -1px  1px 1px rgba(42,101,161,0.25),
+                1px -1px 1px rgba(42,101,161,0.25),
+                1px  1px 1px rgba(42,101,161,0.25)
+}
+#site-title a:hover {
+  text-shadow: -1px -1px 1px rgba(42,101,161,0.5),
+               -1px  1px 1px rgba(42,101,161,0.75),
+                1px -1px 1px rgba(42,101,161,0.25),
+                1px  1px 1px rgba(42,101,161,0.5)
+}
+#site-description {
+  color: #dfeefd;
+  font-size: 1em;
+   z-index: 700;
+  margin: 0 20px 0 0;
+  text-shadow: -1px -1px 1px rgba(42,101,161,0.25),
+               -1px  1px 1px rgba(42,101,161,0.25),
+                1px -1px 1px rgba(42,101,161,0.25),
+                1px  1px 1px rgba(42,101,161,0.25)
+}
+
+/* AddThis */
+#branding .addthis_toolbox {
+  margin: 0.5em 0 0 0.5em;
+  float: left;
+  min-width: 163px;
+}
+
+/* Navigation: Main Menu */
+#main-menu {
+  padding: .25em;
+  float: right;
+}
+#main-menu li {
+  float: left;
+}
+#main-menu a {
+  display: block;
+  color: #fff;
+  font-size: 1em;
+  font-weight: bold;
+  line-height: 1.75;
+  text-decoration: none;
+  padding: 0 0.75em;
+  position: relative;
+  z-index: 1000;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+}
+#main-menu a:hover {
+  background-color: #333;
+}
+
+/* Location Search Form */
+#branding .search {
+  padding: 1em;
+}
+#branding .search input {
+  width: 15em;
+  padding: 0.5em;
+  background: #eee;
+  border: 0;
+  font-weight: bold;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+
+  background-image: linear-gradient(bottom, rgb(229,229,229) 0%, rgb(208,208,208) 100%);
+  background-image: -o-linear-gradient(bottom, rgb(229,229,229) 0%, rgb(208,208,208) 100%);
+  background-image: -moz-linear-gradient(bottom, rgb(229,229,229) 0%, rgb(208,208,208) 100%);
+  background-image: -webkit-linear-gradient(bottom, rgb(229,229,229) 0%, rgb(208,208,208) 100%);
+  background-image: -ms-linear-gradient(bottom, rgb(229,229,229) 0%, rgb(208,208,208) 100%);
+
+  background-image: -webkit-gradient(
+    linear,
+    left bottom,
+    left top,
+    color-stop(0, rgb(229,229,229)),
+    color-stop(1, rgb(208,208,208))
+  );
+}
+ #branding .search ::-webkit-input-placeholder { color: #777; }
+ #branding .search :-moz-placeholder { color: #777; }
+
+
+@media only screen and (min-width: 768px) {
+  #logo {
+    right: 0;
+    top: 2em;
+  }
+
+  #logo .ribbon {
+    height: 5em;
+  }
+
+  #site-title {
+    font-size: 4.25em;
+  }
+  #site-description {
+    font-size: 1.25em;
+  }
+
+  /* Map UI */
+  .leaflet-control-zoom {
+    display: block;
+  }
+  .leaflet-container .leaflet-control-attribution {
+    font-size: 10px;
+  }
+}
+
+
+  header, nav {
+    left: 2%;
+	top: 85%;
+  	z-index: 700;
+	position: absolute;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	border-spacing: 5px;
+	 
+  }
+
+	nav a {
+	  text-decoration: none;
+	  background: #000000;  /* Black */
+	  border-radius: 5px;
+	  font-size: 1.2em;
+	  color: white;
+	  padding: 3px 8px;
+	  display: table-cell;
+	}
+	
+	
+	nav .col_home {
+		background-color: #6b0000;
+	}
+	
+	nav .col_privata {
+		background-color: #4CAF50;
+	}
+	
+	
+	nav .col_collettivo {
+		background-color: #0000ff ;
+	}
+	
+	nav .col_scenari {
+		background-color: #ffa500 ;
+	}
+	
+	
+	nav .col_impatti {
+		background-color: #76a5af ;
+	}
+	
+	nav .IEA_statistics {
+		background-color: #ededed ;
+		color: blue;
+	}
+
+
+
+
+ main {
+		background: #bfbfbf    ;
+		left: 2%;
+		top: 30%;
+		z-index: 700;
+		position: absolute;
+		margin: 10px 0;
+		padding: 15px;
+		text-overflow:ellipsis;
+        overflow:hidden;
+	}
+
+	main div {
+	  background: #7f7fff;
+	  margin: 0 auto;
+	  color: white;
+	  padding: 7px;
+	  margin: 10px auto;
+	}
+	
+
+	main div:nth-child(1) {
+	  width: 270px;
+	}
+	main div:nth-child(2) {
+	  width: 270px;
+	}
+	
+	main div:nth-child(3) {
+	  width: 270px;
+	}
+	
+	main div:nth-child(4) {
+	  width: 270px;
+	}
+	
+	main div:nth-child(5) {
+	  width: 270px;
+	}
+	
+	main div:nth-child(6) {
+	  width: 270px;
+	}
+	
+	main div:nth-child(7) {
+	  width: 270px;
+	}
+	
+	main div:nth-child(8) {
+	  width: 270px;
+	}
+	
+	.inline-block-left {
+	  text-align: left;
+	}
+	
+	.flex-left {
+	  display: flex;
+	  //justify-content: center;
+	}
+	
+
+
+.label {
+  color: white;
+  padding: 8px;
+  font-family: Arial;
+  font-weight: bold;
+}
+.tpl_line {background-color: #2196F3;} /* Blue */
+	
+	
+table, th, td {
+  border:1px solid black;
+}
+
+table.center_table {
+  margin-left: -15%; 
+  //margin-left: 20%;
+}
+
+.animation_link {
+  font-size: 130%;
+  color: blue;
+  font-weight: bold;
+}
+
+</style>
+
+
+
+
+<!-- SET the style of the LOADER-->
+<style>
+
+/* Center the loader (SPINNER) */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  // border-top: 16px solid #3498db;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-right: 16px solid yellow;
+  border-left: 16px solid pink;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+
+div#loading {
+    display: none;
+	position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 700;
+	width: 270px;
+	height: 270px;
+	 margin: -76px 0 0 -76px;
+    background: url(/static/loadingimage_TPL.gif) no-repeat;
+    cursor: wait;
+    }
+	
+	
+
+
+</style>
+
+
+</head>
+
+<!--body-->
+<!--body onload="myFunction()" style="margin:0;"-->
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+
+<!--start the SPINNER or LOADER-->
+<!--div id="loader"></div-->
+
+
+<body>
+
+<div id="loading"></div>
+
+<main class="inline-block-center">
+
+
+
+<form method="POST" action="/GTFS_selector/">
+<body  onload="setGTFS(); setStates(); setTRIP();"></body>
+	<span class="label tpl_line">GTFS data:</span>
+<select class="GTFS_selector" name="gtfs" id="gtfs">
+	<option value="">select_GTFS gtfs</option>
+</select>
+	<!--input class="btn btn-primary btn-sm" type="submit" value="Choose day"></p-->
+</form>
+
+
+
+<br>
+
+<form method="POST" action="/TPL_selector/">
+<body  onload="setGTFS(); setStates(); setTRIP();"></body>
+	<span class="label tpl_line">TPL line:</span>
+	<select class="TPL_selector" name="line" id="line">
+	<option value="">select_TPL line</option>
+	</select>
+	<!--input class="btn btn-primary btn-sm" type="submit" value="Select line"></p-->
+</form>
+
+
+
+<br>
+
+<form method="POST" action="/TPL_hour_selector/">	
+<span class="label tpl_line">hour:</span>
+
+
+
+
+<select class="TPL_hour_selector" name="TPL_hour" id="select_data" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange="this.form.submit()">
+		<option value="">select hour range</option>
+		<option value="0">00:00</option>
+		<option value="1">01:00</option>
+		<option value="2">02:00</option>
+		<option value="3">03:00</option>
+		<option value="4">04:00</option>
+		<option value="5">05:00</option>
+		<option value="6">06:00</option>
+		<option value="7">07:00</option>
+		<option value="8">08:00</option>
+		<option value="9">09:00</option>
+		<option value="10">10:00</option>
+		<option value="11">11:00</option>
+		<option value="12">12:00</option>
+		<option value="13">13:00</option>
+		<option value="14">14:00</option>
+		<option value="15">15:00</option>
+		<option value="16">16:00</option>
+		<option value="17">17:00</option>
+		<option value="18">18:00</option>
+		<option value="19">19:00</option>
+		<option value="20">20:00</option>
+		<option value="21">21:00</option>
+		<option value="22">22:00</option>
+		<option value="23">23:00</option>
+	</select>
+	
+	
+	<!--input class="btn btn-primary btn-sm" type="submit" value="Select hour", onclick="$('#loading').show();"-->
+</form>
+
+
+
+<br>
+
+
+
+<form method="POST" action="/TPL_trip_selector/">
+<body  onload="setGTFS(); setStates(); setTRIP();"></body>
+	<span class="label tpl_line">TRIP:</span>
+<select class="TPL_trip_selector" name="viaggio" id="viaggio">
+<option></option>
+	<option value="">select_TRIP</option>
+</select>
+	<!--input class="btn btn-primary btn-sm" type="submit" value="Select TRIP"></p-->
+</form>
+
+
+<ul>
+{% for item in data %}
+<table class="center_table" style="width:100%">
+<tr>
+    <th>Day (GTFS)</th>
+    <th>line (TPL)</th>
+    <th>hour</th>
+	<th>viaggio</th>
+  </tr>
+  <tr>
+    <td>{{item.GTFS_file}}</td>
+    <td>{{item.TPL_line}}</td>
+    <td>{{item.hour}}</td>
+	<!--td>{{item.trip}}</td-->
+  </tr>
+</table>
+{% endfor %}
+</ul>
+
+ <a class="animation_link" href="/stop_timelines/">Timeline table</a></p>
+
+
+
+
+
+<!-- MAKE a REFRESH BUTTON-->
+<form method="POST" action="/GTFS_selector/">
+<body  onload="setGTFS(); setStates(); setTRIP();"></body>
+	<!--span class="label tpl_line">GTFS data:</span-->
+<select class="GTFS_selector" name="gtfs" id="gtfs">
+		<option value="20230405">---></option>
+</select>
+	<input class="btn btn-primary btn-sm" type="submit" value="Refresh"  onclick="$('#loading').show();"></p>
+</form>
+
+
+</main>	
+	
+
+
+
+
+<<nav role='navigation'>
+  <a class="col_home" href="/home_page/">Home</a>
+  <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
+  <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
+  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
+  <a class="col_impatti" href="/public_transport_page/">Impacts</a>
+  <a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a>
+</nav>  
+
+
+  <div id="map"></div>
+
+  <button id="start">Start Animation</button>
+  
+
+
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
+  <script src="{{ url_for('static', filename='AnimatedMarker.js') }}" /></script>
+  <script src="{{ url_for('static', filename='trip_path_long_TPL.txt') }}" /></script>
+  <script src="{{ url_for('static', filename='routes_and_trips_TPL.txt') }}" /></script>
+  <script src="{{ url_for('static', filename='map_AnimatedMarker.js') }}" /></script>
+  <script src="{{ url_for('static', filename='list_lines_routes_TPL.txt') }}" /></script>
+  <script src="{{ url_for('static', filename='GTFS_files.txt') }}" /></script>
+  <script src="{{ url_for('static', filename='list_trip_keys_TPL.txt') }}" /></script>
+  
+  
+
+
+
+
+<script>
+ 
+ 
+ var gtfs_files = new Array();
+    // alert("GTFS is loaded");
+	list_files_GTFS = list_GTFS_files ;
+	gtfs_files['20230123'] = list_GTFS_files;
+ 
+function setGTFS() {
+    // alert("GTFS is loaded");
+	var newOptions=gtfs_files['20230123'];
+	var newValues=gtfs_files['20230123'];
+	selectField = document.getElementById("gtfs");
+	selectField.options.length = 0;
+	for (j=0; j<newOptions.length; j++) 
+	{
+	selectField.options[selectField.length] = new Option(newOptions[j], newValues[j]);
+	}
+} 
+	
+
+
+	var states = new Array();
+    //states['011']= new Array('01', '011', '012', '013', '013D', '014', '016', '016F', '017', '018', '020', '021', '022', '023', '024', '025', '027', '028', '029', '03', '030', '031', '032', '033', '035', '036', '037', '039', '04', '040', '040F', '041', '041F', '042', '043', '045', '046', '047', '048', '049', '04B', '05', '051', '052', '053', '054', '055', '056', '057', '058', '058F', '059', '05B', '06', '063', '065', '066', '07', '070', '071', '073', '074', '075', '078', '08', '081', '086', '087', '088', '088F', '089', '09', '100', '105', '106', '107', '111', '111F', '113', '115', '117', '118', '119', '120F', '128', '135', '14', '146', '150F', '16', '160', '163', '168', '170', '180F', '188', '19', '190F', '2', '20', '200', '201', '20L', '211', '211F', '213', '218', '223', '226', '228', '23', '230', '235', '246', '246P', '247', '280', '30', '301', '303', '309', '31', '310', '311', '313', '314', '319', '32', '33', '334', '336', '337', '338', '339', '34', '340', '341', '343', '344', '349', '350', '351', '360', '38', '3L', '3NAV', '40', '404', '409', '412', '424', '435', '437', '44', '441', '443', '444', '445', '446', '447', '448', '450', '451', '46', '46B', '49', '490', '492', '495', '5', '50', '500', '502', '503', '504', '505', '506', '507', '508', '509', '51', '515', '52', '520', '53', '541', '542', '543', '544', '545', '546', '548', '551', '552', '555', '556', '557', '558', '559', '590', '60', '61', '62', '628', '63', '64', '649', '654', '657', '66', '660', '663', '664', '665', '669', '670', '671', '69', '70', '700', '701', '702', '705', '706', '708', '709', '71', '710', '711', '712', '713', '714', '715', '716', '718', '719', '72', '720', '721', '723', '724', '73', '731', '74', '75', '762', '763', '763L', '764', '765', '766', '767', '769', '77', '771', '772', '773', '774', '775', '777', '778', '779', '780', '781', '786', '786F', '787', '788', '789', '789F', '791', '792', '795', '80', '808', '81', '82', '83', '85', '86', '87', '870', '871', '88', '881', '889', '89', '892', '8BUS', '90', '904', '905', '906', '907', '908', '910', '911', '912', '913', '913L', '916', '916F', '92', '93', '98', '980', '981', '982', '983', '985', '990', '990L', '992', '993', '998', '999', 'A', 'A01', 'A05', 'A06', 'A07', 'A10', 'A50', 'A60', 'A70', 'B', 'B1', 'C', 'C01', 'C02', 'C03', 'C1', 'C10', 'C11', 'C13', 'C19', 'C2', 'C20', 'C3', 'C30', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'F02', 'F20', 'G03', 'G04', 'G05', 'G06', 'G07', 'G40', 'G50', 'G60', 'G70', 'H', 'L01', 'L02', 'L03', 'L04', 'L05', 'L06', 'L07', 'L08', 'L10', 'L20', 'L30', 'L40', 'L50', 'L60', 'L70', 'L80', 'M02', 'M03', 'M04', 'M05', 'M20', 'M30', 'M50', 'MA', 'P02', 'P03', 'P10', 'P20', 'P30', 'RMG', 'T01', 'T02', 'T10', 'T20', 'n041', 'n075', 'n11', 'n200', 'n201', 'n3d', 'n3s', 'n409', 'n46', 'n5', 'n500', 'n543', 'n551', 'n66', 'n70', 'n705', 'n716', 'n719', 'n74', 'n781', 'n8', 'n90', 'n904', 'n913', 'n92', 'n98', 'nMA', 'nMB', 'nMB1', 'nMC', 'nME'); 
+    routes = list_lines_routes;
+	states['011'] = routes;
+		
+ 
+function setStates() {
+	var newOptions=states['011'];
+	var newValues=states['011'];
+	selectField = document.getElementById("line");
+	selectField.options.length = 0;
+	for (i=0; i<newOptions.length; i++) 
+	{
+	selectField.options[selectField.length] = new Option(newOptions[i], newValues[i]);
+	}
+}
+
+
+
+$('form select').on('change', function(){
+    $(this).closest('form').submit()
+	$('#loading').show();
+});
+
+
+
+
+
+   </script>
+   
+   
+ 
+<script>
+	var trip_keys = new Array();
+    trips = list_trips ;
+    // trip_keys['0'] = trips;
+	trip_keys = trips;
+		
+ 
+function setTRIP() {
+  // alert("TPL line is loaded");
+	// var newOptions=trip_keys['0'];
+	// var newValues=trip_keys['0'];
+	var newOptions=trip_keys;
+	var newValues=trip_keys;
+	selectField = document.getElementById("viaggio");
+	selectField.options.length = 0;
+	for (i=0; i<newOptions.length; i++) 
+	{
+	selectField.options[selectField.length] = new Option(newOptions[i], newValues[i]);
+	}
+}
+
+
+
+
+
+
+
+   </script>
+   
+   
+</script>
+
+   
+   
+</body>
+</html>

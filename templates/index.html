@@ -1,0 +1,269 @@
+
+<!doctype html>
+<html lang="en">
+
+<style type="text/css">
+
+
+	 body {
+	    padding: 0;
+        margin: 0;
+		font-family: Arial, Helvetica, sans-serif;
+		background-image: url("/static/merged_short_animations.gif");
+		background-repeat: no-repeat;
+		background-size: 100%;
+		background-size: cover;
+        //position: relative;
+        background-position: center;
+	 }
+		 
+    #map {
+	  height: 100%;
+	}
+	
+	/* Optional: Makes the sample page fill the window. */
+	html, body {
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	}
+
+
+  .info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+  .legend { text-align: left; line-height: 10px; color: #555; font-size: 0.875em} .legend i { width: 10px; height: 10px; float: left; margin-right: 4px; opacity: 0.7; } 
+	
+ 
+
+		 
+		 
+ header, nav {
+    left: 2%;
+	  top: 85%;
+  	z-index: 700;
+	position: absolute;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	border-spacing: 5px;
+  }
+
+	nav a {
+	  text-decoration: none;
+	  background: #000000;  /* Black */
+	  border-radius: 5px;
+	  font-size: 1.4em;
+	  color: white;
+	  padding: 3px 8px;
+	  
+	  display: table-cell;
+	}
+	
+	nav .col_home {
+		background-color: #6b0000;
+	}
+	
+	nav .col_privata {
+		background-color: #4CAF50;
+	}
+	
+	
+	nav .col_collettivo {
+		background-color: #0000ff ;
+	}
+	
+	nav .col_scenari {
+		background-color: #ffa500 ;
+	}
+	
+	
+	nav .col_impatti {
+		background-color: #76a5af ;
+	}
+	
+	nav .IEA_statistics {
+		background-color: #ededed ;
+		color: blue;
+	}
+	
+	nav .costi_chilometrici {
+		background-color: red ;
+		color: black;
+	}
+	
+
+nav .col_best {background-color: #326bbb ;<!--color: blue;-->}
+	
+	
+	
+
+.img_ENEA {
+ margin-left: 20px;
+  margin-top: 20px;
+  height: inherit;
+  object-fit: cover;
+}
+
+
+.FCD_trips_animation {
+ margin-left: 10px;
+  margin-top: 525px;
+}
+
+
+
+div#loading {
+    display: none;
+	position: absolute;
+	left: 50%;
+    top: 50%;
+    z-index: 700;
+	width: 270px;
+	height: 270px;
+	 margin: -76px 0 0 -76px;
+    background: url(/static/loadingimage_TPL.gif) no-repeat;
+    cursor: wait;
+ }
+ 
+
+
+
+footer{
+        position: relative;
+        margin-top: -3%;
+        height: 5%;
+        width: 100%;
+        // background-color: #333333
+    }
+
+
+
+p.copyright {
+    position: absolute;
+    width: 100%;
+    color: black;
+    line-height: 40px;
+    font-weight: bold;
+    font-size: 0.9em;
+    text-align: center;
+    bottom:0;
+}
+
+
+ </style>
+  
+
+	
+	 
+</head>
+   <meta name="description" content="Leaflet Template">
+  <title>RdS-ENEA</title>
+  <!--meta name="viewport" content="initial-scale=1.0"-->
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+ </head>
+ 
+ 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+
+<body>
+<div id="loading">
+</div>
+
+
+
+
+
+
+<nav role='navigation'>
+  <a class="col_home" href="/home_page/">Home</a>
+  <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
+  <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
+  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
+  <a class="col_impatti" href="/impacts_page/">Impacts</a>
+  <!--a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a-->
+  <a class="col_best" onclick="$('#loading').show();" href="/best_page/">Best</a>
+</nav>  
+
+
+
+
+ <!--div class="rds_logo">
+    <img src="/static/logo-rds.png" alt="logo">
+ </div-->
+  
+ <!--div class="img_ENEA">
+    <img src="/static/logo_ENEA_ROMA3.png" alt="logo" height="15%" width="15%">
+ </div-->
+ 
+ 
+  <div class="img_ENEA">
+    <img src="/static/ENEA_PRIORITY_logo.png" alt="logo" height="30%" width="30%">
+ </div>
+ 
+ 
+ <!--img src="ENEA_logo.png" alt="click here" height="300px" width="300px" /-->
+
+  
+  <!--div class="rds_logo">
+    <img src="/static/FCD_animated_points.gif" alt="logo"  height="20%" width="20%">
+ </div-->
+ 
+   <!--div class="rds_logo">
+    <img src="/static/TPL_animation.gif" alt="logo"  height="20%" width="20%">
+ </div-->
+ 
+ 
+  <!--div class="FCD_trips_animation">
+    <img src="/static/short_FCD_trip_animation.gif" alt="logo" height="35%" width="35%">
+ </div-->
+  
+
+ 
+  <!--div class="SUMPS_logo">
+    <img src="/static/SUMPs logo.png" alt="logo" height="80%" width="80%">
+ </div-->
+ 
+
+<footer>
+    <p class="copyright">designed by Federico Karagulian @ENEA</p>
+</footer>
+
+
+  <script>
+
+     // ----------------------------------------------------
+     
+
+      // Hack to autoset the iframe height.
+      window.addEventListener("load", function() {
+        window.setTimeout(function() {
+          setFrameHeight(document.documentElement.clientHeight)
+        }, 0);
+      });
+	  
+	 ///////////////////////////---------------------------------------------------------------------/////////////////////////////////////////////
+	  ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+	   ///////////////////////////---------------------------------------------------------------------///////////////////////////////////////////
+	    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+		///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+        ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+      ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+	 
+	
+	window.addEventListener('resize', 
+	() => map.getViewPort().resize());
+	
+	
+
+  </script>
+</body>
+</html>
