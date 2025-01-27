@@ -101,12 +101,12 @@ Instead, if you are going to work within a **Linux environment**, proceed as fol
 *The module Private Mobility within the platform PRIORITY*
 
 ## Caveats
-The PRIORTY platform has been realized with the puprose to follow the best practice for deliverign an acceptable web-interface. While the back-end has been completly created using **Python** with the implentation of complex algorithm to process mobility data upon user request, the front-end has been implemented using **css, javascript, html** and namy **java libraries**. 
+The PRIORTY platform has been realized with the puprose to follow the best practice for delivering an acceptable web-interface. While the back-end has been completly created using **Python** with the implementation of several algorithms to process mobility data upon user request, the front-end has been implemented using **css, javascript, html** and namy **java libraries**. 
 
 However there are few things that should be considered for future improvement:
-1. The front-end (web-interface) can be better optimized to have a dashboard better adjustable to different screen sizes.
-2. Every html file used to build the interface contains css and javascripts code. This choice was taken to customize each web-page. However, once the content of the platform is well-defined as well as its functionalites, it is possible to use sperate css and javascripts files included into the html files.
-3. In the select option, it is only possible selecting the same parameter once
+1. The front-end (web-interface) should be optimized to have a dashboard better adjustable to different screen sizes.
+2. Html file used in each module very often contains the same pieces of css and javascripts codes but with sligth differences. This choice was taken to customize each web-page. However, once the functionalites are well defined, it is possible to directly load css and javascripts files into the html files.
+3. In the select option it is only possible selecting the same parameter once
 
 ## Problems or questions?
 for any question contact federico.karagulian@enea.it or karafede@hotmail.com
