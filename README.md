@@ -90,7 +90,8 @@ Instead, if you are going to work within a **Linux environment**, proceed as fol
 <br>
 <br>
 
-![image](https://github.com/user-attachments/assets/7716d40d-8efa-41cd-a42e-a71f3c99d08b)
+![image](https://github.com/user-attachments/assets/cd9dc925-9910-4b3c-b9ad-e05e253f4e88)
+
 
 *Home page of the platform PRIORITY*
 
