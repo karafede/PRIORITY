@@ -90,7 +90,8 @@ Instead, if you are going to work within a **Linux environment**, proceed as fol
 <br>
 <br>
 
-![image](https://github.com/user-attachments/assets/d15abf24-c7d9-4f68-9a6c-8756e726b4b9)
+![image](https://github.com/user-attachments/assets/a82ed799-d784-45f6-882f-72c6d05806c1)
+
 
 
 
@@ -98,7 +99,8 @@ Instead, if you are going to work within a **Linux environment**, proceed as fol
 
 <br>
 
-![image](https://github.com/user-attachments/assets/7545ac3f-7998-400f-98a3-04663c25b7d5)
+![image](https://github.com/user-attachments/assets/9e5de345-da63-4349-9891-91df24bbf9bb)
+
 
 
 *The module Private Mobility within the platform PRIORITY*
