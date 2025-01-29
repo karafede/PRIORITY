@@ -90,14 +90,16 @@ Instead, if you are going to work within a **Linux environment**, proceed as fol
 <br>
 <br>
 
-![image](https://github.com/user-attachments/assets/cd9dc925-9910-4b3c-b9ad-e05e253f4e88)
+![image](https://github.com/user-attachments/assets/d15abf24-c7d9-4f68-9a6c-8756e726b4b9)
+
 
 
 *Home page of the platform PRIORITY*
 
 <br>
 
-![image](https://github.com/user-attachments/assets/d6ab6899-bc60-4e68-9966-8d24cd7c2542)
+![image](https://github.com/user-attachments/assets/7545ac3f-7998-400f-98a3-04663c25b7d5)
+
 
 *The module Private Mobility within the platform PRIORITY*
 
