@@ -105,6 +105,13 @@ Instead, if you are going to work within a **Linux environment**, proceed as fol
 
 *The module Private Mobility within the platform PRIORITY*
 
+<br>
+
+![image](https://github.com/user-attachments/assets/b15b4f3d-8ba2-462d-a065-0a58b91c1dff)
+
+*Outputs generated wiht the Private Mobility module: Heatmap at a resolution of 1km within several hour ranges for the mobility indicator: Trip number, Stop time (minutes), Trip distance (meters) and Trip time (minutes). Different colour scales have been used to visualize mobility indicators at destination zones.*
+
+
 ## Caveats
 The PRIORTY platform has been realized with the puprose to follow the best practice for delivering an acceptable web-interface. While the back-end has been completly created using **Python** with the implementation of several algorithms to process mobility data upon user request, the front-end has been implemented using **css, javascript, html** and namy **java libraries**. 
 
