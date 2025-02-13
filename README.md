@@ -109,7 +109,7 @@ Instead, if you are going to work within a **Linux environment**, proceed as fol
 
 ![image](https://github.com/user-attachments/assets/b15b4f3d-8ba2-462d-a065-0a58b91c1dff)
 
-*Outputs generated wiht the Private Mobility module: Heatmap at a resolution of 1km within several hour ranges for the mobility indicator: Trip number, Stop time (minutes), Trip distance (meters) and Trip time (minutes). Different colour scales have been used to visualize mobility indicators at destination zones.*
+*Outputs generated with the Private Mobility module: Heatmaps at a resolution of 1km within several hour ranges for the mobility indicators: Trip number, Stop time (minutes), Trip distance (meters) and Trip time (minutes). Different colour scales have been used to visualize mobility indicators at destination zones.*
 
 ## Warnings
 The *main.py* script does not yet contain any procedure to clear data that are going to be stored into the *cache* and */flask_session* folder. Similarly, output data (in the *static* folder) and input parameters (in the */static/params* folder) associated to each sesssion, are not automatically cleared. 
