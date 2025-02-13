@@ -115,6 +115,9 @@ Instead, if you are going to work within a **Linux environment**, proceed as fol
 ## Caveats
 The PRIORTY platform has been realized with the puprose to follow the best practice for delivering an acceptable web-interface. While the back-end has been completly created using **Python** with the implementation of several algorithms to process mobility data upon user request, the front-end has been implemented using **css, javascript, html** and namy **java libraries**. 
 
+## Warnings
+The *main.py* script does not yet contain any procedure to clear data that are going to be stored into the *cache* and *flask_session* folder. Similarly, output data (in the *static* folder) and input parameters (in the */static/params* folder) associated to each sesssion, are not automatically cleared. 
+
 However there are few things that should be considered for future improvement:
 1. The front-end (web-interface) should be optimized to have a dashboard better adjustable to different screen sizes.
 2. Html file used in each module very often contains the same pieces of css and javascripts codes but with sligth differences. This choice was taken to customize each web-page. However, once the functionalites are well defined, it is possible to directly load css and javascripts files into the html files.
