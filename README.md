@@ -111,12 +111,12 @@ Instead, if you are going to work within a **Linux environment**, proceed as fol
 
 *Outputs generated wiht the Private Mobility module: Heatmap at a resolution of 1km within several hour ranges for the mobility indicator: Trip number, Stop time (minutes), Trip distance (meters) and Trip time (minutes). Different colour scales have been used to visualize mobility indicators at destination zones.*
 
+## Warnings
+The *main.py* script does not yet contain any procedure to clear data that are going to be stored into the *cache* and *flask_session* folder. Similarly, output data (in the *static* folder) and input parameters (in the */static/params* folder) associated to each sesssion, are not automatically cleared. 
+
 
 ## Caveats
 The PRIORTY platform has been realized with the puprose to follow the best practice for delivering an acceptable web-interface. While the back-end has been completly created using **Python** with the implementation of several algorithms to process mobility data upon user request, the front-end has been implemented using **css, javascript, html** and namy **java libraries**. 
-
-## Warnings
-The *main.py* script does not yet contain any procedure to clear data that are going to be stored into the *cache* and *flask_session* folder. Similarly, output data (in the *static* folder) and input parameters (in the */static/params* folder) associated to each sesssion, are not automatically cleared. 
 
 However there are few things that should be considered for future improvement:
 1. The front-end (web-interface) should be optimized to have a dashboard better adjustable to different screen sizes.
