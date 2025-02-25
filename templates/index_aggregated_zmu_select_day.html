@@ -22,6 +22,11 @@
 	}
 
 
+	//.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	//.legend { text-align: left; line-height: 13px; color: #555; font-size: 1.075em} .legend i { width: 12px; height: 12px; float: left; margin-right: 5px; opacity: 0.7; } 
+	//.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+	//.legend_ZMU { text-align: left; line-height: 15px; color: #555;  font-size: 12px} 
+	
 	
 	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
 	.legend { text-align: left; line-height: 16px; color: #555; font-size: 1.275em} .legend i { width: 15px; height: 15px; float: left; margin-right: 6px; opacity: 0.7; } 
@@ -644,7 +649,7 @@ input::-webkit-inner-spin-button {
   <div class="break_line_1"></div>
 
 	
- <form method="POST" action="/staypoints_type/">
+ <!--form method="POST" action="/staypoints_type/">
 	 <h4 style="margin-top: -1px; margin-left:-175px;" class="label tpl_line">Staypoints:</h4>
         <h4 style="margin-top: -50px;" class="staypoints_type" onchange="this.form.submit()"; onclick="$('#loading').show();"> </h4>
 		
@@ -657,7 +662,7 @@ input::-webkit-inner-spin-button {
         <label class="staypoints_type" onchange="this.form.submit()";">
         <input type="radio" name="id_stay_type"  style="margin-left:27px;" id="registration_staypoint" value="23"  onclick="$('#loading').show();">  OTHER</label>
 		 <label class="staypoints_type" onchange="this.form.submit()";>
-   </form>
+   </form-->
 
 
 <!-- send user coordinates to the Python console-->
@@ -680,6 +685,9 @@ input::-webkit-inner-spin-button {
 		
 		
 	 <form action="/download_aggregated_destinations" method="GET">
+        <!--input type="Submit" value="Download CSV" -->
+		 <!--div class="break_line"></div-->
+		  <!--div class="break_line"></div-->
 		   <div class="break_line"></div>
 		  <input class="btn_CSA btn-lg btn-primary mr-1" style="margin-left: 0%; margin-top: -10%; color:blue; background-color: white;" type="submit" value="download CSV">
     </form>
@@ -695,6 +703,75 @@ input::-webkit-inner-spin-button {
 	
 	
 	
+	<!--form method="POST" action="/ZMU_day_selector/">
+	<span class="label tpl_line">Day:</span>
+	   <input type="date" id="registrationday" name="ZMU_day" onchange="this.form.submit()";>
+	</form-->
+	
+	<!--insert new line-->
+	<!--br-->
+	
+	
+	
+	<!--form method="POST" action="/ZMU_hour_selector/">	
+	<span class="label tpl_line">hour:</span>
+	<select class="ZMU_hour_selector" name="ZMU_hour" id="registrationhour" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			<option value="0">00:00</option>
+			<option value="1">01:00</option>
+			<option value="2">02:00</option>
+			<option value="3">03:00</option>
+			<option value="4">04:00</option>
+			<option value="5">05:00</option>
+			<option value="6">06:00</option>
+			<option value="7">07:00</option>
+			<option value="8">08:00</option>
+			<option value="9">09:00</option>
+			<option value="10">10:00</option>
+			<option value="11">11:00</option>
+			<option value="12">12:00</option>
+			<option value="13">13:00</option>
+			<option value="14">14:00</option>
+			<option value="15">15:00</option>
+			<option value="16">16:00</option>
+			<option value="17">17:00</option>
+			<option value="18">18:00</option>
+			<option value="19">19:00</option>
+			<option value="20">20:00</option>
+			<option value="21">21:00</option>
+			<option value="22">22:00</option>
+			<option value="23">23:00</option>
+		</select>
+	</form-->
+	
+	
+	<!--ul>
+	{% for item in datum_AGGREGATION %}
+	<table class="center_table" style="width:100%">
+	<tr>
+		<th>Day</th>
+		<th>hour</th>
+	  </tr>
+	  <tr>
+		<td>{{item.ZMU_day}}</td>
+		<td>{{item.hour}}</td>
+	  </tr>
+	</table>
+	{% endfor %}
+	</ul-->
+	
+		
+	<!--p style="display:inline-block;">
+	 <input type="button" class="btn_color" onclick = "sendData();" value="1 - Select custom area with button">
+	  <img src="/static/icons8-pentagon-48.png" style="max-width: 6%;">
+	</p-->
+
+	 
+	<!--form method="POST" action="/AGGREGATED_ZMU_border_selector/">
+			<input class="btn btn-primary btn-sm" type="submit" onclick="$('#loading').show();" value="2 - Aggregate data within selected area"></p>
+	</form-->
+
+
+	    
 	
 </main>
 
@@ -733,6 +810,8 @@ input::-webkit-inner-spin-button {
 
   
 <!-- Load data .geojson -->
+<!--script src="{{ url_for('static', filename='hexagons_aggr_POP_ROMA_2011.geojson') }}" /></script-->
+<!-- ZMU zones with population data -->
 <script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script>
 <!-- aggregation by zmu -->
 <script src="{{ url_for('static', filename='aggregated_zmu_filtered.geojson') }}" /></script>
@@ -746,6 +825,13 @@ input::-webkit-inner-spin-button {
 <script src="{{ url_for('static', filename='zmu_POIS_ROMA_2011.geojson') }}" /></script>
 
  <script src="{{ url_for('static', filename='leaflet.motion.min.js') }}" /></script>  
+ 
+ 
+ <!-- load custom polygons and border of custom polygon-->
+<!--script src="{{ url_for('static', filename='ZMUs_custom_selected.geojson') }}" /></script-->
+<!--script src="{{ url_for('static', filename='BORDER_selected_ZMUs.geojson') }}" /></script-->
+
+
 
 <!--load zmu zones with their attributes and charging infrastructure data-->
 <script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
@@ -797,6 +883,21 @@ input::-webkit-inner-spin-button {
   
 	
 	var BORDER_selected_ZMUs = JSON.parse(JSON.stringify({{session['BORDER_selected_ZMUs'] | tojson | safe}}));
+	//BORDER_selected_ZMUs = "[" + BORDER_selected_ZMUs + "]";
+	//var BORDER_selected_ZMUs = eval(BORDER_selected_ZMUs );
+	//alert(BORDER_selected_ZMUs);
+	
+
+	
+	// var BORDER_selected_ZMUs = JSON.parse({{ session['BORDER_selected_ZMUs'] | safe}});
+	//alert(BORDER_selected_ZMUs);
+	
+	// const obj = JSON.parse('{"name":"John", "age":30, "city":"New York"}');
+	// alert(obj);
+
+
+
+	
 	
 	  
 	 ///////////////////////////---------------------------------------------------------------------/////////////////////////////////////////////
@@ -1450,6 +1551,25 @@ input::-webkit-inner-spin-button {
 		
 		
 		
+		/*
+	   //--------- ADD AGGREGATED POPULATION LAYER ---------------//
+	 	var hex_all = L.geoJSON(hex_counts, { style: style_colors, 	
+		  onEachFeature: function (feature, layer) {
+		  layer.on('mouseover', function () {
+           layer.setStyle(selectedStyle);
+          });
+			layer.bindTooltip('<h3><p>Population: '+feature.properties.POP_TOT_HEX+'</p>');
+			layer.on('mouseout', function (e) {
+				layer.setStyle(style_colors); 
+			});	
+		}
+		}); */
+		
+		  //Using a Layer Group to add/ remove data from the map.
+	     // censuary_Layer.addLayer(hex_all);
+		
+		
+		
 		// -------->show TIMESERIES of mean "Number of Vehicles", "triptime", "tripdistance" and "stoptime" @ DESTINATION zone in Plotly within the tooltip...---------------------/////////////////////
 		const time_series_counts = '<iframe src="{{ url_for('figure_plotly1') }}" width="325" height="225"></iframe>'
 		const time_series_tripdistance = '<iframe src="{{ url_for('figure_plotly2') }}" width="325" height="225"></iframe>'
@@ -1559,7 +1679,7 @@ input::-webkit-inner-spin-button {
 				popup_BORDER += time_series_BORDER_tripdistance;
 				popup_BORDER += time_series_BORDER_triptime;
 				popup_BORDER += time_series_BORDER_stoptime;
-				popup_BORDER += '<h2 style="font-size: 18px;  font-family: Arial; font-weight: bold;">Comuni:' + '<h2 style="font-size: 18px;  font-family: Arial; font-weight: bold;">' + aggregated_names_comune + '</h2>';
+				popup_BORDER += '<h2 style="font-size: 18px;  font-family: Arial; font-weight: bold;">Comuni:' + '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">' + aggregated_names_comune + '</h2>';
 				// popup_BORDER += '<h3>Quartieri:</h3> ' + aggregated_names_quartiere;
 				
 
@@ -1647,7 +1767,7 @@ input::-webkit-inner-spin-button {
 		
 		// legend.addTo(map);
 		// legend_censuary.addTo(map);
-		info.addTo(map);
+		//info.addTo(map);
 		
 		
 	///// ------ add custom geometric shapes to select areas ------- ///////////////
@@ -1749,7 +1869,9 @@ input::-webkit-inner-spin-button {
 		const overlays = {
 			'Traffic Zones': ZMU_zones_Layer,
 			'Traffic Zones & Censuary': censuary_Layer,
+			//'aggregated ZMUs': BORDER_ZMUs_Layer,
 			 "<span style='color:black; font-size: 20px;'>aggregated TRIPS Counts @ORIGIN</span>": BORDER_ZMUs_Layer,
+			//'Frequency visiting zmu @DESTINATION': mapmatched_Layer_zmu,
 			'POIS & Residences': POIS_Layer_zmu,
 			'POIS_Parking': POIS_PARKING,
 			'POIS_Amenities': POIS_AMENITIES,
@@ -1760,11 +1882,13 @@ input::-webkit-inner-spin-button {
 		
 		const layerControl = L.control.layers(baseLayers, overlays ,{collapsed:false,}).addTo(map);	
 			
+		//const aggregated_pop = L.layerGroup([hex_all]);
 		const cens_layer = L.layerGroup([censuary_default]);
 		
 		
 		const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
 		layerControl.addBaseLayer(satellite, 'Satellite');
+		// layerControl.addOverlay(hex_all, 'aggregated population (hex)');
 		layerControl.addOverlay(POIS_PARKING, 'parkings');
 		layerControl.addOverlay(POIS_AMENITIES, 'amenities');
 		layerControl.addOverlay(POIS_RESIDENTIALS, 'buildings')
