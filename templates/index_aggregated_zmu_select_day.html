@@ -181,7 +181,7 @@
 		text-overflow:ellipsis;
         overflow:hidden;
     width: 360px;
-    height: 540px
+    height: 360px
 	}
 
 	main div {
@@ -646,8 +646,8 @@ input::-webkit-inner-spin-button {
 	 </select>		 
 	 </form> 
 
-  <div class="break_line_1"></div>
-
+ <div class="break_line"></div>
+ <br>
 	
  <!--form method="POST" action="/staypoints_type/">
 	 <h4 style="margin-top: -1px; margin-left:-175px;" class="label tpl_line">Staypoints:</h4>
@@ -666,7 +666,7 @@ input::-webkit-inner-spin-button {
 
 
 <!-- send user coordinates to the Python console-->
-	<form action="/points_interest/" method="POST">
+	<!--form action="/points_interest/" method="POST">
 		  <div>	
 			<input   type='hidden' id='lat' name='lat'  /> <br />
 		  </div>
@@ -680,8 +680,8 @@ input::-webkit-inner-spin-button {
 		    <div class="break_line_1"></div>
 			  <div class="break_line"></div>
 		  </div>
-	</form>
-	<br>
+	</form-->
+	
 		
 		
 	 <form action="/download_aggregated_destinations" method="GET">
@@ -703,73 +703,6 @@ input::-webkit-inner-spin-button {
 	
 	
 	
-	<!--form method="POST" action="/ZMU_day_selector/">
-	<span class="label tpl_line">Day:</span>
-	   <input type="date" id="registrationday" name="ZMU_day" onchange="this.form.submit()";>
-	</form-->
-	
-	<!--insert new line-->
-	<!--br-->
-	
-	
-	
-	<!--form method="POST" action="/ZMU_hour_selector/">	
-	<span class="label tpl_line">hour:</span>
-	<select class="ZMU_hour_selector" name="ZMU_hour" id="registrationhour" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-			<option value="0">00:00</option>
-			<option value="1">01:00</option>
-			<option value="2">02:00</option>
-			<option value="3">03:00</option>
-			<option value="4">04:00</option>
-			<option value="5">05:00</option>
-			<option value="6">06:00</option>
-			<option value="7">07:00</option>
-			<option value="8">08:00</option>
-			<option value="9">09:00</option>
-			<option value="10">10:00</option>
-			<option value="11">11:00</option>
-			<option value="12">12:00</option>
-			<option value="13">13:00</option>
-			<option value="14">14:00</option>
-			<option value="15">15:00</option>
-			<option value="16">16:00</option>
-			<option value="17">17:00</option>
-			<option value="18">18:00</option>
-			<option value="19">19:00</option>
-			<option value="20">20:00</option>
-			<option value="21">21:00</option>
-			<option value="22">22:00</option>
-			<option value="23">23:00</option>
-		</select>
-	</form-->
-	
-	
-	<!--ul>
-	{% for item in datum_AGGREGATION %}
-	<table class="center_table" style="width:100%">
-	<tr>
-		<th>Day</th>
-		<th>hour</th>
-	  </tr>
-	  <tr>
-		<td>{{item.ZMU_day}}</td>
-		<td>{{item.hour}}</td>
-	  </tr>
-	</table>
-	{% endfor %}
-	</ul-->
-	
-		
-	<!--p style="display:inline-block;">
-	 <input type="button" class="btn_color" onclick = "sendData();" value="1 - Select custom area with button">
-	  <img src="/static/icons8-pentagon-48.png" style="max-width: 6%;">
-	</p-->
-
-	 
-	<!--form method="POST" action="/AGGREGATED_ZMU_border_selector/">
-			<input class="btn btn-primary btn-sm" type="submit" onclick="$('#loading').show();" value="2 - Aggregate data within selected area"></p>
-	</form-->
-
 
 	    
 	
@@ -787,7 +720,6 @@ input::-webkit-inner-spin-button {
   <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
   <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
   <a class="col_impatti" href="/impacts_page/">Impacts</a>
-  <!--a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a-->
 </nav>   
 
 
@@ -816,15 +748,15 @@ input::-webkit-inner-spin-button {
 <!-- aggregation by zmu -->
 <script src="{{ url_for('static', filename='aggregated_zmu_filtered.geojson') }}" /></script>
 <!-- POINTS of INTERESTS (PARKINGs) -->
-<script src="{{ url_for('static', filename='POIS_parking.geojson') }}" /></script>
+<!--script src="{{ url_for('static', filename='POIS_parking.geojson') }}" /></script-->
 <!-- POINTS of INTERESTS (all AMENITIES) -->
-<script src="{{ url_for('static', filename='layer_POIS_amenities.geojson') }}" /></script>
+<!--script src="{{ url_for('static', filename='layer_POIS_amenities.geojson') }}" /></script-->
 <!-- POINTS of INTERESTS (all BUILDINGS) -->
-<script src="{{ url_for('static', filename='layer_POIS_residential.geojson') }}" /></script>
+<!--script src="{{ url_for('static', filename='layer_POIS_residential.geojson') }}" /></script-->
 <!-- ALL POINTS of INTERESTS (all BUILDINGS and AMENITIES) -->
-<script src="{{ url_for('static', filename='zmu_POIS_ROMA_2011.geojson') }}" /></script>
+<!--script src="{{ url_for('static', filename='zmu_POIS_ROMA_2011.geojson') }}" /></script-->
 
- <script src="{{ url_for('static', filename='leaflet.motion.min.js') }}" /></script>  
+ <!--script src="{{ url_for('static', filename='leaflet.motion.min.js') }}" /></script-->  
  
  
  <!-- load custom polygons and border of custom polygon-->
@@ -937,38 +869,6 @@ input::-webkit-inner-spin-button {
 		
 	
    
-	function getColor_hex_traffic(d) {
-		return d >= 40 ? '#0c2c84' :
-			d > 30  ? '#225ea8' :
-			d > 15  ? '#1d91c0' :
-			d > 12.5  ? '#41b6c4' :
-			d > 10  ? '#7fcdbb' :
-			d > 7.5  ? '#c7e9b4' :
-			d > 5  ? '#edf8b1' :
-			d >= 0   ? '#fdfdbf' : '#fdfdbf';
-			} 
-			
-	function getColor_population_hex(d) {
-		return d >= 100 ? '#2d2d4c' :
-		    d > 95 ? '#3d3d66' :
-		    d > 90 ? '#4c4c7f' :
-		    d > 85 ? '#5b5b99' :
-			d > 80 ? '#6b6bb2' :
-			d > 75 ? '#7a7acc' :	
-			d > 70 ? '#8989e5' :
-		    d > 65 ? '#9999ff' :
-		    d > 60 ? '#a3a3ff' :
-			d > 55 ? '#adadff' :			
-			d > 50 ? '#b7b7ff' :
-			d > 45 ? '#c1c1ff' :
-		    d > 40  ? '#ccccff' :  
-		    d > 30  ? '#d6d6ff' :
-			d > 20  ? '#e0e0ff' :
-			d > 10  ? '#eaeaff' :
-			d >= 0   ? '#f4f4ff' : '#ffffff';
-			}
-			
-		
 			
 			
 	function getColor_zmu_origin_destinations(d) {
@@ -1116,30 +1016,7 @@ input::-webkit-inner-spin-button {
 				
 				
 		
-	// get color depending on population number value
 
-			function style_colors(feature) {
-				return {
-					weight: 0.1,
-					opacity: 0.1,
-					color: '#ffffff',
-					dashArray: '2',
-					fillOpacity: 0.7,
-					fillColor: getColor_population_hex(feature.properties.percentile)
-				};
-			}
-			
-			
-		function style_colors_matched(feature) {
-			return {
-				weight: 0.5,
-				opacity: 0.7,
-				color: '#666',
-				dashArray: '3',
-				fillOpacity: 0.7,
-				fillColor: getColor_hex_traffic(feature.properties.load)
-			};
-		}
 		
 		
 		
@@ -1254,11 +1131,11 @@ input::-webkit-inner-spin-button {
 		
 		
 		
-		
+		// alert("...I AM HERE...");
 		
 		
 
-         
+        
 		const censuary_default = L.geoJson(zmu_counts, {
 				style: style_pop,
 				onEachFeature
@@ -1292,7 +1169,7 @@ input::-webkit-inner-spin-button {
 	    /*------------DEFAULT LAYER -----------------*/
 	    const censuary_Layer = L.layerGroup();
 		censuary_Layer.addLayer(censuary_default);		
-	 
+
 	
 			
 	 
@@ -1391,11 +1268,9 @@ input::-webkit-inner-spin-button {
 		
 		
 		
-	
-			
 		
 		  
-
+/*
          /////////----------- Points of Interest (POIS) in ZMUs -------/////////////////////////////////////////	
 		 
 			 var POIS_ZMU = L.geoJSON(zmu_POIS_counts, { style: style_colors_POIS_ZMU, 	
@@ -1548,25 +1423,10 @@ input::-webkit-inner-spin-button {
 		
 		const POIS_Layer_residential = L.layerGroup();
 		POIS_Layer_residential.addLayer(POIS_RESIDENTIALS);
+		*/
 		
 		
-		
-		/*
-	   //--------- ADD AGGREGATED POPULATION LAYER ---------------//
-	 	var hex_all = L.geoJSON(hex_counts, { style: style_colors, 	
-		  onEachFeature: function (feature, layer) {
-		  layer.on('mouseover', function () {
-           layer.setStyle(selectedStyle);
-          });
-			layer.bindTooltip('<h3><p>Population: '+feature.properties.POP_TOT_HEX+'</p>');
-			layer.on('mouseout', function (e) {
-				layer.setStyle(style_colors); 
-			});	
-		}
-		}); */
-		
-		  //Using a Layer Group to add/ remove data from the map.
-	     // censuary_Layer.addLayer(hex_all);
+	
 		
 		
 		
@@ -1679,7 +1539,7 @@ input::-webkit-inner-spin-button {
 				popup_BORDER += time_series_BORDER_tripdistance;
 				popup_BORDER += time_series_BORDER_triptime;
 				popup_BORDER += time_series_BORDER_stoptime;
-				popup_BORDER += '<h2 style="font-size: 18px;  font-family: Arial; font-weight: bold;">Comuni:' + '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">' + aggregated_names_comune + '</h2>';
+				//popup_BORDER += '<h2 style="font-size: 18px;  font-family: Arial; font-weight: bold;">Comuni:' + '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">' + aggregated_names_comune + '</h2>';
 				// popup_BORDER += '<h3>Quartieri:</h3> ' + aggregated_names_quartiere;
 				
 
@@ -1767,7 +1627,7 @@ input::-webkit-inner-spin-button {
 		
 		// legend.addTo(map);
 		// legend_censuary.addTo(map);
-		//info.addTo(map);
+		info.addTo(map);
 		
 		
 	///// ------ add custom geometric shapes to select areas ------- ///////////////
@@ -1872,26 +1732,26 @@ input::-webkit-inner-spin-button {
 			//'aggregated ZMUs': BORDER_ZMUs_Layer,
 			 "<span style='color:black; font-size: 20px;'>aggregated TRIPS Counts @ORIGIN</span>": BORDER_ZMUs_Layer,
 			//'Frequency visiting zmu @DESTINATION': mapmatched_Layer_zmu,
-			'POIS & Residences': POIS_Layer_zmu,
-			'POIS_Parking': POIS_PARKING,
-			'POIS_Amenities': POIS_AMENITIES,
-			'POIS_Residentials': POIS_RESIDENTIALS
+			//'POIS & Residences': POIS_Layer_zmu,
+			//'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			//'POIS_Residentials': POIS_RESIDENTIALS
 			
 		};
 		
 		
 		const layerControl = L.control.layers(baseLayers, overlays ,{collapsed:false,}).addTo(map);	
 			
-		//const aggregated_pop = L.layerGroup([hex_all]);
+		
 		const cens_layer = L.layerGroup([censuary_default]);
 		
 		
 		const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
-		layerControl.addBaseLayer(satellite, 'Satellite');
+		//layerControl.addBaseLayer(satellite, 'Satellite');
 		// layerControl.addOverlay(hex_all, 'aggregated population (hex)');
-		layerControl.addOverlay(POIS_PARKING, 'parkings');
-		layerControl.addOverlay(POIS_AMENITIES, 'amenities');
-		layerControl.addOverlay(POIS_RESIDENTIALS, 'buildings')
+		//layerControl.addOverlay(POIS_PARKING, 'parkings');
+		//layerControl.addOverlay(POIS_AMENITIES, 'amenities');
+		//layerControl.addOverlay(POIS_RESIDENTIALS, 'buildings')
 		
 		
 	
