@@ -1,0 +1,869 @@
+
+<!doctype html>
+<html lang="en">
+
+<style type="text/css">
+    body {
+            padding: 0;
+            margin: 0;
+		    font-family: Arial, Helvetica, sans-serif;
+        }
+   
+	#map {
+	  height: 100%;
+	}
+	
+	/* Optional: Makes the sample page fill the window. */
+	html, body {
+	  height: 100%;
+	  margin: 0;
+	  padding: 0;
+	}
+
+
+    .info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	.legend { text-align: left; line-height: 10px; color: #555; font-size: 0.875em} .legend i { width: 10px; height: 10px; float: left; margin-right: 4px; opacity: 0.7; } 
+	
+	#refreshButton {
+	  position: absolute;
+	  top: 60px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #000000;
+	  background-color:#FFFF00;
+	}
+	
+	
+	#home_locations {
+	  position: absolute;
+	  width: 100%;
+	  top: 60px;
+	  margin-top: 40px;
+	  right: 20px;
+	  padding: 10px;
+	  z-index: 400;
+	  color: #ffffff ;
+	  background-color:#000099;
+	}
+	
+	#refreshButton:hover{
+		opacity: 0.8;
+		cursor: pointer;
+    }
+	
+
+
+	  html, body,  #map {
+        width : 100%;
+        height : 100%;
+      }
+	.box{	  
+		width:15px;
+		height:15px;
+		border-radius:25px;
+		display: inline-block;
+		}
+	
+
+     /** sidebar menu **/
+	.innerDiv{
+		position: absolute;
+		width: 10%;
+		height: 15%;
+		background-color: #b2b2ff;
+		opacity: 0.8;
+		margin-top:  1%;
+		margin-left: 5%;
+		z-index: 800;
+		padding-top: 1%;
+		text-overflow:ellipsis;
+        overflow:hidden;
+		
+	}
+	
+
+
+    .button {
+	    position: absolute;
+		left: 2%;
+		top: 80%;
+		height: 8%;
+		width: 7%
+        min-width: 7%;
+		margin-top: 30%;
+		margin-left: 50%;
+		z-index: 500;
+	    border: none;
+	    color: white;
+	    padding: 20px;
+	    text-align: center;
+	    display: inline-block;
+	    font-size: 1.5em;
+	    margin: 10px 20px;		
+	}
+
+		
+		
+  header, nav {
+    left: 2%;
+	top: 85%;
+  	z-index: 700;
+	position: absolute;
+	text-align: center;
+	margin: 20px 0;
+	padding: 10px;
+	border-spacing: 5px;
+  }
+
+	nav a {
+	  text-decoration: none;
+	  background: #000000;  /* Black */
+	  border-radius: 5px;
+	  font-size: 1.2em;
+	  color: white;
+	  padding: 3px 8px;
+	  display: table-cell;
+	}
+	
+	nav .col_home {
+		background-color: #6b0000;
+	}
+	
+	nav .col_privata {
+		background-color: #4CAF50;
+	}
+	
+	
+	nav .col_collettivo {
+		background-color: #0000ff ;
+	}
+	
+	nav .col_scenari {
+		background-color: #ffa500 ;
+	}
+	
+	
+	nav .col_impatti {
+		background-color: #76a5af ;
+	}
+	
+	
+	
+		
+
+  /** submit lat lon and input text to Python **/
+    main {
+		background: #ffe4b2 ;
+		left: 2%;
+		top: 30%;
+		z-index: 700;
+		position: absolute;
+		margin: 15px 0;
+		padding: 7px;
+		text-overflow:ellipsis;
+        overflow:hidden;
+	}
+
+	main div {
+	  background: #7f7fff;
+	  margin: 0 auto;
+	  color: white;
+	  padding: 7px;
+	  margin: 5px auto;
+	}
+	
+
+	main div:nth-child(1) {
+	  width: 170px;
+	}
+	main div:nth-child(2) {
+	  width: 170px;
+	}
+	
+	main div:nth-child(3) {
+	  width: 170px;
+	}
+	
+	main div:nth-child(4) {
+	  width: 170px;
+	}
+	
+	main div:nth-child(5) {
+	  width: 170px;
+	}
+	
+	main div:nth-child(6) {
+	  width: 170px;
+	}
+	
+	main div:nth-child(7) {
+	  width: 170px;
+	}
+	
+	main div:nth-child(8) {
+	  width: 170px;
+	}
+	
+	.inline-block-center {
+	  text-align: center;
+	}
+	
+	.flex-center {
+	  display: flex;
+	  justify-content: center;
+	}
+	
+
+	
+	
+</style>
+
+
+<!-- SET the style of the LOADER-->
+<style>
+
+/* Center the loader (SPINNER) */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  // border-top: 16px solid #3498db;
+  border-top: 16px solid blue;
+  border-right: 16px solid green;
+  border-bottom: 16px solid red;
+  border-right: 16px solid yellow;
+  border-left: 16px solid pink;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+
+
+</style>
+
+</head>
+  <meta name="description" content="Leaflet Template">
+  <title>Simple Map</title>
+  <!--meta name="viewport" content="initial-scale=1.0"-->
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js" integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw==" crossorigin=""></script>
+ </head>
+ 
+ 
+ 
+<!--body-->
+<body onload="myFunction()" style="margin:0;">
+
+<!--start the SPINNER or LOADER-->
+<div id="loader"></div>
+
+<body>
+
+
+
+
+<body>
+
+
+<!--div class="innerDiv">
+    <form> 
+	   <input type="radio" id="radioZero" name="verify" value="zero" checked>
+	   <label for="zero">Pop.Tot.</label><br>
+	   
+	   <input type="radio" id="radioOne" name="verify" value="N">
+	   <label for="N">Pop. > 1000</label><br>
+	   
+		<input type="radio" id="radioTwo" name="verify" value="Y">
+	   <label for="Y">Pop. > 2000</label><br>
+    </form>
+	
+	<br/>
+	
+	<form action="/my-link/">
+		 <input type="submit" id="home_locations" value="find Home Locations" />		
+	</form>
+	
+	<br/>
+			
+</div-->
+
+
+
+<!--div class="innerDiv_bis">
+
+	<form action="/coords/" method="POST">
+		<input class="latitude_button"  type='text' id='lat' name='lat'  /> <br />
+		<!--label for="lat">Latitude</label><br-->
+		<!--input class="longitude_button" type='text' id='lng' name='lng' />
+		<input type="text" class="input_txt_button" name="tag"><br>
+		<input type="submit" class="submit_button" value="Submit to Python Console">
+	</form>
+
+</div-->
+
+
+<main class="inline-block-center">
+	<form action="/coords/" method="POST">
+		  <div>
+			<input   type='text' id='lat' name='lat'  /> <br />
+		  </div>
+		  <div>
+			<input type='text' id='lng' name='lng'  /> <br />
+		  </div>
+		  <div>
+		   <input type="text" name="tag"><br>
+		  </div>
+		   <div>
+		   <input style="color: teal; background-color: #FFFFC0; border: 3pt ridge lightgrey" type="submit" value="Submit to Python Console">
+		  </div>
+	</form>
+	  
+	 <form> 
+	   <div>
+		 <input type="radio" id="radioZero" name="verify" value="zero" checked>
+		 <label for="zero">Pop.Tot.</label><br>
+	  </div>
+	  
+	   <div>
+		 <input type="radio" id="radioOne" name="verify" value="N">
+		 <label for="N">Pop. > 100</label><br>
+	  </div>
+	  
+	   <div>
+		<input type="radio" id="radioTwo" name="verify" value="Y">
+		<label for="Y">Pop. > 1000</label><br>
+	  </div>
+	</form>
+	
+	<form action="/my-link/">
+		<div>
+		   <input style="color: white; background-color: #0000ff; border: 3pt ridge lightgrey" type="submit" value="find Home Locations">
+        </div>			
+	</form>
+	
+	
+</main>
+
+
+<header>
+  
+</header>
+
+
+
+<nav role='navigation'>
+  <a class="col_home" href="/home_page/">Home</a>
+  <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
+  <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
+  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
+  <a class="col_impatti" href="/public_transport_page/">Impacts</a>
+  <a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a>
+</nav> 
+
+ 
+
+	
+<!--we are inside the area of the map-->
+<div id="map">
+
+</div>
+
+
+	
+
+  
+<!-- Load data .geojson -->
+<script src="{{ url_for('static', filename='hexagons_aggr_POP_ROMA_2011.geojson') }}" /></script>
+    <!--script src="{{ url_for('static', filename='hexagons_aggr_POP_ROMA_2011_regular_hex.geojson') }}" /></script-->
+	<script src="{{ url_for('static', filename='hexagons_aggr_POP_ROMA_2011_scaled_hex.geojson') }}" /></script>
+	  <script src="{{ url_for('static', filename='gdf_home_locations.geojson') }}" /></script>
+	    <script src="{{ url_for('static', filename='gdf_work_locations.geojson') }}" /></script>
+
+	
+	
+		
+		
+
+  <script>
+
+     // ----------------------------------------------------
+     
+
+      // Hack to autoset the iframe height.
+      window.addEventListener("load", function() {
+        window.setTimeout(function() {
+          setFrameHeight(document.documentElement.clientHeight)
+        }, 0);
+      });
+	  
+	 ///////////////////////////---------------------------------------------------------------------/////////////////////////////////////////////
+	  ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+	   ///////////////////////////---------------------------------------------------------------------///////////////////////////////////////////
+	    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+		///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+        ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////
+      ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+    ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
+	 
+	  
+	  
+	// ADD Leaflet map
+	
+		
+		const osm  = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		})
+         
+		 var carto = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+         });
+		 
+		const mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>';
+		const mbUrl = 'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+		const streets = L.tileLayer(mbUrl, {id: 'mapbox/streets-v11', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+
+		 	
+		
+	
+	function getColor(d) {
+		return d >= 100 ? '#2d2d4c' :
+		    d > 95 ? '#3d3d66' :
+		    d > 90 ? '#4c4c7f' :
+		    d > 85 ? '#5b5b99' :
+			d > 80 ? '#6b6bb2' :
+			d > 75 ? '#7a7acc' :	
+			d > 70 ? '#8989e5' :
+		    d > 65 ? '#9999ff' :
+		    d > 60 ? '#a3a3ff' :
+			d > 55 ? '#adadff' :			
+			d > 50 ? '#b7b7ff' :
+			d > 45 ? '#c1c1ff' :
+		    d > 40  ? '#ccccff' :  
+		    d > 30  ? '#d6d6ff' :
+			d > 20  ? '#e0e0ff' :
+			d > 10  ? '#eaeaff' :
+			d >= 0   ? '#f4f4ff' : '#ffffff';
+			}
+	
+	
+	function getColor_legend(d) {
+		return d >= 15000 ? '#2d2d4c' :
+		    d > 6000 ? '#3d3d66' :	
+		    d > 3500 ? '#4c4c7f' :
+			d > 2500 ? '#5b5b99' :
+			d > 1500 ? '#6b6bb2' :				
+			d > 1300 ? '#7a7acc' :	
+		    d > 1000 ? '#8989e5' :	
+		    d > 800 ? '#9999ff' :			
+		    d > 600 ? '#a3a3ff' :	
+            d > 500 ? '#adadff' :
+			d > 300 ? '#b7b7ff' :
+			d > 250 ? '#c1c1ff' :
+		    d > 200 ? '#ccccff' :
+			d > 100 ? '#d6d6ff' :
+			d > 50   ? '#e0e0ff' :
+			d > 20   ? '#eaeaff' :
+			d >= 0   ? '#f4f4ff' : '#ffffff';
+			}
+	
+	
+	
+		var legend = L.control({position: 'bottomright'});
+		
+            legend.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+				   const labels=["from 0 to 20",
+								"from 20 to 50",
+								"from 50 to 100",
+								"from 100 to 200",
+								"from 200 to 250",
+								"from 250 to 300",
+								"from 300 to 500",
+								"from 500 to 600",
+								"from 600 to 800",
+								"from 800 to 1000",
+								"from 1000 to 1300",
+								"from 1300 to 1500",
+								"from 1500 to 2500",
+								"from 2500 to 3500",
+								"from 3500 to 6000",
+								"from 6000 to 15000",
+								" > 15000"];
+				 const grades = [0, 20, 50, 100, 200 ,250 , 300, 500, 600, 800, 1000, 1300, 1500, 2500, 3500, 6000, 15000];
+
+                div.innerHTML='<div><b>Population</b></div';
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_legend(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+	
+
+
+	var myStyle = {
+		color: "#00FFFFFF",
+		weight: 2,
+		opacity: 1,
+		fillColor: '#00000000'
+	};
+	
+		const selectedStyle = {
+		  color: '#000000',
+		  weight: 0.1,
+		  opacity: 0.1,
+		}
+		
+		
+	// get color depending on population number value
+
+			function style_colors(feature) {
+				return {
+					weight: 0.1,
+					opacity: 0.1,
+					color: '#ffffff',
+					dashArray: '2',
+					fillOpacity: 0.7,
+					fillColor: getColor(feature.properties.percentile)
+				};
+			}
+	
+		
+		
+	 const hex_Layer = L.layerGroup();		
+	 
+	 
+	 	var hex_all = L.geoJSON(hex_counts, { style: style_colors, 	
+		onEachFeature: function (feature, layer) {
+		  layer.on('mouseover', function () {
+           layer.setStyle(selectedStyle);
+        });
+			layer.bindTooltip('<h3><p>Population: '+feature.properties.POP_TOT_HEX+'</p>');
+			layer.on('mouseout', function (e) {
+				layer.setStyle(style_colors); 
+			});	
+		}
+		});
+		
+	
+		
+	
+     //Using a Layer Group to add/ remove data from the map.
+	 hex_Layer.addLayer(hex_all);
+		
+		
+		
+	//If Radio Button Zero is clicked.  
+		document.getElementById("radioZero").addEventListener('click', function(event) {
+		theExpression = 'feature.properties.POP_TOT_HEX  all ';
+		console.log(theExpression);	
+			
+			hex_Layer.clearLayers();
+			map.removeLayer(hex_Layer);
+			
+			var hex_all = L.geoJSON(hex_counts, { style: style_colors, 
+			
+			onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			});
+				layer.bindTooltip('<h3><p>Population: '+feature.properties.POP_TOT_HEX+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors); 
+				});	
+			}
+			});
+
+			hex_Layer.addLayer(hex_all);
+			hex_Layer.addTo(map);
+		});		
+
+		
+	//If Radio Button one is clicked.  
+	document.getElementById("radioOne").addEventListener('click', function(event) {
+	theExpression = 'feature.properties.POP_TOT_HEX  > 100 ';
+	console.log(theExpression);	
+	
+		hex_Layer.clearLayers();
+		map.removeLayer(hex_Layer);
+		
+		var hex_100 = L.geoJSON(hex_counts, { style: style_colors, 
+		  filter: function(feature, layer) {
+                return feature.properties.POP_TOT_HEX > 100;
+            },
+		onEachFeature: function (feature, layer) {
+		  layer.on('mouseover', function () {
+           layer.setStyle(selectedStyle);
+        });
+			layer.bindTooltip('<h3><p>Population: '+feature.properties.POP_TOT_HEX+'</p>');
+			layer.on('mouseout', function (e) {
+				layer.setStyle(style_colors); 
+			});	
+		}
+		});
+
+	    hex_Layer.addLayer(hex_100);
+  		hex_Layer.addTo(map);
+    });
+	
+	
+	
+	
+  //If Radio button two is clicked.
+	document.getElementById("radioTwo").addEventListener('click', function(event) {
+	theExpression = 'feature.properties.POP_TOT_HEX  > 1000 ';	
+	console.log(theExpression);
+	
+		hex_Layer.clearLayers();
+		map.removeLayer(hex_Layer);
+		
+		var hex_1000 = L.geoJSON(hex_counts, { style: style_colors, 
+		  filter: function(feature, layer) {
+                return feature.properties.POP_TOT_HEX > 1000;
+            },
+		onEachFeature: function (feature, layer) {
+		  layer.on('mouseover', function () {
+           layer.setStyle(selectedStyle);
+        });
+			layer.bindTooltip('<h3><p>Population: '+feature.properties.POP_TOT_HEX+'</p>');
+			layer.on('mouseout', function (e) {
+				layer.setStyle(style_colors); 
+			});	
+		}
+		});
+
+	    hex_Layer.addLayer(hex_1000);
+		hex_Layer.addTo(map);
+    });
+	 
+	
+		
+	
+
+	 const map = L.map('map', {
+			center: [41.8946, 12.4873],
+			zoom: 11,
+			layers: [osm, hex_Layer]
+		});
+		
+		legend.addTo(map);
+		
+		
+		
+		{% for marker in markers %}
+		L.marker([{{ marker['lat'] }}, {{ marker['lon'] }}]).addTo(map)
+		.bindPopup("{{ marker['popup'] }}")
+		.openPopup();
+		{% endfor %}
+		
+		
+		
+		const baseLayers = {
+			'OpenStreetMap': osm,
+			'Streets': streets,
+			'Carto': carto
+		};
+		
+		const overlays = {
+			'Tessellation': hex_Layer
+		};
+
+
+		const layerControl = L.control.layers(baseLayers, overlays ,{collapsed:false,}).addTo(map);	
+			
+			
+    
+	// add home locations layer.....
+		const home_locations_layer = L.geoJSON(home_locations_point, {
+				onEachFeature(feature, layer) {
+			if (feature.properties && feature.properties.popupContent) {
+				popupContent += feature.properties.popupContent;
+			}
+			layer.bindPopup('<h3><p>latitude:'+feature.properties.latitude+'<h3><p>longitude:'+feature.properties.longitude+'</p>');
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					radius: 2,
+					fillColor: 'blue',
+					color: '#000',
+					weight: 1,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		})
+
+		const home_layer = L.layerGroup([home_locations_layer]);
+		
+		
+		
+		// add work locations layer.....
+		const work_locations_layer = L.geoJSON(work_locations_point, {
+				onEachFeature(feature, layer) {
+			if (feature.properties && feature.properties.popupContent) {
+				popupContent += feature.properties.popupContent;
+			}
+			layer.bindPopup('<h3><p>latitude:'+feature.properties.latitude+'<h3><p>longitude:'+feature.properties.longitude+'</p>');
+		},
+
+			pointToLayer(feature, latlng) {
+				return L.circleMarker(latlng, {
+					radius: 3,
+					fillColor: 'red',
+					color: '#000',
+					weight: 1,
+					opacity: 1,
+					fillOpacity: 0.8
+				});
+			}
+		})
+
+		const work_layer = L.layerGroup([work_locations_layer]);
+		
+		
+		
+		
+		var hex_all_scaled = L.geoJSON(hex_counts_scaled, { style: style_colors, 	
+		onEachFeature: function (feature, layer) {
+		  layer.on('mouseover', function () {
+           layer.setStyle(selectedStyle);
+        });
+			layer.bindTooltip('<h3><p>Population: '+feature.properties.value+'</p>');
+			layer.on('mouseout', function (e) {
+				layer.setStyle(style_colors); 
+			});	
+		}
+		});
+		
+		const hexagons_scaled = L.layerGroup([hex_all_scaled]);
+		
+		
+		
+		const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+		layerControl.addBaseLayer(satellite, 'Satellite');
+		layerControl.addOverlay(home_layer, 'home locations');
+		layerControl.addOverlay(work_layer, 'work locations');
+		layerControl.addOverlay(hex_all_scaled, 'scaled population');
+		
+		
+		
+    //------------------------- choose location on the map manually...
+	
+	
+	/*
+	var marker_click = null;
+	var marker_click1 = null;
+	
+	function onMapClick(e) {
+	
+		marker_click = L.marker(e.latlng, {draggable:'true'})
+			marker_click.on('click',function(e) { // new code here
+			this.remove();
+			});
+		
+		
+		 if (marker_click1 !== null) {
+			map.removeLayer(marker_click1);
+			}
+			
+		marker_click1 = L.marker(e.latlng, {draggable:'true'}).addTo(map);
+		 	marker_click1.on('click',function(e) { // new code here
+        this.remove();
+		});
+			
+		// Adding marker to the map
+		marker_click.addTo(map);
+		marker_click1.addTo(map);
+		
+		sendDataToPython({
+		// send LAT, LON from click to Python...
+        value:  e.latlng,
+        dataType: "json",
+        }); 
+			
+	}
+	
+	map.on('click', onMapClick);
+	*/
+	
+	
+	/*    
+    map.on('click', 
+		function(e){
+			var coord = e.latlng; // no need for toString()
+			var lat = coord.lat;
+			var lng = coord.lng;
+			var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)
+			.bindPopup('send coordinates to <a href="{{ url_for('form') }}?latitude='+lat+'&longitude='+lng+'"> Python</a>').openPopup();
+		
+    });
+	
+*/
+
+
+ map.on('click', 
+		function(e){
+		    document.getElementById('lat').value = e.latlng.lat;
+            document.getElementById('lng').value = e.latlng.lng;
+			var newMarker = L.marker(e.latlng, {draggable:'true'}).addTo(map)	
+    });
+	
+	
+
+	
+	window.addEventListener('resize', 
+	() => map.getViewPort().resize());
+	
+	
+
+  </script>
+</body>
+</html>

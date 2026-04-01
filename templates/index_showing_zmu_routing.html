@@ -720,14 +720,12 @@ input::-webkit-inner-spin-button {
 <nav role='navigation'>
   <a class="col_home" href="/home_page/">Home</a>
   <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
-  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
   <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
-  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a class="col_scenari" href="/modal/">Avoid-Shift measures</a>
   <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
   <a class="col_impatti" href="/public_transport_page/">Impacts</a>
-  <!--a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a-->
+  <a class="col_best" onclick="$('#loading').show();" href="/best_page/">Best</a>
 </nav>    
-
 
 
 
@@ -766,8 +764,6 @@ input::-webkit-inner-spin-button {
  
  
  <!-- load custom polygons and border of custom polygon-->
-<!--script src="{{ url_for('static', filename='ZMUs_custom_selected.geojson') }}" /></script>
-<script src="{{ url_for('static', filename='BORDER_selected_ZMUs.geojson') }}" /></script-->
 <script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
 
 <!--script src="{{ url_for('static', filename='aggregated_zmu_routing_od.geojson') }}" /></script-->
@@ -2625,7 +2621,7 @@ input::-webkit-inner-spin-button {
 			
 			
 		
-	//alert("I am here");
+	// alert("I am here--------------------------");
 	<!-- REDIRECT to final layer....once completed-->
 	window.location.href = "/redirect_zmu_paths_routing/";	
 	

@@ -573,8 +573,6 @@ div#loading {
 	 <a class="animation_link" href="/animation_TPL/">TPL animation</a></p>
 	 
 	 <a class="animation_link_CSA" href="/plan_trip_CSA/">Plan a Trip (CSA)</a></p>
-	 
-	  <a class="animation_link" href="/animation_GTFS/">TPL stop to stop</a></p>
     
 
 	</form>
@@ -652,7 +650,7 @@ div#loading {
 	 var GTFS_hour = "{{ session['GTFS_hour']}}"
 	 // alert(GTFS_hour);
 	 
-
+	
 		
     document.addEventListener("DOMContentLoaded", function(){
 	// var ora_selezionata =  selected_hour_ZMU;
@@ -744,14 +742,14 @@ div#loading {
 			
 			
 	function getColor_nbuses(d) {
-		return d >= 30 ? '#ffff00' :
-			d > 20  ? '#ffff00' :
-			d > 10  ? '#ffff00' :
-			d > 6  ? '#ff0000' :
-			d > 4  ? '#ff0000' :
-			d > 3  ? '#0000ff' :
-			d >= 2  ? '#0000ff' :
-			d >= 1   ? '#0000ff' : '#0000ff';
+		return d >= 30 ? '#2e122d' :
+			d > 20  ? '#2e122d' :
+			d > 10  ? '#530332' :
+			d > 6  ? '#581845' :
+			d > 4  ? '#900c3f' :
+			d > 3  ? '#c70039' :
+			d >= 2  ? '#ff5733' :
+			d >= 1   ? '#ffc300' : '#ffc300';
 			}  
 			
 			
@@ -997,7 +995,8 @@ div#loading {
 		const TPL_stops_layer_bis = L.layerGroup();
 		TPL_stops_layer_bis.addLayer(TPL_stops_default_zero);
 		
-	
+		
+		
 		
 		/////////------ ADD default TPL TRIPS -------------------/////////////////////////////////
 		var TPL_default = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
