@@ -23,7 +23,7 @@
 		z-index: 500;border: none;color: white;padding: 20px;text-align: left;display: inline-block;font-size: 1.5em;
 	    margin: 10px 20px;}
 
-   header, nav {
+  header, nav {
     left: 2%;
 	top: 85%;
   	z-index: 700;
@@ -45,8 +45,6 @@
 	  
 	  display: table-cell;
 	}
-	
-
 	nav .col_home {background-color: #6b0000;}
 	
 	nav .col_privata {background-color: #4CAF50;}
@@ -63,7 +61,7 @@
 
  /** submit lat lon and input text to Python **/
     main {background-color: rgba(51, 170, 51, .3); left: 2%;top: 11%;z-index: 700;position: absolute;margin: 2px 0;
-		padding: 5px;text-overflow:ellipsis;overflow:hidden; width:280 px; height: 750px}
+		padding: 5px;text-overflow:ellipsis;overflow:hidden; width:230 px; height: 750px}
 
 	main div {
 	  width: 500px;
@@ -311,46 +309,6 @@
 		}
 	}
 	
-	
-	
-	
-	
-	
-	
-/* Center the loader (SPINNER) */
-#loader {position: absolute;left: 50%;top: 50%;z-index: 1;width: 120px;height: 120px;margin: -76px 0 0 -76px;border: 16px solid #f3f3f3;
-  border-radius: 50%;// border-top: 16px solid #3498db;border-top: 16px solid blue;border-right: 16px solid green;
-  border-bottom: 16px solid red;border-right: 16px solid yellow;border-left: 16px solid pink;-webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;}
-
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@-webkit-keyframes animatebottom {from { bottom:-100px; opacity:0 } to { bottom:0px; opacity:1 }}
-
-@keyframes animatebottom { from{ bottom:-100px; opacity:0 } to{ bottom:0; opacity:1 }}
-
-#myDiv {display: none;text-align: center;}
-
-div#loading {
-    display: none;
-                position: absolute;
-                left: 50%;
-    top: 50%;
-    z-index: 700;
-                width: 270px;
-                height: 270px;
-                margin: -76px 0 0 -76px;
-    background: url(/static/loadingimage_TPL.gif) no-repeat;
-    cursor: wait;
-}
 
 
 </style>
@@ -381,7 +339,7 @@ div#loading {
 
     <br>
 	
-	<h3 style="font-weight: bold; line-height: 1em; text-align: center; font-size:180%; margin-left: 200px; ">Best Run</h3>
+	<h3 style="font-weight: bold; line-height: 1em; text-align: center; font-size:180%; margin-left: 270px; ">Best Run</h3>
 		<!--insert new line-->
 	<br>
 
@@ -440,7 +398,7 @@ div#loading {
     <div class="break_line_1"></div><br>
 
 	<form method="POST" action="/launch_best/" style='display: inline-block;'>
-        <input style="margin-left: 190px;" class="btn_costi btn-lg btn-primary mr-1 blink" type="submit" value="Run BEST" onclick="$('#loading').show();">
+        <input style="margin-left: 230px;" class="btn_costi btn-lg btn-primary mr-1 blink" type="submit" value="Run BEST" onclick="$('#loading').show();">
 	</form><br>
 
     <div class="break_line_1"></div><br>
@@ -517,10 +475,6 @@ div#loading {
 
 <script src="{{ url_for('static', filename='best/load.txt') }}" /></script>
 
-<!--load zmu zones with their attributes and charging infrastructure data-->
-<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
-
-
 <script>
 var llist3 = new Array(); llist3 = loadlist3;
 function selectlist(wh) {
@@ -532,6 +486,9 @@ function selectlist(wh) {
 }
 //$('form select').on('change', function(){$(this).closest('form').submit();});
 </script>
+
+<!--load zmu zones with their attributes and charging infrastructure data-->
+<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
 
 <script>
 
@@ -740,8 +697,9 @@ function selectlist(wh) {
 			
 		//const TPL_layer = L.layerGroup();
 		//TPL_layer.addLayer(TPL_default);
-		
-	//// ----- ZMU zones -----------------------------////
+   
+  
+  //// ----- ZMU zones -----------------------------////
         function style_colors_ZMU_zones(feature) {
 			return {
 				weight: 1,
@@ -800,7 +758,7 @@ function selectlist(wh) {
 			layers: [carto, ZMU_zones_Layer]
 		});
 
-	
+
 
 				function onEachFeatu(feature, layer) {
     // does this feature have a property named popupContent?
@@ -848,7 +806,7 @@ var MyIcon = L.icon({
 		
 		const overlays = {
 		    //'TPL network': TPL_layer,
-			'Traffic Zones': ZMU_zones_Layer,
+      'Traffic Zones': ZMU_zones_Layer,
 			'TPL stops': TPL_stops_layer_bis,
 			'Censuary data': censuary_Layer
 		};
