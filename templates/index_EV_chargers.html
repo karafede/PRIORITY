@@ -122,7 +122,7 @@
 	  text-decoration: none;
 	  background: #000000;  /* Black */
 	  border-radius: 5px;
-	  font-size: 1.4em;
+	  font-size: 1.2em;
 	  color: white;
 	  padding: 3px 8px;
 	    display: table-cell;
@@ -748,17 +748,17 @@ input::-webkit-inner-spin-button {
 	
 
  <form method="POST" action="/ZMU_tod_selector/">
-	 <h4 style="margin-top: -1px; margin-left:-140px;" class="label tpl_line">Day Type:</h4>
+	 <h4 style="margin-top: -1px; margin-left:-180px;" class="label tpl_line">Load:</h4>
         <h4 style="margin-top: -50px;" class="ZMU_tod_selector" onchange="this.form.submit()";> </h4>
 		
-		 <input type="radio" name="ZMU_tod" style="margin-left:80px; font-weight: bold;" id="registration_tod" value="32" ></label>
+		 <input type="radio" name="ZMU_tod" style="margin-left:10px; font-weight: bold;" id="registration_tod" value="32" ></label>
 		<label class="ZMU_tod_selector" onchange="this.form.submit();"> 
 		
-        <input type="radio" name="ZMU_tod" style="margin-left:-18px;  margin-top: 15px;" id="registration_tod" value="33">   Working day</label><br>
+        <input type="radio" name="ZMU_tod" style="margin-left:-19px;  margin-top: 15px;" id="registration_tod" value="33">   Working day</label><br>
         <label class="ZMU_tod_selector" onchange="this.form.submit()";>  
-        <input type="radio" name="ZMU_tod" style="margin-left:72px;" id="registration_tod" value="34" >  Pre-Holiday</label><br>
+        <input type="radio" name="ZMU_tod" style="margin-left:5px;" id="registration_tod" value="34" >  Pre-Holiday</label><br>
         <label class="ZMU_tod_selector" onchange="this.form.submit()";>
-        <input type="radio" name="ZMU_tod"  style="margin-left:40px;" id="registration_tod" value="35"  >  Holiday</label>
+        <input type="radio" name="ZMU_tod"  style="margin-left:-25px;" id="registration_tod" value="35"  >  Holiday</label>
 		 <label class="ZMU_tod_selector" onchange="this.form.submit()";>
    </form>
 	
@@ -834,7 +834,6 @@ input::-webkit-inner-spin-button {
 <!-- Load data .geojson --> 
 <script src="{{ url_for('static', filename='chargers_OCM.geojson') }}" /></script>
 <script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
-
 
 
 <!-- ZMU zones with population data -->
@@ -938,9 +937,6 @@ $(function() {
 			
 		
 		
-		
-
-			
 		
 	
 			

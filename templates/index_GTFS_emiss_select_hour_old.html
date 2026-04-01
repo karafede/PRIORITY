@@ -33,7 +33,8 @@
 	#heatmapLegend_N_buses { background:white; position:absolute; bottom:215px; right:0; padding:10px;  z-index: 700; font-size: 18px; display: inline;}
 	#min_buses { float:left; }
 	#max_buses { float:right; }
-	
+	#min_emiss { float:left; }
+	#max_emiss { float:right; }
 	
 	
 	#refreshButton {
@@ -169,9 +170,6 @@
 	}
 	
 	
-	nav .col_best {background-color: #326bbb ;<!--color: blue;-->}
-	
-	
 		
 
   /** submit lat lon and input text to Python **/
@@ -186,7 +184,7 @@
 		  //overflow:hidden;
 		overflow-y:scroll;
     width: 350px;
-    height:590px
+    height:65%;
 	}
 
 	main div {
@@ -213,13 +211,13 @@
 
 	main div:nth-child(3) {
       width: 170px;
-	 background: #326bbb;
+	 background: transparent;
 	}
 	
 	main div:nth-child(4) {
 	  width: 270px;
 	   height: 2px;
-	   background: transparent;
+	   background: #326bbb;
 	   float: center;
 	}
 	
@@ -570,11 +568,13 @@ div#loading {
 		
 		
  
+
  
  #form-wrapper {
-  width: 60%;
-  height: 14%;
+  width: 80%;
+  height: 65%;
   margin: 0 auto;
+  overflow-y:scroll;
   text-align: center;
   display:flex;
 }
@@ -666,51 +666,413 @@ input::-webkit-inner-spin-button {
 	<!--insert new line-->
 	<!--br-->
 	
-	 <h2 style="font-weight: bold; line-height: 1em;">TPL network</h2> 
+	 <h2 style="font-weight: bold; line-height: 1em;">TPL Emissions,</h2> 
+	 <h2 style="font-weight: bold; line-height: 1em;">Energy Consumption and Costs</h2> 
 	<!--insert new line-->
 	<!--br-->
 	
 		<div class="break_line_1"></div>
-	   
-   
+
+
+
  <div id="form-wrapper">
     <div id="form1" class="c">
- <h3 style="font-weight: bold">Road / Rail:</h3>
-	<form method="POST" action="/GTFS_type_selector/">	
-	<select class="tipo_alimentazione" name="GTFS_type" id="registration_data_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
-			<!--option value="10">--- choose ---</option-->
-			<option value="11">road</option>
-			<option value="12">rail</option>
+	
+
+ <h3 style="font-weight: bold">Fuel Type:</h3>
+	<form method="POST" action="/fuel_type_selector/">	
+	<select class="tipo_alimentazione" name="fuel_type" id="registration_fuel_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="101">--- choose ---</option>
+			<option value="102">Diesel</option>
+			<option value="103">CNG</option>
+			<option value="104">Electricity</option>
+			<!--option value="105">Biodiesel</option-->
 	</select>
 	</form>
+ 
+  <br>
+
+
+
+  
+<!--DIESEL A-->
+ {% if session["fuel_type"]=='102' and (session["euro_type"] =='11' or session["euro_type"] =='12') %}
+
+ <h3 style="font-weight: bold">Euro Standard:</h3>
+	<form method="POST" action="/euro_standard_selector/">	
+	<select class="tipo_alimentazione" name="euro_type" id="registration_euro_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="11">EURO 3</option>
+			<option value="12">EURO 4</option>
+			<option value="13">EURO 5</option>
+			<option value="14">EURO 6</option>
+	</select>
+	</form>
+	
+	<br>
+	
+
+<form method="POST" action="/segment_selector/">	
+	<h3 style="font-weight: bold">Segment:</h3>
+	<select class="staypoints_type" name="segment_type" id="registration_segment_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="21">Standard</option>
+			<!--option value="22">Articulated</option>
+			<option value="23">midi</option-->
+		</select>
+	</form>
+	
+	<br>
+	
+<form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="30">monofuel</option>
+			<!--option value="31">phev</option-->
+		</select>
+	</form>
+		
+	<br>
+{% endif %}
+	
+	
+
+
+  
+<!--DIESEL B-->
+ {% if session["fuel_type"]=='102' and (session["euro_type"] =='13') and (session["engine_type"]=='30' or session["engine_type"]=='31') and (session["segment_type"]=='22') %}
+
+ <h3 style="font-weight: bold">Euro Standard:</h3>
+	<form method="POST" action="/euro_standard_selector/">	
+	<select class="tipo_alimentazione" name="euro_type" id="registration_euro_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="11">EURO 3</option>
+			<option value="12">EURO 4</option>
+			<option value="13">EURO 5</option>
+			<option value="14">EURO 6</option>
+	</select>
+	</form>
+	
+	<br>
+
+
+
+<form method="POST" action="/segment_selector/">	
+	<h3 style="font-weight: bold">Segment:</h3>
+	<select class="staypoints_type" name="segment_type" id="registration_segment_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="21">Standard</option>
+			<option value="22">Articulated</option>
+			<!--option value="23">midi</option-->
+		</select>
+	</form>
+	
+	<br>
+	
+<form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="30">monofuel</option>
+			<option value="31">phev</option>
+		</select>
+	</form>
+		
+	<br>
+{% endif %}
+	
+	
+	
+	
+	
+
+<!--DIESEL B1-->
+ {% if session["fuel_type"]=='102' and (session["euro_type"] =='14')  and (session["engine_type"]=='30') and (session["segment_type"]=='22' or session["segment_type"]=='23' or session["segment_type"]=='21' ) %}
+
+ <h3 style="font-weight: bold">Euro Standard:</h3>
+	<form method="POST" action="/euro_standard_selector/">	
+	<select class="tipo_alimentazione" name="euro_type" id="registration_euro_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="11">EURO 3</option>
+			<option value="12">EURO 4</option>
+			<option value="13">EURO 5</option>
+			<option value="14">EURO 6</option>
+	</select>
+	</form>
+	
+	<br>
+
+
+
+<form method="POST" action="/segment_selector/">	
+	<h3 style="font-weight: bold">Segment:</h3>
+	<select class="staypoints_type" name="segment_type" id="registration_segment_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="21">Standard</option>
+			<option value="22">Articulated</option>
+			<option value="23">midi</option>
+		</select>
+	</form>
+	
+	<br>
+	
+ {% if (session["segment_type"]=='21') %}
+<form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="30">monofuel</option>
+			<option value="31">phev</option>
+		</select>
+	</form>
+		
+	<br>
+{% endif %}	
+	
+ {% if (session["segment_type"]=='22' or  session["segment_type"]=='23') %}
+ <form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="30">monofuel</option>
+			<!--option value="31">phev</option-->
+		</select>
+	</form>
+<br>
+{% endif %}	
+
+{% endif %}	
+	
+
+
+
+<!--DIESEL C1-->
+ {% if session["fuel_type"]=='102' and (session["euro_type"] =='14') and (session["engine_type"]=='31')  and (session["segment_type"]=='21' ) %}
+
+ <h3 style="font-weight: bold">Euro Standard:</h3>
+	<form method="POST" action="/euro_standard_selector/">	
+	<select class="tipo_alimentazione" name="euro_type" id="registration_euro_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="11">EURO 3</option>
+			<option value="12">EURO 4</option>
+			<option value="13">EURO 5</option>
+			<option value="14">EURO 6</option>
+	</select>
+	</form>
+	
+	<br>
+
+
+
+<form method="POST" action="/segment_selector/">	
+	<h3 style="font-weight: bold">Segment:</h3>
+	<select class="staypoints_type" name="segment_type" id="registration_segment_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="21">Standard</option>
+			<option value="22">Articulated</option>
+			<option value="23">midi</option>
+		</select>
+	</form>
+	
+	<br>
+	
+<form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<!--option value="30">monofuel</option-->
+			<option value="31">phev</option>
+		</select>
+	</form>
+		
+	<br>
+{% endif %}
+
+
+  
+  
+<!--DIESEL C-->
+ {% if session["fuel_type"]=='102' and (session["euro_type"] =='13') and (session["engine_type"]=='30' or session["engine_type"]=='31') and (session["segment_type"]=='21' or session["segment_type"]=='23') %}
+
+ <h3 style="font-weight: bold">Euro Standard:</h3>
+	<form method="POST" action="/euro_standard_selector/">	
+	<select class="tipo_alimentazione" name="euro_type" id="registration_euro_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="11">EURO 3</option>
+			<option value="12">EURO 4</option>
+			<option value="13">EURO 5</option>
+			<option value="14">EURO 6</option>
+	</select>
+	</form>
+	
+	<br>
+
+
+
+<form method="POST" action="/segment_selector/">	
+	<h3 style="font-weight: bold">Segment:</h3>
+	<select class="staypoints_type" name="segment_type" id="registration_segment_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="21">Standard</option>
+			<option value="22">Articulated</option>
+			<option value="23">midi</option>
+		</select>
+	</form>
+	
+	<br>
+	
+<form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="30">monofuel</option>
+			<!--option value="31">phev</option-->
+		</select>
+	</form>
+		
+	<br>
+{% endif %}
+	
+	
+  
+
+  
+<!--CNG-->
+ {% if session["fuel_type"]=='103' %}
+
+ <h3 style="font-weight: bold">Euro Standard:</h3>
+	<form method="POST" action="/euro_standard_selector/">	
+	<select class="tipo_alimentazione" name="euro_type" id="registration_euro_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<!--option value="11">EURO 3</option-->
+			<option value="12">EURO 4</option>
+			<option value="13">EURO 5</option>
+			<option value="14">EURO 6</option>
+	</select>
+	</form>
+	
+	<br>
+	
+
+<form method="POST" action="/segment_selector/">	
+	<h3 style="font-weight: bold">Segment:</h3>
+	<select class="staypoints_type" name="segment_type" id="registration_segment_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="21">Standard</option>
+			<!--option value="22">Articulated</option-->
+			<!--option value="23">midi</option-->
+		</select>
+	</form>
+	
+	<br>
+	
+<form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="30">monofuel</option>
+			<!--option value="31">phev</option-->
+		</select>
+	</form>
+		
+	<br>
+{% endif %}
+
+
+
+  
+<!--ELECTRICITY-->
+ {% if session["fuel_type"]=='104' %}
+
+ <h3 style="font-weight: bold">Euro Standard:</h3>
+	<form method="POST" action="/euro_standard_selector/">	
+	<select class="tipo_alimentazione" name="euro_type" id="registration_euro_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<!--option value="11">EURO 3</option-->
+			<!--option value="12">EURO 4</option-->
+			<!--option value="13">EURO 5</option-->
+			<option value="14">EURO 6</option>
+	</select>
+	</form>
+	
+	<br>
+	
+
+<form method="POST" action="/segment_selector/">	
+	<h3 style="font-weight: bold">Segment:</h3>
+	<select class="staypoints_type" name="segment_type" id="registration_segment_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<!--option value="21">Standard</option-->
+			<!--option value="22">Articulated</option-->
+			<option value="23">midi</option>
+		</select>
+	</form>
+	
+	<br>
+	
+<form method="POST" action="/engine_selector/">	
+	<h3 style="font-weight: bold">Engine:</h3>
+	<select class="staypoints_type" name="engine_type" id="registration_engine_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="30">monofuel</option>
+			<!--option value="31">phev</option-->
+		</select>
+	</form>
+		
+	<br>
+{% endif %}
+	
+	
+	
+	 <h3 style="font-weight: bold">Energy & Pollutant:</h3>
+	<form method="POST" action="/emission_type_selector_tpl/">	
+	<select class="tipo_alimentazione" name="emission_type" id="registration_emission_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+			<option value="10">--- choose ---</option>
+			<option value="11">Energy Consumption</option>
+			<option value="12">Energy Cons.(Wtt)</option>
+			<option value="13">NOx</option>
+			<option value="14">nmVOC</option>
+			<option value="15">PM</option>
+			<option value="16">PM (tyres & brakes)</option>
+			<option value="17">CO2 eq.</option>
+			<option value="18">CO2 eq (Well-to-Thank)</option>
+	</select>
+	</form>
+  <br>
+	
+	
  </div>
   </div>
  <!--br-->
+ 
+ 
+ 
 
 	<!--body  onload="aaa(); "></body-->
 	
- <form method="POST" action="/GTFS_tod_selector/">
+ <form method="POST" action="/tpl_tod_selector/">
 	 <h4 style="margin-top: -1px; margin-left:-195px;" class="label tpl_line">Day type:</h4>
-        <h4 style="margin-top: -50px;" class="GTFS_tod_selector" onchange="this.form.submit()";> </h4>
+        <h4 style="margin-top: -50px;" class="tpl_tod_selector" onchange="this.form.submit()";> </h4>
 		
 		 <input type="radio" name="GTFS_tod" style="margin-left:20px; font-weight: bold;" id="registration_tod" value="9" ></label>
-		<label class="GTFS_tod_selector" onchange="this.form.submit();"> 
+		<label class="tpl_tod_selector" onchange="this.form.submit();"> 
 		
         <input type="radio" name="GTFS_tod" style="margin-left:-19px;  margin-top: 15px;" id="registration_tod" value="6">   Working day</label><br>
-        <label class="GTFS_tod_selector" onchange="this.form.submit()";>  
+        <label class="tpl_tod_selector" onchange="this.form.submit()";>  
         <input type="radio" name="GTFS_tod" style="margin-left:12px;" id="registration_tod" value="7" >  Pre-Holiday</label><br>
-        <label class="GTFS_tod_selector" onchange="this.form.submit()";>
+        <label class="tpl_tod_selector" onchange="this.form.submit()";>
         <input type="radio" name="GTFS_tod"  style="margin-left:-18px;" id="registration_tod" value="8"  >  Holiday</label>
-		 <label class="GTFS_tod_selector" onchange="this.form.submit()";>
+		 <label class="tpl_tod_selector" onchange="this.form.submit()";>
    </form>
 
 	
 		<div class="break_line_1"></div>
 			<div class="break_line_1"></div>
 	
-	<form method="POST" action="/GTFS_LEGS_hour_selector/">	
+	<form method="POST" action="/tpl_emissions_legs_hour_selector/">	
 	<span style= "font-size: 20px;" class="label tpl_line">Hour:</span>
-	<select style="margin-top: -10px;" class="GTFS_LEGS_hour_selector" name="GTFS_hour" id="registrationhour" aria-haspopup="true" aria-expanded="false" onchange="this.form.submit()";>
+	<select style="margin-top: -10px;" class="tpl_emissions_legs_hour_selector" name="GTFS_hour" id="registrationhour" aria-haspopup="true" aria-expanded="false" onchange="this.form.submit()";>
 			<option value="0">00:00</option>
 			<option value="1">01:00</option>
 			<option value="2">02:00</option>
@@ -738,56 +1100,15 @@ input::-webkit-inner-spin-button {
 		</select>
 	</form>
 	
-	 <!--div class="break_line"></div-->
-		 
-	 <!--form action="/animation_TPL/" method="POST">
+	
+    <form action="/bus_type_selector/" method="POST">
 		 <div class="break_line"></div>
 		 <br>
-		<input class="btn_TPL btn-lg btn-primary mr-1" style="margin-left: 0%; margin-top: -10%;" type="submit" value="TPL query by line">
-	</p>
-    </form-->
-
-	<!--div class="break_line_1"></div-->
-	 <!--div class="break_line"></div-->
-	
-	<form action="/OD_matrix/" method="POST">
-		 <!--div class="break_line"></div-->
-		 <br>
-		<input class="btn_CSA btn-lg btn-primary mr-1" style="margin-left: 0%; margin-top: -10%; color:blue;" type="submit" value="O --> D matrix">
-	</p>
-    </form>
-	
-	 <!--div class="break_line"></div-->
-	
-	<form action="/routing_OD/" method="POST">
-		 <!--div class="break_line"></div-->
-		 <br>
-		<input class="btn_CSA btn-lg btn-primary mr-1" style="margin-left: 0%; margin-top: -10%; color:black;" type="submit" value="routing O --> D">
-	</p>
-    </form>
-
-
-	 <form action="/plan_trip_CSA/" method="POST">
-		 <div class="break_line"></div>
-		 <br>
-		<input class="btn_CSA btn-lg btn-primary mr-1" style="margin-left: 0%; margin-top: -10%; color:red;" type="submit" value="Plan a Trip (CSA)">
+		<input class="btn_CSA btn-lg btn-primary mr-1" style="margin-left: 0%; margin-top: -10%; color:black; background-color: yellow;" type="submit" value="refresh">
 	</p>
     </form>
 	
 
-<!-- send user coordinates to the Python console-->
-	<!--form action="/points_interest/" method="POST">
-		  <div>	
-			<input   type='hidden' id='lat' name='lat'  /> <br />
-		  </div>
-		  <div>
-			<input type='hidden' id='lng' name='lng'  /> <br />
-		  </div>
-		  <h3 style="font-weight: bold">Find Points of Interest</h3>
-		  <div>
-		   <input type="text" style="margin-left: -1px;" onfocus="this.value=''"  name="tag" value='-- insert dist(m) (>=1000) --'><button type="submit" class="btn btn-default">find</button>
-		  </div>	  
-	</form-->
 	
 	 
 </main>
@@ -803,8 +1124,6 @@ input::-webkit-inner-spin-button {
   <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
   <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
   <a class="col_impatti" href="/impacts_page/">Impacts</a>
-  <a class="col_best" onclick="$('#loading').show();" href="/best_page/">Best</a>
-  <!--a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a-->
 </nav>  
 
 
@@ -854,7 +1173,7 @@ input::-webkit-inner-spin-button {
 <script src="{{ url_for('static', filename='heatmap.js') }}" /></script>
 <script src="{{ url_for('static', filename='leaflet-heatmap.js') }}" /></script>
 
-<script src="{{ url_for('static', filename='gridded_n_buses.txt') }}" /></script>	
+<!--script src="{{ url_for('static', filename='gridded_n_buses.txt') }}" /></script-->	
 <!--script src="{{ url_for('static', filename='max_n_buses.txt') }}" /></script-->	
 <!--script src="{{ url_for('static', filename='min_n_buses.txt') }}" /></script-->	
  
@@ -866,13 +1185,13 @@ input::-webkit-inner-spin-button {
 	  
 	</div>
       <div id="heatmapLegend_N_buses">
-        <h2 style="font-size: 20px;  font-family: Arial; font-weight: bold;">N Buses (heatmap)</h2>
-        <span id="min_buses"></span>
-        <span id="max_buses"></span>
+        <h2 style="font-size: 20px;  font-family: Arial; font-weight: bold;">emiss / cons</h2>
+        <span id="min_emiss"></span>
+        <span id="max_emiss"></span>
         <img id="gradient" src="" style="width:100%" />
       </div>
     </div>
-
+	
 	
 <!--we are inside the area of the map-->
 <div id="map">  </div>
@@ -893,6 +1212,54 @@ input::-webkit-inner-spin-button {
       });
 	  
 	
+	
+	var fuel_type = "{{ session['fuel_type']}}"
+	// alert(fuel_type);
+    document.addEventListener("DOMContentLoaded", function(){
+	var fueltype_selezionata = fuel_type;
+	// alert(fueltype_selezionata);
+	document.getElementById('registration_fuel_type').value = fueltype_selezionata;  
+	});
+	 
+	 
+	var euro_type = "{{ session['euro_type']}}"
+	// alert(euro_type);
+    document.addEventListener("DOMContentLoaded", function(){
+	var eurtype_selezionata = euro_type;
+	// alert(eurtype_selezionata);
+	document.getElementById('registration_euro_type').value = eurtype_selezionata;  
+	});
+
+
+	var segment_type = "{{ session['segment_type']}}"
+	// alert(segment_type);
+    document.addEventListener("DOMContentLoaded", function(){
+	var segmentype_selezionata = segment_type;
+	// alert(segmentype_selezionata);
+	document.getElementById('registration_segment_type').value = segmentype_selezionata;  
+	});
+	
+	 
+	 
+	var engine_type = "{{ session['engine_type']}}"
+	// alert(engine_type);
+    document.addEventListener("DOMContentLoaded", function(){
+	var enginetype_selezionata = engine_type;
+	// alert(enginetype_selezionata);
+	document.getElementById('registration_engine_type').value = enginetype_selezionata;  
+	});
+	
+	
+	
+
+	var TYPE_data_emission = "{{session['emission_type']}}"	
+	// alert(TYPE_data_emission);
+	document.addEventListener("DOMContentLoaded", function(){
+	var emission_type_selezionata =  TYPE_data_emission;
+	// alert(emission_type_selezionata);
+	document.getElementById('registration_emission_type').value = emission_type_selezionata;   
+	});
+	 
 	  
 
 	var gtfs_tod = "{{ session['GTFS_tod']}}"
@@ -941,10 +1308,22 @@ input::-webkit-inner-spin-button {
 	
 		 
 	
-	var min_n_buses = "{{ session['min_n_buses']}}"
-	var max_n_buses = "{{ session['max_n_buses']}}"
-	//alert(min_n_buses);
-	// alert(max_n_buses);
+	var stop_buses = JSON.parse({{ session_stop_emissions_buses | tojson | safe}});
+	var LEGS_gtfs = JSON.parse({{ session_emissions_LEGS_gtfs | tojson | safe}});
+	//alert(LEGS_gtfs);
+	  
+	
+	
+	//var min_emiss_bus = "{{ session['min_emiss_bus']}}"
+	//var max_emiss_bus = "{{ session['max_emiss_bus']}}"
+	
+	//var n_buses = JSON.parse(JSON.stringify({{session_STOPS_emiss_gtfs_heatmap | tojson | safe}}));
+	//var n_buses = eval(n_buses );
+	// alert(n_buses);
+	
+	//var emission = JSON.parse(JSON.stringify({{session_STOPS_emiss_gtfs_heatmap | tojson | safe}}));
+	//var emission = eval(emission );
+	// alert(n_buses);
 	
 
 	
@@ -987,6 +1366,8 @@ input::-webkit-inner-spin-button {
 		
 	
 	
+		
+			
 			
 	function getColor_zmu_origin_destinations(d) {
 		return d >= 2000 ? '#071a4f' :
@@ -1028,7 +1409,7 @@ input::-webkit-inner-spin-button {
 
 		
 		const selectedStyle = {
-		  color: 'black',
+		  color: 'orange',
 		  weight: 6
 		} 
 			
@@ -1058,9 +1439,6 @@ input::-webkit-inner-spin-button {
 				
 				
 		
-			
-			
-
 		
 		
 		function style_colors_zmu(feature) {
@@ -1076,7 +1454,6 @@ input::-webkit-inner-spin-button {
 		}
 		
 		
-		
 		/*
 		function style_colors_POIS_ZMU(feature) {
 			return {
@@ -1089,6 +1466,7 @@ input::-webkit-inner-spin-button {
 			};
 		}
 		*/
+		
 		
 		
 		
@@ -1120,7 +1498,6 @@ input::-webkit-inner-spin-button {
 		*/
 		
 		
-		
 		/*
 		function style_colors_POIS_residential(feature) {
 			return {
@@ -1133,7 +1510,6 @@ input::-webkit-inner-spin-button {
 			};
 		}
 		*/
-		
 		
 				
 		
@@ -1148,7 +1524,6 @@ input::-webkit-inner-spin-button {
 				fillColor: getColor_census(feature.properties.POP_TOT_ZMU)
 			};
 		}
-		
 		
 		
 		function highlightFeature(e) {
@@ -1389,7 +1764,7 @@ input::-webkit-inner-spin-button {
 		
 		const POIS_Layer_residential = L.layerGroup();
 		POIS_Layer_residential.addLayer(POIS_RESIDENTIALS);
-			*/
+		*/	
 		
 	
 		
@@ -1476,7 +1851,7 @@ input::-webkit-inner-spin-button {
 								" > 30"];
 				 const grades = [1, 4, 6, 10, 20, 30];
 
-                div.innerHTML='<div><b>N Buses (legs)</b></div';
+                div.innerHTML='<div><b>kWh/km</b></div';
 				
 			  for(var i=0; i <grades.length; i++){
 					 div.innerHTML+='<i style="background:'+getColor_nbuses(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
@@ -1524,22 +1899,31 @@ input::-webkit-inner-spin-button {
 		
 		
 		/////////------ ADD default TPL LEGS (from STOP to STOP) -------------------/////////////////////////////////
-		var TPL_lines = L.geoJSON(gtfs_hour, { style: GTFS_trips_style, 	
+		var TPL_lines = L.geoJSON(LEGS_gtfs, { style: GTFS_trips_style, 	
 			  onEachFeature: function (feature, layer) {
 			  layer.on('mouseover', function () {
 			   layer.setStyle(selectedStyle);
 			  });
 				// layer.bindTooltip('<h3><p>trip:   '+feature.properties.trip_LEG_name+'</p>');
-				layer.bindTooltip('<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">from: '+feature.properties.from+'<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">to: '+feature.properties.to +
-				                                                                                              '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n.buses: '+feature.properties.counts+
-																											   '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">consumption(kwh): '+feature.properties.consumption);
+				 layer.bindTooltip('<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">from: '+feature.properties.from+'<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">to: '+feature.properties.to 
+			                      + '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">  <br> '+
+				                   '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Energy Consumption[MJ]: '+feature.properties.ec +
+								   '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Energy Cons.(well-to-tank)[MJ]: '+feature.properties.ec_wtt+ 
+								    '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">NOx[grams]: '+feature.properties.nox +
+									 '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">nmVOC[grams]: '+feature.properties.nmvoc +
+									  '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">PM [grams]: '+feature.properties.pm +
+									   '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">PM (tyres & brakes)[grams]: '+feature.properties.pm_nexh +
+									    '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">CO2 eq.[grams]: '+feature.properties.co2_eq +
+										 '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">CO2 eq.(well-to-tank)[grams]: '+feature.properties.co2_eq_wtt +
+										   '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Temperature [°C]: '+feature.properties.temperature +
+										   '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">AC cons.[]: '+feature.properties.AC_cons +
+										   '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Heating cons.[]: '+feature.properties.heating_cons);
 				layer.on('mouseout', function (e) {
 				layer.setStyle({
 					weight: 4,
 					opacity: 1,
 					// color: 'black',
-					// color: getColor_nbuses(feature.properties.consumption),
-					color: getColor_nbuses(feature.properties.counts),
+					color: getColor_nbuses(feature.properties.consumption),
 					// dashArray: '3',
 					fillOpacity: 0.7,
 					fillColor: '#00000000'}); 
@@ -1567,8 +1951,8 @@ input::-webkit-inner-spin-button {
        ////---------------------------------------------////////////////////////////////
 	  //--------------------- NUMBER OF BUSES--------////////////////////////////////
 	 
-	   var number_buses = {
-		  data: n_buses 
+	    var emission_buses = {
+		  data: emission 
         }; 
 		
 		
@@ -1586,11 +1970,11 @@ input::-webkit-inner-spin-button {
 		
 	
 		
-        function updateLegend_vehicles(data) {
+         function updateLegend_vehicles(data) {
           // the onExtremaChange callback gives us min, max, and the gradientConfig
           // so we can update the legend
-          $('min_buses').innerHTML = data.min;
-          $('max_buses').innerHTML = data.max;
+          $('min_emiss').innerHTML = data.min;
+          $('max_emiss').innerHTML = data.max;
           // regenerate gradient image
           if (data.gradient != gradientCfg_vehicles) {
             gradientCfg_vehicles = data.gradient;
@@ -1648,18 +2032,24 @@ input::-webkit-inner-spin-button {
 
     
 	   
-       //////------------ to be used for the legend  of Number of Vehicles----------////////////////////
+     //////------------ to be used for the legend  of Number of Vehicles----------////////////////////
 		//var width = 50
 		// var height = 50
-		var max_buses = max_n_buses;
-		var min_buses = min_n_buses;
+		
+		//var max_buses = max_n_buses;
+		//var min_buses = min_n_buses;
+		
+		var max_emiss = max_emiss_bus;
+		var min_emiss = min_emiss_bus;
+		
+		
 		// alert(max_buses);
 	
 			
 	  heatmap_gtfs.setData({
-		min: min_buses,
-		max: max_buses,
-		data: n_buses
+		min: min_emiss,
+		max: max_emiss,
+		data: emission
 	  });  
 	  ////////////---------------------------------------------------------------- ////////////////////
 	  
@@ -1678,18 +2068,12 @@ input::-webkit-inner-spin-button {
 			layers: [carto, heatmapLayer_n_buses, TPL_lines_layer]  //osm 
 		});
 		
-    // HEAT-MAP layer for n_buses at stops
-     heatmapLayer_n_buses.setData(number_buses);
+
+      heatmapLayer_n_buses.setData(emission_buses);
 		
 	
+		//legend_ZMU.addTo(map);
 		
-		// legend.addTo(map);
-		// legend_censuary.addTo(map);
-		legend_ZMU.addTo(map);
-		//info.addTo(map);
-		
-				
-	
 	//------------------------- choose location on the map manually...
 
 	 map.on('click', 
@@ -1721,21 +2105,16 @@ input::-webkit-inner-spin-button {
 		
 		
 		const overlays = {
-		    //'TPL stops': TPL_stops_layer,
-			//'TPL stops HeatMap': heatmapLayer_n_buses,
-		    //'TPL network': TPL_lines_layer,
-			//'Traffic Zones': ZMU_zones_Layer,
-			 "<span style='color:black; font-size: 20px;'>TPL stops</span>": TPL_stops_layer,
-			  "<span style='color:black; font-size: 20px;'>TPL stops HeatMap</span>": heatmapLayer_n_buses,
-			   "<span style='color:black; font-size: 20px;'>TPL network</span>": TPL_lines_layer,
-			    "<span style='color:black; font-size: 20px;'>Traffic Zones</span>": ZMU_zones_Layer,
+		    'TPL stops': TPL_stops_layer,
+			'TPL stops HeatMap': heatmapLayer_n_buses,
+		    'TPL network': TPL_lines_layer,
+			'Traffic Zones': ZMU_zones_Layer,
 			'Traffic Zones (by population)': censuary_Layer,
 			//'POIS & Residences': POIS_Layer_zmu,
 			//'POIS_Parking': POIS_PARKING,
 			//'POIS_Amenities': POIS_AMENITIES,
 			//'POIS_Residentials': POIS_RESIDENTIALS			
 		};
-	
 	
 		
 		const layerControl = L.control.layers(overlays, baseLayers, {collapsed:false}).addTo(map);   /// first put "overlays", sendond put "baseLayers"

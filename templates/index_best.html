@@ -2,56 +2,23 @@
 <html lang="en">
 
 <style type="text/css">
-     body {
-            padding: 0;
-            margin: 0;
-			font-family: Arial, Helvetica, sans-serif;
-        }
-   
-	#map {
-	  height: 100%;
-	}
+    body { padding: 0; margin: 0; font-family: Arial, Helvetica, sans-serif;}
+	#map {height: 100%;}
 	
 	/* Optional: Makes the sample page fill the window. */
-	html, body {
-	  height: 100%;
-	  margin: 0;
-	  padding: 0;
-	}
-
+	html, body {height: 100%;margin: 0;padding: 0;}
 
 	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
 	.legend { text-align: left; line-height: 10px; color: #555; font-size: 0.875em} .legend i { width: 10px; height: 10px; float: left; margin-right: 4px; opacity: 0.7; } 
 	.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
 
-  html, body,  #map {
-        width : 100%;
-        height : 100%;
-      }
-	.box{	  
-		width:15px;
-		height:15px;
-		border-radius:25px;
-		display: inline-block;
-		}
-	
+	html, body,  #map {width : 100%;height : 100%;}
+	.box{width:15px;height:15px;border-radius:25px;display: inline-block;}
 
      /** sidebar menu **/
-	.innerDiv{
-		position: absolute;
-		width: 10%;
-		height: 15%;
-		background-color: #b2b2ff;
-		opacity: 0.8;
-		margin-top:  1%;
-		margin-left: 5%;
-		z-index: 800;
-		padding-top: 1%;
-		text-overflow:ellipsis;
-        overflow:hidden;	
-	}
-	
-	
+	.innerDiv{position: absolute;width: 10%;height: 15%;background-color: #b2b2ff;opacity: 0.8;margin-top:  1%;
+		margin-left: 5%;z-index: 700;padding-top: 1%;text-overflow:ellipsis;overflow:hidden;}
+
     .button {position: absolute;left: 2%;top: 80%;height: 8%;width: 7%; min-width: 7%;margin-top: 30%;margin-left: 50%;
 		z-index: 500;border: none;color: white;padding: 20px;text-align: left;display: inline-block;font-size: 1.5em;
 	    margin: 10px 20px;}
@@ -78,7 +45,6 @@
 	  
 	  display: table-cell;
 	}
-	
 
 	nav .col_home {background-color: #6b0000;}
 	
@@ -92,7 +58,7 @@
 	
 	nav .IEA_statistics {background-color: #ededed ;color: blue;}
 	
-	nav .col_best {background-color: #326bbb ;}
+	nav .col_best {background-color: #326bbb ;<!--color: blue;-->}
 
  /** submit lat lon and input text to Python **/
     main {background-color: rgba(51, 170, 51, .3); left: 2%;top: 11%;z-index: 700;position: absolute;margin: 2px 0;
@@ -405,7 +371,7 @@
 
 	<br>
 
-	<nav style="margin-left: 75px;" role='navigation'>
+	<nav style="margin-left: 150px;" role='navigation'>
 	<a class="col_best" href="/best_page/">GTFS</a> <a class="col_best" href="/best_prep/">PreProc</a>
 	<a class="col_best" href="/best_run/">Best</a> <a class="col_best" href="/best_page/">Scat</a>
 	<a class="col_best" href="/best_draw/">Map</a>

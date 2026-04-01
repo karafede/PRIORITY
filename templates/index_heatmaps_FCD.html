@@ -20,6 +20,13 @@
 	  padding: 0;
 	}
 
+
+	//.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	//.legend { text-align: left; line-height: 13px; color: #555; font-size: 1.075em} .legend i { width: 12px; height: 12px; float: left; margin-right: 5px; opacity: 0.7; } 
+	//.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+	// .legend_ZMU { text-align: left; line-height: 15px; color: #555;  font-size: 12px} 
+	
+	
 	
 	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
 	.legend { text-align: left; line-height: 16px; color: #555; font-size: 1.275em} .legend i { width: 15px; height: 15px; float: left; margin-right: 6px; opacity: 0.7; } 
@@ -644,8 +651,12 @@ input::-webkit-inner-spin-button {
 
 <main class="inline-block-center">
 
-	<br>
 
+	<!--insert new line-->
+	<br>
+	
+<!--p><i><b>Heatmaps (private mobility)</i></b></p-->
+ <!--p><h3>Heatmaps (private mobility)</h3></p-->
   <h2 style="font-weight: bold; line-height: 1em;">Heatmaps</h2> 
     <h2 style="font-weight: bold; line-height: 1em;">(private mobility)</h2> 
 
@@ -675,6 +686,8 @@ input::-webkit-inner-spin-button {
         <input type="radio" name="ZMU_tod"  style="margin-left:-18px;" id="registration_tod" value="8"  onclick="$('#loading').show();">  Holiday</label>
 		 <label class="tod_heatmap_selector" onchange="this.form.submit()";>
    </form>
+		<!--input class="btn btn-primary btn-sm" type="submit" value="Select hour"  onclick="$('#loading').show();"-->
+	
 	<div class="break_line_1"></div>
 	
 	
@@ -690,6 +703,7 @@ input::-webkit-inner-spin-button {
 			<option value="4">16:00 ---> 20:00</option>
 			<option value="5">20:00 ---> 24:00</option>
 		</select>
+		 <!--h2 style="font-weight: bold; line-height: 1em; color:blue;">..Wait..Long Run</h2--> 
 	</form>
 
 	
@@ -743,6 +757,11 @@ input::-webkit-inner-spin-button {
 
 
       </div>
+      <!--div id="heatmapLegend_N_vehicles">
+		<h2 style="font-size: 16px;  font-family: Arial; font-weight: bold;">Number of Vehicles</h2>
+        <span id="min_vehicles"></span>
+        <span id="max_vehicles"></span>
+        <img id="gradient" src="" style="width:100%" /-->
       </div>
     </div>
 	
@@ -788,6 +807,7 @@ input::-webkit-inner-spin-button {
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/src/leaflet.draw.css"/>
+<!--link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/-->
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
@@ -795,9 +815,12 @@ input::-webkit-inner-spin-button {
 
   
 <!-- Load data .geojson -->
+<!--script src="{{ url_for('static', filename='hexagons_aggr_POP_ROMA_2011.geojson') }}" /></script-->
 <!-- ZMU zones with population data -->
 <script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script>
 <!-- aggregation by zmu -->
+<!--script src="{{ url_for('static', filename='aggregated_zmu_filtered.geojson') }}" /></script-->
+<!--script src="{{ url_for('static', filename='selected_test_generation_attraction.geojson') }}" /></script-->
 
 <!-- aggregation by zmu -->
 <script src="{{ url_for('static', filename='aggregated_zmu_filtered.geojson') }}" /></script>
@@ -815,8 +838,24 @@ input::-webkit-inner-spin-button {
  
  
  <!-- load custom polygons and border of custom polygon-->
+<!--script src="{{ url_for('static', filename='ZMUs_custom_selected.geojson') }}" /></script-->
+<!--script src="{{ url_for('static', filename='BORDER_selected_ZMUs.geojson') }}" /></script-->
 <script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
 <script src="{{ url_for('static', filename='chargers_OCM.geojson') }}" /></script>
+<!--script src="{{ url_for('static', filename='home_work_selected_idterm_4053589.geojson') }}" /></script-->
+<!--script src="{{ url_for('static', filename='home_work_selected_idterm_4398901.geojson') }}" /></script-->
+
+<!--script src="{{ url_for('static', filename='home_locations_roma_2019.geojson') }}" /></script>
+<script src="{{ url_for('static', filename='work_locations_roma_2019.geojson') }}" /></script>
+
+<script src="{{ url_for('static', filename='home_locations_roma_2022.geojson') }}" /></script>
+<script src="{{ url_for('static', filename='work_locations_roma_2022.geojson') }}" /></script>
+
+<script src="{{ url_for('static', filename='staypoints_tod.geojson') }}" /></script-->
+
+<!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script-->
+
 
 
 
@@ -835,6 +874,15 @@ input::-webkit-inner-spin-button {
 <script src="{{ url_for('static', filename='gridded_stoptime_destination.txt') }}" /></script>	
 <script src="{{ url_for('static', filename='gridded_tripdistance_destination.txt') }}" /></script>	
 <script src="{{ url_for('static', filename='min_n_vehicles.txt') }}" /></script>	
+<!--script src="{{ url_for('static', filename='max_n_vehicles.txt') }}" /></script>
+<script src="{{ url_for('static', filename='min_triptime.txt') }}" /></script>
+<script src="{{ url_for('static', filename='max_triptime.txt') }}" /></script>	
+<script src="{{ url_for('static', filename='min_stoptime.txt') }}" /></script>
+<script src="{{ url_for('static', filename='max_stoptime.txt') }}" /></script>	
+<script src="{{ url_for('static', filename='min_tripdistance.txt') }}" /></script>
+<script src="{{ url_for('static', filename='max_tripdistance.txt') }}" /></script-->	
+
+
 
 
 
@@ -935,6 +983,13 @@ input::-webkit-inner-spin-button {
 	// alert(tod_selezionata);
 	});
 	
+	
+	/*
+	$('form select').on('change', function(){
+		$(this).closest('form').submit()
+		$('#loading').show();
+	});*/
+
 
 
 	var number = "{{ session['ZMU_tod']}}";
@@ -1253,7 +1308,29 @@ input::-webkit-inner-spin-button {
 			};
 		}
 		
-
+		
+		
+		
+		/*
+		function myStyle_matching(feature) {
+			return {
+				weight: feature.properties.load/6,
+				opacity: 1,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: '#00000000'
+			};
+		 }
+		 
+		 
+		 const selectedStyle_matching = {
+		  color: 'orange',
+		  weight: 5
+		}
+		*/
+		
+		
 	
 	
 
@@ -2026,6 +2103,7 @@ input::-webkit-inner-spin-button {
 	////------------------------------------------------------------////////////////////////////// 
 	var EV_charging_layer_OCM = L.geoJSON(EV_chargers_OCM, {
 	   onEachFeature: function (feature, layer) {
+		//layer.bindTooltip('<h2>'+feature.properties.OperatorInfo+'</h2><p>n.points: '+feature.properties.NumberOfPoints +'<br>power(kW):'+feature.properties.Power+'</p>');
 		
 		var popupTextt = '';
 					popupTextt += (feature.properties.OperatorInfo) ? '<h2 style="font-size: 20px;  font-family: Arial; font-weight: bold;">Operator: ' + feature.properties.OperatorInfo : '</h2>';
@@ -2061,6 +2139,9 @@ input::-webkit-inner-spin-button {
 			layers: [carto, heatmapLayer_n_vehicles, ZMU_zones_Layer]  //osm 
 		});
 		
+		// legend.addTo(map);
+		// legend_censuary.addTo(map);
+		//legend_ZMU.addTo(map);
 		info.addTo(map);
 		
 		heatmapLayer_n_vehicles.setData(N_destination_vehicles);
@@ -2099,10 +2180,16 @@ input::-webkit-inner-spin-button {
 		const overlays = {
 			'Traffic Zones': ZMU_zones_Layer,
 			'Traffic Zones & Censuary': censuary_Layer,
+			//'Frequency visiting zmu @DESTINATION': mapmatched_Layer_zmu,
+			//'num. of trips @DESTINATION': heatmapLayer_n_vehicles,
 			 "<span style='color:black; font-size: 20px;'>num. of trips @DESTINATION</span>": heatmapLayer_n_vehicles,
 			  "<span style='color:black; font-size: 20px;'>stop time (min) @DESTINATION</span>": heatmapLayer_stoptime,
 			   "<span style='color:black; font-size: 20px;'>trip distance (km) @DESTINATION</span>": heatmapLayer_tripdistance,
 			    "<span style='color:black; font-size: 20px;'>trip time (min) @DESTINATION</span>": heatmapLayer_triptime,
+			//'stop time (min) @DESTINATION': heatmapLayer_stoptime,
+			//'trip distance (km) @DESTINATION': heatmapLayer_tripdistance,
+			//'trip time (min) @DESTINATION': heatmapLayer_triptime,
+			//'Staypoints': stay_points_layer,
 			'Charging Stations (Open Charge Map)': OCM_Layer,
 			'POIS & Residences': POIS_Layer_zmu,
 			'POIS_Parking': POIS_PARKING,
@@ -2113,10 +2200,16 @@ input::-webkit-inner-spin-button {
 		
 		const layerControl = L.control.layers(baseLayers, overlays ,{collapsed:false,}).addTo(map);	
 			
-
+		//const aggregated_pop = L.layerGroup([hex_all]);
 		const cens_layer = L.layerGroup([censuary_default]);
 		
-
+		
+		// const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+		// layerControl.addBaseLayer(satellite, 'Satellite');
+		// layerControl.addOverlay(hex_all, 'aggregated population (hex)');
+		// layerControl.addOverlay(POIS_PARKING, 'parkings');
+		// layerControl.addOverlay(POIS_AMENITIES, 'amenities');
+		// layerControl.addOverlay(POIS_RESIDENTIALS, 'buildings')
 		
 		
 	
