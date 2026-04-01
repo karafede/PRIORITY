@@ -603,6 +603,12 @@ input::-webkit-inner-spin-button {
 <main class="inline-block-center">
 
 
+<!--div style="display:none;" id="myDiv" class="animate-bottom">
+  <h2>Tada!</h2>
+  <p>Some text in my newly loaded page..</p>
+</div-->
+
+
 	<br>
 	
 	<h3 style="font-weight: bold; line-height: 1em; text-align: center;">Connected Traffic Zones</h3> 
@@ -612,6 +618,13 @@ input::-webkit-inner-spin-button {
 	<br>
 	
 
+	
+	
+	<!--form method="POST" action="/ZMU_paths_day_selector/">
+	<span class="label tpl_line">Day:</span>
+	   <input type="date" id="registrationday" name="ZMU_day" onchange="this.form.submit()";>
+	</form-->
+	
 	<form id="mainform" action="/ZMU_paths_day_selector" method="POST" >
 	   <input type="text" id="daterange"  name="daterange" onchange="myFunction_daterange(event)" value="     ___from___to___" />
 	   <button type="submit">enter</button><br><p>
@@ -627,12 +640,45 @@ input::-webkit-inner-spin-button {
 			<option value="11">FCD</option>
 			<option value="12">Synthetic</option>
 	</select>
+		<!--input class="btn btn-primary btn-sm" type="submit" value="Select hour"  onclick="$('#loading').show();"-->
 	</form>
  </div>
   </div>
  <br>
  
 	
+	<!--insert new line-->
+	
+	
+	<!--form method="POST" action="/ZMU_paths_hour_selector/">	
+	<span style= "font-size: 22px;" class="label tpl_line">Hour:</span>
+	<select class="ZMU_paths_hour_selector" name="ZMU_hour" id="registrationhour" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange="this.form.submit()";>
+			<option value="0">00:00</option>
+			<option value="1">01:00</option>
+			<option value="2">02:00</option>
+			<option value="3">03:00</option>
+			<option value="4">04:00</option>
+			<option value="5">05:00</option>
+			<option value="6">06:00</option>
+			<option value="7">07:00</option>
+			<option value="8">08:00</option>
+			<option value="9">09:00</option>
+			<option value="10">10:00</option>
+			<option value="11">11:00</option>
+			<option value="12">12:00</option>
+			<option value="13">13:00</option>
+			<option value="14">14:00</option>
+			<option value="15">15:00</option>
+			<option value="16">16:00</option>
+			<option value="17">17:00</option>
+			<option value="18">18:00</option>
+			<option value="19">19:00</option>
+			<option value="20">20:00</option>
+			<option value="21">21:00</option>
+			<option value="22">22:00</option>
+			<option value="23">23:00</option>
+		</select>
+	</form-->
 	
   <form method="POST" action="/ZMU_paths_hour_selector/">	
 	<span class="label tpl_line">Hour range:</span>
@@ -645,8 +691,13 @@ input::-webkit-inner-spin-button {
 			<option value="4">16:00 ---> 20:00</option>
 			<option value="5">20:00 ---> 24:00</option>
 		</select>
+		<!-- Radio buttons-->
 	</form>
 	
+
+<!--br>
+<h3><img src="/static/click.png" style="max-width: 12%;"> Click over a traffic zone <img src="/static/polygon_zones.png" style="max-width: 12%;"></h3-->
+
 
  <form method="POST" action="/ZMU_paths_tod_selector/">
 	 <h4 style="margin-top: -1px; margin-left:-195px;" class="label tpl_line">Day type:</h4>
@@ -662,10 +713,11 @@ input::-webkit-inner-spin-button {
         <input type="radio" name="ZMU_tod"  style="margin-left:-18px;" id="registration_tod" value="8"  >Holiday</label>
 		 <label class="ZMU_paths_tod_selector" onchange="this.form.submit()";>
    </form>
-
+		<!--input class="btn btn-primary btn-sm" type="submit" value="Select hour"  onclick="$('#loading').show();"-->
 	
 	<br>
 	<br>
+	<!--h3 style="font-weight: bold; line-height: 1em; text-align: center; color: #326bbb;"><img src="/static/click.png" style="max-width: 12%;"> Click over a traffic zone <img src="/static/polygon_zones.png" style="max-width: 12%;"></h2-->
 	<h3 style="font-weight: bold; line-height: 1em; text-align: center; color: #326bbb;"><img src="/static/click.png" style="max-width: 12%;"> Click over a traffic zone</h2>
 	
 	
@@ -681,11 +733,13 @@ input::-webkit-inner-spin-button {
 <nav role='navigation'>
   <a class="col_home" href="/home_page/">Home</a>
   <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
   <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
   <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
   <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
   <a class="col_impatti" href="/public_transport_page/">Impacts</a>
   <a class="col_best" onclick="$('#loading').show();" href="/best_page/">Best</a>
+  <!--a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a-->
 </nav>    
 
 
@@ -699,6 +753,7 @@ input::-webkit-inner-spin-button {
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/src/leaflet.draw.css"/>
+<!--link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/-->
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
@@ -707,8 +762,26 @@ input::-webkit-inner-spin-button {
   
   
 <!-- Load data .geojson -->
+<!--script src="{{ url_for('static', filename='hexagons_aggr_POP_ROMA_2011.geojson') }}" /></script-->
 <!-- ZMU zones with population data -->
 <script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script>
+<!-- aggregation by zmu -->
+<!--script src="{{ url_for('static', filename='aggregated_zmu_filtered.geojson') }}" /></script-->
+<!-- POINTS of INTERESTS (PARKINGs) -->
+<!--script src="{{ url_for('static', filename='POIS_parking.geojson') }}" /></script-->
+<!-- POINTS of INTERESTS (all AMENITIES) -->
+<!--script src="{{ url_for('static', filename='layer_POIS_amenities.geojson') }}" /></script-->
+<!-- POINTS of INTERESTS (all BUILDINGS) -->
+<!--script src="{{ url_for('static', filename='layer_POIS_residential.geojson') }}" /></script-->
+<!-- ALL POINTS of INTERESTS (all BUILDINGS and AMENITIES) -->
+<!--script src="{{ url_for('static', filename='zmu_POIS_ROMA_2011.geojson') }}" /></script-->
+
+ <!--script src="{{ url_for('static', filename='leaflet.motion.min.js') }}" /></script-->  
+ 
+ 
+ <!-- load custom polygons and border of custom polygon-->
+<!--script src="{{ url_for('static', filename='ZMUs_custom_selected.geojson') }}" /></script>
+<script src="{{ url_for('static', filename='BORDER_selected_ZMUs.geojson') }}" /></script-->
 <script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
 
 <script src="{{ url_for('static', filename='grouped_zmu_paths.geojson') }}" /></script>
@@ -859,6 +932,14 @@ input::-webkit-inner-spin-button {
 	};
 		
 	
+   
+
+		
+			
+			
+			
+
+				
 	function getColor_zmu_origin_destinations(d) {
 		return d >= 200 ? '#071a4f' :
 		    d > 100  ? '#225ea8' : 
@@ -915,6 +996,12 @@ input::-webkit-inner-spin-button {
             }
             
             
+		
+		
+		
+			
+		
+	
 
 	info.update = function (props) {
 		const contents = props ? `<b>${props.POP_TOT_ZMU}</b> people` : 'Hover over a traffic zone';
@@ -945,6 +1032,15 @@ input::-webkit-inner-spin-button {
 		  opacity: 0.1,
 		}
 		
+	
+				
+				
+		
+	// get color depending on population number value
+
+	
+	
+		
 		function style_colors_zmu(feature) {
 			return {
 				weight: 0.5,
@@ -957,6 +1053,61 @@ input::-webkit-inner-spin-button {
 		}
 		
 		
+		
+		/*
+		function style_colors_POIS_ZMU(feature) {
+			return {
+				weight: 3,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.1,
+				fillColor: 'blue'
+			};
+		}
+		
+		
+		
+		
+		
+		function style_colors_POIS(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'blue'
+			};
+		}
+		
+		
+		
+		function style_colors_POIS_amenities(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'red'
+			};
+		}
+		
+		
+		function style_colors_POIS_residential(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.7,
+				color: '#666',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: 'yellow'
+			};
+		}
+		*/
+		
+				
 		
 	    // used to color ZMU zones with POPULATION data 2011
 		function style_pop(feature) {
@@ -984,6 +1135,29 @@ input::-webkit-inner-spin-button {
 		}
 		
 		
+		
+		
+		/*
+		function myStyle_matching(feature) {
+			return {
+				weight: feature.properties.load/6,
+				opacity: 1,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.7,
+				fillColor: '#00000000'
+			};
+		 }
+		 
+		 
+		 const selectedStyle_matching = {
+		  color: 'orange',
+		  weight: 5
+		}
+		*/
+		
+		
+	
 	
 
 		function highlightFeature(e) {
@@ -1000,7 +1174,45 @@ input::-webkit-inner-spin-button {
 			info.update(layer.feature.properties);
 		}
 		
+		
+		
+		
+		
+		
+
+         
 	
+         
+		/*
+		///////////// -------------------------------------/////////////////////////
+		////// ----- censuary Layer ------------------------------------------ /////
+         
+		const censuary_default = L.geoJson(zmu_counts, {
+				style: style_pop,
+				onEachFeature
+			});
+			
+		
+		function resetHighlight(e) {
+			censuary_default.resetStyle(e.target);
+			info.update();
+		}
+
+		function zoomToFeature(e) {
+			map.fitBounds(e.target.getBounds());
+		}
+
+		function onEachFeature(feature, layer) {
+			layer.on({
+				mouseover: highlightFeature,
+				mouseout: resetHighlight,
+				//click: zoomToFeature
+			});
+		}
+		*/
+		
+		
+		
 		
 		/// add ZMU zones  borders  /////////////////////////////////////////////////////
 		var censuary_default = L.geoJSON(zmu_counts, { style: style_pop, 	
@@ -1022,12 +1234,173 @@ input::-webkit-inner-spin-button {
 			});
 			
 		
-
+		
+		
+	 // alert("...I AM HERE...");
+		 
 		
 	    /*------------DEFAULT LAYER -----------------*/
 	    const censuary_Layer = L.layerGroup();
 		censuary_Layer.addLayer(censuary_default);		
 	
+	
+		
+		  
+    /*
+         /////////----------- Points of Interest (POIS) in ZMUs -------/////////////////////////////////////////	
+		 
+			 var POIS_ZMU = L.geoJSON(zmu_POIS_counts, { style: style_colors_POIS_ZMU, 	
+				  onEachFeature: function (feature, layer) {
+				  layer.on('mouseover', function () {
+				   layer.setStyle(selectedStyle_highlight);
+				  });
+				  
+					var popupText = '';
+					popupText += (feature.properties.apartments) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Apartments: ' + feature.properties.apartments : '';
+					popupText += (feature.properties.church) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Church: ' + feature.properties.church : ''
+					popupText += (feature.properties.residential) ?  '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Residential: ' + feature.properties.residential : '';
+					popupText += (feature.properties.hotel) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hotel: ' + feature.properties.hotel : ''
+					popupText += (feature.properties.office) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Office: ' + feature.properties.office : ''
+					popupText += (feature.properties.basilica) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hotel: ' + feature.properties.basilica : ''
+					popupText += (feature.properties.house) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">House: ' + feature.properties.house : ''
+					popupText += (feature.properties.public) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Public: ' + feature.properties.public : ''
+					popupText += (feature.properties.market) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Market: ' + feature.properties.market : ''
+					popupText += (feature.properties.detached) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Detached: ' + feature.properties.detached : ''
+					popupText += (feature.properties.synagogue) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Synagogue: ' + feature.properties.synagogue : ''
+					popupText += (feature.properties.roof) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Roof: ' + feature.properties.roof : ''
+					popupText += (feature.properties.supermarket) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Supermarket: ' + feature.properties.supermarket : '';
+					popupText += (feature.properties.retail) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Retail: ' + feature.properties.retail : ''
+					popupText += (feature.properties.congress_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Congress centre: ' + feature.properties.congress_centre : ''
+					popupText += (feature.properties.government) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Government: ' + feature.properties.government : ''
+					popupText += (feature.properties.commercial) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Commercial: ' + feature.properties.commercial : ''
+					popupText += (feature.properties.semidetached_house) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Semidetached house: ' + feature.properties.semidetached_house : ''
+					
+					popupText += (feature.properties.arts_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Arts centre: ' + feature.properties.arts_centre : ''
+					popupText += (feature.properties.bus_station) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bus station: ' + feature.properties.bus_station : ''
+					popupText += (feature.properties.cafe) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Cafe: ' + feature.properties.cafe : ''
+					popupText += (feature.properties.fast_food) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Fast food: ' + feature.properties.fast_food : ''
+					popupText += (feature.properties.pharmacy) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Pharmacy: ' + feature.properties.pharmacy : ''
+					popupText += (feature.properties.parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Parking: ' + feature.properties.parking : ''
+					popupText += (feature.properties.place_of_worship) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Place of worship: ' + feature.properties.place_of_worship : ''
+					popupText += (feature.properties.restaurant) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Restaurant: ' + feature.properties.restaurant : ''
+					popupText += (feature.properties.bar) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bar: ' + feature.properties.bar : ''
+					popupText += (feature.properties.bicycle_parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bicycle parking: ' + feature.properties.bicycle_parking : ''
+					popupText += (feature.properties.charging_station) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Charging station: ' + feature.properties.charging_station : ''
+					popupText += (feature.properties.theatre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Theatre: ' + feature.properties.theatre : ''
+					popupText += (feature.properties.cinema) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Cinema: ' + feature.properties.cinema : ''
+					popupText += (feature.properties.library) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Library: ' + feature.properties.library : ''
+					popupText += (feature.properties.marketplace) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Marketplace: ' + feature.properties.marketplace : ''
+					popupText += (feature.properties.motorcycle_parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Motorcycle parking: ' + feature.properties.motorcycle_parking : ''
+					popupText += (feature.properties.parking_entrance) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Parking entrance: ' + feature.properties.parking_entrance : ''
+					popupText += (feature.properties.police) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Police: ' + feature.properties.police : ''
+					popupText += (feature.properties.public_building) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Public building: ' + feature.properties.public_building : ''
+					popupText += (feature.properties.school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">School: ' + feature.properties.school : ''
+					popupText += (feature.properties.social_facility) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Social facility: ' + feature.properties.social_facility : ''
+					popupText += (feature.properties.car_sharing) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Car sharing: ' + feature.properties.car_sharing : ''
+					popupText += (feature.properties.pub) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Pub: ' + feature.properties.pub : ''
+					popupText += (feature.properties.taxi) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Taxi: ' + feature.properties.taxi : ''
+					popupText += (feature.properties.university) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">University: ' + feature.properties.university : ''
+					popupText += (feature.properties.college) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">College: ' + feature.properties.college : ''
+					popupText += (feature.properties.community_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Community centre: ' + feature.properties.community_centre : ''
+					popupText += (feature.properties.doctors) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Doctors: ' + feature.properties.doctors : ''
+					popupText += (feature.properties.townhall) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Townhall: ' + feature.properties.townhall : ''
+					popupText += (feature.properties.parking_space) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">parking space: ' + feature.properties.parking_space : ''		
+					popupText += (feature.properties.hospital) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hospital: ' + feature.properties.hospital : '';
+					popupText += (feature.properties.music_school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Music school: ' + feature.properties.music_school : '';
+					popupText += (feature.properties.fuel) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Fuel: ' + feature.properties.fuel : '';
+					popupText += (feature.properties.car_rental) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Car rental: ' + feature.properties.car_rental : '';
+					popupText += (feature.properties.dentist) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Dentist: ' + feature.properties.dentist : '';
+					popupText += (feature.properties.clinic) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Clinic: ' + feature.properties.clinic : '';
+					popupText += (feature.properties.social_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Social centre: ' + feature.properties.social_centre : '';
+					popupText += (feature.properties.events_venue) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Events venue: ' + feature.properties.events_venue : '';
+					popupText += (feature.properties.research_institute) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Research institute: ' + feature.properties.research_institute : '';
+					popupText += (feature.properties.ferry_terminal) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Ferry terminal: ' + feature.properties.ferry_terminal : '';
+					popupText += (feature.properties.language_school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Language school: ' + feature.properties.language_school : '';
+					popupText += (feature.properties.kindergarten) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Kindergarten: ' + feature.properties.kindergarten : '';
+					popupText += (feature.properties.conference_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Conference centre: ' + feature.properties.conference_centre : '';
+					popupText += (feature.properties.courthouse) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Courthouse: ' + feature.properties.courthouse : '';
+					popupText += (feature.properties.tourism) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Tourism: ' + feature.properties.tourism : '';
+					popupText += (feature.properties.weighbridge) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Weighbridge: ' + feature.properties.weighbridge : '';
+					popupText += (feature.properties.childcare) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Childcare: ' + feature.properties.childcare : '';
+					popupText += (feature.properties.nursing_home) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Nursing home: ' + feature.properties.nursing_home : '';
+					popupText += (feature.properties.coworking_space) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Coworking space: ' + feature.properties.coworking_space : '';
+					popupText += (feature.properties.casino) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Casino: ' + feature.properties.casino : '';
+					popupText += (feature.properties.community_centres) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Community centres: ' + feature.properties.community_centres : '';
+										
+					layer.bindTooltip(popupText);
+					
+					
+					
+			layer.on('mouseout', function (e) {
+						layer.setStyle(selectedStyle_mouseout); 
+					});	
+				}
+				});
+				
+		const POIS_Layer_zmu = L.layerGroup();
+		POIS_Layer_zmu.addLayer(POIS_ZMU);
+		*/
+
+		
+		
+		
+		/*
+		/////////----- ADD POINTS of INTERESTS (PARKINGS) nearby chosen location -----------////////////////////////
+		var POIS_PARKING = L.geoJSON(POIS_parking, { style: style_colors_POIS, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>amenity: '+feature.properties.amenity+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer = L.layerGroup();
+		POIS_Layer.addLayer(POIS_PARKING);
+		
+		
+		
+	    /////////----- ADD POINTS of INTERESTS (all AMENITIES) nearby chosen location -----------////////////////////////
+		var POIS_AMENITIES = L.geoJSON(POIS_amenities, { style: style_colors_POIS_amenities, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>amenity: '+feature.properties.amenity+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS_amenities); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer_amenities = L.layerGroup();
+		POIS_Layer_amenities.addLayer(POIS_AMENITIES);
+		
+		
+		
+		/////////----- ADD POINTS of INTERESTS (all residential) nearby chosen location -----------////////////////////////
+		var POIS_RESIDENTIALS = L.geoJSON(POIS_residential, { style: style_colors_POIS_residential, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('mouseover', function () {
+			   layer.setStyle(selectedStyle);
+			  });
+				layer.bindTooltip('<h3><p>building: '+feature.properties.building+'</p>');
+				layer.on('mouseout', function (e) {
+					layer.setStyle(style_colors_POIS_residential); 
+				});	
+			}
+			});
+			
+		
+		const POIS_Layer_residential = L.layerGroup();
+		POIS_Layer_residential.addLayer(POIS_RESIDENTIALS);
+		*/
+		
 	
         
 		//// ----- ZMU path zones -----------------------------////
@@ -1074,6 +1447,12 @@ input::-webkit-inner-spin-button {
 		}
 		
 		
+		
+	
+		
+	
+			
+			
 		
 		/////////----------- AGGREGATED TRAFFIC DATA in ZMUs areas by HOURS -------/////////////////////////////////////////	
 	    var matched_zmu_by_hour = L.geoJSON(charging_data, { style: style_colors_ZMU_zones, 	
@@ -1203,8 +1582,16 @@ input::-webkit-inner-spin-button {
 			layers: [carto, mapmatched_Layer_zmu]  //osm 
 		});
 		
+		// legend.addTo(map);
+		// legend_censuary.addTo(map);
 		legend_ZMU.addTo(map);
-
+		//info.addTo(map);
+		
+		
+		
+		
+		
+	
 	//------------------------- choose location on the map manually...
 
 	 map.on('click', 
@@ -1231,15 +1618,26 @@ input::-webkit-inner-spin-button {
 		};
 		
 		const overlays = {
-			'Traffic Zones & Censuary': censuary_Layer			
+			'Traffic Zones & Censuary': censuary_Layer,
+			//'Frequency visiting zmu @DESTINATION': mapmatched_Layer_zmu,
+			//'POIS & Residences': POIS_Layer_zmu,
+			//'POIS_Parking': POIS_PARKING,
+			//'POIS_Amenities': POIS_AMENITIES,
+			//'POIS_Residentials': POIS_RESIDENTIALS
+			
 		};
 		
 		
 		const layerControl = L.control.layers(baseLayers, overlays ,{collapsed:false,}).addTo(map);	
-
+			
+		//const aggregated_pop = L.layerGroup([hex_all]);
 		const cens_layer = L.layerGroup([censuary_default]);
 		
 		
+
+		
+	
+	
 	window.addEventListener('resize', 
 	() => map.getViewPort().resize());
 	

@@ -21,6 +21,13 @@
 	}
 
 
+	//.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	//.legend { text-align: left; line-height: 13px; color: #555; font-size: 1.075em} .legend i { width: 12px; height: 12px; float: left; margin-right: 5px; opacity: 0.7; } 
+	//.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+	// .legend_ZMU { text-align: left; line-height: 15px; color: #555;  font-size: 12px} 
+	
+	
+	
 	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
 	.legend { text-align: left; line-height: 25px; color: #555; font-size: 22px} .legend i { width: 23px; height: 23px; float: left; margin-right: 6px; opacity: 0.7; }  
 	.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
@@ -173,9 +180,9 @@
 		margin: 2px 0;
 		padding: 5px;
 		text-overflow:ellipsis;
-        // overflow-y:scroll;
+        overflow-y:auto;
     width: 380px;
-    height: 50%;
+    height: 60%;
 	}
 
 	
@@ -556,7 +563,7 @@ div#loading {
   width: 70%;
   height: 50%;
   margin: 0px auto;
-  overflow-y:scroll;
+  overflow-y:auto;
   text-align: center;
   display:flex;
 }
@@ -644,6 +651,12 @@ input::-webkit-inner-spin-button {
 
 <main class="inline-block-center">
 
+
+<!--div style="display:none;" id="myDiv" class="animate-bottom">
+  <h2>Tada!</h2>
+  <p>Some text in my newly loaded page..</p>
+</div-->
+
 	<!--insert new line-->
 	<br>
 	
@@ -652,14 +665,18 @@ input::-webkit-inner-spin-button {
 	<!--insert new line-->
 	<br>
 	
-	
+		
+	<!--form id="mainform" action="/ZMU_day_emiss_selector" method="POST" >
+	   <input type="text" id="daterange"  name="daterange" onchange="myFunction_daterange(event)" value="     ___from___to___" />
+	   <button type="submit">enter date</button><br><br>
+	</form-->
 	
 	
 	<div id="form-wrapper">
     <div id="form1" class="c">
     <h3 style="font-weight: bold">Day of Week</h3>
 	<form method="POST" action="/dow_selector/">	
-	<select class="tipo_alimentazione" name="dow_type" id="registration_dow" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+	<select class="tipo_alimentazione" name="dow_type" id="registration_dow" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" onclick= "setTimeout('this.form.submit()', 4000);  Validate();">
 			<option value="10">--- choose ---</option>
 			<option value="11">Monday</option>
 			<option value="12">Tuesday</option>
@@ -675,19 +692,37 @@ input::-webkit-inner-spin-button {
   <br>
   
   
-
+  
+	
+  
+    <!--br-->
+  
+   
+  	<!--div id="form-wrapper">
+    <div id="form1" class="c"-->
 	<h3 style="font-weight: bold">Scenario:</h3>
-	<form method="POST" action="/aaa/">	
-	<select class="tipo_alimentazione" name="fleet_type" id="registration_data_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
+	<form method="POST" action="/scenario_selector/">	
+	<select class="tipo_alimentazione" name="scenario_type" id="scenario_data_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
 			<option value="20">--- choose ---</option>
-			<option value="21">Circulating</option>
-			<option value="22">El1(scenario)</option>
-			<option value="23">El2(scenario)</option>
+			<option value="21">scen1</option>
+			<option value="22">scen2</option>
 	</select>
 	</form>
 	
 	<br>
 	
+
+	
+	<!--form method="POST" action="/staypoints_type_impacts/">	
+	<h3 style="font-weight: bold">Staypoints:</h3>
+	<select class="staypoints_type_impacts" name="id_stay_type" id="registrationstaypoint" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();>
+			<option value="999">--choose--</option>
+			<option value="21">HOME</option>
+			<option value="22">WORK</option>
+			<option value="23">HOME & WORK</option>
+		</select>
+	</form-->
+		
  </div>
   </div>
  
@@ -710,7 +745,7 @@ input::-webkit-inner-spin-button {
   <a class="col_home" href="/home_page/">Home</a>
   <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
   <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
-  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a class="col_scenari" href="/modal/">Avoid-Shift measures</a>
   <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
   <a class="col_impatti" href="/impacts_page/">Impacts</a>
   <a class="col_best" onclick="$('#loading').show();" href="/best_page/">Best</a>
@@ -762,7 +797,41 @@ input::-webkit-inner-spin-button {
         }, 0);
       });
 	  
-	 
+	  
+    /*
+	//  date range picker //
+	$(function() {
+	  $('input[name="daterange"]').daterangepicker({
+		opens: 'left'
+	  }, function(start, end, label) {
+		  //alert("A new date range was chosen: " + start.format('MM-DD-YYYY') + ' to ' + end.format('MM-DD-YYYY'));
+		  var daterange_ZMU = start.format('MM-DD-YYYY');
+		  // alert(daterange_ZMU);
+	  });
+	});
+	
+	
+
+    var form = document.getElementById("mainform")
+      var input = document.getElementById("daterange")
+      form.addEventListener('submit', function(e){
+        input.value = daterange_ZMU
+        form.submit()
+      })
+
+
+
+	var input = document.getElementById('daterange');
+	var ___from___to___ = "{{ session['input_data_range']}}";
+	input.value = ___from___to___;
+
+	var myFunction_daterange = function (e) {
+	  console.log(e.target.value);
+	}
+  */
+  
+  
+  
   
 	var TYPE_dow = "{{session['dow_type']}}"	
 	//alert(TYPE_dow);
@@ -773,6 +842,81 @@ input::-webkit-inner-spin-button {
 	});
 	
 
+
+	/*
+	var zmu_day_start = "{{ session['ZMU_day_start']}}"
+	// alert(zmu_day_start);
+		 
+	var zmu_day_start = zmu_day_start.slice(0, 10);
+	// alert(zmu_day_start);
+		 
+	document.addEventListener("DOMContentLoaded", function(){
+    // var data_selezionata = "{{ session['ZMU_day_start'] }}";
+	var data_selezionata_start = zmu_day_start;
+	//alert(data_selezionata);
+	document.getElementById('registrationday_start').value = data_selezionata_start;  
+	});
+	
+
+	
+	
+	var zmu_day_end = "{{ session['ZMU_day_end']}}"
+	//alert(zmu_day_end);
+		 
+	var zmu_day_end = zmu_day_end.slice(0, 10);
+	// alert(zmu_day_end);
+		 
+	document.addEventListener("DOMContentLoaded", function(){
+    // var data_selezionata_end = "{{ session['ZMU_day_end'] }}";
+	var data_selezionata_end = zmu_day_end;
+	// alert(data_selezionata);
+	document.getElementById('registrationday_end').value = data_selezionata_end;  
+	});
+	*/
+		 
+
+	/*
+    var zmu_hourrange = "{{ session['ZMU_hourrange']}}"
+	// alert(zmu_hourrange);
+    document.addEventListener("DOMContentLoaded", function(){
+	var range_ora_selezionata = zmu_hourrange;
+	// alert(range_ora_selezionata);
+	document.getElementById('registrationhourrange').value = range_ora_selezionata;  
+	});
+	*/
+
+	
+	/*
+	var zmu_tod = "{{ session['ZMU_tod']}}"
+    document.addEventListener("DOMContentLoaded", function(){
+	var tod_selezionata =  zmu_tod;
+	document.getElementById('registration_tod').value = tod_selezionata;  
+	// alert(tod_selezionata);
+	});
+	*/
+	
+
+
+
+	//var number = "{{ session['ZMU_tod']}}";
+	 //$('input[name=ZMU_tod][value=' + number + ']').prop('checked',true);
+	 
+
+		
+	/*
+	var id_stay_type = "{{ session['id_stay_type']}}"
+    document.addEventListener("DOMContentLoaded", function(){
+	var staytype_selezionata =  id_stay_type;
+	document.getElementById('registration_staypoint').value = staytype_selezionata;  
+	// alert(staytype_selezionata);
+	});
+	
+	
+	
+	var number_staypoint = "{{ session['id_stay_type']}}";
+	 $('input[name=id_stay_type][value=' + number_staypoint + ']').prop('checked',true);
+	 */
+
 	
 	$('form select').on('change', function(){
 		$(this).closest('form').submit()
@@ -780,6 +924,49 @@ input::-webkit-inner-spin-button {
 	});
 	
 	
+	
+	/*
+	var stay_type = "{{ session['id_stay_type']}}"
+	// alert(stay_type);
+    document.addEventListener("DOMContentLoaded", function(){
+	var staytype_selezionata = stay_type;
+	// alert(staytype_selezionata);
+	document.getElementById('registrationstaypoint').value = staytype_selezionata;  
+	});
+	 */
+
+	
+	/*
+	var TYPE_data_costs = "{{session['costs_type']}}"	
+	// alert(TYPE_data_costs);
+	document.addEventListener("DOMContentLoaded", function(){
+	var costs_type_selezionata =  TYPE_data_costs;
+	// alert(costs_type_selezionata);
+	document.getElementById('registration_costs_type').value = costs_type_selezionata;   
+	});
+	*/
+	
+	
+	/*
+	var TYPE_data_external = "{{session['external_type']}}"	
+	// alert(TYPE_data_external);
+	document.addEventListener("DOMContentLoaded", function(){
+	var external_type_selezionata =  TYPE_data_external;
+	// alert(external_type_selezionata);
+	document.getElementById('registration_external_type').value = external_type_selezionata;   
+	});
+	*/
+
+
+
+ 	
+	var scenario_data = "{{session['scenario_type']}}"	
+	//alert(scenario_data);
+	document.addEventListener("DOMContentLoaded", function(){
+	var scenario_type_selezionata =  scenario_data;
+	//alert(scenario_type_selezionata);
+	document.getElementById('scenario_data_type').value = scenario_type_selezionata;   
+	});
 	 
  
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -788,8 +975,19 @@ input::-webkit-inner-spin-button {
    var aggregated_recharge_zmu = JSON.parse(JSON.stringify({{session['aggregated_recharge'] | tojson | safe}}));
    aggregated_recharge_zmu = "[" + aggregated_recharge_zmu + "]";
    var aggregated_recharge_zmu = eval(aggregated_recharge_zmu );
+   
+   
+   
+   var points_staypoints = JSON.parse(JSON.stringify({{session['home_staypoints'] | tojson | safe}}));
+   points_staypoints = "[" + points_staypoints + "]";
+   var points_staypoints = eval(points_staypoints );
+   
+
+	
 
 
+ 
+ 
 	
 	 ///////////////////////////---------------------------------------------------------------------/////////////////////////////////////////////
 	  ///////////////////////////---------------------------------------------------------------------////////////////////////////////////////////
@@ -834,16 +1032,38 @@ input::-webkit-inner-spin-button {
 		
   plot_factor_recharge = 1.5
   function getColor_zmu_origin_destinations_recharge(d) {
-							return d >= 60/plot_factor_recharge ? '#071a4f' :
-							d > 50/plot_factor_recharge  ? '#384772' :
-							d > 30/plot_factor_recharge  ? '#6a7595' :
-							d > 20/plot_factor_recharge  ? '#7fcdbb' :
-							d > 10/plot_factor_recharge  ? '#b4baca' : 
-							d > 5/plot_factor_recharge  ? '#d5df9f' :
-							d > 2/plot_factor_recharge  ? '#c7e9b4' :
+							return d >= 1000/plot_factor_recharge ? '#071a4f' :
+							//d > 400/plot_factor_recharge  ? '#0c2c84' :
+							// d > 300/plot_factor_recharge  ? '#071a4f' : 
+							d > 500/plot_factor_recharge  ? '#384772' :
+							d > 250/plot_factor_recharge  ? '#6a7595' :
+							d > 120/plot_factor_recharge  ? '#7fcdbb' :
+							d > 60/plot_factor_recharge  ? '#b4baca' : 
+							d > 30/plot_factor_recharge  ? '#d5df9f' :
+							d > 10/plot_factor_recharge  ? '#c7e9b4' :
 							d >= 0/plot_factor_recharge   ? '#fdfdbf' : '#fdfdbf';
 							}   
+				
 				 
+				 
+
+			
+ plot_factor_staypoints = 1.5
+	function getColor_zmu_staypoints(d) {
+		return d >= 20000/plot_factor_staypoints ? '#071a4f' :
+		    d > 10000/plot_factor_staypoints  ? '#0c2c84' :
+		    d > 7000/plot_factor_staypoints  ? '#225ea8' : 
+			d > 5000/plot_factor_staypoints  ? '#546ba8' :
+			d > 2000/plot_factor_staypoints ? '#1d91c0' :
+			d > 1000/plot_factor_staypoints  ? '#41b6c4' :
+			d > 500/plot_factor_staypoints  ? '#7fcdbb' :
+			d > 200/plot_factor_staypoints  ? '#c7e9b4' :
+			d > 50/plot_factor_staypoints  ? '#d5df9f' :
+			d >= 1/plot_factor_staypoints   ? '#fdfdbf' : '#fdfdbf';
+			}  			
+     
+	  
+
 				
 		
 	function getColor_census(d) {
@@ -872,15 +1092,18 @@ input::-webkit-inner-spin-button {
                 var div=L.DomUtil.create('div','info legend');
 							
 		
-			      const labels=["from 0 to 2",
-								"from 2 to 5",
-								"from 5 to 10",
-								"from 10 to 20",
-								"from 20 to 30",
-							     "from 30 to 50",
-								 "from 50 to 60",
-								" > 60"];
-				 const grades = [0, 2, 5, 10, 20, 30, 50, 60];
+				const labels=["from 0 to 10",
+								"from 10 to 30",
+								"from 30 to 60",
+								"from 60 to 120",
+								"from 120 to 250",
+							     "from 250 to 500",
+								 "from 500 to 1000",
+								 //"from 300 to 400",
+								 //"from 400 to 500",
+								 // "from 33 to 66",
+								" > 1000"];
+				 const grades = [0, 10, 30, 60, 120, 250, 500, 1000];
 				 
 				 
 				 
@@ -898,6 +1121,39 @@ input::-webkit-inner-spin-button {
 			
 
 
+
+
+		var legend_ZMU_staypoints = L.control({position: 'bottomright'});
+		
+            legend_ZMU_staypoints.onAdd=function(map){
+                var div=L.DomUtil.create('div','info legend');
+							
+			
+				const labels=["from 1 to 50",
+								"from 50 to 200",
+								"from 200 to 500",
+								"from 500 to 1000",
+								"from 1000 to 2000",
+							     "from 2000 to 5000",
+								 "from 5000 to 7000",
+								 "from 7000 to 10000",
+								 "from 10000 to 20000",
+								 // "from 33 to 66",
+								" > 20000"];
+				 const grades = [1, 50, 200, 500, 1000, 2000, 5000, 7000, 10000, 20000];
+				 
+  
+                div.innerHTML='<div><b>n. Staypoints (Home)</div';
+		
+				
+			  for(var i=0; i <grades.length; i++){
+					 div.innerHTML+='<i style="background:'+getColor_zmu_staypoints(grades[i]) + ' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i]+'<br/>';        						 
+                }
+                return div;
+            }
+	
+
+			
 			
 			
 
@@ -956,12 +1212,30 @@ input::-webkit-inner-spin-button {
 				color: 'black',
 				dashArray: '3',
 				fillOpacity: 0.8,
-			    fillColor: getColor_zmu_origin_destinations_recharge(feature.properties.energy/plot_factor_recharge)
+			    fillColor: getColor_zmu_origin_destinations_recharge(feature.properties.mean_energy/plot_factor_recharge)
 			};
 		}
 		
 	
 
+
+	plot_factor_staypoints = 1.5
+	
+		function style_colors_zmu_staypoints(feature) {
+			return {
+				weight: 0.5,
+				opacity: 0.3,
+				color: 'black',
+				dashArray: '3',
+				fillOpacity: 0.8,
+			    fillColor: getColor_zmu_staypoints(feature.properties.homes/plot_factor_staypoints)
+			};
+		}
+		
+		
+		 	
+
+		
 
 		
 		 	
@@ -1043,11 +1317,19 @@ input::-webkit-inner-spin-button {
 	
 			
 		// -------->show TIMESERIES of mean "Number of Vehicles", "triptime", "tripdistance" and "stoptime" @ DESTINATION zone in Plotly within the tooltip...---------------------/////////////////////
-		const time_series_recharge_profile = '<iframe src="{{ url_for('figure_plotly30') }}" width="625" height="410"></iframe>'
+		//const time_series_ec = '<iframe src="{{ url_for('figure_plotly6') }}" width="325" height="210"></iframe>'
+		//const time_series_ec_wtt = '<iframe src="{{ url_for('figure_plotly7') }}" width="325" height="210"></iframe>'
+		//const time_series_nox = '<iframe src="{{ url_for('figure_plotly8') }}" width="325" height="210"></iframe>'
+		//const time_series_nmvoc = '<iframe src="{{ url_for('figure_plotly9') }}" width="325" height="210"></iframe>'
+		//const time_series_pm = '<iframe src="{{ url_for('figure_plotly10') }}" width="325" height="210"></iframe>'
+		//const time_series_pm_nexh = '<iframe src="{{ url_for('figure_plotly11') }}" width="325" height="210"></iframe>'
+		//const time_series_co2eq = '<iframe src="{{ url_for('figure_plotly12') }}" width="325" height="210"></iframe>'
+		//const time_series_co2eq_wtt = '<iframe src="{{ url_for('figure_plotly13') }}" width="325" height="210"></iframe>'
+		
+		const time_series_recharge_profile = '<iframe src="{{ url_for('figure_plotly30') }}" width="525" height="310"></iframe>'
 		
 		
 			
-		
 		
 		///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
 		/////// ----- RECHARGE ---------------------------------------------------------------------------------///////////////////////////////////////////////////////////
@@ -1079,13 +1361,22 @@ input::-webkit-inner-spin-button {
 				
 				
 				var popup_zmu = '';
+				//popup_zmu += time_series_ec;
+				//popup_zmu += time_series_ec_wtt;
+				//popup_zmu += time_series_nox;
+				//popup_zmu += time_series_nmvoc;
+				//popup_zmu += time_series_pm;
+				//popup_zmu += time_series_pm_nexh;
+				//popup_zmu += time_series_co2eq;
+				//popup_zmu += time_series_co2eq_wtt;
 				popup_zmu += time_series_recharge_profile
 				
-				popup_zmu += (feature.properties.energy) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Recharge Energy[kWh]: ' + feature.properties.energy : '';
+				popup_zmu += (feature.properties.mean_energy) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Recharge Energy [kWh]: ' + feature.properties.mean_energy : '';
+				popup_zmu += (feature.properties.homes) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Total Staypoints (Home): ' + feature.properties.homes : '';
 				popup_zmu += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
 				popup_zmu += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
-				popup_zmu += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
-				popup_zmu += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				// popup_zmu += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				//popup_zmu += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
 				popup_zmu += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
 				
 				layer.bindPopup(popup_zmu ,{maxWidth : 670}); 
@@ -1109,6 +1400,81 @@ input::-webkit-inner-spin-button {
 		///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
 		
 			
+		
+		
+		
+		
+		
+		///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+		/////// ----- RECHARGE + STAYPOINTS ---------------------------------------------------------------------------------///////////////////////////////////////////////////////////
+		
+			  var staypoints_home_recharge = L.geoJSON(aggregated_recharge_zmu, { style: style_colors_zmu_staypoints, 	
+			  onEachFeature: function (feature, layer) {
+			  layer.on('click', function () {
+			   layer.setStyle(selectedStyle_highlight);
+			   	var feature_variable = layer.feature.properties.index_zmu;
+				 // alert("The variable named x1 has value:  " + feature_variable);
+				 
+				 //----> send layer.feature.properties.zmu to python
+				 fetch('/process_zmu_index', {
+					  method: 'POST',
+					  headers: {
+						'Content-Type': 'application/json'
+					  },
+					  body: JSON.stringify({data: feature_variable})
+					})
+					.then(response => response.text())
+					.then(result => {
+					  console.log(result);
+					})
+					.catch(error => {
+					  console.error('Error:', error);
+					});
+				 
+			  });
+				
+				
+				var popup_zmu = '';
+				//popup_zmu += time_series_ec;
+				//popup_zmu += time_series_ec_wtt;
+				//popup_zmu += time_series_nox;
+				//popup_zmu += time_series_nmvoc;
+				//popup_zmu += time_series_pm;
+				//popup_zmu += time_series_pm_nexh;
+				//popup_zmu += time_series_co2eq;
+				//popup_zmu += time_series_co2eq_wtt;
+				popup_zmu += time_series_recharge_profile
+				
+				popup_zmu += (feature.properties.mean_energy) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Recharge Energy [kWh]: ' + feature.properties.mean_energy : '';
+				popup_zmu += (feature.properties.homes) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Total Staypoints (Home): ' + feature.properties.homes : '';
+				popup_zmu += (feature.properties.nome_comun) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Comune: ' + feature.properties.nome_comun : '';
+				popup_zmu += (feature.properties.quartiere) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Quartiere: ' + feature.properties.quartiere : '';
+				// popup_zmu += (feature.properties.index_zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu index: ' + feature.properties.index_zmu : '';
+				//popup_zmu += (feature.properties.zmu) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">zmu: ' + feature.properties.zmu : '';
+				popup_zmu += (feature.properties.POP_TOT_ZMU) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Population: ' + feature.properties.POP_TOT_ZMU : '';	
+				
+				layer.bindPopup(popup_zmu ,{maxWidth : 670}); 
+				layer.on('mouseout', function (e) {
+					layer.setStyle(selectedStyle_mouseout); 
+				});
+                 
+                layer.on('mouseover', function (e) {
+					layer.setStyle(selectedStyle_mouseover); 
+				});				 
+			}
+				
+			});
+		
+			
+		const mapmatched_Layer_staypoints_home = L.layerGroup();
+		mapmatched_Layer_staypoints_home.addLayer(staypoints_home_recharge);
+		
+		
+		
+		///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
+		
+		
+		
 		
 		
 
@@ -1207,7 +1573,8 @@ input::-webkit-inner-spin-button {
 	////------------------------------------------------------------////////////////////////////// 
 	var EV_charging_layer_OCM = L.geoJSON(EV_chargers_OCM, {
 	   onEachFeature: function (feature, layer) {
-	
+		//layer.bindTooltip('<h2>'+feature.properties.OperatorInfo+'</h2><p>n.points: '+feature.properties.NumberOfPoints +'<br>power(kW):'+feature.properties.Power+'</p>');
+		
 		var popupTextt = '';
 					popupTextt += (feature.properties.OperatorInfo) ? '<h2 style="font-size: 20px;  font-family: Arial; font-weight: bold;">Operator: ' + feature.properties.OperatorInfo : '</h2>';
 					popupTextt += (feature.properties.NumberOfPoints) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">n.points: ' + feature.properties.NumberOfPoints : '</h2>' ;	
@@ -1229,8 +1596,12 @@ input::-webkit-inner-spin-button {
 	}).addTo(OCM_Layer);
 					
 
-		
+
+ //alert(TYPE_dow);	
+ // alert("---- I am here ------");			
 			
+			
+		
 			
     /////////---------------------------------/////////////////////////////////////////	
     /////////---------------------------------/////////////////////////////////////////	
@@ -1276,15 +1647,26 @@ input::-webkit-inner-spin-button {
 	    
 		const overlays = {
 			"<span style='color:black; font-size: 20px;'>Simulated Recharge Energy (kW)</span>": mapmatched_Layer_recharge_by_day,
+			"<span style='color:black; font-size: 20px;'>N. Staypoints (Home)</span>": mapmatched_Layer_staypoints_home,
+			// "<span style='color:black; font-size: 20px;'>NOx Emissions</span>": mapmatched_Layer_zmu_nox,
+			 //"<span style='color:black; font-size: 20px;'>NOx Costs @Origin</span>": mapmatched_Layer_zmu_nox_cost,
+			 // "<span style='color:black; font-size: 20px;'>Free Flow Cost  @Origin</span>": mapmatched_Layer_zmu_free_flow_cost,
+			 //  "<span style='color:black; font-size: 20px;'>Real Flow Cost @Origin</span>": mapmatched_Layer_zmu_real_cost,
+			 //   "<span style='color:black; font-size: 20px;'>Delta Flow Cost @Origin</span>": mapmatched_Layer_zmu_deltatime_cost,
+			//	 "<span style='color:black; font-size: 20px;'>Accidentalities Cost @Origin</span>": mapmatched_Layer_zmu_acc_cost,
+			 "<span style='color:black; font-size: 20px;'>Staypoints (Home)</span>": stay_points_layer,
+			//'Staypoints': stay_points_layer,
 			"<span style='color:black; font-size: 20px;'>Charging Stations (Open Charge Map)</span>": OCM_Layer,
+			//'Charging Stations (Open Charge Map)': OCM_Layer,
 		};
 		
 	
 		const layerControl = L.control.layers(overlays, baseLayers ,{collapsed:false,}).addTo(map);	
 		const layerControl_collapsed = L.control.layers(baseLayers, overlays).addTo(map);
+		// const layerControl = L.control.layers(baseLayers, overlays ,{collapsed:false,}).addTo(map);	
 		
-				/* ----->  ADD TITLE -----*/
-		$(".leaflet-top" + ".leaflet-right").children().eq(1).prepend('<div id="mapTitle" style="text-align: center;"><span style="font-size:16pt">Overlay Layers</span></div>');
+		/* ----->  ADD TITLE -----*/
+	    $(".leaflet-top" + ".leaflet-right").children().eq(1).prepend('<div id="mapTitle" style="text-align: center;"><span style="font-size:16pt">Overlay Layers</span></div>');
 		
 		
 	legend_ZMU.addTo(map);
@@ -1292,16 +1674,22 @@ input::-webkit-inner-spin-button {
 	
 	
 	map.on('baselayerchange', function (eventLayer) {
-    if (eventLayer.name ===   "<span style='color:black; font-size: 20px;'>NOx Emissions</span>") {
+    if (eventLayer.name ===   "<span style='color:black; font-size: 20px;'>Simulated Recharge Energy (kW)</span>") {
         map.removeControl(currentLegend);
         currentLegend = legend_ZMU;
         legend_ZMU.addTo(map);		
     }
-	 else if  (eventLayer.name ===  "<span style='color:black; font-size: 20px;'>NOx Costs @Origin</span>") {
+	 else if  (eventLayer.name ===  "<span style='color:black; font-size: 20px;'>N. Staypoints (Home)</span>") {
         map.removeControl(currentLegend );
-        currentLegend = legend_ZMU_NOX;
-        legend_ZMU_NOX.addTo(map);
+        currentLegend = legend_ZMU_staypoints;
+        legend_ZMU_staypoints.addTo(map);
 		}
+	});
+	
+	
+	
+	/*
+	
     else if  (eventLayer.name === "<span style='color:black; font-size: 20px;'>Free Flow Cost  @Origin</span>") {
         map.removeControl(currentLegend );
         currentLegend = legend_free_flow_cost;
@@ -1327,7 +1715,8 @@ input::-webkit-inner-spin-button {
         currentLegend = legend_noise_flow_cost;
         legend_noise_flow_cost.addTo(map);
 		}  
-  });
+  
+  */
 	
 		
 	const cens_layer = L.layerGroup([censuary_default]);
@@ -1336,7 +1725,6 @@ input::-webkit-inner-spin-button {
 	() => map.getViewPort().resize());
 	
 	
-
   </script>
 </body>
 </html>
