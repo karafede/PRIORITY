@@ -5,6 +5,7 @@
 <style type="text/css">
 
 
+
 	 body {
 	    padding: 0;
         margin: 0;
@@ -141,12 +142,16 @@ p.copyright {
     position: absolute;
     width: 100%;
     color: black;
-    line-height: 40px;
+    line-height: 20px;
     font-weight: bold;
     font-size: 0.9em;
     text-align: center;
     bottom:0;
 }
+
+
+p { margin-bottom: 5;}
+
 
 
  </style>
@@ -155,6 +160,16 @@ p.copyright {
 	
 	 
 </head>
+
+
+<script type="text/javascript" src="https://embeds.iubenda.com/widgets/a5489232-a044-4760-bc1f-981b2a3ed23c.js"></script>
+
+
+<!--script type="text/javascript" src="https://embeds.iubenda.com/widgets/a5489232-a044-4760-bc1f-981b2a3ed23c.js"></script-->
+<a href="https://www.iubenda.com/privacy-policy/89474937" class="iubenda-black iubenda-noiframe iubenda-embed iubenda-noiframe " title="Privacy Policy ">Privacy Policy</a><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
+<a href="https://www.iubenda.com/privacy-policy/89474937/cookie-policy" class="iubenda-black iubenda-noiframe iubenda-embed iubenda-noiframe " title="Cookie Policy ">Cookie Policy</a><script type="text/javascript">(function (w,d) {var loader = function () {var s = d.createElement("script"), tag = d.getElementsByTagName("script")[0]; s.src="https://cdn.iubenda.com/iubenda.js"; tag.parentNode.insertBefore(s,tag);}; if(w.addEventListener){w.addEventListener("load", loader, false);}else if(w.attachEvent){w.attachEvent("onload", loader);}else{w.onload = loader;}})(window, document);</script>
+
+
    <meta name="description" content="Leaflet Template">
   <title>RdS-ENEA</title>
   <!--meta name="viewport" content="initial-scale=1.0"-->
@@ -168,6 +183,7 @@ p.copyright {
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
+  
 
 
 <body>
@@ -179,28 +195,20 @@ p.copyright {
 
 
 
+
 <nav role='navigation'>
+
+
   <a class="col_home" href="/home_page/">Home</a>
   <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
-  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
   <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
-  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a class="col_scenari" href="/modal/">Avoid-Shift measures</a>
   <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
   <a class="col_impatti" href="/impacts_page/">Impacts</a>
-  <!--a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a-->
-  <a class="col_best" onclick="$('#loading').show();" href="/best_page/">Best</a>
 </nav>  
 
 
 
-
- <!--div class="rds_logo">
-    <img src="/static/logo-rds.png" alt="logo">
- </div-->
-  
- <!--div class="img_ENEA">
-    <img src="/static/logo_ENEA_ROMA3.png" alt="logo" height="15%" width="15%">
- </div-->
  
  
   <div class="img_ENEA">
@@ -208,36 +216,27 @@ p.copyright {
  </div>
  
  
- <!--img src="ENEA_logo.png" alt="click here" height="300px" width="300px" /-->
 
-  
-  <!--div class="rds_logo">
-    <img src="/static/FCD_animated_points.gif" alt="logo"  height="20%" width="20%">
- </div-->
- 
-   <!--div class="rds_logo">
-    <img src="/static/TPL_animation.gif" alt="logo"  height="20%" width="20%">
- </div-->
- 
- 
-  <!--div class="FCD_trips_animation">
-    <img src="/static/short_FCD_trip_animation.gif" alt="logo" height="35%" width="35%">
- </div-->
-  
 
- 
-  <!--div class="SUMPS_logo">
-    <img src="/static/SUMPs logo.png" alt="logo" height="80%" width="80%">
- </div-->
- 
+
 
 <footer>
-    <p class="copyright">designed by Federico Karagulian @ENEA</p>
+
+
+<p class="copyright"> Dichiarazione di Accessibilit&agrave: <a href="mailto:info@example.com">accessibilit&agrave.priority@enea.it<a><br> 
+<a href="https://form.agid.gov.it/eanln_rm/priority.enea.it/dichiarazione">Dichiarazione di accessibilit&agrave</a><br>
+<a href="/home_page/">Privacy</a><br>
+per le finalit&agrave progettuali il sito non pu&ograve rispondere alle specifiche di accessibilit&agrave</p>
+
+
 </footer>
 
 
-  <script>
 
+
+
+  <script>
+  
      // ----------------------------------------------------
      
 
@@ -258,12 +257,13 @@ p.copyright {
     ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
     ///////////////////////////---------------------------------------------------------------------//////////////////////////////////////////////
 	 
-	
 	window.addEventListener('resize', 
 	() => map.getViewPort().resize());
 	
-	
-
   </script>
+  
+
 </body>
 </html>
+
+

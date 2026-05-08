@@ -22,6 +22,8 @@
 	}
 
 
+
+	
 	
 	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
 	.legend { text-align: left; line-height: 29px; color: #555; font-size: 25px} .legend i { width: 10px; height: 10px; float: left; margin-right: 6px; margin-top: 6px; opacity: 0.7}
@@ -610,7 +612,7 @@ input::-webkit-inner-spin-button {
 <div id="loader"></div>
 
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<!--script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 
@@ -625,6 +627,7 @@ input::-webkit-inner-spin-button {
 <div id="loading"></div>
 
 <main class="inline-block-center">
+
 
 <!--insert new line-->
 <br>
@@ -642,6 +645,7 @@ input::-webkit-inner-spin-button {
 
 
 
+
 	<form method="POST" action="/FCD_hour_selector/">	
 	<span class="label tpl_line">Hour range:</span>
 	<select class="FCD_hour_selector" name="FCD_hourrange" id="registrationhourrange" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange="this.form.submit()";>
@@ -653,9 +657,10 @@ input::-webkit-inner-spin-button {
 			<option value="4">16:00 ---> 20:00</option>
 			<option value="5">20:00 ---> 24:00</option>
 		</select>
+		<!-- Radio buttons-->
 	</form>
 	
-	
+	<!--insert new line-->
 <br>
 
 
@@ -699,24 +704,25 @@ input::-webkit-inner-spin-button {
   <div id="map"></div>
   
 
- 
-<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
+
+  <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script-->
   <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
   <script src="{{ url_for('static', filename='AnimatedMarker.js') }}" /></script>
 
-  <script src="{{ url_for('static', filename='selected_trip_path_FCD.txt') }}" /></script>
-  
-  
 <script>
 	
 
-	
+	 var lat_ORIGIN_province = "{{ session['lat_ORIGIN_province']}}"
+	 var lon_ORIGIN_province = "{{ session['lon_ORIGIN_province']}}"
+	 // alert(lat_ORIGIN_province);
+	 // alert(lon_ORIGIN_province);
 	
 	 //  date range picker //
 	$(function() {
 	  $('input[name="daterange"]').daterangepicker({
 		opens: 'left'
 	  }, function(start, end, label) {
+		  //alert("A new date range was chosen: " + start.format('MM-DD-YYYY') + ' to ' + end.format('MM-DD-YYYY'));
 		  alert('---- ONLY CHOOSE AN INTERVAL OF 1 OR 2 DAYS ----');
 		  var daterange_FCD = start.format('MM-DD-YYYY');
 		  //  alert(start_daterange);
@@ -811,6 +817,8 @@ input::-webkit-inner-spin-button {
 	
 	 function getColor_trials_origin_destinations(d) {
 		return d >= 2000 ? '#ffff00' :
+		    //d >= 1000  ? '#ffa500' : 
+			//d >= 150  ? '#ff0000' :
 			d >= 10   ? '#0000ff' : '#0000ff';
 			}    
 
@@ -827,8 +835,12 @@ input::-webkit-inner-spin-button {
 				 
 				  // multiply by factor a == 7
 				  const labels=["Origin of trip"];
+								//"from 150 to 1000",
+								//"from 1000 to 2000",
+								//" > 2000"];
 				 const grades = ["aaaaaa"];
 
+                // div.innerHTML='<div><b>Number of trips (O <--> D)</b></div';
 				
 			  for(var i=0; i <grades.length; i++){
 					 div.innerHTML+='<i style="background:'+getColor_trials_origin_destinations(grades[i]) +' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i] +'<br/>';        						 
@@ -887,6 +899,18 @@ input::-webkit-inner-spin-button {
 		}
 		
 		
+   
+   
+   
+   
+     
+ fetch("{{ url_for('static', filename='charging_stations_ZMU.geojson') }}")
+  .then(response => response.json())
+  .then(charging_data => {
+    // console.log(data);
+    // use your GeoJSON here
+  //alert(charging_data);
+  
 		
 		/// add ZMU zones  borders  /////////////////////////////////////////////////////
 		var ZMU_zones = L.geoJSON(charging_data, { style: style_colors_ZMU_zones, 	
@@ -921,8 +945,22 @@ input::-webkit-inner-spin-button {
 		'Carto': carto
 		};
 		
-
+// });
 		
+
+
+
+
+
+     
+ fetch("{{ url_for('static', filename='selected_trip_path_FCD.txt') }}")
+  .then(response => response.text())
+  .then(route_FCD => {
+    // console.log(data);
+    // use your GeoJSON here
+  //alert(route_FCD);
+  var route_FCD = eval(route_FCD);
+  
 
 
 
@@ -942,7 +980,8 @@ input::-webkit-inner-spin-button {
       tileUrl : 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
       overlayTileUrl : 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
       tileAttrib :  '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-      initLatLng : new L.LatLng(41.90266120539129, 12.492052587659225), // ROMA
+      // initLatLng : new L.LatLng(41.90266120539129, 12.492052587659225), // ROMA
+	  initLatLng : new L.LatLng(lat_ORIGIN_province, lon_ORIGIN_province), // center of the province
       initZoom : 11,
       minZoom : 5,
       maxZoom : 17
@@ -951,17 +990,26 @@ input::-webkit-inner-spin-button {
   var map = L.map('map', {minZoom: config.minZoom, 
 						  maxZoom: config.maxZoom}),
 						  
+						  
       routeLines = route_FCD,
       markers = [];
+      //route_id = trip_FCD_params;
 	  map.addLayer(new L.TileLayer(config.tileUrl, {attribution: config.tileAttrib}));
 	  map.addLayer(new L.TileLayer(config.overlayTileUrl));
-	  map.setView(config.initLatLng, config.initZoom);	 
+	  map.setView(config.initLatLng, config.initZoom);
+	  // const ZMU_zones_Layer = L.layerGroup();	 
  
   $.each(routeLines, function(i, routeLine) {
     var marker = L.animatedMarker(routeLine.getLatLngs(), {
       icon: bikeIcon,
 	  //route_id: route_id[i],
       autoStart: false,
+    //onEnd: function() {
+     //   $(this._shadow).fadeOut();
+     //   $(this._icon).fadeOut(3000, function(){
+     //   map.removeLayer(this);
+     //   });
+    //}
     });
 	
 	
@@ -971,8 +1019,14 @@ input::-webkit-inner-spin-button {
 	markers.push(marker);
 	
 
+	
+	
+	 //marker.bindPopup('LatLng: ' + marker.options.route_id+"");  // OK!!!, this must be repeated below...---->
+
 	 marker.on('mouseover', function(e){
       this.openPopup();
+	  	    // alert("...current Lat, Lon..."+ e.latlng.lat);
+			//marker.bindPopup('' +  marker.options.route_id+""  );    ///OK!!!!!!!!
     })
   });
 
@@ -998,7 +1052,11 @@ legend_TRIALS.addTo(map);
 
 
 
-	
+
+});  //closs fetch
+
+}); // close fetch for ZMU_zones
+			
 		
 
 

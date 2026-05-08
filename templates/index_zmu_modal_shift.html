@@ -612,7 +612,6 @@ input::-webkit-inner-spin-button {
 </head>
   <meta name="description" content="Leaflet Template">
   <title>RdS-ENEA</title>
-  <!--meta name="viewport" content="initial-scale=1.0"-->
   <meta name="viewport" content="initial-scale=1, maximum-scale=1">
   <meta charset="utf-8">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
@@ -624,7 +623,7 @@ input::-webkit-inner-spin-button {
 <div id="loader"></div>
 
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<!--script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 
@@ -676,17 +675,13 @@ input::-webkit-inner-spin-button {
 	
 	
 	
-		<div class="break_line_1"></div>
 	
 
-
-
-	 <form action="/ZMU_paths/" method="POST">
-		 <!--div class="break_line"></div-->
+	 <!--form action="/ZMU_paths/" method="POST">
 		 <br>
 		<input class="btn_CSA btn-lg btn-primary mr-1" style="margin-left: 0%; margin-top: -10%; color:blue;" type="submit" value="Zones Connectivity">
 	</p>
-    </form>
+    </form-->
 	
 	
 	
@@ -730,10 +725,12 @@ input::-webkit-inner-spin-button {
   
 <!-- Load data .geojson -->
 <!-- ZMU zones with population data -->
-<script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script>
+<!--script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script-->
+
  <script src="{{ url_for('static', filename='leaflet.motion.min.js') }}" /></script>  
-<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
-<script src="{{ url_for('static', filename='aggregated_modal_work.geojson') }}" /></script>
+ 
+<!--script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script-->
+<!--script src="{{ url_for('static', filename='aggregated_modal_work.geojson') }}" /></script-->
 
 
   <script>
@@ -966,7 +963,15 @@ input::-webkit-inner-spin-button {
 		
 	
 	
-       
+
+ fetch("{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}")
+  .then(response => response.json())
+  .then(zmu_counts => {
+    // console.log(data);
+    // use your GeoJSON here
+  //alert(zmu_counts);
+  
+  
 		
 		/// add ZMU zones  borders  /////////////////////////////////////////////////////
 		var censuary_default = L.geoJSON(zmu_counts, { style: style_pop, 	
@@ -997,7 +1002,7 @@ input::-webkit-inner-spin-button {
 		censuary_Layer.addLayer(censuary_default);		
 	
 	
-
+  // });
 		
 
 		
@@ -1032,6 +1037,18 @@ input::-webkit-inner-spin-button {
 		}
 		
 		
+   
+   
+   
+   
+     
+   fetch("{{ url_for('static', filename='charging_stations_ZMU.geojson') }}")
+  .then(response => response.json())
+  .then(charging_data => {
+    // console.log(data);
+    // use your GeoJSON here
+    // alert(charging_data);
+     
 		
 		/// add ZMU zones  borders  /////////////////////////////////////////////////////
 		var ZMU_zones = L.geoJSON(charging_data, { style: style_colors_ZMU_zones, 	
@@ -1056,12 +1073,22 @@ input::-webkit-inner-spin-button {
 		const ZMU_zones_Layer = L.layerGroup();
 		ZMU_zones_Layer.addLayer(ZMU_zones);	
 		
-		
+		// });	
 		
 		
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////----------- AGGREGATED TPL routing DATA in ZMUs areas by HOURS -------//////////////////////////////////////////
 
+
+   fetch("{{ url_for('static', filename='aggregated_modal_work.geojson') }}")
+  .then(response => response.json())
+  .then(aggregated_modal_zmu_work => {
+    // console.log(data);
+    // use your GeoJSON here
+     //alert(aggregated_modal_zmu_work);
+     
+     
+     
 	
 	/////// ----- Modal SHIFT data --------------------------------------------------////////////////////////////////////////
 		
@@ -1091,7 +1118,7 @@ input::-webkit-inner-spin-button {
 		
    ///// ----------------------------------------------------------------------------------------------------- //////////////////////////////////////////////////////////
 		
-	
+			// });
 		
 		
 	/////////---------------------------------/////////////////////////////////////////	
@@ -1161,11 +1188,15 @@ input::-webkit-inner-spin-button {
 		$(".leaflet-top" + ".leaflet-right").children().eq(1).prepend('<div id="mapTitle" style="text-align: center;"><span style="font-size:16pt">Overlay Layers</span></div>');
 		
 		
-
-		
-
 	
 		
+
+		});	// cloese one fetch for zones
+   
+			});	// cloese one fetch for charging data
+      
+      	});	// cloese one fetch for aggregated modal data
+       
 
 	window.addEventListener('resize', 
 	() => map.getViewPort().resize());

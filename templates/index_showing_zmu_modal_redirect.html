@@ -595,7 +595,7 @@ input::-webkit-inner-spin-button {
  <!--start the SPINNER or LOADER-->
 <div id="loader"></div>
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<!--script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 
@@ -646,11 +646,7 @@ input::-webkit-inner-spin-button {
   <h3 style="font-weight: bold">Private Transport: time reduction</h3>
 	<form method="POST" action="/modal_selected_private/">	
 	<select class="indicator" name="modal_pt" id="registration_modal" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
-			<!--option value="101">--- choose ---</option-->
 			<option value="103">0%</option>
-			<!--option value="104">0.85%</option>
-			<option value="105">0.9%</option>
-			<option value="106">0.95%</option-->
 	</select>
 	</form>
  <br>
@@ -702,10 +698,12 @@ input::-webkit-inner-spin-button {
   
 <!-- Load data .geojson -->
 <!-- ZMU zones with population data -->
-<script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script>
+<!--script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script-->
+
  <script src="{{ url_for('static', filename='leaflet.motion.min.js') }}" /></script>  
-<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
-<!--script src="{{ url_for('static', filename='aggregated_modal_work.geojson') }}" /></script-->
+ 
+<!--script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script-->
+
 
 		
 
@@ -943,6 +941,14 @@ input::-webkit-inner-spin-button {
 		
 	
 	
+ 
+ fetch("{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}")
+  .then(response => response.json())
+  .then(zmu_counts => {
+    // console.log(data);
+    // use your GeoJSON here
+  //alert(zmu_counts);
+  
        
 		
 		/// add ZMU zones  borders  /////////////////////////////////////////////////////
@@ -973,7 +979,7 @@ input::-webkit-inner-spin-button {
 	    const censuary_Layer = L.layerGroup();
 		censuary_Layer.addLayer(censuary_default);		
 	
-	
+	// });		
 
 		
 
@@ -1010,6 +1016,17 @@ input::-webkit-inner-spin-button {
 		
 		
 		
+   
+   
+       fetch("{{ url_for('static', filename='charging_stations_ZMU.geojson') }}")
+  .then(response => response.json())
+  .then(charging_data => {
+    // console.log(data);
+    // use your GeoJSON here
+    // alert(charging_data);
+    
+    
+    
 		/// add ZMU zones  borders  /////////////////////////////////////////////////////
 		var ZMU_zones = L.geoJSON(charging_data, { style: style_colors_ZMU_zones, 	
 				  onEachFeature: function (feature, layer) {
@@ -1032,16 +1049,13 @@ input::-webkit-inner-spin-button {
 	
 		const ZMU_zones_Layer = L.layerGroup();
 		ZMU_zones_Layer.addLayer(ZMU_zones);	
-		
+	
+ // });		
 		
 	
 	//alert("---- I am here --------");
 	
-	
-	</script>
 
-	    
-	 <script>
 	 
 	    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    ///------------- add ZMU grouped_zmu_paths  -------------------/////////////////////////////////////////////////////
@@ -1150,7 +1164,11 @@ input::-webkit-inner-spin-button {
 		
 		$(".leaflet-top" + ".leaflet-right").children().eq(1).prepend('<div id="mapTitle" style="text-align: center;"><span style="font-size:16pt">Overlay Layers</span></div>');
 		
-		
+	
+ 
+ 		});	// cloese one fetch for zones
+   
+			});	// cloese one fetch for charging data
 
 	
 	window.addEventListener('resize', 

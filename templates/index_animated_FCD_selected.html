@@ -21,6 +21,13 @@
 	  padding: 0;
 	}
 
+
+	//.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+	//.legend { text-align: left; line-height: 13px; color: #555; font-size: 1.075em} .legend i { width: 12px; height: 12px; float: left; margin-right: 5px; opacity: 0.7; } 
+	//.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
+	// .legend_ZMU { text-align: left; line-height: 15px; color: #555;  font-size: 12px} 
+	
+	
 	
 	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
 	.legend { text-align: left; line-height: 29px; color: #555; font-size: 25px} .legend i { width: 10px; height: 10px; float: left; margin-right: 6px; margin-top: 6px; opacity: 0.7}
@@ -592,7 +599,6 @@ input::-webkit-inner-spin-button {
 </head>
   <meta name="description" content="Leaflet Template">
   <title>RdS-ENEA</title>
-  <!--meta name="viewport" content="initial-scale=1.0"-->
   <meta name="viewport" content="initial-scale=1, maximum-scale=1">
   <meta charset="utf-8">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
@@ -622,6 +628,7 @@ input::-webkit-inner-spin-button {
 <main class="inline-block-center">
 
 
+<!--insert new line-->
 <br>
 
  <h2 style="font-weight: bold; line-height: 1em;">Private mobility </h2> 
@@ -629,10 +636,13 @@ input::-webkit-inner-spin-button {
 <!--insert new line-->
 <br>
 
+
 <form id="mainform" action="/FCD_day_selector" method="POST" >
    <input type="text" id="daterange"  name="daterange" onchange="myFunction_daterange(event)" value="     ___from___to___" />
    <button type="submit">enter</button><br><br>
 </form>
+
+
 
 
 
@@ -688,15 +698,24 @@ input::-webkit-inner-spin-button {
   <div id="map"></div>
 
 
+
+  
+  <!--script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script-->
   <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
   <script src="{{ url_for('static', filename='AnimatedMarker.js') }}" /></script>
 
-
-<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
-
- 
+  
+  
+  
 <script>
 	
+	
+	
+	 var lat_ORIGIN_province = "{{ session['lat_ORIGIN_province']}}"
+	 var lon_ORIGIN_province = "{{ session['lon_ORIGIN_province']}}"
+	 // alert(lat_ORIGIN_province);
+	 // alert(lon_ORIGIN_province);
+	 
 
 	 //  date range picker //
 	$(function() {
@@ -706,6 +725,7 @@ input::-webkit-inner-spin-button {
 		  //alert("A new date range was chosen: " + start.format('MM-DD-YYYY') + ' to ' + end.format('MM-DD-YYYY'));
 		  alert('---- ONLY CHOOSE AN INTERVAL OF 1 OR 2 DAYS ----');
 		  var daterange_FCD = start.format('MM-DD-YYYY');
+		  //  alert(start_daterange);
 	  });
 	});
 	
@@ -787,6 +807,15 @@ input::-webkit-inner-spin-button {
 	// alert(route_FCD);
 	
 	
+    //var trip_FCD_params = "{{session_trip_FCD_params }}";
+	// var trip_destinations_FCD = "{{session_trip_destinations_FCD }}";
+	
+	// alert(trip_FCD_params);
+	// alert(trip_destinations_FCD);
+		
+
+	
+
 	
 	 function getColor_trials_origin_destinations(d) {
 		return d >= 2000 ? '#ffff00' :
@@ -808,9 +837,12 @@ input::-webkit-inner-spin-button {
 				 
 				  // multiply by factor a == 7
 				  const labels=["Origin of trip"];
+								//"from 150 to 1000",
+								//"from 1000 to 2000",
+								//" > 2000"];
 				 const grades = ["aaaaaa"];
 
-     
+                // div.innerHTML='<div><b>Number of trips (O <--> D)</b></div';
 				
 			  for(var i=0; i <grades.length; i++){
 					 div.innerHTML+='<i style="background:'+getColor_trials_origin_destinations(grades[i]) +' ">&nbsp;</i>&nbsp;&nbsp;' +labels[i] +'<br/>';        						 
@@ -867,6 +899,20 @@ input::-webkit-inner-spin-button {
 		
 		
 		
+   
+   
+   
+ 
+     
+ fetch("{{ url_for('static', filename='charging_stations_ZMU.geojson') }}")
+  .then(response => response.json())
+  .then(charging_data => {
+    // console.log(data);
+    // use your GeoJSON here
+  //alert(charging_data);
+  
+  
+  
 		/// add ZMU zones  borders  /////////////////////////////////////////////////////
 		var ZMU_zones = L.geoJSON(charging_data, { style: style_colors_ZMU_zones, 	
 				  onEachFeature: function (feature, layer) {
@@ -901,6 +947,9 @@ input::-webkit-inner-spin-button {
 		};
 		
 
+		
+// });
+		
 
 	
 (function(){
@@ -915,10 +964,14 @@ input::-webkit-inner-spin-button {
   
 
   var config = {
+      // tileUrl : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
 	   tileUrl : 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+      // overlayTileUrl : 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
 	  overlayTileUrl : 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+      // tileAttrib : 'Routing powered by <a href="http://opentripplanner.org/">OpenTripPlanner</a>, Map tiles &copy; Development Seed and OpenStreetMap ',
 	   tileAttrib : 'Routing powered by <a href="http://opentripplanner.org/">OpenTripPlanner</a>, Map tiles &copy; Development Seed and OpenStreetMap ',
-      initLatLng : new L.LatLng(41.90266120539129, 12.492052587659225), // ROMA
+      // initLatLng : new L.LatLng(41.90266120539129, 12.492052587659225), // ROMA
+	  initLatLng : new L.LatLng(lat_ORIGIN_province, lon_ORIGIN_province), // center of the province
       initZoom : 11,
       minZoom : 5,
       maxZoom : 17
@@ -934,10 +987,14 @@ input::-webkit-inner-spin-button {
 	map.setView(config.initLatLng, config.initZoom);
 	
 
+  //setInterval(function () {
   $.each(routeLines, function(i, routeLine) {
     var marker = L.animatedMarker(routeLine.getLatLngs(), {
       icon: bikeIcon,  
       autoStart: false,
+	//onEnd: function() {
+	//   map.removeLayer(this);
+	//   }
     });
 	
 	
@@ -945,14 +1002,21 @@ input::-webkit-inner-spin-button {
 	markers.push(marker);
  }); 
 
+  //    for( var i = 0; i < markers.length; i++) {
+//		markers[i].start();
+  //   }
+ //}, 5000);	
+ 
+ 	    
 
 // ----- ADD Traffic ZONES ------- //
 map.addLayer(ZMU_zones);
 const layerControl = L.control.layers(baseLayers, overlays ,{collapsed:false,}).addTo(map);	
 legend_TRIALS.addTo(map);
+	
 
-
-
+		
+			
  $(function() {
   $('#start').click(function() {
     console.log('start');
@@ -966,7 +1030,11 @@ legend_TRIALS.addTo(map);
 
 
 
+	});   // close one fetch for ZMU_zone
+
 	
+
+
 </script>
 
    

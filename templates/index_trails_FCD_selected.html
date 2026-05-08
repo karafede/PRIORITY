@@ -20,6 +20,9 @@
 	  padding: 0;
 	}
 
+
+
+	
 	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
 	.legend { text-align: left; line-height: 25px; color: #555; font-size: 22px} .legend i { width: 23px; height: 8px; float: left; margin-right: 6px; margin-top: 6px; opacity: 0.7; }  
 	.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
@@ -592,7 +595,6 @@ input::-webkit-inner-spin-button {
 </head>
   <meta name="description" content="Leaflet Template">
   <title>RdS-ENEA</title>
-  <!--meta name="viewport" content="initial-scale=1.0"-->
   <meta name="viewport" content="initial-scale=1, maximum-scale=1">
   <meta charset="utf-8">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
@@ -630,12 +632,12 @@ input::-webkit-inner-spin-button {
 <!--insert new line-->
 <br>
 
-<!--p><i><b>Private mobility (animated)</i></b></p-->
 
 <form id="mainform" action="/FCD_day_selector" method="POST" >
    <input type="text" id="daterange"  name="daterange" onchange="myFunction_daterange(event)" value="     ___from___to___" />
    <button type="submit">enter</button><br><br>
 </form>
+
 
 
 
@@ -652,10 +654,13 @@ input::-webkit-inner-spin-button {
 		</select>
 	</form>
 	
+	<!--insert new line-->
 <br>
 <br>
 
 
+
+<!--button class="btn_animation btn-lg btn-primary mr-1"  style="font-weight: bold; color: black;" id="start">Start Animation</button><br-->  
  <form action="/animation_FCD/" method="POST">
 		<input class="btn_animation btn-lg btn-primary mr-1" style="font-weight: bold; color: black;" type="submit" value="refresh">
  </form>
@@ -669,6 +674,7 @@ input::-webkit-inner-spin-button {
 <nav role='navigation'>
   <a class="col_home" href="/home_page/">Home</a>
   <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
+  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
   <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
   <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
   <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
@@ -684,33 +690,45 @@ input::-webkit-inner-spin-button {
   
   <script src="https://unpkg.com/leaflet@1.0.2/dist/leaflet.js"></script>
   <script src="{{ url_for('static', filename='AnimatedMarker.js') }}" /></script>
-  <script src="{{ url_for('static', filename='selected_trip_path_FCD.txt') }}" /></script>
-
+ 
+  
+  
    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
    <link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/src/leaflet.draw.css"/>
    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script>
 
   <script src="{{ url_for('static', filename='leaflet.motion.min.js') }}" /></script>  
   
  
- <!--ZMU sones with charging station and population info-->
-<script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
-<script src="{{ url_for('static', filename='giubilari_2025.geojson') }}" /></script>
-
  
  <script>
  
 ////////////// session ID /////////////////////////////////	
   var session_ID = "{{ session.sid}}"
-
+  // var session_ID = "{{ session.sid|tojson}}"
+  // alert(session_ID);
+  // src="{{ url_for('static', filename='lista_coords.txt') }}"
+  // alert("---- I AM HERE----------");
+  // alert("--- gotta!------");
+  
 	
 
 </script>
-    
+  
+  
+  
   
 <script>
 	
+	
+	
+	
+	var lat_ORIGIN_province = "{{ session['lat_ORIGIN_province']}}"
+	 var lon_ORIGIN_province = "{{ session['lon_ORIGIN_province']}}"
+	 // alert(lat_ORIGIN_province);
+	 // alert(lon_ORIGIN_province);
 	
  //  date range picker //
 	$(function() {
@@ -802,8 +820,10 @@ input::-webkit-inner-spin-button {
 	
 
 
-var map = L.map("map").setView([41.90266120539129, 12.492052587659225], 11);
+// var map = L.map("map").setView([41.90266120539129, 12.492052587659225], 11);
+var map = L.map("map").setView([lat_ORIGIN_province, lon_ORIGIN_province], 11);
 
+			// L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 			L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
 				// attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
 				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
@@ -882,6 +902,14 @@ var map = L.map("map").setView([41.90266120539129, 12.492052587659225], 11);
             legend_TRIALS.onAdd=function(map){
                 var div=L.DomUtil.create('div','info legend');
 							
+				 /*
+				 const labels=["from 1 to 20",
+								"from 20 to 150",
+								"from 150 to 300",
+								" > 300"];
+				 const grades = [1, 20, 150, 300];
+				 */
+				 
 				  // multiply by factor a == 7
 				  const labels=["from 10 to 150",
 								"from 150 to 1000",
@@ -935,6 +963,16 @@ var map = L.map("map").setView([41.90266120539129, 12.492052587659225], 11);
 		
 		
 		
+      
+ fetch("{{ url_for('static', filename='charging_stations_ZMU.geojson') }}")
+  .then(response => response.json())
+  .then(charging_data => {
+    // console.log(data);
+    // use your GeoJSON here
+  //alert(charging_data);
+ 
+   
+   
 		/// add ZMU zones  borders  /////////////////////////////////////////////////////
 		var ZMU_zones = L.geoJSON(charging_data, { style: style_colors_ZMU_zones, 	
 				  onEachFeature: function (feature, layer) {
@@ -954,38 +992,7 @@ var map = L.map("map").setView([41.90266120539129, 12.492052587659225], 11);
 			}
 			});
 			
-			
-			
-			
-	////------------------------------------------------------------////////////////////////////// 
-	////GIUBILARI 2025////////////////////////////// 
-	var giubilari_2025_layer = L.geoJSON(giubilari_2025, {
-	   onEachFeature: function (feature, layer) {
-		
-		var popupTextt = '';
-					popupTextt += (feature.properties.nome) ? '<h2 style="font-size: 20px;  font-family: Arial; font-weight: bold;">Name: ' + feature.properties.nome : '</h2>';     						
-					layer.bindTooltip(popupTextt);	
-	},
 
-		pointToLayer(feature, latlng) {
-			return L.circleMarker(latlng, {
-				radius: 6,
-				// radius: feature.properties.n_buses*1,
-				fillColor: "black", //'#ff7800',
-				color: '#000',
-				weight: 1,
-				opacity: 1,
-				fillOpacity: 1
-			});
-		}
-	});
-	
-	
-	    const giubilari_Layer = L.layerGroup();
-		giubilari_Layer.addLayer(giubilari_2025_layer);
-
-		
-		
 		
 
 
@@ -995,17 +1002,20 @@ var map = L.map("map").setView([41.90266120539129, 12.492052587659225], 11);
 		// alert(ZMU_zones);
 		
 		const overlays = {
-			'Traffic Zones': ZMU_zones_Layer,
-			'Giubilar_2025': giubilari_Layer
+			'Traffic Zones': ZMU_zones_Layer
 		};
 		
 		const baseLayers = {
 		'OpenStreetMap': osm,
 		'Carto': carto
 		};
-	
-			var seqGroup = L.motion.group( motion_polyline_route_FCD
-                ).addTo(map);
+		
+
+// });		
+
+		
+			
+		var seqGroup = L.motion.group( motion_polyline_route_FCD).addTo(map);
 				
 		// ----- ADD Traffic ZONES ------- //
 		map.addLayer(ZMU_zones);
@@ -1026,6 +1036,9 @@ var map = L.map("map").setView([41.90266120539129, 12.492052587659225], 11);
 			setTimeout(function () {
 				seqGroup.motionStart();
 			}, 1000);
+      
+      
+   }); // close fetch for ZMU_zones
 
 </script>
 

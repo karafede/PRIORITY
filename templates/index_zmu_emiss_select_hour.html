@@ -21,11 +21,6 @@
 	}
 
 
-	//.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
-	//.legend { text-align: left; line-height: 13px; color: #555; font-size: 1.075em} .legend i { width: 12px; height: 12px; float: left; margin-right: 5px; opacity: 0.7; } 
-	//.legend_censuary { text-align: left; line-height: 10px; color: #555;  font-size: 10px} 
-	// .legend_ZMU { text-align: left; line-height: 15px; color: #555;  font-size: 12px} 
-	
 	
 	
 	.info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
@@ -196,7 +191,7 @@
 	main div:nth-child(1) {
 	  width: 270px;
 	  height: 0px;
-	   background: #326bbb;
+	   background: transparent;
 	}
 	
 	
@@ -237,7 +232,7 @@
 	
 	main div:nth-child(8) {
 	   width: 270px;
-	    background: #326bbb;
+	    background: transparent;
 	}
 	
 
@@ -559,7 +554,7 @@ div#loading {
  
  #form-wrapper {
   width: 70%;
-  height: 50%;
+  height: 40%;
   margin: 0px auto;
   overflow-y:scroll;
   text-align: center;
@@ -618,7 +613,6 @@ input::-webkit-inner-spin-button {
 </head>
   <meta name="description" content="Leaflet Template">
   <title>RdS-ENEA</title>
-  <!--meta name="viewport" content="initial-scale=1.0"-->
   <meta name="viewport" content="initial-scale=1, maximum-scale=1">
   <meta charset="utf-8">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin="" />
@@ -630,7 +624,7 @@ input::-webkit-inner-spin-button {
 <div id="loader"></div>
 
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<!--script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script-->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 
@@ -649,17 +643,12 @@ input::-webkit-inner-spin-button {
 <main class="inline-block-center">
 
 
-<!--div style="display:none;" id="myDiv" class="animate-bottom">
-  <h2>Tada!</h2>
-  <p>Some text in my newly loaded page..</p>
-</div-->
 
 	<!--insert new line-->
 	<br>
 	
 	 <h2 style="font-weight: bold; line-height: 1em;">Emissions,</h2> 
 	 <h2 style="font-weight: bold; line-height: 1em;">Energy Consumption and Costs</h2> 
-	 <!--h2 style="font-weight: bold; line-height: 1em;">by traffic Zones</h2--> 
 	<!--insert new line-->
 	<br>
 	
@@ -686,44 +675,11 @@ input::-webkit-inner-spin-button {
 			<option value="18">CO2 eq (Well-to-Thank)</option>
 	</select>
 	</form>
- <!--/div>
-  </div-->
   <br>
   
   
- <!--h3 style="font-weight: bold">Emissions Costs:</h3>
-	<form method="POST" action="/costs_type_selector/">	
-	<select class="tipo_alimentazione" name="costs_type" id="registration_costs_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
-			<option value="110">--- choose ---</option>
-			<option value="113">NOx cost</option>
-			<option value="114">nmVOC cost </option>
-			<option value="115">PM cost</option>
-			<option value="116">PM (no exh) cost</option>
-			<option value="117">CO2 eq. cost.</option>
-			<option value="118">CO2 eq. (wtt) cost</option>
-	</select>
-	</form-->
 	
-	 <!--br-->
-	 
-	<!--h3 style="font-weight: bold">External Costs:</h3>
-	<form method="POST" action="/external_cost_type_selector/">	
-	<select class="tipo_alimentazione" name="external_type" id="registration_external_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
-			<option value="210">--- choose ---</option>
-			<option value="211">Free Flow (time) cost</option>
-			<option value="212">Real Flow (time) cost</option>
-			<option value="213">Delta Flow (time) cost</option>
-			<option value="214">Accidentality cost</option>
-			<option value="215">Noise cost</option>			
-	</select>
-	</form-->
-	
-	
-  
-    <!--br-->
-  
-  	<!--div id="form-wrapper">
-    <div id="form1" class="c"-->
+ 
 	<h3 style="font-weight: bold">Type of Car Fleet:</h3>
 	<form method="POST" action="/fleet_type_selector/">	
 	<select class="tipo_alimentazione" name="fleet_type" id="registration_data_type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange= "this.form.submit(); Validate();" >
@@ -746,7 +702,6 @@ input::-webkit-inner-spin-button {
 			<option value="22">WORK</option>
 			<option value="23">HOME & WORK</option>
 		</select>
-		<!-- Radio buttons-->
 	</form>
 	
 
@@ -757,8 +712,7 @@ input::-webkit-inner-spin-button {
  
   
   <br>
-  		<!--div class="break_line_1"></div-->
-	
+  
 	<form method="POST" action="/ZMU_emiss_hourrange_selector/">	
 	<span class="label tpl_line">Hour range:</span>
 	<select class="ZMU_emiss_hourrange_selector" name="ZMU_hourrange" id="registrationhourrange" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onchange="this.form.submit()";>
@@ -770,11 +724,10 @@ input::-webkit-inner-spin-button {
 			<option value="4">16:00 ---> 20:00</option>
 			<option value="5">20:00 ---> 24:00</option>
 		</select>
-		<!-- Radio buttons-->
 	</form>
 
 	
-	 <form method="POST" action="/tod_emiss_selector/">
+	 <!--form method="POST" action="/tod_emiss_selector/">
 	 <h4 style="margin-top: -1px; margin-left:-195px;" class="label tpl_line">Day type:</h4>
         <h4 style="margin-top: -50px;" class="ZMU_tod_selector" onchange="this.form.submit()";> </h4>
 		
@@ -787,74 +740,27 @@ input::-webkit-inner-spin-button {
         <label class="ZMU_tod_selector" onchange="this.form.submit()";>
         <input type="radio" name="ZMU_tod"  style="margin-left:-18px;" id="registration_tod" value="8"  onclick="$('#loading').show();">  Holiday</label>
 		 <label class="ZMU_tod_selector" onchange="this.form.submit()";>
-   </form>
+   </form-->
 	
 	
 
 	
-	
-	<br>
-
-	
-
-
-	 <!--form action="/bus_type_selector/" method="POST">
-		 <br>
-		<input class="btn_CSA btn-lg btn-primary mr-1" style="margin-left: 0%; margin-top: -10%; color:blue;" type="submit" value="TPL">
-	</p>
-    </form-->
-	
-	
-	
-
-<!-- send user coordinates to the Python console-->
-	<!--form action="/points_interest/" method="POST">
-		  <div>	
-			<input   type='hidden' id='lat' name='lat'  /> <br />
-		  </div>
-		  <div>
-			<input type='hidden' id='lng' name='lng'  /> <br />
-		  </div>
-		  <div class="break_line_1"></div>
-		  <h3 style="font-weight: bold">Find Points of Interest</h3>
-		  <div>
-		   <input type="text" style="margin-left: -1px;" onfocus="this.value=''"  name="tag" value='-- insert dist(m) (>=1000) --'><button type="submit" class="btn btn-default">find</button>
-		    <div class="break_line_1"></div>
-			  <div class="break_line_1"></div>
-		  </div>
-	</form-->
-	<!--br-->
-	
-
-	 
-	<!--br-->
-	<!--div class="break_line_1"></div-->
-	
-	
-	<!--form method="POST" action="/heatmaps_FCD/"><br>
-	  <input class="btn_CSA btn-lg btn-primary mr-1" style="margin-left: 0%; margin-top: -10%; color:black; background-color: white;" type="submit" value="Heatmaps">
-    </form-->
-	
+		<br>
 
 
 	 <form action="/download" method="GET">
-        <!--input type="Submit" value="Download CSV" -->
-		 <div class="break_line"></div>
 		  <div class="break_line"></div>
-		   <div class="break_line"></div>
+  		 <div class="break_line"></div>
 		  <input class="btn_CSA btn-lg btn-primary mr-1" style="margin-left: 0%; margin-top: -10%; color:blue; background-color: white;" type="submit" value="download CSV">
     </form>
 	
 	<br>
 	
 	<form action="/impacts_page/" method="POST">
-		 <div class="break_line"></div>
 		 <br>
 		<input class="btn_CSA btn-lg btn-primary mr-1" style="margin-left: 0%; margin-top: -10%; color:black; background-color: yellow;" type="submit" value="refresh">
 	</p>
     </form>
-	
-	<!--br-->
 	
 
 	 
@@ -867,12 +773,10 @@ input::-webkit-inner-spin-button {
 <nav role='navigation'>
   <a class="col_home" href="/home_page/">Home</a>
   <a class="col_privata" href="/mob_privata_page/" style="color:#ffffff;">Private Mobility</a>
-  <!--img border="0" alt="W3Schools" src="/static/img/icone_mezzi_priv.png" width="30" height="30"-->
   <a class="col_collettivo" href="/public_transport_page/">Public Transport</a>
-  <a class="col_scenari" href="/TRIP_LEGS/">Avoid-Shift measures</a>
+  <a class="col_scenari" href="/modal/">Avoid-Shift measures</a>
   <a href="/charging_infrastructure_OSM/">EVs Charging Profile</a>
   <a class="col_impatti" href="/impacts_page/">Impacts</a>
-  <!--a class="IEA_statistics"  onclick="$('#loading').show();" href="/IEA_STATS_show/">statistics IEA</a-->
   <a class="col_best" onclick="$('#loading').show();" href="/best_page/">Best</a>
 </nav>  
 
@@ -888,57 +792,20 @@ input::-webkit-inner-spin-button {
 
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<!--link rel="stylesheet" href="https://leaflet.github.io/Leaflet.draw/src/leaflet.draw.css"/-->
-<!--link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/-->
 
 
-<!--script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.2/leaflet.draw.js"></script-->
 <script src = "https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js" integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ==" crossorigin = "anonymous" referrerpolicy = "no-referrer"> </script>
 
   
 <!-- Load data .geojson -->
-<!--script src="{{ url_for('static', filename='hexagons_aggr_POP_ROMA_2011.geojson') }}" /></script-->
 <!-- ZMU zones with population data -->
-<script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script>
-<!-- aggregation by zmu -->
-<!--script src="{{ url_for('static', filename='aggregated_zmu_filtered.geojson') }}" /></script-->
-<!--script src="{{ url_for('static', filename='selected_test_generation_attraction.geojson') }}" /></script-->
+<!--script src="{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}" /></script>
 
-<!-- aggregation by zmu -->
-<!--script src="{{ url_for('static', filename='aggregated_gdf_emission.geojson') }}" /></script-->
-<!--script src="{{ url_for('static', filename='aggregated_gdf_costs.geojson') }}" /></script-->
-<!--script src="{{ url_for('static', filename='aggregated_gdf_externalities.geojson') }}" /></script-->
-
-<!-- POINTS of INTERESTS (PARKINGs) -->
-<!--script src="{{ url_for('static', filename='POIS_parking.geojson') }}" /></script-->
-<!-- POINTS of INTERESTS (all AMENITIES) -->
-<!--script src="{{ url_for('static', filename='layer_POIS_amenities.geojson') }}" /></script-->
-<!-- POINTS of INTERESTS (all BUILDINGS) -->
-<!--script src="{{ url_for('static', filename='layer_POIS_residential.geojson') }}" /></script-->
-<!-- ALL POINTS of INTERESTS (all BUILDINGS and AMENITIES) -->
-<!--script src="{{ url_for('static', filename='zmu_POIS_ROMA_2011.geojson') }}" /></script-->
-
- <!--script src="{{ url_for('static', filename='leaflet.motion.min.js') }}" /></script-->  
- 
- 
- <!-- load custom polygons and border of custom polygon-->
-<!--script src="{{ url_for('static', filename='ZMUs_custom_selected.geojson') }}" /></script-->
-<!--script src="{{ url_for('static', filename='BORDER_selected_ZMUs.geojson') }}" /></script-->
 <script src="{{ url_for('static', filename='charging_stations_ZMU.geojson') }}" /></script>
 <script src="{{ url_for('static', filename='chargers_OCM.geojson') }}" /></script>
-<!--script src="{{ url_for('static', filename='home_work_selected_idterm_4053589.geojson') }}" /></script-->
-<!--script src="{{ url_for('static', filename='home_work_selected_idterm_4398901.geojson') }}" /></script-->
 
-<!--script src="{{ url_for('static', filename='home_locations_roma_2019.geojson') }}" /></script>
-<script src="{{ url_for('static', filename='work_locations_roma_2019.geojson') }}" /></script>
 
-<script src="{{ url_for('static', filename='home_locations_roma_2022.geojson') }}" /></script>
-<script src="{{ url_for('static', filename='work_locations_roma_2022.geojson') }}" /></script-->
-
-<script src="{{ url_for('static', filename='staypoints_tod.geojson') }}" /></script>
-
-<!--script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script-->
+<script src="{{ url_for('static', filename='staypoints_tod.geojson') }}" /></script-->
 
 
   <script>
@@ -1044,19 +911,6 @@ input::-webkit-inner-spin-button {
 	 
 
 	
-	/*
-	var id_stay_type = "{{ session['id_stay_type']}}"
-    document.addEventListener("DOMContentLoaded", function(){
-	var staytype_selezionata =  id_stay_type;
-	document.getElementById('registration_staypoint').value = staytype_selezionata;  
-	// alert(staytype_selezionata);
-	});
-	
-	
-	
-	var number_staypoint = "{{ session['id_stay_type']}}";
-	 $('input[name=id_stay_type][value=' + number_staypoint + ']').prop('checked',true);
-	 */
 	
 	
 	$('form select').on('change', function(){
@@ -1084,28 +938,6 @@ input::-webkit-inner-spin-button {
 	});
 	
 	
-	/*
-	var TYPE_data_costs = "{{session['costs_type']}}"	
-	// alert(TYPE_data_costs);
-	document.addEventListener("DOMContentLoaded", function(){
-	var costs_type_selezionata =  TYPE_data_costs;
-	// alert(costs_type_selezionata);
-	document.getElementById('registration_costs_type').value = costs_type_selezionata;   
-	});
-	*/
-	
-	
-	/*
-	var TYPE_data_external = "{{session['external_type']}}"	
-	// alert(TYPE_data_external);
-	document.addEventListener("DOMContentLoaded", function(){
-	var external_type_selezionata =  TYPE_data_external;
-	// alert(external_type_selezionata);
-	document.getElementById('registration_external_type').value = external_type_selezionata;   
-	});
-	*/
-
-
 	var TYPE_data = "{{session['fleet_type']}}"	
 	//alert(TYPE_data);
 	document.addEventListener("DOMContentLoaded", function(){
@@ -2708,6 +2540,53 @@ if(TYPE_data == '21') {      // traditional, circulating
 		}
 		
 		
+   
+   
+   
+   // load all fetch here--------------------------
+    // load all fetch here--------------------------
+     // load all fetch here--------------------------
+      // load all fetch here--------------------------
+       // load all fetch here--------------------------
+       
+   
+ fetch("{{ url_for('static', filename='zmu_aggr_POP_ROMA_2011.geojson') }}")
+  .then(response => response.json())
+  .then(zmu_counts => {
+    // console.log(data);
+    // use your GeoJSON here
+  //alert(zmu_counts);
+  
+  
+  
+     fetch("{{ url_for('static', filename='charging_stations_ZMU.geojson') }}")
+  .then(response => response.json())
+  .then(charging_data => {
+    // console.log(data);
+    // use your GeoJSON here
+    // alert(charging_data);
+    
+    
+    
+     fetch("{{ url_for('static', filename='staypoints_tod.geojson') }}")
+  .then(response => response.json())
+  .then(points_staypoints => {
+    // console.log(data);
+    // use your GeoJSON here
+   // alert(points_staypoints);
+   
+   
+      
+   fetch("{{ url_for('static', filename='chargers_OCM.geojson') }}")
+  .then(response => response.json())
+  .then(EV_chargers_OCM => {
+    // console.log(data);
+    // use your GeoJSON here
+    // alert(EV_chargers_OCM);
+    
+   
+  
+  
          
 		const censuary_default = L.geoJson(zmu_counts, {
 				style: style_pop,
@@ -2748,162 +2627,6 @@ if(TYPE_data == '21') {      // traditional, circulating
 			
 		
 		  
-         /*
-         /////////----------- Points of Interest (POIS) in ZMUs -------/////////////////////////////////////////	
-		 
-			 var POIS_ZMU = L.geoJSON(zmu_POIS_counts, { style: style_colors_POIS_ZMU, 	
-				  onEachFeature: function (feature, layer) {
-				  layer.on('mouseover', function () {
-				   layer.setStyle(selectedStyle_highlight);
-				  });
-				  
-					var popupText = '';
-					popupText += (feature.properties.apartments) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Apartments: ' + feature.properties.apartments : '';
-					popupText += (feature.properties.church) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Church: ' + feature.properties.church : ''
-					popupText += (feature.properties.residential) ?  '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Residential: ' + feature.properties.residential : '';
-					popupText += (feature.properties.hotel) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hotel: ' + feature.properties.hotel : ''
-					popupText += (feature.properties.office) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Office: ' + feature.properties.office : ''
-					popupText += (feature.properties.basilica) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hotel: ' + feature.properties.basilica : ''
-					popupText += (feature.properties.house) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">House: ' + feature.properties.house : ''
-					popupText += (feature.properties.public) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Public: ' + feature.properties.public : ''
-					popupText += (feature.properties.market) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Market: ' + feature.properties.market : ''
-					popupText += (feature.properties.detached) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Detached: ' + feature.properties.detached : ''
-					popupText += (feature.properties.synagogue) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Synagogue: ' + feature.properties.synagogue : ''
-					popupText += (feature.properties.roof) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Roof: ' + feature.properties.roof : ''
-					popupText += (feature.properties.supermarket) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Supermarket: ' + feature.properties.supermarket : '';
-					popupText += (feature.properties.retail) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Retail: ' + feature.properties.retail : ''
-					popupText += (feature.properties.congress_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Congress centre: ' + feature.properties.congress_centre : ''
-					popupText += (feature.properties.government) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Government: ' + feature.properties.government : ''
-					popupText += (feature.properties.commercial) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Commercial: ' + feature.properties.commercial : ''
-					popupText += (feature.properties.semidetached_house) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Semidetached house: ' + feature.properties.semidetached_house : ''
-					
-					popupText += (feature.properties.arts_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Arts centre: ' + feature.properties.arts_centre : ''
-					popupText += (feature.properties.bus_station) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bus station: ' + feature.properties.bus_station : ''
-					popupText += (feature.properties.cafe) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Cafe: ' + feature.properties.cafe : ''
-					popupText += (feature.properties.fast_food) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Fast food: ' + feature.properties.fast_food : ''
-					popupText += (feature.properties.pharmacy) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Pharmacy: ' + feature.properties.pharmacy : ''
-					popupText += (feature.properties.parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Parking: ' + feature.properties.parking : ''
-					popupText += (feature.properties.place_of_worship) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Place of worship: ' + feature.properties.place_of_worship : ''
-					popupText += (feature.properties.restaurant) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Restaurant: ' + feature.properties.restaurant : ''
-					popupText += (feature.properties.bar) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bar: ' + feature.properties.bar : ''
-					popupText += (feature.properties.bicycle_parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Bicycle parking: ' + feature.properties.bicycle_parking : ''
-					popupText += (feature.properties.charging_station) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Charging station: ' + feature.properties.charging_station : ''
-					popupText += (feature.properties.theatre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Theatre: ' + feature.properties.theatre : ''
-					popupText += (feature.properties.cinema) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Cinema: ' + feature.properties.cinema : ''
-					popupText += (feature.properties.library) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Library: ' + feature.properties.library : ''
-					popupText += (feature.properties.marketplace) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Marketplace: ' + feature.properties.marketplace : ''
-					popupText += (feature.properties.motorcycle_parking) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Motorcycle parking: ' + feature.properties.motorcycle_parking : ''
-					popupText += (feature.properties.parking_entrance) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Parking entrance: ' + feature.properties.parking_entrance : ''
-					popupText += (feature.properties.police) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Police: ' + feature.properties.police : ''
-					popupText += (feature.properties.public_building) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Public building: ' + feature.properties.public_building : ''
-					popupText += (feature.properties.school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">School: ' + feature.properties.school : ''
-					popupText += (feature.properties.social_facility) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Social facility: ' + feature.properties.social_facility : ''
-					popupText += (feature.properties.car_sharing) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Car sharing: ' + feature.properties.car_sharing : ''
-					popupText += (feature.properties.pub) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Pub: ' + feature.properties.pub : ''
-					popupText += (feature.properties.taxi) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Taxi: ' + feature.properties.taxi : ''
-					popupText += (feature.properties.university) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">University: ' + feature.properties.university : ''
-					popupText += (feature.properties.college) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">College: ' + feature.properties.college : ''
-					popupText += (feature.properties.community_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Community centre: ' + feature.properties.community_centre : ''
-					popupText += (feature.properties.doctors) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Doctors: ' + feature.properties.doctors : ''
-					popupText += (feature.properties.townhall) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Townhall: ' + feature.properties.townhall : ''
-					popupText += (feature.properties.parking_space) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">parking space: ' + feature.properties.parking_space : ''		
-					popupText += (feature.properties.hospital) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Hospital: ' + feature.properties.hospital : '';
-					popupText += (feature.properties.music_school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Music school: ' + feature.properties.music_school : '';
-					popupText += (feature.properties.fuel) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Fuel: ' + feature.properties.fuel : '';
-					popupText += (feature.properties.car_rental) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Car rental: ' + feature.properties.car_rental : '';
-					popupText += (feature.properties.dentist) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Dentist: ' + feature.properties.dentist : '';
-					popupText += (feature.properties.clinic) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Clinic: ' + feature.properties.clinic : '';
-					popupText += (feature.properties.social_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Social centre: ' + feature.properties.social_centre : '';
-					popupText += (feature.properties.events_venue) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Events venue: ' + feature.properties.events_venue : '';
-					popupText += (feature.properties.research_institute) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Research institute: ' + feature.properties.research_institute : '';
-					popupText += (feature.properties.ferry_terminal) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Ferry terminal: ' + feature.properties.ferry_terminal : '';
-					popupText += (feature.properties.language_school) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Language school: ' + feature.properties.language_school : '';
-					popupText += (feature.properties.kindergarten) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Kindergarten: ' + feature.properties.kindergarten : '';
-					popupText += (feature.properties.conference_centre) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Conference centre: ' + feature.properties.conference_centre : '';
-					popupText += (feature.properties.courthouse) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Courthouse: ' + feature.properties.courthouse : '';
-					popupText += (feature.properties.tourism) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Tourism: ' + feature.properties.tourism : '';
-					popupText += (feature.properties.weighbridge) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Weighbridge: ' + feature.properties.weighbridge : '';
-					popupText += (feature.properties.childcare) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Childcare: ' + feature.properties.childcare : '';
-					popupText += (feature.properties.nursing_home) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Nursing home: ' + feature.properties.nursing_home : '';
-					popupText += (feature.properties.coworking_space) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Coworking space: ' + feature.properties.coworking_space : '';
-					popupText += (feature.properties.casino) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Casino: ' + feature.properties.casino : '';
-					popupText += (feature.properties.community_centres) ? '<h2 style="font-size: 15px;  font-family: Arial; font-weight: bold;">Community centres: ' + feature.properties.community_centres : '';
-										
-					layer.bindTooltip(popupText);
-					
-					
-					
-			layer.on('mouseout', function (e) {
-						layer.setStyle(selectedStyle_mouseout); 
-					});	
-				}
-				});
-				
-		const POIS_Layer_zmu = L.layerGroup();
-		POIS_Layer_zmu.addLayer(POIS_ZMU);
-		
-
-		
-		
-		
-		
-		/////////----- ADD POINTS of INTERESTS (PARKINGS) nearby chosen location -----------////////////////////////
-		var POIS_PARKING = L.geoJSON(POIS_parking, { style: style_colors_POIS, 	
-			  onEachFeature: function (feature, layer) {
-			  layer.on('mouseover', function () {
-			   layer.setStyle(selectedStyle);
-			  });
-				layer.bindTooltip('<h3><p>amenity: '+feature.properties.amenity+'</p>');
-				layer.on('mouseout', function (e) {
-					layer.setStyle(style_colors_POIS); 
-				});	
-			}
-			});
-			
-		
-		const POIS_Layer = L.layerGroup();
-		POIS_Layer.addLayer(POIS_PARKING);
-		
-		
-		
-	    /////////----- ADD POINTS of INTERESTS (all AMENITIES) nearby chosen location -----------////////////////////////
-		var POIS_AMENITIES = L.geoJSON(POIS_amenities, { style: style_colors_POIS_amenities, 	
-			  onEachFeature: function (feature, layer) {
-			  layer.on('mouseover', function () {
-			   layer.setStyle(selectedStyle);
-			  });
-				layer.bindTooltip('<h3><p>amenity: '+feature.properties.amenity+'</p>');
-				layer.on('mouseout', function (e) {
-					layer.setStyle(style_colors_POIS_amenities); 
-				});	
-			}
-			});
-			
-		
-		const POIS_Layer_amenities = L.layerGroup();
-		POIS_Layer_amenities.addLayer(POIS_AMENITIES);
-		
-		
-		
-		/////////----- ADD POINTS of INTERESTS (all residential) nearby chosen location -----------////////////////////////
-		var POIS_RESIDENTIALS = L.geoJSON(POIS_residential, { style: style_colors_POIS_residential, 	
-			  onEachFeature: function (feature, layer) {
-			  layer.on('mouseover', function () {
-			   layer.setStyle(selectedStyle);
-			  });
-				layer.bindTooltip('<h3><p>building: '+feature.properties.building+'</p>');
-				layer.on('mouseout', function (e) {
-					layer.setStyle(style_colors_POIS_residential); 
-				});	
-			}
-			});
-			
-		
-		const POIS_Layer_residential = L.layerGroup();
-		POIS_Layer_residential.addLayer(POIS_RESIDENTIALS);
-	  */
-
-        
 		
 		// -------->show TIMESERIES of mean "Number of Vehicles", "triptime", "tripdistance" and "stoptime" @ DESTINATION zone in Plotly within the tooltip...---------------------/////////////////////
 		const time_series_ec = '<iframe src="{{ url_for('figure_plotly6') }}" width="325" height="210"></iframe>'
@@ -2914,13 +2637,7 @@ if(TYPE_data == '21') {      // traditional, circulating
 		const time_series_pm_nexh = '<iframe src="{{ url_for('figure_plotly11') }}" width="325" height="210"></iframe>'
 		const time_series_co2eq = '<iframe src="{{ url_for('figure_plotly12') }}" width="325" height="210"></iframe>'
 		const time_series_co2eq_wtt = '<iframe src="{{ url_for('figure_plotly13') }}" width="325" height="210"></iframe>'
-		//const time_series_tripdistance = '<iframe src="{{ url_for('figure_plotly2') }}" width="325" height="225"></iframe>'
-		//const time_series_triptime = '<iframe src="{{ url_for('figure_plotly3') }}" width="325" height="225"></iframe>'
-		// const time_series_stoptime = '<iframe src="{{ url_for('figure_plotly4') }}" width="325" height="225"></iframe>'
-		
-		
-		
-		
+	
 		
 		
 		
@@ -4278,25 +3995,14 @@ if(TYPE_data == '21') {      // traditional, circulating
 		
 	    
 		const overlays = {
-			// "<span style='color:red; font-size: 20px;'>Traffic Zones</span>": ZMU_zones_Layer,
-			//'Traffic Zones & Censuary': censuary_Layer,
-			//'ENERGY CONSUMPTION from ORIGIN': mapmatched_Layer_zmu_ec,
-			//'FREE FLOW Cost from ORIGIN': mapmatched_Layer_zmu_free_flow_cost,
-			// "<span style='color:red; font-size: 20px;'>Traffic Zones & Censuary</span>": censuary_Layer,
 			  "<span style='color:black; font-size: 20px;'>Energy Consumption @Origin</span>": mapmatched_Layer_zmu_ec,
 			  "<span style='color:black; font-size: 20px;'>Free Flow Cost  @Origin</span>": mapmatched_Layer_zmu_free_flow_cost,
 			   "<span style='color:black; font-size: 20px;'>Real Flow Cost @Origin</span>": mapmatched_Layer_zmu_real_cost,
 			    "<span style='color:black; font-size: 20px;'>Delta Flow Cost @Origin</span>": mapmatched_Layer_zmu_deltatime_cost,
 				 "<span style='color:black; font-size: 20px;'>Accidentalities Cost @Origin</span>": mapmatched_Layer_zmu_acc_cost,
 				 "<span style='color:black; font-size: 20px;'>Noise Cost @Origin</span>": mapmatched_Layer_zmu_noise_cost,
-			  // "<span style='color:black; font-size: 20px;'>Staypoints</span>": stay_points_layer,
-			  //  "<span style='color:black; font-size: 20px;'>Charging Stations (Open Charge Map)</span>": OCM_Layer,
 			'Staypoints': stay_points_layer,
-			'Charging Stations (Open Charge Map)': OCM_Layer,
-			//'POIS & Residences': POIS_Layer_zmu,
-			//'POIS_Parking': POIS_PARKING,
-			//'POIS_Amenities': POIS_AMENITIES,
-			//'POIS_Residentials': POIS_RESIDENTIALS,
+			'Charging Stations (Open Charge Map)': OCM_Layer
 		};
 		
 		const layerControl = L.control.layers(overlays, baseLayers ,{collapsed:false}).addTo(map);	
@@ -4349,13 +4055,8 @@ if(TYPE_data == '21') {      // traditional, circulating
 		
 	
 			
-		//const aggregated_pop = L.layerGroup([hex_all]);
-		//const cens_layer = L.layerGroup([censuary_default]);
-		
-		
-		//const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
+
 		layerControl.addBaseLayer(satellite, 'Satellite');
-		// layerControl.addOverlay(hex_all, 'aggregated population (hex)');
 		layerControl.addOverlay(POIS_PARKING, 'parkings');
 		layerControl.addOverlay(POIS_AMENITIES, 'amenities');
 		layerControl.addOverlay(POIS_RESIDENTIALS, 'buildings')
@@ -4406,11 +4107,6 @@ if(TYPE_data == '21') {      // traditional, circulating
 		};
 	    
 		const overlays = {
-			//'Traffic Zones': ZMU_zones_Layer,
-			// "<span style='color:red; font-size: 20px;'>Traffic Zones</span>": ZMU_zones_Layer,
-			//'Traffic Zones & Censuary': censuary_Layer,
-			//'ENERGY CONSUMPTION [MJ] from ORIGIN': mapmatched_Layer_zmu_ec,
-		    //'ENERGY CONSUMPTION from Well-to-Tank @ORIGIN': mapmatched_Layer_zmu_ec_wtt,
 			  "<span style='color:black; font-size: 20px;'>Energy Cons. from Well-to-Tank @Origin</span>": mapmatched_Layer_zmu_ec_wtt,
 			   "<span style='color:black; font-size: 20px;'>Free Flow Cost  @Origin</span>": mapmatched_Layer_zmu_free_flow_cost,
 			   "<span style='color:black; font-size: 20px;'>Real Flow Cost @Origin</span>": mapmatched_Layer_zmu_real_cost,
@@ -4418,11 +4114,7 @@ if(TYPE_data == '21') {      // traditional, circulating
 				 "<span style='color:black; font-size: 20px;'>Accidentalities Cost @Origin</span>": mapmatched_Layer_zmu_acc_cost,
 				 "<span style='color:black; font-size: 20px;'>Noise Cost @Origin</span>": mapmatched_Layer_zmu_noise_cost,
 			'Staypoints': stay_points_layer,
-			'Charging Stations (Open Charge Map)': OCM_Layer,
-			//'POIS & Residences': POIS_Layer_zmu,
-			//'POIS_Parking': POIS_PARKING,
-			//'POIS_Amenities': POIS_AMENITIES,
-			//'POIS_Residentials': POIS_RESIDENTIALS,
+			'Charging Stations (Open Charge Map)': OCM_Layer
 		};
 		
 		
@@ -4474,12 +4166,7 @@ if(TYPE_data == '21') {      // traditional, circulating
 		
 		const cens_layer = L.layerGroup([censuary_default]);
 		
-		//const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
-		//layerControl.addBaseLayer(satellite, 'Satellite');
-		//layerControl.addOverlay(POIS_PARKING, 'parkings');
-		//layerControl.addOverlay(POIS_AMENITIES, 'amenities');
-		//layerControl.addOverlay(POIS_RESIDENTIALS, 'buildings')
-		
+
 		
 	}    // this closes the IF
 	
@@ -4528,10 +4215,6 @@ if(TYPE_data == '21') {      // traditional, circulating
 		};
 	    
 		const overlays = {
-			//'Traffic Zones': ZMU_zones_Layer,
-			//'Traffic Zones & Censuary': censuary_Layer,
-			//'NOX EMISSIONS from ORIGIN': mapmatched_Layer_zmu_nox,
-			//'NOX COSTS from ORIGIN': mapmatched_Layer_zmu_nox_cost,
 			 "<span style='color:black; font-size: 20px;'>NOx Emissions</span>": mapmatched_Layer_zmu_nox,
 			 "<span style='color:black; font-size: 20px;'>NOx Costs @Origin</span>": mapmatched_Layer_zmu_nox_cost,
 			  "<span style='color:black; font-size: 20px;'>Free Flow Cost  @Origin</span>": mapmatched_Layer_zmu_free_flow_cost,
@@ -4540,11 +4223,7 @@ if(TYPE_data == '21') {      // traditional, circulating
 				 "<span style='color:black; font-size: 20px;'>Accidentalities Cost @Origin</span>": mapmatched_Layer_zmu_acc_cost,
 				 "<span style='color:black; font-size: 20px;'>Noise Cost @Origin</span>": mapmatched_Layer_zmu_noise_cost,
 			'Staypoints': stay_points_layer,
-			'Charging Stations (Open Charge Map)': OCM_Layer,
-			//'POIS & Residences': POIS_Layer_zmu,
-			//'POIS_Parking': POIS_PARKING,
-			//'POIS_Amenities': POIS_AMENITIES,
-			//'POIS_Residentials': POIS_RESIDENTIALS,
+			'Charging Stations (Open Charge Map)': OCM_Layer
 		};
 		
 		
@@ -4601,13 +4280,7 @@ if(TYPE_data == '21') {      // traditional, circulating
 		
 		
 		const cens_layer = L.layerGroup([censuary_default]);
-		
-		//const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
-		//layerControl.addBaseLayer(satellite, 'Satellite');
-		//layerControl.addOverlay(POIS_PARKING, 'parkings');
-		//layerControl.addOverlay(POIS_AMENITIES, 'amenities');
-		//layerControl.addOverlay(POIS_RESIDENTIALS, 'buildings')
-		
+	
 		
 	}    // this closes the IF
 	
@@ -4654,9 +4327,6 @@ if(TYPE_data == '21') {      // traditional, circulating
 	    
 		const overlays = {
 			'Traffic Zones': ZMU_zones_Layer,
-			//'Traffic Zones & Censuary': censuary_Layer,
-			//'nmVOC EMISSIONS from ORIGIN': mapmatched_Layer_zmu_nmvoc,
-			//'nmVOC COSTS from ORIGIN': mapmatched_Layer_zmu_nmvoc_cost,
 			"<span style='color:black; font-size: 20px;'>nmVOC Emissions</span>": mapmatched_Layer_zmu_nmvoc,
 			 "<span style='color:black; font-size: 20px;'>nmVOC Cost @Origin</span>": mapmatched_Layer_zmu_nmvoc_cost,
 			  "<span style='color:black; font-size: 20px;'>Free Flow Cost  @Origin</span>": mapmatched_Layer_zmu_free_flow_cost,
@@ -4665,11 +4335,7 @@ if(TYPE_data == '21') {      // traditional, circulating
 				 "<span style='color:black; font-size: 20px;'>Accidentalities Cost @Origin</span>": mapmatched_Layer_zmu_acc_cost,
 				 "<span style='color:black; font-size: 20px;'>Noise Cost @Origin</span>": mapmatched_Layer_zmu_noise_cost,
 			'Staypoints': stay_points_layer,
-			'Charging Stations (Open Charge Map)': OCM_Layer,
-			//'POIS & Residences': POIS_Layer_zmu,
-			//'POIS_Parking': POIS_PARKING,
-			//'POIS_Amenities': POIS_AMENITIES,
-			//'POIS_Residentials': POIS_RESIDENTIALS,
+			'Charging Stations (Open Charge Map)': OCM_Layer
 		};
 		
 		
@@ -4724,12 +4390,7 @@ if(TYPE_data == '21') {      // traditional, circulating
 		
 		
 		const cens_layer = L.layerGroup([censuary_default]);
-		
-		//const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
-		//layerControl.addBaseLayer(satellite, 'Satellite');
-		//layerControl.addOverlay(POIS_PARKING, 'parkings');
-		//layerControl.addOverlay(POIS_AMENITIES, 'amenities');
-		//layerControl.addOverlay(POIS_RESIDENTIALS, 'buildings')
+
 		
 		
 	}    // this closes the IF
@@ -4781,10 +4442,6 @@ if(TYPE_data == '21') {      // traditional, circulating
 		};
 	    
 		const overlays = {
-			//'Traffic Zones': ZMU_zones_Layer,
-			//'Traffic Zones & Censuary': censuary_Layer,
-			//'PM EMISSIONS from ORIGIN': mapmatched_Layer_zmu_pm,
-			//'PM COSTS from ORIGIN':mapmatched_Layer_zmu_pm_cost,
 			"<span style='color:black; font-size: 20px;'>PM Emissions</span>": mapmatched_Layer_zmu_pm,
 			 "<span style='color:black; font-size: 20px;'>PM Cost @Origin</span>": mapmatched_Layer_zmu_pm_cost,
 			  "<span style='color:black; font-size: 20px;'>Free Flow Cost  @Origin</span>": mapmatched_Layer_zmu_free_flow_cost,
@@ -4793,11 +4450,7 @@ if(TYPE_data == '21') {      // traditional, circulating
 				 "<span style='color:black; font-size: 20px;'>Accidentalities Cost @Origin</span>": mapmatched_Layer_zmu_acc_cost,
 				 "<span style='color:black; font-size: 20px;'>Noise Cost @Origin</span>": mapmatched_Layer_zmu_noise_cost,
 			'Staypoints': stay_points_layer,
-			'Charging Stations (Open Charge Map)': OCM_Layer,
-			//'POIS & Residences': POIS_Layer_zmu,
-			//'POIS_Parking': POIS_PARKING,
-			//'POIS_Amenities': POIS_AMENITIES,
-			//'POIS_Residentials': POIS_RESIDENTIALS,
+			'Charging Stations (Open Charge Map)': OCM_Layer
 		};
 		
 		
@@ -4853,13 +4506,7 @@ if(TYPE_data == '21') {      // traditional, circulating
 	
 		
 		const cens_layer = L.layerGroup([censuary_default]);
-		
-		//const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
-		//layerControl.addBaseLayer(satellite, 'Satellite');
-		//layerControl.addOverlay(POIS_PARKING, 'parkings');
-		//layerControl.addOverlay(POIS_AMENITIES, 'amenities');
-		//layerControl.addOverlay(POIS_RESIDENTIALS, 'buildings')
-		
+
 		
 	}    // this closes the IF
 	
@@ -4908,10 +4555,6 @@ if(TYPE_data == '21') {      // traditional, circulating
 		};
 	    
 		const overlays = {
-			//'Traffic Zones': ZMU_zones_Layer,
-			//'Traffic Zones & Censuary': censuary_Layer,
-			//'PM EMISSIONS from TYRES & BRAKES @ORIGIN': mapmatched_Layer_zmu_pm_nexh,
-			//'PM COSTS from TYRES & BRAKES @ORIGIN':mapmatched_Layer_zmu_pm_nexh_cost,
 			"<span style='color:black; font-size: 20px;'>PM Emissions from tyres & brakes</span>": mapmatched_Layer_zmu_pm_nexh,
 			 "<span style='color:black; font-size: 20px;'>PM Cost from tyres & brakes @Origin</span>": mapmatched_Layer_zmu_pm_nexh_cost,
 			  "<span style='color:black; font-size: 20px;'>Free Flow Cost  @Origin</span>": mapmatched_Layer_zmu_free_flow_cost,
@@ -4920,11 +4563,7 @@ if(TYPE_data == '21') {      // traditional, circulating
 				 "<span style='color:black; font-size: 20px;'>Accidentalities Cost @Origin</span>": mapmatched_Layer_zmu_acc_cost,
 				 "<span style='color:black; font-size: 20px;'>Noise Cost @Origin</span>": mapmatched_Layer_zmu_noise_cost,
 			'Staypoints': stay_points_layer,
-			'Charging Stations (Open Charge Map)': OCM_Layer,
-			//'POIS & Residences': POIS_Layer_zmu,
-			//'POIS_Parking': POIS_PARKING,
-			//'POIS_Amenities': POIS_AMENITIES,
-			//'POIS_Residentials': POIS_RESIDENTIALS,
+			'Charging Stations (Open Charge Map)': OCM_Layer
 		};
 		
 		
@@ -4981,11 +4620,6 @@ if(TYPE_data == '21') {      // traditional, circulating
 		
 		const cens_layer = L.layerGroup([censuary_default]);
 		
-		//const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
-		//layerControl.addBaseLayer(satellite, 'Satellite');
-		//layerControl.addOverlay(POIS_PARKING, 'parkings');
-		//layerControl.addOverlay(POIS_AMENITIES, 'amenities');
-		//layerControl.addOverlay(POIS_RESIDENTIALS, 'buildings')
 		
 		
 	}    // this closes the IF
@@ -5030,10 +4664,6 @@ if(TYPE_data == '21') {      // traditional, circulating
 		};
 	    
 		const overlays = {
-			//'Traffic Zones': ZMU_zones_Layer,
-			//'Traffic Zones & Censuary': censuary_Layer,
-			//'CO2 EMISSIONS from ORIGIN': mapmatched_Layer_zmu_co2eq,
-			//'CO2 COSTS from ORIGIN': mapmatched_Layer_zmu_co2eq_cost,
 			"<span style='color:black; font-size: 20px;'>CO2 Emissions @Origin</span>": mapmatched_Layer_zmu_co2eq,
 			 "<span style='color:black; font-size: 20px;'>CO2 Cost @Origin</span>": mapmatched_Layer_zmu_co2eq_cost,
 			  "<span style='color:black; font-size: 20px;'>Free Flow Cost  @Origin</span>": mapmatched_Layer_zmu_free_flow_cost,
@@ -5042,11 +4672,7 @@ if(TYPE_data == '21') {      // traditional, circulating
 				 "<span style='color:black; font-size: 20px;'>Accidentalities Cost @Origin</span>": mapmatched_Layer_zmu_acc_cost,
 				 "<span style='color:black; font-size: 20px;'>Noise Cost @Origin</span>": mapmatched_Layer_zmu_noise_cost,
 			'Staypoints': stay_points_layer,
-			'Charging Stations (Open Charge Map)': OCM_Layer,
-			//'POIS & Residences': POIS_Layer_zmu,
-			//'POIS_Parking': POIS_PARKING,
-			//'POIS_Amenities': POIS_AMENITIES,
-			//'POIS_Residentials': POIS_RESIDENTIALS,
+			'Charging Stations (Open Charge Map)': OCM_Layer
 		};
 		
 		
@@ -5099,15 +4725,7 @@ if(TYPE_data == '21') {      // traditional, circulating
 		}  
   });
 	
-	
-	
-		//const cens_layer = L.layerGroup([censuary_default]);
-		//const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
-		//layerControl.addBaseLayer(satellite, 'Satellite');
-		//layerControl.addOverlay(POIS_PARKING, 'parkings');
-		//layerControl.addOverlay(POIS_AMENITIES, 'amenities');
-		//layerControl.addOverlay(POIS_RESIDENTIALS, 'buildings')
-		
+
 		
 	}    // this closes the IF
 	
@@ -5150,10 +4768,6 @@ if(TYPE_data == '21') {      // traditional, circulating
 		};
 	    
 		const overlays = {
-			//'Traffic Zones': ZMU_zones_Layer,
-			//'Traffic Zones & Censuary': censuary_Layer,
-			//'CO2 EMISSIONS [grams] from Well-to-Tank @ORIGIN': mapmatched_Layer_zmu_co2eq_wtt,
-			//'CO2 COSTS [EUR] from Well-to-Tank @ORIGIN': mapmatched_Layer_zmu_co2eq_wtt_cost,
 			"<span style='color:black; font-size: 20px;'>CO2 Emissions from Well-to-Tank @Origin</span>": mapmatched_Layer_zmu_co2eq_wtt,
 			 "<span style='color:black; font-size: 20px;'>CO2 Cost from Well-to-Tank  @Origin</span>": mapmatched_Layer_zmu_co2eq_wtt_cost,
 			  "<span style='color:black; font-size: 20px;'>Free Flow Cost  @Origin</span>": mapmatched_Layer_zmu_free_flow_cost,
@@ -5162,11 +4776,7 @@ if(TYPE_data == '21') {      // traditional, circulating
 				 "<span style='color:black; font-size: 20px;'>Accidentalities Cost @Origin</span>": mapmatched_Layer_zmu_acc_cost,
 				 "<span style='color:black; font-size: 20px;'>Noise Cost @Origin</span>": mapmatched_Layer_zmu_noise_cost,
 			'Staypoints': stay_points_layer,
-			'Charging Stations (Open Charge Map)': OCM_Layer,
-			//'POIS & Residences': POIS_Layer_zmu,
-			//'POIS_Parking': POIS_PARKING,
-			//'POIS_Amenities': POIS_AMENITIES,
-			//'POIS_Residentials': POIS_RESIDENTIALS,
+			'Charging Stations (Open Charge Map)': OCM_Layer
 		};
 		
 		
@@ -5222,22 +4832,18 @@ if(TYPE_data == '21') {      // traditional, circulating
 		$(".leaflet-top" + ".leaflet-right").children().eq(1).prepend('<div id="mapTitle" style="text-align: center;"><span style="font-size:16pt">Overlay Layers</span></div>');
 
 
-
-			
-		
-		
-		//const cens_layer = L.layerGroup([censuary_default]);
-		
-		//const satellite = L.tileLayer(mbUrl, {id: 'mapbox/satellite-v9', tileSize: 512, zoomOffset: -1, attribution: mbAttr});
-		//layerControl.addBaseLayer(satellite, 'Satellite');
-		//layerControl.addOverlay(POIS_PARKING, 'parkings');
-		//layerControl.addOverlay(POIS_AMENITIES, 'amenities');
-		//layerControl.addOverlay(POIS_RESIDENTIALS, 'buildings')
-		
 		
 	}    // this closes the IF
 	
+ 
+ });	 // cloese one fetch
 	
+ 
+  }); // cloese one fetch
+  
+  }); // cloese one fetch
+  
+  });	 // cloese one fetch
 
 	
 	
