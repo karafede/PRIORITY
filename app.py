@@ -4,9 +4,6 @@ import os
 os.environ["PYTHONIOENCODING"] = "utf-8"
 # path_app = os.getcwd() + "/"
 path_app = '/var/www/flask-app/'
-# path_app = '/var/www/flask-app/'
-# path_app = '/home/federico/flask_app/'
-# path_app = 'D:/Federico/Mobility/flask_app/'
 
 
 import pandas as pd
@@ -60,14 +57,6 @@ print(pyproj.__version__)   ## 3.3.1
 # shapely.__version__ # (1.8.5)
 
 
-
-#### connect to ROMA DB
-# conn_HAIG = db_connect.connect_HAIG_ROMA()
-# cur_HAIG = conn_HAIG.cursor()
-# Create an SQL connection engine to the output DB
-# engine = sal.create_engine('postgresql://postgres:superuser@10.1.0.1:5432/HAIG_ROMA', poolclass=NullPool)
-
-
 # Function to generate WKB hex
 def wkb_hexer(line):
     return line.wkb_hex
@@ -102,16 +91,7 @@ def page_not_found(error):
 
 @app.route('/')
 def root():
-    # markers=[
-    #    {
-    #    'lat':41.88897126206829,
-    #    'lon':12.495815421278861,
-    #    'popup':'middle pnt.'
-    #    }
-    # ]
-    # ##--->> return
-    # return render_template('index.html', markers=markers)
-
+   
     longitude = request.args.get('lng', type=float)
     latitude = request.args.get('latitude', type=float)
     print("latitude--->: ", latitude)
@@ -211,27 +191,12 @@ def form():
   latitude = request.args.get('latitude', type=float)
   print("latitude--->: ", latitude)
   print("longitude--->: ", longitude)
-  # return render_template("form.html", longitude=longitude, latitude=latitude)
   return render_template("index.html", longitude=longitude, latitude=latitude)
 
 
 
 @app.route('/mob_privata_page/', methods=['GET', 'POST'])
 def mob_privata():
-    """
-      longitude = request.args.get('lng', type=float)
-      latitude = request.args.get('latitude', type=float)
-      print("latitude--->: ", latitude)
-      print("longitude--->: ", longitude)
-      markers = [
-          {
-              'lat': longitude,
-              'lon': latitude,
-              'popup': 'user input pnt.'
-          }
-      ]
-      print(markers)
-    """
 
     import glob
     session['ZMU_day'] = '2024-10-11'
@@ -569,8 +534,6 @@ def bus_type_selector():
     print("selected_bus_load-------I AM HERE-----------: ", selected_bus_load)
     session["bus_load"] = selected_bus_load
 
-   
-
 
 
     return render_template("index_GTFS_emiss_select_daytype.html")
@@ -876,10 +839,12 @@ def OD_pub_hour_selector():
         aggregated_gdf_OD_GTFS.to_file(filename=path_app + 'static/aggregated_gdf_OD_GTFS.geojson',
                                             driver='GeoJSON')
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + "static/aggregated_gdf_OD_GTFS.geojson", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var aggregated_OD_zmu = \n" + old)  # assign the "var name" in the .geojson file
+        """
 
         #### make AGGREGATION BY DAY and by ORIGIN zone to find HOURLY PROFILE from all ORIGIN ZMUs
         query_origin_OD_hourly_profile = text('''SELECT orig, ora,giorno_tipo, 
@@ -918,7 +883,6 @@ def OD_pub_hour_selector():
 
         # print(session['id'])
     return render_template("index_OD_pub_zmu_select_hour.html", session_aggregated_gdf_OD_GTFS=session["aggregated_gdf_OD_GTFS"])
-    # return render_template("index_OD_pub_zmu.html")
 
 
 
@@ -1044,12 +1008,13 @@ def hour_selector_routing():
         import sqlalchemy as sal
         from sqlalchemy.pool import NullPool
 
-        engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
+        # engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
+        engine = create_engine("postgresql://postgres:pippo123@localhost:5432/RSM_Oct_Nov_2022")
         from sqlalchemy.sql import text
 
         ##### ----- query roting OD data from TPL  (CSA outputs from Gaetano V)------- #################################
         query_routing_od = text('''SELECT *
-                                    FROM gaetano.routing_od 
+                                    FROM gtfs.routing_od_20201002
                                      WHERE EXTRACT(HOUR FROM daytime)= :x
                                      AND distance_m  != -1
                                      AND travel_time_min != -1
@@ -1168,10 +1133,12 @@ def hour_selector_routing():
         aggregated_zmu_origin.to_file(filename=path_app + 'static/aggregated_zmu_routing_od.geojson',
                                       driver='GeoJSON')
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + "static/aggregated_zmu_routing_od.geojson", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var aggregated_zmu_routing_od = \n" + old)  # assign the "var name" in the .geojson file
+        """
 
         ### convert Geodataframe into .geojson...
         session["aggregated_zmu_routing_od_origin"] = aggregated_zmu_origin.to_json()
@@ -1278,10 +1245,12 @@ def choose_zmu_index_routing():
     filtered_od_routing.to_file(filename=path_app + 'static/filtered_od_routing.geojson',
                               driver='GeoJSON')
     ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+    """
     with open(path_app + "static/filtered_od_routing.geojson", "r+") as f:
         old = f.read()  # read everything in the file
         f.seek(0)  # rewind
         f.write("var filtered_od_routing = \n" + old)  # assign the "var name" in the .geojson file
+    """
 
     print("-------------- I am here...selected_index_zmu is:---------------------- ", session["ZMU_index"])
 
@@ -1400,6 +1369,8 @@ def process():
     #                 {'lat': 42.00338672135351, 'lng': 12.437896728515625, 'distanceToNextPoint': 21446.84893686627},
     #                 {'lat': 41.86649282301996, 'lng': 12.2552490234375}]]
 
+    print("------ test_polygon-------0")
+    
     lat_point_list = []
     lon_point_list = []
     ## build a list of LATITUDES and LONGITUDES
@@ -1419,7 +1390,9 @@ def process():
 
     ## draw and save a quick map
     custom_polygon.to_file(filename=path_app + 'static/custom_polygon_ZMU.geojson', driver='GeoJSON')
-
+    
+    print("------ test_polygon-------1")
+    
     import folium
     ave_LAT = 41.90368331095105
     ave_LON = 12.487932714627279
@@ -1428,6 +1401,9 @@ def process():
     folium.GeoJson(custom_polygon).add_to(my_map)
     folium.LatLngPopup().add_to(my_map)
     my_map.save(path_app + 'static/test_polygon.html')
+
+    print("------ test_polygon-------1")
+
 
     #### -------------------------------------------- ######################
     #### ---- Intersect CUSTOM POLYGON with ZMUs----- ######################
@@ -1457,27 +1433,35 @@ def process():
     selected_province_number = int(selected_province_number)
     
     
-
-    # engine_lnx = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/andreatmp")
-    # engine_lnx = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/rds_22-24")
-    # engine_lnx = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
-    engine_lnx = sal.create_engine("postgresql://postgres:pippo123@localhost:5432/VIASAT_RM_Oct_2024")
+    # engine_lnx = sal.create_engine("postgresql://postgres:pippo123@localhost:5432/VIASAT_RM_Oct_2024")
     from sqlalchemy.sql import text
-    connection = engine_lnx.connect()
+    # connection = engine_lnx.connect()
     
     
     if selected_province_number == 48:
         province = 'firenze'
         print("firenze")
         print("selected_province_number:--------selector", selected_province_number, province)
+        print("----- I AM HEREEEEEEE---------------FIRENZE")
         engine_lnx = create_engine("postgresql://postgres:pippo123@localhost:5432/VIASAT_FIRENZE")
-        print("----- I AM HEREEEEEEE---------------")
+        
 
     elif selected_province_number == 58:
         province = 'roma'
         print("roma")
         print("selected_province_number:--------selector", selected_province_number, province)
-        engine_lnx = sal.create_engine("postgresql://postgres:pippo123@localhost:5432/VIASAT_RM_Oct_2024")
+        engine_lnx = create_engine("postgresql://postgres:pippo123@localhost:5432/VIASAT_RM_Oct_2024")
+        print("----- I AM HEREEEEEEE---------------ROMA")
+        
+        
+        
+    elif selected_province_number == 99:
+        province = 'italia_EV'
+        print("italia_EV")
+        print("selected_province_number:--------selector", selected_province_number, province)
+        engine_lnx = create_engine("postgresql://postgres:pippo123@localhost:5432/ELECTRIC_ITALIA_OCT_2024")
+        print("----- I AM HEREEEEEEE---------------ITALIA")
+        
 
     print("------current ---engine-------------:", engine_lnx)
     print("selected_province_number:--------selector", selected_province_number, province)
@@ -1560,11 +1544,13 @@ def process():
     # save first as geojson file
     with open(path_app + 'static/ZMUs_custom_selected.geojson', 'w') as f:
         f.write(ZMUs_custom_selected.to_json())
+    """
     ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
     with open(path_app + "static/ZMUs_custom_selected.geojson", "r+") as f:
         old = f.read()  # read everything in the file
         f.seek(0)  # rewind
         f.write("var ZMUs_custom_selected = \n" + old)  # assign the "var name" in the .geojson file
+    """
 
     ## --- compute the external boundary of the slected ZMUs
     # --->> ,erge all geometries
@@ -1583,11 +1569,14 @@ def process():
     # print("------BORDER------", border.to_json())
     with open(path_app + 'static/BORDER_selected_ZMUs_aggr_' + session.sid + '.geojson', 'w') as f:
         f.write(border.to_json())
+    
+    """
     ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
     with open(path_app + "static/BORDER_selected_ZMUs.geojson", "r+") as f:
         old = f.read()  # read everything in the file
         f.seek(0)  # rewind
         f.write("var BORDER_selected_ZMUs = \n" + old)  # assign the "var name" in the .geojson file
+    """
 
     # session['BORDER_selected_ZMUs'] = border.to_json()
     # print("------BORDER------", session['BORDER_selected_ZMUs'])
@@ -1658,10 +1647,12 @@ def pois():
         with open(path_app + 'static/POIS_parking.geojson', 'w') as f:
             f.write(POIS_parking.to_json())
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + "static/POIS_parking.geojson", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var POIS_parking = \n" + old)  # assign the "var name" in the .geojson file
+        """
     else:
         print("enter valid location coordinates")
 
@@ -1721,10 +1712,13 @@ def pois():
         with open(path_app + 'static/layer_POIS_amenities.geojson', 'w') as f:
             f.write(layer_POIS_amenities.to_json())
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        
+        """
         with open(path_app + "static/layer_POIS_amenities.geojson", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var POIS_amenities = \n" + old)  # assign the "var name" in the .geojson file
+        """
     else:
         print("enter valid location coordinates")
 
@@ -1788,19 +1782,23 @@ def pois():
         aggr_POIS_ZMU.to_file(filename=path_app + 'static/zmu_POIS_ROMA_2011.geojson',
                                   driver='GeoJSON')
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + "static/zmu_POIS_ROMA_2011.geojson", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var zmu_POIS_counts = \n" + old)  # assign the "var name" in the .geojson file
+        """
 
         # save first as geojson file
         with open(path_app + 'static/layer_POIS_residential.geojson', 'w') as f:
             f.write(layer_pois_residential.to_json())
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + "static/layer_POIS_residential.geojson", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var POIS_residential = \n" + old)  # assign the "var name" in the .geojson file
+        """
 
         ### ---- CHARGING_STATION ---#####################################################
         tags_residential = {'amenity': True,
@@ -1815,21 +1813,7 @@ def pois():
 
 @app.route('/animation_TPL/', methods=['GET', 'POST'])
 def animation_TPL():
-    """
-    longitude = request.args.get('lng', type=float)
-    latitude = request.args.get('latitude', type=float)
-    print("latitude--->: ", latitude)
-    print("longitude--->: ", longitude)
-    markers = [
-        {
-            'lat': longitude,
-            'lon': latitude,
-            'popup': 'user input pnt.'
-        }
-    ]
-    print(markers)
-    return render_template("index_animated_TPL.html", longitude=longitude, latitude=latitude)
-    """
+   
     session["gtfs"] = '2023_04_05'
     return render_template("index_animated_TPL_GTFS_selection.html", session=session)
 
@@ -3160,7 +3144,8 @@ def ZMU_hourrange_selector():
           print("italia_ev")
           print("selected_province_number:--------selector", selected_province_number, province)
           # engine = sal.create_engine("postgresql://federico:pippo75@192.168.132.222:5432/ELECTRIC_ITALIA_JULY_2025")
-          engine = create_engine("postgresql://postgres:pippo123@localhost:5432/ELECTRIC_ITALIA_JULY_2025")
+          # engine = create_engine("postgresql://postgres:pippo123@localhost:5432/ELECTRIC_ITALIA_JULY_2025")
+          engine = create_engine("postgresql://postgres:pippo123@localhost:5432/ELECTRIC_ITALIA_OCT_2024")
 
         print("------current ---engine-------------:", engine)
         print("selected_province_number:--------selector", selected_province_number, province)
@@ -3244,12 +3229,13 @@ def ZMU_hourrange_selector():
                 gdf_staypoints.to_file(filename=path_app + 'static/staypoints_tod.geojson',
                                        driver='GeoJSON')
                 ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+                """
                 with open(path_app + 'static/staypoints_tod.geojson', 'r+', encoding='utf8',
                           errors='ignore') as f:
                     old = f.read()  # read everything in the file
                     f.seek(0)  # rewind
                     f.write("var points_staypoints = \n" + old)  # assign the "var name" in the .geojson file
-
+                """
                 #################################################################################
 
 
@@ -3272,89 +3258,14 @@ def ZMU_hourrange_selector():
                                                             WHERE 
                                                               date(fcd.trips.dt_o) BETWEEN :x AND :xx 
                                                               AND fcd.trips.hour_range_o = :y
-                                                              AND fcd.trips.tod_o = :z 
-                                                              AND fcd.staypoints.id_stay_type = :s 
+                                                               AND fcd.staypoints.id_stay_type != 'O'
                                                             AND (fcd.staypoints.info->>'virtual')::boolean IS false 
                                                      ''')
 
                     stmt = query_trip_staypoints.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                                    y=str(hourrange_id), z=str(tod), s=str(stay_type))
+                                                                    y=str(hourrange_id))
 
-                ###### staypoint: home or work and all Time of days (W, P, H)
-                elif (selected_stay_type == 21 or selected_stay_type == 22) and (selected_ZMU_tod == 9):
-                    query_trip_staypoints = text(''' SELECT fcd.trips.id_veh,
-                                                                     fcd.trips.geom,
-                                                                     fcd.trips.id_zone_o, fcd.trips.id_zone_d,
-                                                                     fcd.trips.tod_o,fcd.trips.tod_d,
-                                                                     fcd.trips.dt_o,fcd.trips.dt_d,
-                                                                     fcd.trips.tt,fcd.trips.dist,
-                                                                     fcd.trips.p_after,  fcd.trips.p_before,
-                                                                     fcd.trips.hour_range_o,fcd.trips.hour_range_d,
-                                                                     fcd.staypoints.id_stay_type
-    
-                                                                     FROM fcd.staypoints
-                                                                     INNER JOIN 
-                                                                     fcd.trips ON fcd.trips.id_veh = fcd.staypoints.id_veh
-                                                                     WHERE 
-                                                                       date(fcd.trips.dt_o) BETWEEN :x AND :xx 
-                                                                       AND fcd.trips.hour_range_o = :y
-                                                                       AND fcd.staypoints.id_stay_type = :s 
-                                                                     AND (fcd.staypoints.info->>'virtual')::boolean IS false 
-                                                              ''')
-
-                    stmt = query_trip_staypoints.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                            y=str(hourrange_id), s=str(stay_type))
-                ### staypoint = Home + WORK
-                elif (selected_stay_type == 23) and  (selected_ZMU_tod != 9):
-                    query_trip_staypoints = text(''' SELECT fcd.trips.id_veh,
-                                                                            fcd.trips.geom,
-                                                                            fcd.trips.id_zone_o, fcd.trips.id_zone_d,
-                                                                            fcd.trips.tod_o,fcd.trips.tod_d,
-                                                                            fcd.trips.dt_o,fcd.trips.dt_d,
-                                                                            fcd.trips.tt,fcd.trips.dist,
-                                                                            fcd.trips.p_after,  fcd.trips.p_before,
-                                                                            fcd.trips.hour_range_o,fcd.trips.hour_range_d,
-                                                                            fcd.staypoints.id_stay_type
-    
-                                                                            FROM fcd.staypoints
-                                                                            INNER JOIN 
-                                                                            fcd.trips ON fcd.trips.id_veh = fcd.staypoints.id_veh
-                                                                            WHERE 
-                                                                              date(fcd.trips.dt_o) BETWEEN :x AND :xx 
-                                                                              AND fcd.trips.hour_range_o = :y
-                                                                              AND fcd.trips.tod_o = :z 
-                                                                            AND fcd.staypoints.id_stay_type != 'O' 
-                                                                            AND (fcd.staypoints.info->>'virtual')::boolean IS false 
-                                                                     ''')
-
-                    stmt = query_trip_staypoints.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                            y=str(hourrange_id), z=str(tod))
-
-                ### staypoint = Home + WORK and all Time of days (W, P, H)
-                elif (selected_stay_type == 23) and (selected_ZMU_tod == 9):
-                    query_trip_staypoints = text(''' SELECT fcd.trips.id_veh,
-                                                                                     fcd.trips.geom,
-                                                                                     fcd.trips.id_zone_o, fcd.trips.id_zone_d,
-                                                                                     fcd.trips.tod_o,fcd.trips.tod_d,
-                                                                                     fcd.trips.dt_o,fcd.trips.dt_d,
-                                                                                     fcd.trips.tt,fcd.trips.dist,
-                                                                                     fcd.trips.p_after,  fcd.trips.p_before,
-                                                                                     fcd.trips.hour_range_o,fcd.trips.hour_range_d,
-                                                                                     fcd.staypoints.id_stay_type
-    
-                                                                                     FROM fcd.staypoints
-                                                                                     INNER JOIN 
-                                                                                     fcd.trips ON fcd.trips.id_veh = fcd.staypoints.id_veh
-                                                                                     WHERE 
-                                                                                       date(fcd.trips.dt_o) BETWEEN :x AND :xx 
-                                                                                       AND fcd.trips.hour_range_o = :y
-                                                                                     AND fcd.staypoints.id_stay_type != 'O' 
-                                                                                     AND (fcd.staypoints.info->>'virtual')::boolean IS false 
-                                                                              ''')
-
-                    stmt = query_trip_staypoints.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                            y=str(hourrange_id))
-
+                
             elif selected_province_number == 99:
                 #### ---- DATI ITALIA ELETTRICI ------#########
                 ### any staypoint = Home or WORK
@@ -3364,15 +3275,25 @@ def ZMU_hourrange_selector():
                 import sqlalchemy as sal
                 from sqlalchemy.pool import NullPool
 
+
+                """
                 query_trip_staypoints = text(''' SELECT * 
                                                  FROM fcd.trips
                                                  WHERE 
                                                  date(fcd.trips.timedate_o) BETWEEN :x AND :xx 
                                                  /* AND date_part('hour', timedate_o) as hour */
                                                  AND extract(hour from timedate_o) BETWEEN :y AND :yy ''')
+                """
 
-                # selected_ZMU_day_start = '2025-07-21'
-                # selected_ZMU_day_end = '2025-07-22'
+                query_trip_staypoints = text(''' SELECT * 
+                                                 FROM fcd.trips
+                                                 WHERE 
+                                                 date(fcd.trips.dt_o) BETWEEN :x AND :xx 
+                                                 /* AND date_part('hour', dt_o) as hour */
+                                                 AND extract(hour from dt_o) BETWEEN :y AND :yy ''')
+                                               
+                # selected_FCD_day_start = '2025-07-21'
+                # selected_FCD_day_end = '2025-07-22'
                 # hour_s = 7  # start hour
                 # hour_e = 10  # end hour
 
@@ -3386,6 +3307,7 @@ def ZMU_hourrange_selector():
 
             if selected_province_number == 99:
 
+                """
                 origin_destination_routes_day.rename({'idterm': 'id_veh'}, axis=1, inplace=True)
                 origin_destination_routes_day.rename({'timedate_o': 'dt_o'}, axis=1, inplace=True)
                 origin_destination_routes_day.rename({'timedate_d': 'dt_d'}, axis=1, inplace=True)
@@ -3393,6 +3315,7 @@ def ZMU_hourrange_selector():
                 origin_destination_routes_day.rename({'triptime_s': 'tt'}, axis=1, inplace=True)
                 origin_destination_routes_day.rename({'breaktime_s_new': 'p_after'}, axis=1, inplace=True)
                 origin_destination_routes_day.rename({'idtrajectory': 'id'}, axis=1, inplace=True)
+                """
 
                 origin_destination_routes_day = origin_destination_routes_day[['id', 'id_veh', 'dt_o', 'dt_d', 'dist', 'tt',
                                                                                 'p_after', 'id_zone_o', 'id_zone_d', 'geom']]
@@ -3400,36 +3323,7 @@ def ZMU_hourrange_selector():
             elif selected_province_number != 99:
                 origin_destination_routes_day = origin_destination_routes_day.sample(frac=0.15)  # 10%; # n=1000
 
-            '''
-            ### ---- consider only CROSSED ZONES ------ ##################
-            df_crossed_zmu = []
-            for i in range(len(origin_destination_routes_day)):
-                if (origin_destination_routes_day.id_zone_o.iloc[i] != origin_destination_routes_day.id_zone_d.iloc[i]):
-                    # print("============ got it ! ===================")
-                    crossed_zmu = pd.DataFrame({'id_zone_o': [origin_destination_routes_day.id_zone_o.iloc[i]],
-                                                'id_zone_d': [origin_destination_routes_day.id_zone_d.iloc[i]],
-                                                'id_veh': [origin_destination_routes_day.id_veh.iloc[i]],
-                                                 'geom': [origin_destination_routes_day.geom.iloc[i]],
-                                                 'tod_o': [origin_destination_routes_day.tod_o.iloc[i]],
-                                                   'tod_d': [origin_destination_routes_day.tod_d.iloc[i]],
-                                                    'dt_o': [origin_destination_routes_day.dt_o.iloc[i]],
-                                                     'dt_d': [origin_destination_routes_day.dt_d.iloc[i]],
-                                                     
-                                                     'tt': [origin_destination_routes_day.tt.iloc[i]],
-                                                     'dist': [origin_destination_routes_day.dist.iloc[i]],
-                                                     'p_after': [origin_destination_routes_day.p_after.iloc[i]],
-                                                     'p_before': [origin_destination_routes_day.p_before.iloc[i]],
-                                                     'hour_range_o': [origin_destination_routes_day.hour_range_o.iloc[i]],
-                                                     'hour_range_d': [origin_destination_routes_day.hour_range_d.iloc[i]],
-                                                     'id_stay_type': [origin_destination_routes_day.id_stay_type.iloc[i]]
-                                                     
-                                                })
-                    df_crossed_zmu.append(crossed_zmu)
-            crossed_zmu = pd.concat(df_crossed_zmu)
-            ################################################################
-    
-            origin_destination_routes_day = crossed_zmu
-            '''
+         
 
             ### ---- consider only CROSSED ZONES ------ ##################
             origin_destination_routes_day = origin_destination_routes_day[
@@ -3828,110 +3722,31 @@ def ZMU_hourrange_selector():
                                                                       fcd.trips ON fcd.trips.id_veh = fcd.staypoints.id_veh
                                                                       WHERE 
                                                                         date(fcd.trips.dt_o) BETWEEN :x AND :xx 
-                                                                        AND fcd.trips.tod_o = :z 
-                                                                        AND fcd.staypoints.id_stay_type = :s 
+                                                                         AND fcd.staypoints.id_stay_type != 'O' 
+                                                                        
+                                                                        
                                                                       AND (fcd.staypoints.info->>'virtual')::boolean IS false 
                                                                ''')
 
-                    stmt = query_origin_destination_routes_day.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                            z=str(tod), s=str(stay_type))
+                    stmt = query_origin_destination_routes_day.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end))
 
                 ### staypoint = Home or WORK and all Time of days (W, P, H)
-                elif (selected_stay_type == 21 or selected_stay_type == 22) and  (selected_ZMU_tod == 9):
-                    query_origin_destination_routes_day = text(''' SELECT fcd.trips.id_veh,
-                                                                             /*fcd.trips.geom,*/
-                                                                             fcd.trips.id_zone_o, fcd.trips.id_zone_d,
-                                                                             fcd.trips.tod_o,fcd.trips.tod_d,
-                                                                             fcd.trips.dt_o,fcd.trips.dt_d,
-                                                                             fcd.trips.id_staypoint_o,fcd.trips.id_staypoint_d,
-                                                                             fcd.trips.tt,fcd.trips.dist,
-                                                                             fcd.trips.p_after,  fcd.trips.p_before,
-                                                                             fcd.trips.hour_range_o,fcd.trips.hour_range_d,
-                                                                             fcd.staypoints.id_stay_type,
-                                                                             fcd.trips.geom,
-                                                                              date_part('hour', dt_o) as hr, 
-                                                                              TO_CHAR(dt_o::DATE, 'dd-mm-yyyy') as day
-    
-                                                                             FROM fcd.staypoints
-                                                                             INNER JOIN 
-                                                                             fcd.trips ON fcd.trips.id_veh = fcd.staypoints.id_veh
-                                                                             WHERE 
-                                                                               date(fcd.trips.dt_o) BETWEEN :x AND :xx 
-                                                                               AND fcd.staypoints.id_stay_type = :s 
-                                                                             AND (fcd.staypoints.info->>'virtual')::boolean IS false 
-                                                                      ''')
-
-                    stmt = query_origin_destination_routes_day.bindparams(x=str(selected_ZMU_day_start),
-                                                                          xx=str(selected_ZMU_day_end),
-                                                                          s=str(stay_type))
-
-
-                ### staypoint = Home + WORK
-                elif (selected_stay_type == 23) and  (selected_ZMU_tod != 9):
-                    query_origin_destination_routes_day = text(''' SELECT fcd.trips.id_veh,
-                                                                                 /*fcd.trips.geom,*/
-                                                                                 fcd.trips.id_zone_o, fcd.trips.id_zone_d,
-                                                                                 fcd.trips.tod_o,fcd.trips.tod_d,
-                                                                                 fcd.trips.id_staypoint_o,fcd.trips.id_staypoint_d,
-                                                                                 fcd.trips.dt_o,fcd.trips.dt_d,
-                                                                                 fcd.trips.tt,fcd.trips.dist,
-                                                                                 fcd.trips.p_after,  fcd.trips.p_before,
-                                                                                 fcd.trips.hour_range_o,fcd.trips.hour_range_d,
-                                                                                 fcd.staypoints.id_stay_type,
-                                                                                 fcd.trips.geom,
-                                                                                  date_part('hour', dt_o) as hr, 
-                                                                                  TO_CHAR(dt_o::DATE, 'dd-mm-yyyy') as day
-        
-                                                                                 FROM fcd.staypoints
-                                                                                 INNER JOIN 
-                                                                                 fcd.trips ON fcd.trips.id_veh = fcd.staypoints.id_veh
-                                                                                 WHERE 
-                                                                                   date(fcd.trips.dt_o) BETWEEN :x AND :xx 
-                                                                                   AND fcd.trips.tod_o = :z 
-                                                                                  AND fcd.staypoints.id_stay_type != 'O'
-                                                                                 AND (fcd.staypoints.info->>'virtual')::boolean IS false 
-                                                                          ''')
-
-                    stmt = query_origin_destination_routes_day.bindparams(x=str(selected_ZMU_day_start),
-                                                                          xx=str(selected_ZMU_day_end),
-                                                                          z=str(tod))
-
-                ### staypoint = Home + WORK and all Time of day (W, P, H)
-                elif (selected_stay_type == 23) and  (selected_ZMU_tod == 9):
-                    query_origin_destination_routes_day = text(''' SELECT fcd.trips.id_veh,
-                                                                                                /*fcd.trips.geom,*/
-                                                                                                fcd.trips.id_zone_o, fcd.trips.id_zone_d,
-                                                                                                fcd.trips.tod_o,fcd.trips.tod_d,
-                                                                                                fcd.trips.dt_o,fcd.trips.dt_d,
-                                                                                                fcd.trips.id_staypoint_o,fcd.trips.id_staypoint_d,
-                                                                                                fcd.trips.tt,fcd.trips.dist,
-                                                                                                fcd.trips.p_after,  fcd.trips.p_before,
-                                                                                                fcd.trips.hour_range_o,fcd.trips.hour_range_d,
-                                                                                                fcd.staypoints.id_stay_type,
-                                                                                                fcd.trips.geom,
-                                                                                                 date_part('hour', dt_o) as hr, 
-                                                                                                 TO_CHAR(dt_o::DATE, 'dd-mm-yyyy') as day
-    
-                                                                                                FROM fcd.staypoints
-                                                                                                INNER JOIN 
-                                                                                                fcd.trips ON fcd.trips.id_veh = fcd.staypoints.id_veh
-                                                                                                WHERE 
-                                                                                                  date(fcd.trips.dt_o) BETWEEN :x AND :xx 
-                                                                                                 AND fcd.staypoints.id_stay_type != 'O'
-                                                                                                AND (fcd.staypoints.info->>'virtual')::boolean IS false 
-                                                                                         ''')
-
-                    stmt = query_origin_destination_routes_day.bindparams(x=str(selected_ZMU_day_start),
-                                                                          xx=str(selected_ZMU_day_end))
-
-
+              
 
             if selected_province_number == 99:   ### ITALY EV
                 print("------- WORKING HERE NOW!!!! -----------------------------")
+                
+                """
                 query_origin_destination_routes_day = text(''' SELECT *,
                                                                 date_part('hour', fcd.trips.timedate_o) as hr
                                                                 FROM fcd.trips
                                                                 WHERE date(fcd.trips.timedate_o) BETWEEN :x AND :xx ''')
+                """
+                
+                query_origin_destination_routes_day = text(''' SELECT *,
+                                                                date_part('hour', fcd.trips.dt_o) as hr
+                                                                FROM fcd.trips
+                                                                WHERE date(fcd.trips.dt_o) BETWEEN :x AND :xx ''')
 
                 # selected_ZMU_day_start = '2025-07-21'
                 # selected_ZMU_day_end = '2025-07-22'
@@ -3952,6 +3767,8 @@ def ZMU_hourrange_selector():
                 origin_destination_routes_day = origin_destination_routes_day.sample(frac=0.15)  # 10%; # n=1000
 
             if selected_province_number == 99:    ### ITALY  EV
+            
+                """
                 origin_destination_routes_day.rename({'idterm': 'id_veh'}, axis=1, inplace=True)
                 origin_destination_routes_day.rename({'timedate_o': 'dt_o'}, axis=1, inplace=True)
                 origin_destination_routes_day.rename({'timedate_d': 'dt_d'}, axis=1, inplace=True)
@@ -3959,6 +3776,7 @@ def ZMU_hourrange_selector():
                 origin_destination_routes_day.rename({'triptime_s': 'tt'}, axis=1, inplace=True)
                 origin_destination_routes_day.rename({'breaktime_s_new': 'p_after'}, axis=1, inplace=True)
                 origin_destination_routes_day.rename({'idtrajectory': 'id'}, axis=1, inplace=True)
+                """
 
                 origin_destination_routes_day = origin_destination_routes_day[
                     ['id', 'id_veh', 'dt_o', 'dt_d', 'dist', 'tt', 'hr',
@@ -4023,30 +3841,7 @@ def ZMU_hourrange_selector():
                 origin_destination_routes_day['tripdistance_m'] > 0]
 
 
-            """
-            # print(origin_destination_routes_day.columns)
-            ### ---- aggregate number of HOMES and POPULATION by zone
-            homes_and_pop = origin_destination_routes_day[[ 'zmu_origin', 'zmu_destination', 'id_stay_type', 'id_staypoint_d', 'hr', 'POP_TOT_ZMU']]
-
-            ## consider an unique staypoint ID
-            homes_and_pop = homes_and_pop.drop_duplicates(['id_staypoint_d'])
-            homes_and_pop = homes_and_pop[homes_and_pop.id_stay_type == 'H']
-
-            homes_and_pop.to_csv(path_app + 'static/homes_and_pop.csv')
-            # print(homes_and_pop)
-
-            ### ---->> aggregate by zones  ------ #############################################################
-            homes_and_pop = homes_and_pop[['zmu_origin', 'id_stay_type']].groupby(
-                ['zmu_origin'], sort=False).size().reset_index().rename(columns={0: 'counts'})
-            homes_and_pop.rename({'zmu_origin': 'zmu'}, axis=1, inplace=True)
-            homes_and_pop.rename({'counts': 'n_homes'}, axis=1, inplace=True)
-
-            homes_and_pop = pd.merge(homes_and_pop,
-                                     ZMU_ROMA_with_population[['zmu', 'index_zmu', 'area', 'nome_comun', 'quartiere',
-                                                               'POP_TOT_ZMU']], on=['zmu'], how='left')
-
-            homes_and_pop['n_homes'] = (homes_and_pop['n_homes'] * 100) / 1.3
-            """
+          
 
             if selected_province_number != 99:
                 #### ---- read data from .csv (Carlo's elaborations)
@@ -4802,10 +4597,13 @@ def ZMU_hourrange_selector():
                                                       driver='GeoJSON')
 
             ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+            
+            """
             with open(path_app + "static/aggregated_zmu_filtered.geojson", "r+") as f:
                 old = f.read()  # read everything in the file
                 f.seek(0)  # rewind
                 f.write("var aggregated_matched_routes_zmu = \n" + old)  # assign the "var name" in the .geojson file
+            """
 
             ### convert Geodataframe into .geojson...
             session["aggregated_zmu_origin"] = aggregated_zmu_origin_for_geojson.to_json()
@@ -4833,1225 +4631,8 @@ def ZMU_hourrange_selector():
         elif selected_data_type == 12:  ## SYNTHETIC DATA ##
             print("---------------------------------------------------SYNTHETIC DATA")
             ## switch to table SYNTHETIC data.....
-
-            ### ---> get filtered data of ZMU 'test' table  <--- ####################################
-            #########################################################################################
-            #########################################################################################
-
-            ########################### ----------------------------------- ###########
-            ########################### ----------------------------------- ###########
-            ########################### ----------------------------------- ###########
-            ########################### ----------------------------------- ###########
-            ########################### ----------------------------------- ###########
-            ########################### ----------------------------------- ###########
-
-            print("-----------NEW SYNTHETIC data from CARLO--------------------------")
             
-            from sqlalchemy import create_engine
-            from sqlalchemy import exc
-            import sqlalchemy as sal
-            from sqlalchemy.pool import NullPool
-
-            # engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
-            engine = create_engine("postgresql://postgres:pippo123@localhost:5432/RSM_Oct_Nov_2022")
-            from sqlalchemy.sql import text
-
-
-            ####----- query all staypoints ----- #######################
-            if (selected_stay_type == 21 or selected_stay_type == 22):
-                query_all_staypoints = text('''SELECT count(id_staypoint),
-                                                      id_zone
-                                                      FROM fcd.staypoints
-                                                                 WHERE
-                                                                 fcd.staypoints.id_stay_type = :s
-                                                                 AND (fcd.staypoints.info->>'virtual')::boolean IS false 
-                                                                 GROUP BY
-                                                                  id_zone''')
-
-                stmt = query_all_staypoints.bindparams(s=str(stay_type))
-
-            elif (selected_stay_type==23):
-                query_all_staypoints = text('''SELECT count(id_staypoint),
-                                                                 id_zone
-                                                                 FROM fcd.staypoints
-                                                                            WHERE  
-                                                                            fcd.staypoints.id_stay_type != 'O'
-                                                                            AND (fcd.staypoints.info->>'virtual')::boolean IS false 
-                                                                            GROUP BY
-                                                                             id_zone''')
-
-                stmt = query_all_staypoints
-
-
-
-            with engine.connect() as conn:
-                res = conn.execute(stmt).all()
-            all_staypoints = pd.DataFrame(res)
-            all_staypoints.rename({'id_zone': 'zmu'}, axis=1, inplace=True)
-            all_staypoints.rename({'count': 'count_staypoints'}, axis=1, inplace=True)   ### all staypoints by zone
-            all_staypoints.replace([np.inf, -np.inf], np.nan, inplace=True)
-            all_staypoints = all_staypoints[
-                all_staypoints['zmu'].notna()]
-            all_staypoints['zmu'] = all_staypoints.zmu.astype('int')
-
-            ##### ----- make geojson for staypoints --------- ###############################
-            if (selected_stay_type == 21 or selected_stay_type == 22):
-                query_staypoints = text('''SELECT id_staypoint, id_veh, n_points, name,
-                                                          id_stay_type, lon, lat, id_zone
-                                                             FROM fcd.staypoints 
-                                                              WHERE (fcd.staypoints.info->>'virtual')::boolean IS false 
-                                                            AND id_stay_type=:s ''')
-                stmt = query_staypoints.bindparams(s=str(stay_type))
-
-
-            elif (selected_stay_type == 23):
-                query_staypoints = text('''SELECT id_staypoint, id_veh, n_points, name,
-                                                                       id_stay_type, lon, lat, id_zone
-                                                                          FROM fcd.staypoints 
-                                                                           WHERE (fcd.staypoints.info->>'virtual')::boolean IS false 
-                                                                           AMD id_stay_type !='O' ''')
-                stmt = query_staypoints
-            with engine.connect() as conn:
-                res = conn.execute(stmt).all()
-            df_staypoints = pd.DataFrame(res)
-
-            ##-----> make a geodataframe with lat, lon, coordinates
-            geometry = [Point(xy) for xy in zip(df_staypoints.lon, df_staypoints.lat)]
-            crs = {'init': 'epsg:4326'}
-            gdf_staypoints = GeoDataFrame(df_staypoints, crs=crs, geometry=geometry)
-            ## save as .geojson file
-            gdf_staypoints.to_file(filename=path_app + 'static/staypoints_tod.geojson',
-                                   driver='GeoJSON')
-            ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
-            with open(path_app + 'static/staypoints_tod.geojson', 'r+', encoding='utf8',
-                      errors='ignore') as f:
-                old = f.read()  # read everything in the file
-                f.seek(0)  # rewind
-                f.write("var points_staypoints = \n" + old)  # assign the "var name" in the .geojson file
-
-            #################################################################################
-
-            #### ---- query all trips having a staypoint ------#########
-            # selected_ZMU_day_start = '2022-10-06'
-            # selected_ZMU_day_end = '2022-10-07'
-           
-            ### staypoint = Home or WORK
-            if (selected_stay_type == 21 or selected_stay_type == 22) and (selected_ZMU_tod != 9):
-                query_trip_staypoints = text(''' SELECT synt.trips.id_veh,
-                                                        synt.trips.geom,
-                                                        synt.trips.id_zone_o, synt.trips.id_zone_d,
-                                                        synt.trips.tod_o,synt.trips.tod_d,
-                                                        synt.trips.dt_o,synt.trips.dt_d,
-                                                        synt.trips.tt,synt.trips.dist,
-                                                        synt.trips.p_after,  synt.trips.p_before,
-                                                        synt.trips.hour_range_o,synt.trips.hour_range_d               
-                                                        FROM synt.trips
-                                                        WHERE 
-                                                          date(synt.trips.dt_o) BETWEEN :x AND :xx 
-                                                          AND synt.trips.hour_range_o = :y
-                                                          AND synt.trips.tod_o = :z      ''')
-
-                
-                stmt = query_trip_staypoints.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                                y=str(hourrange_id), z=str(tod))                                                                
-                                                                
-            ###### staypoint: home or work and all Time of days (W, P, H)
-            elif (selected_stay_type == 21 or selected_stay_type == 22) and (selected_ZMU_tod == 9):
-                query_trip_staypoints = text(''' SELECT synt.trips.id_veh,
-                                                                 synt.trips.geom,
-                                                                 synt.trips.id_zone_o, synt.trips.id_zone_d,
-                                                                 synt.trips.tod_o,synt.trips.tod_d,
-                                                                 synt.trips.dt_o,synt.trips.dt_d,
-                                                                 synt.trips.tt,synt.trips.dist,
-                                                                 synt.trips.p_after,  synt.trips.p_before,
-                                                                 synt.trips.hour_range_o,synt.trips.hour_range_d
-                                                                 FROM synt.trips
-                                                                 WHERE 
-                                                                   date(synt.trips.dt_o) BETWEEN :x AND :xx 
-                                                                   AND synt.trips.hour_range_o = :y   ''')
-
-                stmt = query_trip_staypoints.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                        y=str(hourrange_id))
-
-            ### staypoint = Home + WORK
-            elif (selected_stay_type == 23) and  (selected_ZMU_tod != 9):
-                query_trip_staypoints = text(''' SELECT synt.trips.id_veh,
-                                                                        synt.trips.geom,
-                                                                        synt.trips.id_zone_o, synt.trips.id_zone_d,
-                                                                        synt.trips.tod_o,synt.trips.tod_d,
-                                                                        synt.trips.dt_o,synt.trips.dt_d,
-                                                                        synt.trips.tt,synt.trips.dist,
-                                                                        synt.trips.p_after,  synt.trips.p_before,
-                                                                        synt.trips.hour_range_o,synt.trips.hour_range_d
-                                                                
-                                                                        FROM synt.trips
-                                                                        WHERE 
-                                                                          date(synt.trips.dt_o) BETWEEN :x AND :xx 
-                                                                          AND synt.trips.hour_range_o = :y
-                                                                          AND synt.trips.tod_o = :z    ''')
-
-                stmt = query_trip_staypoints.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                        y=str(hourrange_id), z=str(tod))
-
-
-            ### staypoint = Home + WORK and all Time of days (W, P, H)
-            elif (selected_stay_type == 23) and (selected_ZMU_tod == 9):
-                query_trip_staypoints = text(''' SELECT synt.trips.id_veh,
-                                                                     synt.trips.geom,
-                                                                     synt.trips.id_zone_o, synt.trips.id_zone_d,
-                                                                     synt.trips.tod_o,synt.trips.tod_d,
-                                                                     synt.trips.dt_o,synt.trips.dt_d,
-                                                                     synt.trips.tt,synt.trips.dist,
-                                                                     synt.trips.p_after,  synt.trips.p_before,
-                                                                     synt.trips.hour_range_o,synt.trips.hour_range_d
-                                                                
-                                                                     FROM synt.trips
-                                                                     WHERE 
-                                                                       date(synt.trips.dt_o) BETWEEN :x AND :xx 
-                                                                       AND synt.trips.hour_range_o = :y
-                                                                          ''')
-
-                stmt = query_trip_staypoints.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                        y=str(hourrange_id))
-
-
-            print(selected_stay_type)
-            print(selected_ZMU_tod)
-
-            with engine.connect() as conn:
-                res = conn.execute(stmt).all()
-            origin_destination_routes_day = pd.DataFrame(res)
-            print("-----------------length origin_destination_routes_day:-------------------------", len(origin_destination_routes_day))
-
-
-            ### ---- consider only CROSSED ZONES ------ ##################
-            origin_destination_routes_day = origin_destination_routes_day[
-                (origin_destination_routes_day.id_zone_o != origin_destination_routes_day.id_zone_d)]
-
-            origin_destination_routes_day['speed'] = ((origin_destination_routes_day.dist) / 1000) / (
-                        (origin_destination_routes_day.tt) / 3600)
-
-            ## -----  get ZMU zones  -------- ################################
-            ## function to transform Geometry from text to LINESTRING
-            def wkb_tranformation(line):
-                return wkb.loads(line.geom, hex=True)
-
-            def wkb_tranformation_centroid(line):
-                return wkb.loads(line.centroid, hex=True)
-
-            ZMU_ROMA_with_population = gpd.read_file(path_app + "static/zmu_aggregated_POP_ROMA_2015_new.geojson")
-            ZMU_ROMA_with_population['centroid'] = ZMU_ROMA_with_population.apply(wkb_tranformation_centroid, axis=1)
-            ZMU_ROMA_with_population = gpd.GeoDataFrame(ZMU_ROMA_with_population)
-
-            ##### -------->>>> ORIGIN ----- ################################################################
-            print("origin_destination_routes_day", len(origin_destination_routes_day))
-            print(selected_stay_type)
-            print(selected_ZMU_tod)
-            print(len(origin_destination_routes_day))
-
-            origin_destination_routes_day.rename({'id_zone_o': 'zmu'}, axis=1, inplace=True)
-            ## merge with zmu zones
-            try:
-                routes_origin_destination = pd.merge(origin_destination_routes_day,
-                                                     ZMU_ROMA_with_population[
-                                                         ['zmu', 'index_zmu', 'area', 'nome_comun', 'quartiere']],
-                                                     on=['zmu'], how='left')
-            except (KeyError, UnboundLocalError):
-                print("----- I am here at abort -404----------")
-                session["check_ZMU_tod"] = 1
-                print(session["check_ZMU_tod"])
-                return render_template("index_zmu_select_day.html")
-                session["check_ZMU_tod"] = session["ZMU_tod"]
-                print(session["check_ZMU_tod"])
-                # abort(404)
-
-            routes_origin_destination.rename({'zmu': 'zmu_origin'}, axis=1, inplace=True)
-            routes_origin_destination.rename({'index_zmu': 'index_zmu_origin'}, axis=1, inplace=True)
-            routes_origin_destination.rename({'area': 'area_origin'}, axis=1, inplace=True)
-            routes_origin_destination.rename({'nome_comun': 'nome_comun_origin'}, axis=1, inplace=True)
-            routes_origin_destination.rename({'quartiere': 'quartiere_origin'}, axis=1, inplace=True)
-
-            ##### ------>>>>> DESTINATION
-            routes_origin_destination.rename({'id_zone_d': 'zmu'}, axis=1, inplace=True)
-            ##merge with zmu zones
-            routes_origin_destination = pd.merge(routes_origin_destination,
-                                                 ZMU_ROMA_with_population[
-                                                     ['zmu', 'index_zmu', 'area', 'nome_comun', 'quartiere']],
-                                                 on=['zmu'], how='left')
-            routes_origin_destination.rename({'zmu': 'zmu_destination'}, axis=1, inplace=True)
-            routes_origin_destination.rename({'index_zmu': 'index_zmu_destination'}, axis=1, inplace=True)
-            routes_origin_destination.rename({'area': 'area_destination'}, axis=1, inplace=True)
-            routes_origin_destination.rename({'nome_comun': 'nome_comun_destination'}, axis=1, inplace=True)
-            routes_origin_destination.rename({'quartiere': 'quartiere_destination'}, axis=1, inplace=True)
-
-            ## merge ORIGIN and DESTINATION routes by 'idtrajectory'
-
-            routes = routes_origin_destination
-            routes.rename({'tt': 'triptime_s'}, axis=1, inplace=True)
-            routes.rename({'p_before': 'breaktime_s'}, axis=1, inplace=True)
-            routes.rename({'id': 'idtrajectory'}, axis=1, inplace=True)
-            routes.rename({'p_after': 'breaktime_s_dest'}, axis=1, inplace=True)
-
-            # print("----routes---", routes.breaktime_s)
-            # print("----routes_dest---", routes.breaktime_s_dest)
-
-            ## transform geom into linestring....projection is in meters epsg:6875
-            routes['geom'] = routes.apply(wkb_tranformation, axis=1)
-            routes = gpd.GeoDataFrame(routes)
-            routes.rename({'geom': 'geometry'}, axis=1, inplace=True)
-
-            ## reference system = 6875 (in meters)
-            routes = routes.set_geometry("geometry")
-            routes = routes.set_crs('epsg:6875', allow_override=True)
-
-            ## convert into lat , lon
-            routes = routes.to_crs({'init': 'epsg:4326'})
-            routes = routes.set_crs('epsg:4326', allow_override=True)
-
-            ## transfor hours as integer
-            routes['triptime_s'] = routes['triptime_s'].astype(int)
-
-            ##### ---->>> aggregation @ ORIGIN
-            ## grouby + counts....only if you want to estimate the NUMBER of vehicles
-            aggregated_zmu_origin = routes[['index_zmu_origin', 'zmu_origin']].groupby(
-                ['index_zmu_origin', 'zmu_origin'],
-                sort=False).size().reset_index().rename(columns={0: 'counts'})
-
-            mean_aggregated_zmu_origin = routes[
-                ['index_zmu_origin', 'zmu_origin', 'triptime_s', 'breaktime_s', 'dist', 'speed']].groupby(
-                ['index_zmu_origin', 'zmu_origin'],
-                sort=False).mean().reset_index().rename(
-                columns={0: 'means'})
-            mean_aggregated_zmu_origin.rename({'triptime_s': 'mean_triptime_m'}, axis=1, inplace=True)
-            mean_aggregated_zmu_origin['mean_triptime_m'] = (mean_aggregated_zmu_origin['mean_triptime_m']) / 60
-            mean_aggregated_zmu_origin.rename({'breaktime_s': 'mean_breaktime_m'}, axis=1, inplace=True)
-            mean_aggregated_zmu_origin['mean_breaktime_m'] = (mean_aggregated_zmu_origin['mean_breaktime_m']) / 60
-            mean_aggregated_zmu_origin.rename({'dist': 'mean_tripdistance_m'}, axis=1, inplace=True)
-            mean_aggregated_zmu_origin.rename({'speed': 'mean_speed'}, axis=1, inplace=True)
-
-            ##### ---->>> aggregation @ DESTINATION
-            ## grouby + counts....only if you want to estimate the NUMBER of vehicles
-            aggregated_zmu_destination = routes[['index_zmu_destination', 'zmu_destination']].groupby(
-                ['index_zmu_destination', 'zmu_destination'],
-                sort=False).size().reset_index().rename(columns={0: 'counts'})
-
-            mean_aggregated_zmu_destination = routes[
-                ['index_zmu_destination', 'zmu_destination', 'triptime_s', 'breaktime_s', 'breaktime_s_dest',
-                 'dist', 'speed']].groupby(
-                ['index_zmu_destination', 'zmu_destination'],
-                sort=False).mean().reset_index().rename(
-                columns={0: 'means'})
-            mean_aggregated_zmu_destination.rename({'triptime_s': 'mean_triptime_m'}, axis=1, inplace=True)
-            mean_aggregated_zmu_destination['mean_triptime_m'] = (mean_aggregated_zmu_destination[
-                'mean_triptime_m']) / 60
-            mean_aggregated_zmu_destination.rename({'breaktime_s': 'mean_breaktime_m'}, axis=1, inplace=True)
-            mean_aggregated_zmu_destination['mean_breaktime_m'] = (mean_aggregated_zmu_destination[
-                'mean_breaktime_m']) / 60
-            mean_aggregated_zmu_destination.rename({'breaktime_s_dest': 'mean_breaktime_m_dest'}, axis=1, inplace=True)
-            mean_aggregated_zmu_destination['mean_breaktime_m_dest'] = (mean_aggregated_zmu_destination[
-                'mean_breaktime_m_dest']) / 60
-            mean_aggregated_zmu_destination.rename({'dist': 'mean_tripdistance_m'}, axis=1, inplace=True)
-            mean_aggregated_zmu_destination.rename({'speed': 'mean_speed'}, axis=1, inplace=True)
-
-            ## merge data together ------########################################################
-            aggregated_zmu_origin = pd.merge(aggregated_zmu_origin, mean_aggregated_zmu_origin,
-                                             on=['zmu_origin', 'index_zmu_origin'],
-                                             how='left')
-            ## merge trip counts @destination with total staypoints in each traffic ZONE ZMU
-            aggregated_zmu_origin = pd.merge(aggregated_zmu_origin, all_staypoints,
-                                             left_on='zmu_origin', right_on='zmu')
-
-            ### NORMALIZE each cont @destination with the number of staypoints in each traffic zone
-            # aggregated_zmu_origin['counts_norm'] = aggregated_zmu_origin.counts / aggregated_zmu_origin.count_staypoints
-            aggregated_zmu_origin['counts_norm'] = aggregated_zmu_origin.counts / 1
-
-            aggregated_zmu_origin = aggregated_zmu_origin[
-                ['index_zmu_origin', 'zmu', 'counts_norm', 'mean_triptime_m', 'mean_breaktime_m', 'mean_speed',
-                 'mean_tripdistance_m', 'count_staypoints']]
-
-            # aggregated_zmu_origin.rename({'zmu_origin': 'zmu'}, axis=1, inplace=True)
-            aggregated_zmu_origin['zmu'] = aggregated_zmu_origin.zmu.astype('int')
-            aggregated_zmu_origin = pd.merge(aggregated_zmu_origin, ZMU_ROMA_with_population, on=['zmu'],
-                                             how='left')
-
-            # aggregated_zmu_destinations['counts'] = (aggregated_zmu_destinations['counts'] /
-            #                                         aggregated_zmu_destinations[
-            #                                             'POP_TOT_ZMU']) * 1000
-            aggregated_zmu_origin.replace([np.inf, -np.inf], np.nan, inplace=True)
-            aggregated_zmu_origin['counts_norm'] = round(aggregated_zmu_origin['counts_norm'], 2)
-
-            ######################################################################################
-            ## merge data together ------########################################################
-            aggregated_zmu_destination = pd.merge(aggregated_zmu_destination, mean_aggregated_zmu_destination,
-                                                  on=['zmu_destination', 'index_zmu_destination'],
-                                                  how='left')
-            ## merge trip counts @destination with total staypoints in each traffic ZONE ZMU
-            aggregated_zmu_destination = pd.merge(aggregated_zmu_destination, all_staypoints,
-                                                  left_on='zmu_destination', right_on='zmu')
-
-            ### NORMALIZE each cont @destination with the number of staypoints in each traffic zone
-            # aggregated_zmu_origin['counts_norm'] = aggregated_zmu_origin.counts / aggregated_zmu_origin.count_staypoints
-            aggregated_zmu_destination['counts_norm'] = aggregated_zmu_destination.counts / 1
-
-            aggregated_zmu_destination = aggregated_zmu_destination[
-                ['index_zmu_destination', 'zmu', 'counts_norm', 'mean_triptime_m', 'mean_breaktime_m_dest', 'mean_speed',
-                 'mean_tripdistance_m', 'count_staypoints']]
-
-            # aggregated_zmu_origin.rename({'zmu_origin': 'zmu'}, axis=1, inplace=True)
-            aggregated_zmu_destination['zmu'] = aggregated_zmu_destination.zmu.astype('int')
-            aggregated_zmu_destination = pd.merge(aggregated_zmu_destination, ZMU_ROMA_with_population, on=['zmu'],
-                                                  how='left')
-
-            # aggregated_zmu_destinations['counts'] = (aggregated_zmu_destinations['counts'] /
-            #                                         aggregated_zmu_destinations[
-            #                                             'POP_TOT_ZMU']) * 1000
-            aggregated_zmu_destination.replace([np.inf, -np.inf], np.nan, inplace=True)
-            aggregated_zmu_destination['counts_norm'] = round(aggregated_zmu_destination['counts_norm'], 2)
-            aggregated_zmu_destination.rename({'counts_norm': 'counts_norm_dest'}, axis=1, inplace=True)
-
-            #### ---- compute ration between number of trips at origing and number of trips at destinatios
-            aggregated_zmu_origin['ratio_num_orig_dest'] = (aggregated_zmu_origin.counts_norm) / (
-                aggregated_zmu_destination.counts_norm_dest)
-
-            aggregated_zmu_origin = pd.merge(aggregated_zmu_origin, aggregated_zmu_destination[
-                ['zmu', 'counts_norm_dest', 'mean_breaktime_m_dest']], on=['zmu'], how='left')
-
-            print(
-                "-------- I am HERE .....FCD-------------------------------------------------------------------------------")
-
-
-
-            ################################################################################################
-            #######--------------------------------------------- ###########################################
-            ###--->>> get aggregation by DAY <<---------------------########################################
-
-            """
-            selected_ZMU_day_start = "'2022-10-03"
-            selected_ZMU_day_end = "2022-10-04"
-            tod = 'W'
-            stay_type = 'H'
-            selected_ZMU_tod = 6
-            selected_stay_type = 21
-            """
-
-            #### ---- query all trips having a staypoint ------#########
-            ### staypoint = Home or WORK
-            if (selected_stay_type == 21 or selected_stay_type == 22) and (selected_ZMU_tod != 9):
-
-
-                query_origin_destination_routes_day = text(''' SELECT synt.trips.id_veh,
-                                                                                 synt.trips.id_zone_o, synt.trips.id_zone_d,
-                                                                                 synt.trips.tod_o,synt.trips.tod_d,
-                                                                                 synt.trips.dt_o,synt.trips.dt_d,
-                                                                                 synt.trips.id_staypoint_o,synt.trips.id_staypoint_d,
-                                                                                 synt.trips.tt,synt.trips.dist,
-                                                                                 synt.trips.p_after,  synt.trips.p_before,
-                                                                                 synt.trips.hour_range_o,synt.trips.hour_range_d,
-                                                                                 fcd.staypoints.id_stay_type,
-                                                                                 synt.trips.geom,
-                                                                                  date_part('hour', dt_o) as hr, 
-                                                                                  TO_CHAR(dt_o::DATE, 'dd-mm-yyyy') as day
-
-                                                                                 FROM fcd.staypoints
-                                                                                 INNER JOIN 
-                                                                                 synt.trips ON synt.trips.id_veh = fcd.staypoints.id_veh
-                                                                                 WHERE 
-                                                                                   date(synt.trips.dt_o) BETWEEN :x AND :xx 
-                                                                                   AND synt.trips.tod_o = :z 
-                                                                                   /*AND fcd.staypoints.id_stay_type = :s */
-                                                                                 AND (fcd.staypoints.info->>'virtual')::boolean IS false 
-                                                                          ''')
-                                                                          
-                stmt = query_origin_destination_routes_day.bindparams(x=str(selected_ZMU_day_start),
-                xx=str(selected_ZMU_day_end), z=str(tod), s=str(stay_type))
-
-
-
-            ### staypoint = Home or WORK and all Time of days (W, P, H)
-            elif (selected_stay_type == 21 or selected_stay_type == 22) and (selected_ZMU_tod == 9):
-                query_origin_destination_routes_day = text(''' SELECT synt.trips.id_veh,
-                                                                                        synt.trips.id_zone_o, synt.trips.id_zone_d,
-                                                                                        synt.trips.tod_o,synt.trips.tod_d,
-                                                                                        synt.trips.dt_o,synt.trips.dt_d,
-                                                                                        synt.trips.id_staypoint_o,synt.trips.id_staypoint_d,
-                                                                                        synt.trips.tt,synt.trips.dist,
-                                                                                        synt.trips.p_after,  synt.trips.p_before,
-                                                                                        synt.trips.hour_range_o,synt.trips.hour_range_d,
-                                                                                        fcd.staypoints.id_stay_type,
-                                                                                        synt.trips.geom,
-                                                                                         date_part('hour', dt_o) as hr, 
-                                                                                         TO_CHAR(dt_o::DATE, 'dd-mm-yyyy') as day
-
-                                                                                        FROM fcd.staypoints
-                                                                                        INNER JOIN 
-                                                                                        synt.trips ON synt.trips.id_veh = fcd.staypoints.id_veh
-                                                                                        WHERE 
-                                                                                          date(synt.trips.dt_o) BETWEEN :x AND :xx 
-                                                                                          /*AND fcd.staypoints.id_stay_type = :s */
-                                                                                        AND (fcd.staypoints.info->>'virtual')::boolean IS false 
-                                                                                 ''')
-
-                stmt = query_origin_destination_routes_day.bindparams(x=str(selected_ZMU_day_start),
-                                                                      xx=str(selected_ZMU_day_end),
-                                                                      s=str(stay_type))
-
-
-            ### staypoint = Home + WORK
-            elif (selected_stay_type == 23) and (selected_ZMU_tod != 9):
-                query_origin_destination_routes_day = text(''' SELECT synt.trips.id_veh,
-                                                                                         /*fcd.trips.geom,*/
-                                                                                         synt.trips.id_zone_o, synt.trips.id_zone_d,
-                                                                                         synt.trips.tod_o,synt.trips.tod_d,
-                                                                                         synt.trips.dt_o,synt.trips.dt_d,
-                                                                                        synt.trips.id_staypoint_o,synt.trips.id_staypoint_d,
-                                                                                         synt.trips.tt,synt.trips.dist,
-                                                                                         synt.trips.p_after,  synt.trips.p_before,
-                                                                                         synt.trips.hour_range_o,synt.trips.hour_range_d,
-                                                                                         fcd.staypoints.id_stay_type,
-                                                                                         synt.trips.geom,
-                                                                                          date_part('hour', dt_o) as hr, 
-                                                                                          TO_CHAR(dt_o::DATE, 'dd-mm-yyyy') as day
-
-                                                                                         FROM fcd.staypoints
-                                                                                         INNER JOIN 
-                                                                                         synt.trips ON synt.trips.id_veh = fcd.staypoints.id_veh
-                                                                                        WHERE 
-                                                                                           date(synt.trips.dt_o) BETWEEN :x AND :xx 
-                                                                                           AND synt.trips.tod_o = :z 
-                                                                                          /*AND fcd.staypoints.id_stay_type != 'O'*/
-                                                                                         AND (fcd.staypoints.info->>'virtual')::boolean IS false 
-                                                                                  ''')
-                stmt = query_origin_destination_routes_day.bindparams(x=str(selected_ZMU_day_start),
-                                                                      xx=str(selected_ZMU_day_end),
-                                                                      z=str(tod))
-
-            ### staypoint = Home + WORK and all Time of day (W, P, H)
-            elif (selected_stay_type == 23) and (selected_ZMU_tod == 9):
-                query_origin_destination_routes_day = text(''' SELECT fcd.trips.id_veh,   /*synt.trips.geom,*/
-                                                                                                        synt.trips.id_zone_o, synt.trips.id_zone_d,
-                                                                                                        synt.trips.tod_o,synt.trips.tod_d,
-                                                                                                        synt.trips.dt_o,synt.trips.dt_d,
-                                                                                                        synt.trips.id_staypoint_o,synt.trips.id_staypoint_d,
-                                                                                                        synt.trips.tt,synt.trips.dist,
-                                                                                                        synt.trips.p_after,  synt.trips.p_before,
-                                                                                                        synt.trips.hour_range_o,synt.trips.hour_range_d,
-                                                                                                        fcd.staypoints.id_stay_type,
-                                                                                                        synt.trips.geom,
-                                                                                                         date_part('hour', dt_o) as hr, 
-                                                                                                         TO_CHAR(dt_o::DATE, 'dd-mm-yyyy') as day
-
-                                                                                                        FROM fcd.staypoints
-                                                                                                        INNER JOIN 
-                                                                                                        synt.trips ON synt.trips.id_veh = fcd.staypoints.id_veh
-                                                                                                        WHERE 
-                                                                                                          date(synt.trips.dt_o) BETWEEN :x AND :xx 
-                                                                                                         /*AND fcd.staypoints.id_stay_type != 'O'*/
-                                                                                                        AND (fcd.staypoints.info->>'virtual')::boolean IS false 
-                                                                                                 ''')
-
-                stmt = query_origin_destination_routes_day.bindparams(x=str(selected_ZMU_day_start),
-                                                                      xx=str(selected_ZMU_day_end))
-
-            print(selected_stay_type)
-            print(selected_ZMU_tod)
-
-            with engine.connect() as conn:
-                res = conn.execute(stmt).all()
-            origin_destination_routes_day = pd.DataFrame(res)
-
-            print("-- origin_destination_routes_day-----------> ...before....", origin_destination_routes_day.columns,
-                  len(origin_destination_routes_day))
-
-            ### ---- consider only CROSSED ZONES ------ ##################
-            origin_destination_routes_day = origin_destination_routes_day[
-                (origin_destination_routes_day.id_zone_o != origin_destination_routes_day.id_zone_d)]
-
-            print("-- origin_destination_routes_day-----------> ...after....", origin_destination_routes_day.columns,
-                  len(origin_destination_routes_day))
-
-            origin_destination_routes_day = origin_destination_routes_day.sample(frac=0.2)  # 50%
-
-            ##### -------->>>> ORIGIN
-            origin_destination_routes_day.rename({'id_zone_o': 'zmu'}, axis=1, inplace=True)
-            ##merge with zmu zones
-            origin_destination_routes_day = pd.merge(origin_destination_routes_day,
-                                                     ZMU_ROMA_with_population[
-                                                         ['zmu', 'index_zmu', 'area', 'nome_comun', 'quartiere']],
-                                                     on=['zmu'], how='left')
-            origin_destination_routes_day.rename({'zmu': 'zmu_origin'}, axis=1, inplace=True)
-            origin_destination_routes_day.rename({'index_zmu': 'index_zmu_origin'}, axis=1, inplace=True)
-            origin_destination_routes_day.rename({'area': 'area_origin'}, axis=1, inplace=True)
-            origin_destination_routes_day.rename({'nome_comun': 'nome_comun_origin'}, axis=1, inplace=True)
-            origin_destination_routes_day.rename({'quartiere': 'quartiere_origin'}, axis=1, inplace=True)
-
-            ##### ------>>>>> DESTINATION
-            origin_destination_routes_day.rename({'id_zone_d': 'zmu'}, axis=1, inplace=True)
-
-            ##merge with zmu zones
-            origin_destination_routes_day = pd.merge(origin_destination_routes_day,
-                                                     ZMU_ROMA_with_population[
-                                                         ['zmu', 'index_zmu', 'area', 'nome_comun', 'quartiere',
-                                                          'POP_TOT_ZMU']],
-                                                     on=['zmu'], how='left')
-            origin_destination_routes_day.rename({'zmu': 'zmu_destination'}, axis=1, inplace=True)
-            origin_destination_routes_day.rename({'index_zmu': 'index_zmu_destination'}, axis=1, inplace=True)
-            origin_destination_routes_day.rename({'area': 'area_destination'}, axis=1, inplace=True)
-            origin_destination_routes_day.rename({'nome_comun': 'nome_comun_destination'}, axis=1, inplace=True)
-            origin_destination_routes_day.rename({'quartiere': 'quartiere_destination'}, axis=1, inplace=True)
-            origin_destination_routes_day_copy_dest = origin_destination_routes_day
-
-            ## merge ORIGIN and DESTINATION routes by 'idtrajectory'
-            origin_destination_routes_day.rename({'tt': 'triptime_s'}, axis=1, inplace=True)
-            origin_destination_routes_day.rename({'p_before': 'breaktime_s'}, axis=1, inplace=True)
-            origin_destination_routes_day.rename({'p_after': 'breaktime_s_dest'}, axis=1, inplace=True)
-            origin_destination_routes_day.rename({'id': 'idtrajectory'}, axis=1, inplace=True)
-            origin_destination_routes_day.rename({'dist': 'tripdistance_m'}, axis=1, inplace=True)
-
-            origin_destination_routes_day = origin_destination_routes_day[
-                origin_destination_routes_day['triptime_s'] > 0]
-            origin_destination_routes_day = origin_destination_routes_day[
-                origin_destination_routes_day['breaktime_s'] > 0]
-            origin_destination_routes_day = origin_destination_routes_day[
-                origin_destination_routes_day['breaktime_s_dest'] > 0]
-            origin_destination_routes_day = origin_destination_routes_day[
-                origin_destination_routes_day['tripdistance_m'] > 0]
-
-            # print(origin_destination_routes_day.columns)
-            ### ---- aggregate number of HOMES and POPULATION by zone
-            homes_and_pop = origin_destination_routes_day[
-                ['zmu_origin', 'zmu_destination', 'id_stay_type', 'id_staypoint_d', 'hr', 'POP_TOT_ZMU']]
-            homes_and_pop = homes_and_pop[homes_and_pop.id_stay_type == 'O']
-            homes_and_pop = homes_and_pop.drop_duplicates(['id_staypoint_d'])
-            # print(homes_and_pop)
-
-            ### ---->> aggregate by zones  ------ #############################################################
-            homes_and_pop = homes_and_pop[['zmu_origin', 'id_stay_type']].groupby(
-                ['zmu_origin'], sort=False).size().reset_index().rename(columns={0: 'counts'})
-            homes_and_pop.rename({'zmu_origin': 'zmu'}, axis=1, inplace=True)
-            homes_and_pop.rename({'counts': 'n_homes'}, axis=1, inplace=True)
-            homes_and_pop = pd.merge(homes_and_pop,
-                                     ZMU_ROMA_with_population[['zmu', 'index_zmu', 'area', 'nome_comun', 'quartiere',
-                                                               'POP_TOT_ZMU']], on=['zmu'], how='left')
-            homes_and_pop['ratio_homes_pop'] = ((homes_and_pop.n_homes) / (homes_and_pop.POP_TOT_ZMU))*100
-            # print(homes_and_pop)
-
-            homes_and_pop['ratio_homes_pop'] = round(homes_and_pop.ratio_homes_pop, ndigits=2)
-
-            # homes_and_pop.to_csv(path_app + 'static/homes_and_pop.csv')
-
-            ### ----- @ ORIGINS ---------------------------------- ##################################################
-
-            ## grouby + counts....only if you want to estimate the NUMBER of vehicles
-            aggregated_zmu_origin_day = origin_destination_routes_day[['hr', 'zmu_origin']].groupby(
-                ['hr', 'zmu_origin'], sort=False).size().reset_index().rename(columns={0: 'counts'})
-
-            ## merge trip counts @destination with total staypoints in each traffic ZONE ZMU
-            aggregated_zmu_origin_day = pd.merge(aggregated_zmu_origin_day, all_staypoints,
-                                                 left_on='zmu_origin', right_on='zmu')
-
-            ### NORMALIZE each cont @destination with the number of staypoints in each traffic zone
-            # aggregated_zmu_origin_day['counts_norm'] = aggregated_zmu_origin_day.counts / aggregated_zmu_origin_day.count_staypoints
-
-            aggregated_zmu_origin_day[
-                'counts_norm'] = aggregated_zmu_origin_day.counts / 1
-
-            aggregated_zmu_origin_day.replace([np.inf, -np.inf], np.nan, inplace=True)
-            aggregated_zmu_origin_day['counts_norm'] = round(aggregated_zmu_origin_day['counts_norm'], 2)
-
-            ## remove none values
-            aggregated_zmu_origin_day = aggregated_zmu_origin_day[
-                aggregated_zmu_origin_day['zmu_origin'].notna()]
-            aggregated_zmu_origin_day['zmu_origin'] = aggregated_zmu_origin_day.zmu_origin.astype(
-                'int')
-
-            ## merge with zmu to get geometries.....
-            ## get geometry from "ZMU_ROMA"
-
-            aggregated_zmu_origin_day['zmu'] = aggregated_zmu_origin_day.zmu.astype('int')
-            aggregated_zmu_origin_day = aggregated_zmu_origin_day[
-                ['hr', 'zmu', 'counts', 'count_staypoints', 'counts_norm']]
-            aggregated_zmu_origin_day = pd.merge(aggregated_zmu_origin_day, ZMU_ROMA_with_population,
-                                                 on=['zmu'], how='left')
-            aggregated_zmu_origin_day = aggregated_zmu_origin_day[
-                aggregated_zmu_origin_day['index_zmu'].notna()]
-            aggregated_zmu_origin_day['index_zmu'] = aggregated_zmu_origin_day.index_zmu.astype('int')
-
-            aggregated_zmu_origin_day = aggregated_zmu_origin_day[
-                ['counts_norm', 'index_zmu', 'POP_TOT_ZMU', 'zmu', 'hr', 'nome_comun', 'quartiere']]
-            # aggregated_zmu_destinations_day['counts'] = (aggregated_zmu_destinations_day['counts'] /
-            #                                             aggregated_zmu_destinations_day['POP_TOT_ZMU']) * 1000
-
-            #### ------->>>> groupby + mean triptime, tripdistance, breaktime <<<-----------###########################################
-
-            origin_destination_routes_day.rename({'zmu_origin': 'zmu'}, axis=1, inplace=True)
-            origin_destination_routes_day = origin_destination_routes_day[
-                origin_destination_routes_day['zmu'].notna()]
-            origin_destination_routes_day['zmu'] = origin_destination_routes_day.zmu.astype('int')
-
-            aggregated_means_zmu_origin = origin_destination_routes_day[
-                ['zmu', 'hr', 'triptime_s', 'breaktime_s', 'tripdistance_m']].groupby(['hr', 'zmu'],
-                                                                                      sort=False).mean().reset_index().rename(
-                columns={0: 'means'})
-
-            # aggregated_means_zmu_destination['day'] = selected_ZMU_day
-            ## convert triptime_s into minutes
-            aggregated_means_zmu_origin['triptime_m'] = (aggregated_means_zmu_origin['triptime_s']) / 60
-            aggregated_means_zmu_origin = aggregated_means_zmu_origin[
-                aggregated_means_zmu_origin['triptime_s'].notna()]
-            aggregated_means_zmu_origin['triptime_m'] = aggregated_means_zmu_origin.triptime_m.astype('int')
-            ## convert breaktime_s into minutes
-            aggregated_means_zmu_origin['breaktime_m'] = (aggregated_means_zmu_origin['breaktime_s']) / 60
-            aggregated_means_zmu_origin = aggregated_means_zmu_origin[
-                aggregated_means_zmu_origin['breaktime_m'].notna()]
-            aggregated_means_zmu_origin['breaktime_m'] = aggregated_means_zmu_origin.breaktime_m.astype('int')
-
-            ## convert tripdistance_m
-            aggregated_means_zmu_origin = aggregated_means_zmu_origin[
-                aggregated_means_zmu_origin['tripdistance_m'].notna()]
-            aggregated_means_zmu_origin['tripdistance_m'] = aggregated_means_zmu_origin.tripdistance_m.astype(
-                'int')
-
-            aggregated_means_zmu_origin = pd.merge(aggregated_means_zmu_origin, aggregated_zmu_origin_day,
-                                                   on=['zmu', 'hr'], how='left')
-
-            aggregated_means_zmu_origin.replace([np.inf, -np.inf], np.nan, inplace=True)
-            aggregated_means_zmu_origin = aggregated_means_zmu_origin[
-                aggregated_means_zmu_origin['counts_norm'].notna()]
-
-            ##############################################################################################################################
-            ## compute total counts over ALL ZONES for a given hour-range, and compute total mean FOR ALL ZONEs for a given hour-range
-            aggregated_zmu_origin_day.replace([np.inf, -np.inf], np.nan, inplace=True)
-            aggregated_zmu_origin_day = aggregated_zmu_origin_day[aggregated_zmu_origin_day['counts_norm'].notna()]
-            # aggregated_zmu_destinations = aggregated_zmu_destinations[aggregated_zmu_destinations['counts'].notna()]
-
-            #### make the means ove the 24hours
-            aggregated_24h_mean = aggregated_means_zmu_origin[
-                ['zmu', 'triptime_m', 'breaktime_m', 'tripdistance_m']].groupby(['zmu'],
-                                                                                sort=False).mean().reset_index().rename(
-                columns={0: 'means'})
-
-            aggragated_24h_counts = aggregated_means_zmu_origin[['counts_norm', 'zmu']].groupby(
-                ['zmu'], sort=False).size().reset_index().rename(columns={0: 'counts'})  ### over 1000 inhabitants
-
-            aggregated_24h_mean = pd.merge(aggregated_24h_mean, aggragated_24h_counts,
-                                           on=['zmu'], how='left')
-
-            aggregated_24h_mean.rename({'triptime_m': 'mean_triptime_m'}, axis=1, inplace=True)
-            aggregated_24h_mean.rename({'breaktime_m': 'mean_breaktime_m'}, axis=1, inplace=True)
-            aggregated_24h_mean.rename({'tripdistance_m': 'mean_tripdistance_m'}, axis=1, inplace=True)
-            aggregated_24h_mean.rename({'counts': 'counts24'}, axis=1, inplace=True)
-
-            ### ....> make copy of the file for file .geojson to save later on....
-            aggregated_zmu_origin['mean_speed'] = round(aggregated_zmu_origin['mean_speed'], 2)
-            aggregated_zmu_origin_for_geojson = aggregated_zmu_origin
-            aggregated_zmu_origin = pd.merge(
-                aggregated_zmu_origin[['index_zmu_origin', 'zmu', 'index_zmu', 'POP_TOT_ZMU', 'counts_norm',
-                                       'area', 'comune', 'nome_comun', 'quartiere', 'pgtu', 'municipio', 'lon',
-                                       'lat', 'centroid', 'geometry']], aggregated_24h_mean,
-                on=['zmu'], how='left')
-
-            aggregated_zmu_origin['mean_triptime_m'] = round(aggregated_zmu_origin.mean_triptime_m, ndigits=2)
-            aggregated_zmu_origin['mean_tripdistance_m'] = round(aggregated_zmu_origin.mean_tripdistance_m,
-                                                                 ndigits=2)
-            aggregated_zmu_origin['mean_breaktime_m'] = round(aggregated_zmu_origin.mean_breaktime_m,
-                                                              ndigits=2)
-
-            ### ----- @ DESTINATION ---------------------------------- ##################################################
-
-            origin_destination_routes_day_copy_dest.rename({'zmu_destination': 'zmu'}, axis=1, inplace=True)
-
-            origin_destination_routes_day_copy_dest = origin_destination_routes_day_copy_dest[
-                origin_destination_routes_day_copy_dest['zmu'].notna()]
-            origin_destination_routes_day_copy_dest['zmu'] = origin_destination_routes_day_copy_dest.zmu.astype('int')
-
-            ## grouby + counts....only if you want to estimate the NUMBER of vehicles
-            aggregated_destination_routes_day_copy_dest = origin_destination_routes_day_copy_dest[
-                ['hr', 'zmu']].groupby(
-                ['hr', 'zmu'], sort=False).size().reset_index().rename(columns={0: 'counts'})
-
-            ## merge trip counts @destination with total staypoints in each traffic ZONE ZMU
-            aggregated_destination_routes_day_copy_dest = pd.merge(aggregated_destination_routes_day_copy_dest,
-                                                                   all_staypoints,
-                                                                   left_on='zmu', right_on='zmu')
-
-            ### NORMALIZE each cont @destination with the number of staypoints in each traffic zone
-            # aggregated_zmu_origin_day['counts_norm'] = aggregated_zmu_origin_day.counts / aggregated_zmu_origin_day.count_staypoints
-
-            aggregated_destination_routes_day_copy_dest[
-                'counts_norm'] = aggregated_destination_routes_day_copy_dest.counts / 1
-
-            aggregated_destination_routes_day_copy_dest.replace([np.inf, -np.inf], np.nan, inplace=True)
-            aggregated_destination_routes_day_copy_dest['counts_norm'] = round(
-                aggregated_destination_routes_day_copy_dest['counts_norm'], 2)
-
-            ## remove none values
-            aggregated_destination_routes_day_copy_dest = aggregated_destination_routes_day_copy_dest[
-                aggregated_destination_routes_day_copy_dest['zmu'].notna()]
-            aggregated_destination_routes_day_copy_dest['zmu'] = aggregated_destination_routes_day_copy_dest.zmu.astype(
-                'int')
-
-            ## merge with zmu to get geometries.....
-            ## get geometry from "ZMU_ROMA"
-
-            # aggregated_zmu_destinations_day.rename({'zmu_destination': 'zmu'}, axis=1, inplace=True)
-            aggregated_destination_routes_day_copy_dest['zmu'] = aggregated_destination_routes_day_copy_dest.zmu.astype(
-                'int')
-            aggregated_destination_routes_day_copy_dest = aggregated_destination_routes_day_copy_dest[
-                ['hr', 'zmu', 'counts', 'count_staypoints', 'counts_norm']]
-            aggregated_destination_routes_day_copy_dest = pd.merge(aggregated_destination_routes_day_copy_dest,
-                                                                   ZMU_ROMA_with_population,
-                                                                   on=['zmu'], how='left')
-            aggregated_destination_routes_day_copy_dest = aggregated_destination_routes_day_copy_dest[
-                aggregated_destination_routes_day_copy_dest['index_zmu'].notna()]
-            aggregated_destination_routes_day_copy_dest[
-                'index_zmu'] = aggregated_destination_routes_day_copy_dest.index_zmu.astype('int')
-
-            aggregated_destination_routes_day_copy_dest = aggregated_destination_routes_day_copy_dest[
-                ['counts_norm', 'index_zmu', 'POP_TOT_ZMU', 'zmu', 'hr', 'nome_comun', 'quartiere']]
-            # aggregated_zmu_destinations_day['counts'] = (aggregated_zmu_destinations_day['counts'] /
-            #                                             aggregated_zmu_destinations_day['POP_TOT_ZMU']) * 1000
-
-            #### ------->>>> groupby + mean triptime, tripdistance, breaktime <<<-----------###########################################
-
-            aggregated_means_zmu_destination = origin_destination_routes_day_copy_dest[
-                ['zmu', 'hr', 'triptime_s', 'breaktime_s', 'breaktime_s_dest', 'tripdistance_m']].groupby(['hr', 'zmu'],
-                                                                                                          sort=False).mean().reset_index().rename(
-                columns={0: 'means'})
-
-            # aggregated_means_zmu_destination['day'] = selected_ZMU_day
-            ## convert triptime_s into minutes
-            aggregated_means_zmu_destination['triptime_m'] = (aggregated_means_zmu_destination['triptime_s']) / 60
-            aggregated_means_zmu_destination = aggregated_means_zmu_destination[
-                aggregated_means_zmu_destination['triptime_s'].notna()]
-            aggregated_means_zmu_destination['triptime_m'] = aggregated_means_zmu_destination.triptime_m.astype('int')
-            ## convert breaktime_s into minutes
-            aggregated_means_zmu_destination['breaktime_m'] = (aggregated_means_zmu_destination['breaktime_s']) / 60
-            aggregated_means_zmu_destination = aggregated_means_zmu_destination[
-                aggregated_means_zmu_destination['breaktime_m'].notna()]
-            aggregated_means_zmu_destination['breaktime_m'] = aggregated_means_zmu_destination.breaktime_m.astype('int')
-
-            aggregated_means_zmu_destination['breaktime_m_dest'] = (aggregated_means_zmu_destination[
-                'breaktime_s_dest']) / 60
-            aggregated_means_zmu_destination = aggregated_means_zmu_destination[
-                aggregated_means_zmu_destination['breaktime_m_dest'].notna()]
-            aggregated_means_zmu_destination[
-                'breaktime_m_dest'] = aggregated_means_zmu_destination.breaktime_m_dest.astype('int')
-
-            ## convert tripdistance_m
-            aggregated_means_zmu_destination = aggregated_means_zmu_destination[
-                aggregated_means_zmu_destination['tripdistance_m'].notna()]
-            aggregated_means_zmu_destination['tripdistance_m'] = aggregated_means_zmu_destination.tripdistance_m.astype(
-                'int')
-
-            aggregated_means_zmu_destination = pd.merge(aggregated_means_zmu_destination,
-                                                        aggregated_destination_routes_day_copy_dest,
-                                                        on=['zmu', 'hr'], how='left')
-
-            aggregated_means_zmu_destination.replace([np.inf, -np.inf], np.nan, inplace=True)
-
-            aggregated_means_zmu_destination = aggregated_means_zmu_destination[
-                aggregated_means_zmu_destination['counts_norm'].notna()]
-
-            ##############################################################################################################################
-            ## compute total counts over ALL ZONES for a given hour-range, and compute total mean FOR ALL ZONEs for a given hour-range
-            aggregated_means_zmu_destination.replace([np.inf, -np.inf], np.nan, inplace=True)
-            aggregated_means_zmu_destination = aggregated_means_zmu_destination[
-                aggregated_means_zmu_destination['counts_norm'].notna()]
-
-            #### make the means ove the 24hours
-            aggregated_24h_mean_destination = aggregated_means_zmu_destination[
-                ['zmu', 'triptime_m', 'breaktime_m', 'breaktime_m_dest', 'tripdistance_m']].groupby(['zmu'],
-                                                                                                    sort=False).mean().reset_index().rename(
-                columns={0: 'means'})
-
-            aggragated_24h_counts_destination = aggregated_means_zmu_destination[['counts_norm', 'zmu']].groupby(
-                ['zmu'], sort=False).size().reset_index().rename(columns={0: 'counts'})  ### over 1000 inhabitants
-            # print(aggragated_24h_counts_destination)
-
-            aggregated_24h_mean_destination = pd.merge(aggregated_24h_mean_destination,
-                                                       aggragated_24h_counts_destination,
-                                                       on=['zmu'], how='left')
-
-            aggregated_24h_mean_destination.rename({'triptime_m': 'mean_triptime_m'}, axis=1, inplace=True)
-            aggregated_24h_mean_destination.rename({'breaktime_m': 'mean_breaktime_m'}, axis=1, inplace=True)
-            aggregated_24h_mean_destination.rename({'breaktime_m_dest': 'mean_breaktime_m_dest'}, axis=1, inplace=True)
-            aggregated_24h_mean_destination.rename({'tripdistance_m': 'mean_tripdistance_m'}, axis=1, inplace=True)
-            aggregated_24h_mean_destination.rename({'counts': 'counts24'}, axis=1, inplace=True)
-
-            aggregated_zmu_destination = pd.merge(
-                aggregated_zmu_destination[
-                    ['index_zmu_destination', 'zmu', 'index_zmu', 'POP_TOT_ZMU', 'counts_norm_dest',
-                     'area', 'comune', 'nome_comun', 'quartiere', 'pgtu', 'municipio', 'lon',
-                     'lat', 'centroid', 'geometry']], aggregated_24h_mean_destination,
-                on=['zmu'], how='left')
-
-            aggregated_zmu_destination['mean_triptime_m'] = round(aggregated_zmu_destination.mean_triptime_m, ndigits=2)
-            aggregated_zmu_destination['mean_tripdistance_m'] = round(aggregated_zmu_destination.mean_tripdistance_m,
-                                                                      ndigits=2)
-            aggregated_zmu_destination['mean_breaktime_m'] = round(aggregated_zmu_destination.mean_breaktime_m,
-                                                                   ndigits=2)
-            aggregated_zmu_destination['mean_breaktime_m_dest'] = round(
-                aggregated_zmu_destination.mean_breaktime_m_dest,
-                ndigits=2)
-
-            ############## --------------------------------------------------------------- ############################################################
-            ############## --------------------------------------------------------------- ############################################################
-
-            TOTAL_TRIPS_COUNTS = max(aggregated_zmu_origin.counts24)  ## per 1000 inhabitants
-            TOTAL_TRIPS_COUNTS_destination = max(aggregated_zmu_destination.counts24)  ## per 1000 inhabitants
-            TOTAL_MAX_TRIPTIME = np.max(aggregated_zmu_origin.mean_triptime_m)
-            TOTAL_MAX_BREAKTIME = np.max(aggregated_zmu_origin.mean_breaktime_m)
-            TOTAL_MAX_BREAKTIME_destination = np.max(aggregated_zmu_destination.mean_breaktime_m_dest)
-            TOTAL_MAX_TRIPDISTANCE = np.max(aggregated_zmu_origin.mean_tripdistance_m)
-
-            ## INDICATORs for RADAR of POLAR CHARTS (compute PERCENTAGES within the chosen hourrange compared to the total OVER ALL ZONES)
-            aggregated_zmu_origin = aggregated_zmu_origin[
-                aggregated_zmu_origin['counts24'].notna()]
-            aggregated_zmu_origin['radial_counts'] = aggregated_zmu_origin['counts24'] * 100 / TOTAL_TRIPS_COUNTS
-
-            aggregated_zmu_origin['radial_counts'] = round(aggregated_zmu_origin.radial_counts, ndigits=4)
-            # print(aggregated_zmu_origin['radial_counts'])
-
-            aggregated_zmu_destination = aggregated_zmu_destination[
-                aggregated_zmu_destination['counts24'].notna()]
-            aggregated_zmu_destination['radial_counts'] = aggregated_zmu_destination[
-                                                              'counts24'] * 100 / TOTAL_TRIPS_COUNTS_destination
-            aggregated_zmu_destination['radial_counts'] = round(aggregated_zmu_destination.radial_counts, ndigits=4)
-            # print(aggregated_zmu_destination['radial_counts'])
-
-            aggregated_zmu_origin['radial_ratio_trip_counts'] = (aggregated_zmu_origin['radial_counts']) / (
-            aggregated_zmu_destination['radial_counts'])
-
-            aggregated_zmu_origin = aggregated_zmu_origin[
-                aggregated_zmu_origin['mean_triptime_m'].notna()]
-            aggregated_zmu_origin['radial_mean_triptime'] = (aggregated_zmu_origin[
-                'mean_triptime_m']) * 100 / TOTAL_MAX_TRIPTIME
-            aggregated_zmu_origin['radial_mean_triptime'] = round(aggregated_zmu_origin.radial_mean_triptime, ndigits=2)
-
-            aggregated_zmu_origin = aggregated_zmu_origin[
-                aggregated_zmu_origin['mean_breaktime_m'].notna()]
-            aggregated_zmu_origin['radial_mean_breaktime'] = (aggregated_zmu_origin[
-                'mean_breaktime_m']) * 100 / TOTAL_MAX_BREAKTIME
-            aggregated_zmu_origin['radial_mean_breaktime'] = round(aggregated_zmu_origin.radial_mean_breaktime,
-                                                                   ndigits=2)
-
-            aggregated_zmu_destination = aggregated_zmu_destination[
-                aggregated_zmu_destination['mean_breaktime_m_dest'].notna()]
-            aggregated_zmu_destination['radial_mean_breaktime_dest'] = (aggregated_zmu_destination[
-                'mean_breaktime_m_dest']) * 100 / TOTAL_MAX_BREAKTIME_destination
-            aggregated_zmu_destination['radial_mean_breaktime_dest'] = round(
-                aggregated_zmu_destination.radial_mean_breaktime_dest,
-                ndigits=2)
-
-            aggregated_zmu_origin = aggregated_zmu_origin[
-                aggregated_zmu_origin['mean_tripdistance_m'].notna()]
-            aggregated_zmu_origin['radial_mean_tripdistance'] = (aggregated_zmu_origin[
-                'mean_tripdistance_m']) * 100 / TOTAL_MAX_TRIPDISTANCE
-            aggregated_zmu_origin['radial_mean_tripdistance'] = round(aggregated_zmu_origin.radial_mean_tripdistance,
-                                                                      ndigits=2)
-
-            ####################################################################################
-            ####################################################################################
-            ####################################################################################
-            ####################################################################################
-            ## radar chart over a single ZMU for a given hour range ###########################
-
-            ## classify by scores...
-            aggregated_zmu_origin['score_trip_counts'] = 0
-            aggregated_zmu_origin['score_ratio_trip_counts'] = 0
-            aggregated_zmu_destination['score_trip_counts_dest'] = 0
-            aggregated_zmu_origin['score_trip_time'] = 0
-            aggregated_zmu_origin['score_breaktime'] = 0
-            aggregated_zmu_destination['score_breaktime_dest'] = 0
-            aggregated_zmu_origin['score_trip_distance'] = 0
-
-            aggregated_zmu_origin['mark_trip_counts'] = 0
-            aggregated_zmu_origin['mark_ratio_trip_counts'] = 0
-            aggregated_zmu_destination['mark_trip_counts_dest'] = 0
-            aggregated_zmu_origin['mark_trip_time'] = 0
-            aggregated_zmu_origin['mark_breaktime'] = 0
-            aggregated_zmu_destination['mark_breaktime_dest'] = 0
-            aggregated_zmu_origin['mark_trip_distance'] = 0
-
-            ### number of trips @origin
-            for i in range(len(aggregated_zmu_origin)):
-                if (aggregated_zmu_origin.radial_counts.iloc[i] >= 0) and (
-                        aggregated_zmu_origin.radial_counts.iloc[i] <= 30):
-                    aggregated_zmu_origin.score_trip_counts.iloc[i] = 1
-                    aggregated_zmu_origin.mark_trip_counts.iloc[i] = "Low"
-                elif (aggregated_zmu_origin.radial_counts.iloc[i] > 30) and (
-                        aggregated_zmu_origin.radial_counts.iloc[i] <= 60):
-                    aggregated_zmu_origin.score_trip_counts.iloc[i] = 2
-                    aggregated_zmu_origin.mark_trip_counts.iloc[i] = "Average"
-                elif (aggregated_zmu_origin.radial_counts.iloc[i] > 60) and (
-                        aggregated_zmu_origin.radial_counts.iloc[i] <= 80):
-                    aggregated_zmu_origin.score_trip_counts.iloc[i] = 3
-                    aggregated_zmu_origin.mark_trip_counts.iloc[i] = "Important"
-                elif (aggregated_zmu_origin.radial_counts.iloc[i] > 80) and (
-                        aggregated_zmu_origin.radial_counts.iloc[i] <= max(aggregated_zmu_origin.radial_counts)):
-                    aggregated_zmu_origin.mark_trip_counts.iloc[i] = "Relevant"
-                    aggregated_zmu_origin.score_trip_counts.iloc[i] = 4
-
-            ### RATIO (number of trips @origin / number of trips @destination )
-            for i in range(len(aggregated_zmu_origin)):
-                if (aggregated_zmu_origin.radial_ratio_trip_counts.iloc[i] >= 0) and (
-                        aggregated_zmu_origin.radial_ratio_trip_counts.iloc[i] <= 0.5):
-                    aggregated_zmu_origin.score_ratio_trip_counts.iloc[i] = 1
-                    aggregated_zmu_origin.mark_ratio_trip_counts.iloc[i] = "Low"
-                elif (aggregated_zmu_origin.radial_ratio_trip_counts.iloc[i] > 0.5) and (
-                        aggregated_zmu_origin.radial_ratio_trip_counts.iloc[i] <= 1.5):
-                    aggregated_zmu_origin.score_ratio_trip_counts.iloc[i] = 2
-                    aggregated_zmu_origin.mark_ratio_trip_counts.iloc[i] = "Average"
-                elif (aggregated_zmu_origin.radial_ratio_trip_counts.iloc[i] > 1.5) and (
-                        aggregated_zmu_origin.radial_ratio_trip_counts.iloc[i] <= 2.5):
-                    aggregated_zmu_origin.score_ratio_trip_counts.iloc[i] = 3
-                    aggregated_zmu_origin.mark_ratio_trip_counts.iloc[i] = "Important"
-                elif (aggregated_zmu_origin.radial_ratio_trip_counts.iloc[i] > 2.5) and (
-                        aggregated_zmu_origin.radial_ratio_trip_counts.iloc[i] <= max(
-                    aggregated_zmu_origin.radial_ratio_trip_counts)):
-                    aggregated_zmu_origin.mark_ratio_trip_counts.iloc[i] = "Relevant"
-                    aggregated_zmu_origin.score_ratio_trip_counts.iloc[i] = 4
-
-            ### number of trips @destination
-            for i in range(len(aggregated_zmu_destination)):
-                if (aggregated_zmu_destination.radial_counts.iloc[i] >= 0) and (
-                        aggregated_zmu_destination.radial_counts.iloc[i] <= 30):
-                    aggregated_zmu_destination.score_trip_counts_dest.iloc[i] = 1
-                    aggregated_zmu_destination.mark_trip_counts_dest.iloc[i] = "Low"
-                elif (aggregated_zmu_destination.radial_counts.iloc[i] > 30) and (
-                        aggregated_zmu_destination.radial_counts.iloc[i] <= 60):
-                    aggregated_zmu_destination.score_trip_counts_dest.iloc[i] = 2
-                    aggregated_zmu_destination.mark_trip_counts_dest.iloc[i] = "Average"
-                elif (aggregated_zmu_destination.radial_counts.iloc[i] > 60) and (
-                        aggregated_zmu_destination.radial_counts.iloc[i] <= 80):
-                    aggregated_zmu_destination.score_trip_counts_dest.iloc[i] = 3
-                    aggregated_zmu_destination.mark_trip_counts_dest.iloc[i] = "Important"
-                elif (aggregated_zmu_destination.radial_counts.iloc[i] > 80) and (
-                        aggregated_zmu_destination.radial_counts.iloc[i] <= max(
-                    aggregated_zmu_destination.radial_counts)):
-                    aggregated_zmu_destination.mark_trip_counts_dest.iloc[i] = "Relevant"
-                    aggregated_zmu_destination.score_trip_counts_dest.iloc[i] = 4
-
-            #### mean trip time
-            for i in range(len(aggregated_zmu_origin)):
-                if (aggregated_zmu_origin.radial_mean_triptime.iloc[i] >= 0) and (
-                        aggregated_zmu_origin.radial_mean_triptime.iloc[i] <= 15):
-                    aggregated_zmu_origin.score_trip_time.iloc[i] = 1
-                    aggregated_zmu_origin.mark_trip_time.iloc[i] = "Low"
-                elif (aggregated_zmu_origin.radial_mean_triptime.iloc[i] > 15) and (
-                        aggregated_zmu_origin.radial_mean_triptime.iloc[i] <= 20):
-                    aggregated_zmu_origin.score_trip_time.iloc[i] = 2
-                    aggregated_zmu_origin.mark_trip_time.iloc[i] = "Average"
-                elif (aggregated_zmu_origin.radial_mean_triptime.iloc[i] > 20) and (
-                        aggregated_zmu_origin.radial_mean_triptime.iloc[i] <= 30):
-                    aggregated_zmu_origin.score_trip_time.iloc[i] = 3
-                    aggregated_zmu_origin.mark_trip_time.iloc[i] = "Important"
-                elif (aggregated_zmu_origin.radial_mean_triptime.iloc[i] > 30) and (
-                        aggregated_zmu_origin.radial_mean_triptime.iloc[i] <= max(
-                    aggregated_zmu_origin.radial_mean_triptime)):
-                    aggregated_zmu_origin.score_trip_time.iloc[i] = 4
-                    aggregated_zmu_origin.mark_trip_time.iloc[i] = "Relevant"
-
-            #### mean stop time or breaktime @ORIGIN
-            for i in range(len(aggregated_zmu_origin)):
-                if (aggregated_zmu_origin.radial_mean_breaktime.iloc[i] >= 0) and (
-                        aggregated_zmu_origin.radial_mean_breaktime.iloc[i] <= 5):
-                    aggregated_zmu_origin.score_breaktime.iloc[i] = 1
-                    aggregated_zmu_origin.mark_breaktime.iloc[i] = "Low"
-                elif (aggregated_zmu_origin.radial_mean_breaktime.iloc[i] > 5) and (
-                        aggregated_zmu_origin.radial_mean_breaktime.iloc[i] <= 15):
-                    aggregated_zmu_origin.score_breaktime.iloc[i] = 2
-                    aggregated_zmu_origin.mark_breaktime.iloc[i] = "Average"
-                elif (aggregated_zmu_origin.radial_mean_breaktime.iloc[i] > 15) and (
-                        aggregated_zmu_origin.radial_mean_breaktime.iloc[i] <= 25):
-                    aggregated_zmu_origin.score_breaktime.iloc[i] = 3
-                    aggregated_zmu_origin.mark_breaktime.iloc[i] = "Important"
-                elif (aggregated_zmu_origin.radial_mean_breaktime.iloc[i] > 25) and (
-                        aggregated_zmu_origin.radial_mean_breaktime.iloc[i] <= max(
-                    aggregated_zmu_origin.radial_mean_breaktime)):
-                    aggregated_zmu_origin.score_breaktime.iloc[i] = 4
-                    aggregated_zmu_origin.mark_breaktime.iloc[i] = "Relevant"
-
-            #### mean stop time or breaktime @DESTINATION
-            for i in range(len(aggregated_zmu_destination)):
-                if (aggregated_zmu_destination.radial_mean_breaktime_dest.iloc[i] >= 0) and (
-                        aggregated_zmu_destination.radial_mean_breaktime_dest.iloc[i] <= 1):
-                    aggregated_zmu_destination.score_breaktime_dest.iloc[i] = 1
-                    aggregated_zmu_destination.mark_breaktime_dest.iloc[i] = "Low"
-                elif (aggregated_zmu_destination.radial_mean_breaktime_dest.iloc[i] > 1) and (
-                        aggregated_zmu_destination.radial_mean_breaktime_dest.iloc[i] <= 5):
-                    aggregated_zmu_destination.score_breaktime_dest.iloc[i] = 2
-                    aggregated_zmu_destination.mark_breaktime_dest.iloc[i] = "Average"
-                elif (aggregated_zmu_destination.radial_mean_breaktime_dest.iloc[i] > 5) and (
-                        aggregated_zmu_destination.radial_mean_breaktime_dest.iloc[i] <= 10):
-                    aggregated_zmu_destination.score_breaktime_dest.iloc[i] = 3
-                    aggregated_zmu_destination.mark_breaktime_dest.iloc[i] = "Important"
-                elif (aggregated_zmu_destination.radial_mean_breaktime_dest.iloc[i] > 10) and (
-                        aggregated_zmu_destination.radial_mean_breaktime_dest.iloc[i] <= max(
-                    aggregated_zmu_destination.radial_mean_breaktime_dest)):
-                    aggregated_zmu_destination.score_breaktime_dest.iloc[i] = 4
-                    aggregated_zmu_destination.mark_breaktime_dest.iloc[i] = "Relevant"
-
-            #### mean trip_distance  @ORIGIN
-            for i in range(len(aggregated_zmu_origin)):
-                if (aggregated_zmu_origin.radial_mean_tripdistance.iloc[i] >= 0) and (
-                        aggregated_zmu_origin.radial_mean_tripdistance.iloc[i] <= 5):
-                    aggregated_zmu_origin.score_trip_distance.iloc[i] = 1
-                    aggregated_zmu_origin.mark_trip_distance.iloc[i] = "Low"
-                elif (aggregated_zmu_origin.radial_mean_tripdistance.iloc[i] > 5) and (
-                        aggregated_zmu_origin.radial_mean_tripdistance.iloc[i] <= 15):
-                    aggregated_zmu_origin.score_trip_distance.iloc[i] = 2
-                    aggregated_zmu_origin.mark_trip_distance.iloc[i] = "Average"
-                elif (aggregated_zmu_origin.radial_mean_tripdistance.iloc[i] > 15) and (
-                        aggregated_zmu_origin.radial_mean_tripdistance.iloc[i] <= 25):
-                    aggregated_zmu_origin.score_trip_distance.iloc[i] = 3
-                    aggregated_zmu_origin.mark_trip_distance.iloc[i] = "Important"
-                elif (aggregated_zmu_origin.radial_mean_tripdistance.iloc[i] > 25) and (
-                        aggregated_zmu_origin.radial_mean_tripdistance.iloc[i] <= max(
-                    aggregated_zmu_origin.radial_mean_tripdistance)):
-                    aggregated_zmu_origin.score_trip_distance.iloc[i] = 4
-                    aggregated_zmu_origin.mark_trip_distance.iloc[i] = "Relevant"
-
-            #### save data into .csv format ###################################################
-            #####----->>> save csv file ---- ##################################################
-            csv_aggregated_zmu_origin = aggregated_zmu_origin[
-                ['index_zmu_origin', 'zmu', 'score_trip_counts', 'score_trip_time', 'score_breaktime',
-                 'score_trip_distance', 'mark_trip_counts', 'mark_trip_time',
-                 'mark_breaktime', 'mark_trip_distance', 'score_ratio_trip_counts', 'mark_ratio_trip_counts']]
-
-            csv_aggregated_zmu_origin = pd.merge(csv_aggregated_zmu_origin, aggregated_zmu_destination[
-                ['zmu', 'score_breaktime_dest', 'mark_breaktime_dest']],
-                                                 on=['zmu'], how='left')
-
-            # print(csv_aggregated_zmu_origin.columns)
-
-            csv_aggregated_zmu_origin.to_csv(
-                path_app + 'static/csv_aggregated_zmu_origin_' + session.sid + '.csv')
-
-            csv_aggregated_zmu_destination = aggregated_zmu_destination[
-                ['index_zmu_destination', 'zmu', 'score_trip_counts_dest',
-                 'mark_trip_counts_dest', 'score_breaktime_dest', 'mark_breaktime_dest']]
-            # csv_aggregated_zmu_destination.to_csv(
-            #    path_app + 'static/csv_aggregated_zmu_destination_' + session.sid + '.csv')
-
-            ##########################################################################################################
-            ##########################################################################################################
-
-            aggregated_means_zmu_origin = aggregated_means_zmu_origin[
-                ['counts_norm', 'hr', 'zmu', 'triptime_s', 'tripdistance_m',
-                 'triptime_m', 'breaktime_m']]
-
-            aggregated_means_zmu_destination = aggregated_means_zmu_destination[
-                ['counts_norm', 'hr', 'index_zmu', 'zmu', 'triptime_s', 'breaktime_m_dest', 'tripdistance_m',
-                 'triptime_m', 'breaktime_m']]
-
-            # print(aggregated_means_zmu_destination.columns)
-
-            aggregated_means_zmu_destination.rename({'counts_norm': 'counts_norm_dest'}, axis=1, inplace=True)
-
-            ## merge with zmu to get geometries.....
-            ## get geometry from "ZMU_ROMA"
-            aggregated_means_zmu_origin = pd.merge(aggregated_means_zmu_origin, ZMU_ROMA_with_population,
-                                                   on=['zmu'], how='left')
-
-            aggregated_means_zmu_origin = aggregated_means_zmu_origin[
-                ['index_zmu', 'zmu', 'hr', 'tripdistance_m',
-                 'triptime_m', 'breaktime_m', 'nome_comun', 'quartiere']]
-
-            ### -----> merge all data together ---- ###################################################################
-            aggregated_zmu_origin_day = pd.merge(aggregated_zmu_origin_day,
-                                                 aggregated_means_zmu_origin,
-                                                 on=['index_zmu', 'zmu', 'hr', 'nome_comun', 'quartiere'],
-                                                 how='left')
-
-            ### ----------------- merge all data together @ORIGIN and @DESTINATION ----------- #####################
-            # print("aggregated_zmu_origin_day------>", aggregated_zmu_origin_day)
-            # print("aggregated_means_zmu_destination------>", aggregated_means_zmu_destination)
-            aggregated_zmu_origin_day = pd.merge(aggregated_zmu_origin_day,
-                                                 aggregated_means_zmu_destination[
-                                                     ['index_zmu', 'zmu', 'hr', 'breaktime_m_dest',
-                                                      'counts_norm_dest']],
-                                                 on=['index_zmu', 'zmu', 'hr'],
-                                                 how='left')
-
-            ## compute ration between N trips @origin and N trips @ destination
-            aggregated_zmu_origin_day['Ratio_N_orig_dest'] = (
-                                                                 aggregated_zmu_origin_day.counts_norm) / aggregated_zmu_origin_day.counts_norm_dest
-            aggregated_zmu_origin_day['Ratio_N_orig_dest'] = round(aggregated_zmu_origin_day['Ratio_N_orig_dest'], 2)
-
-            print("----I am here ----------------------------------------------------------")
-
-            aggregated_zmu_origin_day = aggregated_zmu_origin_day[
-                aggregated_zmu_origin_day['counts_norm_dest'].notna()]
-
-            aggregated_zmu_origin_day = aggregated_zmu_origin_day[
-                aggregated_zmu_origin_day['breaktime_m_dest'].notna()]
-
-            #####----->>> save csv file ---- ##################################################
-            aggregated_means_zmu_origin['counts_norm'] = round(aggregated_zmu_origin_day['counts_norm'], 2)
-            aggregated_means_zmu_origin['counts_norm_dest'] = round(aggregated_zmu_origin_day['counts_norm_dest'], 2)
-
-            aggregated_zmu_origin_day.to_csv(
-                path_app + 'static/aggregated_zmu_origin_day_' + session.sid + '.csv')
-
-            # print("aggregated_zmu_origin_day------->", aggregated_zmu_origin_day.columns)
-
-            aggregated_zmu_origin_for_geojson['counts_norm_dest'] = round(
-                aggregated_zmu_origin_for_geojson.counts_norm_dest, ndigits=2)
-            aggregated_zmu_origin_for_geojson['counts_norm'] = round(aggregated_zmu_origin_for_geojson.counts_norm,
-                                                                     ndigits=2)
-            aggregated_zmu_origin_for_geojson['ratio_num_orig_dest'] = round(
-                aggregated_zmu_origin_for_geojson.ratio_num_orig_dest, ndigits=2)
-            aggregated_zmu_origin_for_geojson['mean_breaktime_m'] = round(
-                aggregated_zmu_origin_for_geojson.mean_breaktime_m, ndigits=2)
-            aggregated_zmu_origin_for_geojson['mean_breaktime_m_dest'] = round(
-                aggregated_zmu_origin_for_geojson.mean_breaktime_m_dest, ndigits=2)
-            aggregated_zmu_origin_for_geojson['mean_tripdistance_m'] = round(
-                aggregated_zmu_origin_for_geojson.mean_tripdistance_m, ndigits=2)
-            aggregated_zmu_origin_for_geojson['mean_triptime_m'] = round(
-                aggregated_zmu_origin_for_geojson.mean_triptime_m, ndigits=2)
-
-            aggregated_zmu_origin_for_geojson = pd.merge(aggregated_zmu_origin_for_geojson,
-                                                         homes_and_pop[['index_zmu', 'zmu', 'ratio_homes_pop']],
-                                                         on=['index_zmu', 'zmu'],
-                                                         how='left')
-
-            # print(aggregated_zmu_origin_for_geojson.columns)
-
-            ### add field color-hex.....
-            color_values = ['#00e31c48', '#09f60065', '#09f60052', '#00e31c37', '#00ee116b', '#00926d42', '#009e6154',
-                            '#06f9006f']
-            from itertools import islice, cycle
-            aggregated_zmu_origin_for_geojson['color_hex'] = list(
-                islice(cycle(color_values), len(aggregated_zmu_origin_for_geojson)))
-
-            ## remove "centroid" column
-            aggregated_zmu_origin_for_geojson.drop(['centroid'], axis=1, inplace=True)
-
-            try:
-                aggregated_zmu_origin_for_geojson = gpd.GeoDataFrame(aggregated_zmu_origin_for_geojson)
-            except IndexError:
-                abort(404)
-
-            ## save as .geojson file
-            aggregated_zmu_origin_for_geojson.to_file(filename=path_app + 'static/aggregated_zmu_filtered.geojson',
-                                                      driver='GeoJSON')
-            ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
-            with open(path_app + "static/aggregated_zmu_filtered.geojson", "r+") as f:
-                old = f.read()  # read everything in the file
-                f.seek(0)  # rewind
-                f.write("var aggregated_matched_routes_zmu = \n" + old)  # assign the "var name" in the .geojson file
-
-            ### convert Geodataframe into .geojson...
-            session["aggregated_zmu_origin"] = aggregated_zmu_origin_for_geojson.to_json()
-            print("------ I am here----- SESSION Colored ZMUs--------------------------")
-            # print(session["aggregated_zmu_origin"])
-
-            # print(session['id'])
-            return render_template("index_zmu_select_hour.html",
-                                   var_ZMU_day=selected_ZMU_day_start,
-                                   session_aggregated_zmu_origin=session["aggregated_zmu_origin"])
-
+          
         return render_template("index_zmu_select_hour.html")
 
 
@@ -6753,11 +5334,13 @@ def ZMU_emiss_hourrange_selector():
         gdf_staypoints.to_file(filename=path_app + 'static/staypoints_tod.geojson',
                                driver='GeoJSON')
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + 'static/staypoints_tod.geojson', 'r+', encoding='utf8',
                   errors='ignore') as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var points_staypoints = \n" + old)  # assign the "var name" in the .geojson file
+        """
 
         #############################################################################################################
         #### use extennd emissions over all the traffic zones crossed during the trip (valid only for NOX, NMVOCs, PM, PM_nexh)
@@ -6769,7 +5352,7 @@ def ZMU_emiss_hourrange_selector():
                                                                      LEFT JOIN fcd.trips 
                                                                                  ON impacts.trips_cons_emis_fcd.id_trip = trips.id        
                                                                                    WHERE date(trips.dt_o) BETWEEN :x AND :xx   
-                                                                                    AND trips.tod_o = :z      
+                                                                                    
                                                                                    /*limit 1000*/
                                                                 )
                                                                   SELECT id_car_fleet,  zmu, id_trip, id_veh, dt_o, dt_d, id_zone_o, id_zone_d, ec, ec_wtt, nox, nmvoc, pm, pm_nexh, co2eq, co2eq_wtt, 
@@ -6788,7 +5371,7 @@ def ZMU_emiss_hourrange_selector():
                                                                  LEFT JOIN fcd.trips 
                                                                              ON trips_cons_emis_fcd.id_trip = trips.id        
                                                                                WHERE date(trips.dt_o) BETWEEN :x AND :xx   
-                                                                                AND trips.tod_o = :z      
+                                                                                      
                                                                                /*limit 1000*/
                                                             )
                                                               SELECT id_car_fleet, id_trip, id_veh, dt_o, dt_d, id_zone_o, id_zone_d, ec, ec_wtt, nox, nmvoc, pm, pm_nexh, co2eq, co2eq_wtt, 
@@ -6806,7 +5389,7 @@ def ZMU_emiss_hourrange_selector():
                                                                            LEFT JOIN fcd.trips 
                                                                                        ON trips_emission_costs_fcd.id_trip = trips.id        
                                                                                          WHERE date(trips.dt_o) BETWEEN :x AND :xx   
-                                                                                          AND trips.tod_o = :z      
+                                                                                              
                                                                                          /*limit 1000*/
                                                                       )
                                                                         SELECT id_car_fleet, id_trip, id_veh, dt_o, dt_d, id_zone_o, id_zone_d, nox_cost, nmvoc_cost, pm_cost, pmnnex_cost, co2_cost, wtt_co2_cost, 
@@ -6823,7 +5406,7 @@ def ZMU_emiss_hourrange_selector():
                                                                                 LEFT JOIN fcd.trips 
                                                                                             ON trips_external_costs_fcd.id_trip = trips.id        
                                                                                               WHERE date(trips.dt_o) BETWEEN :x AND :xx   
-                                                                                               AND trips.tod_o = :z      
+                                                                                                    
                                                                                               /*limit 1000*/
                                                                            )
                                                                              SELECT id_car_fleet, id_trip, id_veh, dt_o, dt_d, id_zone_o, id_zone_d, v0_cost, real_cost, deltatime_cost, acc_cost, noise_cost, 
@@ -6835,47 +5418,22 @@ def ZMU_emiss_hourrange_selector():
 
         #### ---- query all trips having a staypoint ------#########
         ### staypoint = Home or WORK
-        if (selected_stay_type == 21 or selected_stay_type == 22) and (selected_ZMU_tod != 9):
+        if (selected_stay_type == 21 or selected_stay_type == 22):
 
             stmt = query_emissions_origin.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                     y=str(hourrange_id), z=str(tod), w=str(fleet_type))
+                                                     y=str(hourrange_id), w=str(fleet_type))
 
             stmt_costs = query_emissions_costs_origin.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                     y=str(hourrange_id), z=str(tod), w=str(fleet_type))
+                                                     y=str(hourrange_id), w=str(fleet_type))
 
             stmt_external_costs = query_externalities_costs_origin.bindparams(x=str(selected_ZMU_day_start),
                                                                  xx=str(selected_ZMU_day_end),
-                                                                 y=str(hourrange_id), z=str(tod), w=str(fleet_type))
+                                                                 y=str(hourrange_id), w=str(fleet_type))
 
-        ###### staypoint: home or work and all Time of days (W, P, H)
-        elif (selected_stay_type == 21 or selected_stay_type == 22) and (selected_ZMU_tod == 9):
-
-            stmt = query_emissions_origin.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                    y=str(hourrange_id))
-
-            stmt_costs = query_emissions_costs_origin.bindparams(x=str(selected_ZMU_day_start),
-                                                                 xx=str(selected_ZMU_day_end),
-                                                                 y=str(hourrange_id))
-
-            stmt_external_costs = query_externalities_costs_origin.bindparams(x=str(selected_ZMU_day_start),
-                                                                              xx=str(selected_ZMU_day_end),
-                                                                              y=str(hourrange_id))
+       
 
         ### staypoint = Home + WORK
-        elif (selected_stay_type == 23) and (selected_ZMU_tod != 9):
-            stmt = query_emissions_origin.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                    y=str(hourrange_id), z=str(tod))
-
-            stmt_costs = query_emissions_costs_origin.bindparams(x=str(selected_ZMU_day_start),
-                                                                 xx=str(selected_ZMU_day_end),
-                                                                 y=str(hourrange_id), z=str(tod))
-
-            stmt_external_costs = query_externalities_costs_origin.bindparams(x=str(selected_ZMU_day_start),
-                                                                              xx=str(selected_ZMU_day_end),
-                                                                              y=str(hourrange_id), z=str(tod))
-
-        ### staypoint = Home + WORK and all Time of days (W, P, H)
-        elif (selected_stay_type == 23) and (selected_ZMU_tod == 9):
+        elif (selected_stay_type == 23):
             stmt = query_emissions_origin.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
                                                     y=str(hourrange_id))
 
@@ -6887,8 +5445,7 @@ def ZMU_emiss_hourrange_selector():
                                                                               xx=str(selected_ZMU_day_end),
                                                                               y=str(hourrange_id))
 
-        print(selected_stay_type)
-        print(selected_ZMU_tod)
+ 
 
         ### ---> EMISSIONS <------#####################
         with engine.connect() as conn:
@@ -7018,17 +5575,7 @@ def ZMU_emiss_hourrange_selector():
 
 
 
-        """
-        ### ### ---- divide all the amount of Energy consumption or Emission by the number of staypoints
-        aggregated_gdf_emission['ec'] = aggregated_gdf_emission['ec'] / aggregated_gdf_emission.count_staypoints
-        aggregated_gdf_emission['ec_wtt'] = aggregated_gdf_emission['ec_wtt'] / aggregated_gdf_emission.count_staypoints
-        aggregated_gdf_emission['nox'] = aggregated_gdf_emission['nox'] / aggregated_gdf_emission.count_staypoints
-        aggregated_gdf_emission['nmvoc'] = aggregated_gdf_emission['nmvoc'] / aggregated_gdf_emission.count_staypoints
-        aggregated_gdf_emission['pm'] = aggregated_gdf_emission['pm'] / aggregated_gdf_emission.count_staypoints
-        aggregated_gdf_emission['pm_nexh'] = aggregated_gdf_emission['pm_nexh'] / aggregated_gdf_emission.count_staypoints
-        aggregated_gdf_emission['co2eq'] = aggregated_gdf_emission['co2eq'] / aggregated_gdf_emission.count_staypoints
-        aggregated_gdf_emission['co2eq_wtt'] = aggregated_gdf_emission['co2eq_wtt'] / aggregated_gdf_emission.count_staypoints
-        """
+       
 
         aggregated_gdf_emission['zmu'] = aggregated_gdf_emission.zmu.astype('int')
 
@@ -7036,25 +5583,7 @@ def ZMU_emiss_hourrange_selector():
 
 
 
-        """
-        ### ---- divide all the amount of Energy consumption or Emission by 1000 people
-        aggregated_gdf_emission['ec'] = (aggregated_gdf_emission['ec'] /
-                                                       aggregated_gdf_emission['POP_TOT_ZMU']) * 1000
-        aggregated_gdf_emission['ec_wtt'] = (aggregated_gdf_emission['ec_wtt'] /
-                                         aggregated_gdf_emission['POP_TOT_ZMU']) * 1000
-        aggregated_gdf_emission['nox'] = (aggregated_gdf_emission['nox'] /
-                                         aggregated_gdf_emission['POP_TOT_ZMU']) * 1000
-        aggregated_gdf_emission['nmvoc'] = (aggregated_gdf_emission['nmvoc'] /
-                                         aggregated_gdf_emission['POP_TOT_ZMU']) * 1000
-        aggregated_gdf_emission['pm'] = (aggregated_gdf_emission['pm'] /
-                                         aggregated_gdf_emission['POP_TOT_ZMU']) * 1000
-        aggregated_gdf_emission['pm_nexh'] = (aggregated_gdf_emission['pm_nexh'] /
-                                         aggregated_gdf_emission['POP_TOT_ZMU']) * 1000
-        aggregated_gdf_emission['co2eq'] = (aggregated_gdf_emission['co2eq'] /
-                                         aggregated_gdf_emission['POP_TOT_ZMU']) * 1000
-        aggregated_gdf_emission['co2eq_wtt'] = (aggregated_gdf_emission['co2eq_wtt'] /
-                                         aggregated_gdf_emission['POP_TOT_ZMU']) * 1000
-        """
+      
 
         aggregated_gdf_emission['ec'] = round(
             aggregated_gdf_emission['ec'], 2)
@@ -7102,21 +5631,7 @@ def ZMU_emiss_hourrange_selector():
 
 
 
-        """
-        # aggregated_gdf_emission['unit'] = 'gram'
-        if fleet_type == 'el1':   ## electric
-            aggregated_gdf_emission['ec_color'] = aggregated_gdf_emission['ec']*10
-            aggregated_gdf_emission['ec_wtt_color'] = aggregated_gdf_emission['ec_wtt']*30
-        if fleet_type == 'el2':   ## electric
-            aggregated_gdf_emission['ec_color'] = aggregated_gdf_emission['ec']*10
-            aggregated_gdf_emission['ec_wtt_color'] = aggregated_gdf_emission['ec_wtt']*30
-        elif fleet_type == 'rm1':   ## traditional
-            aggregated_gdf_emission['ec_color'] = aggregated_gdf_emission['ec']*10
-            aggregated_gdf_emission['ec_wtt_color'] = aggregated_gdf_emission['ec_wtt']*30
-            aggregated_gdf_emission['nox_color'] = aggregated_gdf_emission['nox']*30
-            aggregated_gdf_emission['nmvoc_color'] = aggregated_gdf_emission['nmvoc']*30
-            aggregated_gdf_emission['pm_color'] = aggregated_gdf_emission['pm']*100
-        """
+      
 
         #####----->>> save csv file ---- ##################################################
         # aggregated_gdf_OD_GTFS['n_spostamenti_res'] = round(aggregated_gdf_OD_GTFS['n_spostamenti_res'], 2)
@@ -7154,6 +5669,7 @@ def ZMU_emiss_hourrange_selector():
         aggregated_gdf_externalities.to_file(filename=path_app + 'static/aggregated_gdf_externalities.geojson',
                                      driver='GeoJSON')
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + "static/aggregated_gdf_emission.geojson", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
@@ -7168,7 +5684,7 @@ def ZMU_emiss_hourrange_selector():
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var aggregate_externalities_zmu = \n" + old)  # assign the "var name" in the .geojson file
-
+        """
 
 
 
@@ -7184,7 +5700,7 @@ def ZMU_emiss_hourrange_selector():
                                                    LEFT JOIN fcd.trips 
                                                                ON trips_cons_emis_fcd.id_trip = trips.id        
                                                                  WHERE date(trips.dt_o) BETWEEN :x AND :xx   
-                                                                  AND trips.tod_o = :z      
+                                                                   
                                                                  /*limit 1000*/
                                               )
                                                 SELECT id_car_fleet, id_trip, dt_o, dt_d, id_zone_o, id_zone_d, ec, ec_wtt, nox, nmvoc, pm, pm_nexh, co2eq, co2eq_wtt,
@@ -7193,7 +5709,7 @@ def ZMU_emiss_hourrange_selector():
                                                 from data  WHERE id_car_fleet =:w ''')
 
         stmt = query_emissions_origin_hourly_profile.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                 z=str(tod), w=str(fleet_type))
+                                                 w=str(fleet_type))
         with engine.connect() as conn:
             res = conn.execute(stmt).all()
         emission_origin_zones_hourly_profile = pd.DataFrame(res)
@@ -7288,800 +5804,7 @@ def download():
 ###############################################################################################################
 
 
-        
-
-#######///////////////////////////////////////////////////////////////////////##############
-#####-----------------------------------------------------------------------------##########
-#######///////////////////////////////////////////////////////////////////////##############
-#####-----------------------------------------------------------------------------##########
-### ------  HIGHLIGHT ZMUs crossed from ORIGIN ZONES to all DESTINATION ZMU zones --- #####
-### ------------------------------------------------------------------------------- ########
-
-### select DATA TYPE  -------- #################################
-@app.route('/ZMU_paths/', methods=['GET', 'POST'])
-def ZMU_paths():
-
-    import glob
-    session["ZMU_day_start"] = '2022-10-01'
-    session["ZMU_day_end"] = '2022-10-15'
-    session["ZMU_hourrange"] = 2
-    session["ZMU_tod"] = 6
-    # session["data_type"] = 11
-
-    #### ----- check for session ----> data type (FCD, SYNTHETIC)
-    stored_data_type_files = glob.glob(path_app + "static/params/selected_data_type_*.txt")
-    stored_data_type_files.sort(key=os.path.getmtime)
-    stored_data_type_file = stored_data_type_files[len(stored_data_type_files) - 1]
-
-    with open(stored_data_type_file) as file:
-        selected_data_type = file.read()
-    print("selected_data_type-------I AM HERE-----------: ", selected_data_type)
-    session["data_type"] = selected_data_type
-
-    return render_template("index_zmu_paths_select_day.html")
-
-
-### select DATA TYPE  -------- #################################
-@app.route('/ZMU_paths_data_type/', methods=['GET', 'POST'])
-def ZMU_paths_data_type():
-    if request.method == "POST":
-        session["data_type"] = request.form.get("data_type")
-        selected_data_type = session["data_type"]
-        print("selected_data_type:", selected_data_type)
-        selected_data_type = str(selected_data_type)
-
-        with open(path_app + "static/params/selected_data_type_" + session.sid + ".txt", "w") as file:
-            file.write(str(selected_data_type))
-
-        ## --------- SELECT DATA TYPE and redirect to new .html page -------- ##############
-        # selected_data_type = int(selected_data_type)
-        if selected_data_type == '11':  ## FCD data
-            print("FCD data")
-            print("selected_data_type:--------selector", selected_data_type)
-
-        elif selected_data_type == '12':  ## SYNTHETIC DATA
-            print("SYNTHETIC DATA")
-            print("selected_data_type:--------selector", selected_data_type)
-
-
-        return render_template("index_zmu_paths_select_day.html")
-
-
-@app.route('/ZMU_paths_day_selector/', methods=['GET', 'POST'])
-### select day (ZMU)...from Database
-def ZMU_paths_day_selector():
-    if request.method == "POST":
-        ###--->> record the ZMU_day in into the Flask Session
-        ## TRY if session exists
-        import glob
-
-        ##### ------ daterangepicker ----- ############################################
-        ###############################################################################
-
-        try:
-            data = request.form["daterange"]
-            session['input_data_range'] = data
-            print("-------------data-------------:", data)
-        except:
-            data = "10/12/2022 - 10/13/2022"
-
-        try:
-            start_date = data.split(" - ")[0]
-            start_date = datetime.datetime.strptime(start_date, '%m/%d/%Y')
-            session["ZMU_day_start"] = str(start_date.date())
-            selected_ZMU_day_start = session["ZMU_day_start"]
-            print("gotta!!!----->> selected_ZMU_day_start:", session["ZMU_day_start"])  ##--->> only get date
-            selected_ZMU_day_start = str(selected_ZMU_day_start)
-        except:
-            selected_ZMU_day_start = '2022-10-04'
-            session["ZMU_day_start"] = selected_ZMU_day_start
-            print("using stored variable ZMU_day_start: ", session["ZMU_day_start"])
-
-        try:
-            end_date = data.split(" - ")[1]
-            end_date = datetime.datetime.strptime(end_date, '%m/%d/%Y')
-            session["ZMU_day_end"] = str(end_date.date())
-            selected_ZMU_day_end = session["ZMU_day_end"]
-            print("gotta!!!----->> selected_ZMU_day_end:", session["ZMU_day_end"])  ##--->> only get date
-            selected_ZMU_day_end = str(selected_ZMU_day_end)
-        except:
-            selected_ZMU_day_end = '2022-10-15'
-            session["ZMU_day_end"] = selected_ZMU_day_end
-            print("using stored variable selected_ZMU_day_end: ", session["ZMU_day_end"])
-
-        try:
-            with open(path_app + "static/params/selected_data_type_" + session.sid + ".txt", "r") as file:
-                selected_data_type = file.read()
-            print("selected_data_type-------I AM HERE-----------: ", selected_data_type)
-        except:
-            # for stored_tod_file in glob.glob(path_app + "static/params/selected_data_type_*.txt"):
-            #    print(stored_tod_file)
-            stored_data_type_files = glob.glob(path_app + "static/params/selected_data_type_*.txt")
-            stored_data_type_files.sort(key=os.path.getmtime)
-            stored_data_type_file = stored_data_type_files[len(stored_data_type_files) - 1]
-            with open(stored_data_type_file) as file:
-                selected_data_type = file.read()
-            print("selected_data_type-------I AM HERE-----------: ", selected_data_type)
-
-        selected_data_type = session["data_type"]
-        selected_data_type = int(selected_data_type)
-        print("selected_data_type-------2: ", session["data_type"])
-
-        return render_template("index_zmu_paths_select_day.html")
-
-
-@app.route('/ZMU_paths_hour_selector/', methods=['GET', 'POST'])
-def ZMU_paths_hour_selector():
-    if request.method == "POST":
-
-        import glob
-
-        session["ZMU_tod"] = 6
-        # selected_ZMU_hourrange = "1"
-        # selected_ZMU_day_start = '2022-10-18'
-        # selected_ZMU_day_end = '2022-10-22'
-        # session["ZMU_tod"] = 6
-        # tod = "W"
-
-        try:
-            # selected_ZMU_day_start = session["ZMU_day_start"].strftime('%Y-%m-%d')
-            selected_ZMU_day_start = session["ZMU_day_start"]
-            print("day from selected_ZMU_day_start:", selected_ZMU_day_start)
-        except:
-            selected_ZMU_day_start = '2022-10-04'
-            session["ZMU_day_start"] = selected_ZMU_day_start
-            print("using stored variable ZMU_day_start: ", session["ZMU_day_start"])
-
-        try:
-            # selected_ZMU_day_end = session["ZMU_day_end"].strftime('%Y-%m-%d')
-            selected_ZMU_day_end = session["ZMU_day_end"]
-            print("day from selected_ZMU_day_end:", selected_ZMU_day_end)
-        except:
-            selected_ZMU_day_end = '2022-10-15'
-            session["ZMU_day_end"] = selected_ZMU_day_end
-            print("using stored variable ZMU_day_end: ", session["ZMU_day_end"])
-
-        try:
-            with open(path_app + "static/params/selected_data_type_" + session.sid + ".txt", "r") as file:
-                selected_data_type = file.read()
-            print("selected_data_type-------I AM HERE-----------: ", selected_data_type)
-        except:
-            # for stored_tod_file in glob.glob(path_app + "static/params/selected_data_type_*.txt"):
-            #    print(stored_tod_file)
-            stored_data_type_files = glob.glob(path_app + "static/params/selected_data_type_*.txt")
-            stored_data_type_files.sort(key=os.path.getmtime)
-            stored_data_type_file = stored_data_type_files[len(stored_data_type_files) - 1]
-            with open(stored_data_type_file) as file:
-                selected_data_type = file.read()
-            print("selected_data_type-------I AM HERE-----------: ", selected_data_type)
-
-        selected_data_type = session["data_type"]
-        selected_data_type = int(selected_data_type)
-        print("selected_data_type-------2: ", session["data_type"])
-
-        ## TRY if session exists
-        try:
-            session["ZMU_hourrange"] = request.form.get("ZMU_hourrange")
-            selected_ZMU_hourrange = session["ZMU_hourrange"]
-            print("selected_ZMU_hourrange:", selected_ZMU_hourrange)
-            selected_ZMU_hourrange = str(selected_ZMU_hourrange)
-        except:
-            session["ZMU_hourrange"] = 2
-            selected_ZMU_hourrange = session["ZMU_hourrange"]
-            print("selected_ZMU_hourrange: ", session["ZMU_hourrange"])
-
-        ## --------- get hourrange table from DB   -------- #######################
-
-        selected_ZMU_hourrange = int(selected_ZMU_hourrange)
-        if selected_ZMU_hourrange == 0:  ## 00:00 ---> 07:00
-            hourrange_id = "N1"
-        elif selected_ZMU_hourrange == 1:  ## 07:00 ----> 10:00
-            hourrange_id = "M1"
-        elif selected_ZMU_hourrange == 2:  ## 10:00 ---> 14:00
-            hourrange_id = "M2"
-        elif selected_ZMU_hourrange == 3:  ##  14:00 ---> 16:00
-            hourrange_id = "A1"
-        elif selected_ZMU_hourrange == 4:  ## 16:00 ---> 20:00
-            hourrange_id = "A2"
-        elif selected_ZMU_hourrange == 5:  ## 20:00 ---> 24:00
-            hourrange_id = "A3"
-
-        session["hourrange_id"] = hourrange_id
-        print("------hourrange_id------------>>>:", hourrange_id)
-        print("selected data type...........................................", selected_data_type)
-
-        session["tod"] = "W"
-        tod = session["tod"]
-        print("----- tod------:", session["tod"])
-
-        ######################################################################################
-        #####----- make selection between FCD data and Synthetic data ------ #################
-        ######################################################################################
-        if selected_data_type == 11:  ## FCD data ##
-            print("--------------------------------------------------------FCD data")
-            ## switch to table.........TRIPD----FCD data
-            from sqlalchemy import create_engine
-            from sqlalchemy import exc
-            import sqlalchemy as sal
-            from sqlalchemy.pool import NullPool
-
-            # engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
-            engine = create_engine("postgresql://postgres:pippo123@localhost:5432/RSM_Oct_Nov_2022")
-            from sqlalchemy.sql import text
-
-            ##### ----- destinations ------- #################################
-            query_destination = text('''SELECT * FROM fcd.trips
-                                                         WHERE date(dt_d) BETWEEN :x AND :xx 
-                                                          AND hour_range_d = :y
-                                                          AND tod_d = :z ''')
-            stmt = query_destination.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                y=str(hourrange_id), z=str(tod))
-
-            with engine.connect() as conn:
-                res = conn.execute(stmt).all()
-            destination_routes = pd.DataFrame(res)
-            destination_routes = destination_routes.sample(frac=0.5) 
-
-            ##### ----- origins ------- #################################
-            query_origin = text('''SELECT * FROM fcd.trips
-                                                        WHERE date(dt_o) BETWEEN :x AND :xx 
-                                                        AND hour_range_o = :y
-                                                        AND tod_o = :z ''')
-            stmt = query_origin.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                           y=str(hourrange_id), z=str(tod))
-
-            with engine.connect() as conn:
-                res = conn.execute(stmt).all()
-            origin_routes = pd.DataFrame(res)
-            origin_routes = origin_routes.sample(frac=0.5)  
-
-        elif selected_data_type == 12:  ## SYNTHETIC DATA ##
-            print("---------------------------------------------------SYNTHETIC DATA")
-            ## switch to table.........TRIPD----FCD data
-            from sqlalchemy import create_engine
-            from sqlalchemy import exc
-            import sqlalchemy as sal
-            from sqlalchemy.pool import NullPool
-
-            # engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
-            engine = create_engine("postgresql://postgres:pippo123@localhost:5432/RSM_Oct_Nov_2022")
-            from sqlalchemy.sql import text
-
-            ##### ----- destinations ------- #################################
-            query_destination = text('''SELECT * FROM synt.trips
-                                                WHERE date(dt_d) BETWEEN :x AND :xx 
-                                                                     AND hour_range_d = :y
-                                                                     AND tod_d = :z ''')
-            stmt = query_destination.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                y=str(hourrange_id), z=str(tod))
-
-            with engine.connect() as conn:
-                res = conn.execute(stmt).all()
-            destination_routes = pd.DataFrame(res)
-            destination_routes = destination_routes.sample(frac=0.4) 
-
-            ##### ----- origins ------- #################################
-            query_origin = text('''SELECT * FROM synt.trips
-                                                WHERE date(dt_o) BETWEEN :x AND :xx 
-                                                                   AND hour_range_o = :y
-                                                                   AND tod_o = :z ''')
-            stmt = query_origin.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                           y=str(hourrange_id), z=str(tod))
-
-            with engine.connect() as conn:
-                res = conn.execute(stmt).all()
-            origin_routes = pd.DataFrame(res)
-            origin_routes = origin_routes.sample(frac=0.4)  
-
-
-        ## -----  get ZMU zones  -------- ################################
-        ## function to transform Geometry from text to LINESTRING
-        def wkb_tranformation(line):
-            return wkb.loads(line.geom, hex=True)
-
-        def wkb_tranformation_centroid(line):
-            return wkb.loads(line.centroid, hex=True)
-
-        ZMU_ROMA_with_population = gpd.read_file(path_app + "static/zmu_aggregated_POP_ROMA_2015_new.geojson")
-        ZMU_ROMA_with_population['centroid'] = ZMU_ROMA_with_population.apply(wkb_tranformation_centroid, axis=1)
-        ZMU_ROMA = gpd.GeoDataFrame(ZMU_ROMA_with_population)
-
-        """
-        ### ---> get filtered data of ZMU from DB  <--- ###########################
-        query_destination = text('''SELECT  
-                                                p_after, id, tt, dt_d, dist,  id_zone_o, id_zone_d,
-                                                date_part('hour', dt_d) as hour, geom,
-                                                TO_CHAR(dt_d::DATE, 'dd-mm-yyyy') as day
-                                                FROM fcd.trips
-                                                  WHERE date(dt_d) = :x AND
-                                                    extract(hour from dt_d) = :y
-                                                         /*limit 1000*/ ''')
-
-        destinations = []
-        selected_ZMU_hour = int(selected_ZMU_hour)
-        hourrange = [selected_ZMU_hour - 1, selected_ZMU_hour, selected_ZMU_hour + 1]
-        for hour in hourrange:
-            print(hour)
-            stmt = query_destination.bindparams(x=str(selected_ZMU_day), y=str(hour))
-            with engine.connect() as conn:
-                res = conn.execute(stmt).all()
-            routes = pd.DataFrame(res)
-            destinations.append(routes)
-        destination_routes = pd.concat(destinations)
-
-
-        query_origin = text('''SELECT  
-                                                 p_before, tt, id, dt_o, dist,  id_zone_o, id_zone_d,
-                                                 date_part('hour', dt_o) as hour, geom,
-                                                 TO_CHAR(dt_o::DATE, 'dd-mm-yyyy') as day
-                                                 FROM fcd.trips
-                                                   WHERE date(dt_o) = :x AND
-                                                     extract(hour from dt_o) = :y
-                                                          /*limit 1000*/ ''')
-
-        origins = []
-        hourrange = [selected_ZMU_hour - 1, selected_ZMU_hour, selected_ZMU_hour + 1]
-        for hour in hourrange:
-            print(hour)
-            stmt = query_origin.bindparams(x=str(selected_ZMU_day), y=str(hour))
-            with engine.connect() as conn:
-                res = conn.execute(stmt).all()
-            routes = pd.DataFrame(res)
-            origins.append(routes)
-        origin_routes = pd.concat(origins)
-        """
-
-        #### -------------------------------------------- ##########################################################
-        #### -------------------------------------------- ##########################################################
-        #### -------------------------------------------- ##########################################################
-
-        ### ----- DESTINATIONS ---------------------------------- ##################################################
-
-        ## remove none values
-        df_gdf_destination_routes = destination_routes[
-            ['p_after', 'tt', 'id', 'dt_d', 'dist', 'id_zone_d', 'geom']]
-        df_gdf_destination_routes.rename({'id_zone_d': 'zmu'}, axis=1, inplace=True)
-        df_gdf_destination_routes = df_gdf_destination_routes[df_gdf_destination_routes['zmu'].notna()]
-        df_gdf_destination_routes['zmu'] = df_gdf_destination_routes.zmu.astype('int')
-
-        df_gdf_destination_routes.rename({'tt': 'triptime_s'}, axis=1, inplace=True)
-        df_gdf_destination_routes.rename({'p_before': 'breaktime_s'}, axis=1, inplace=True)
-        df_gdf_destination_routes.rename({'id': 'idtrajectory'}, axis=1, inplace=True)
-        df_gdf_destination_routes.rename({'dist': 'tripdistance_m'}, axis=1, inplace=True)
-
-        ### ----- ORIGIN ---------------------------------- ##################################################
-
-        ## remove none values
-        df_gdf_origin_routes = origin_routes[
-            ['p_before', 'tt', 'id', 'dt_o', 'dist', 'id_zone_o', 'geom']]
-        df_gdf_origin_routes.rename({'id_zone_o': 'zmu'}, axis=1, inplace=True)
-        df_gdf_origin_routes = df_gdf_origin_routes[df_gdf_origin_routes['zmu'].notna()]
-        df_gdf_origin_routes['zmu'] = df_gdf_origin_routes.zmu.astype('int')
-
-        df_gdf_origin_routes.rename({'tt': 'triptime_s'}, axis=1, inplace=True)
-        df_gdf_origin_routes.rename({'p_before': 'breaktime_s'}, axis=1, inplace=True)
-        df_gdf_origin_routes.rename({'id': 'idtrajectory'}, axis=1, inplace=True)
-        df_gdf_origin_routes.rename({'dist': 'tripdistance_m'}, axis=1, inplace=True)
-
-        ### only CONSIDER "idtrajectories" from DIFFERENT zones ZMU
-        crossing_zones = pd.merge(df_gdf_origin_routes[['zmu', 'idtrajectory']],
-                                  df_gdf_destination_routes[['zmu', 'idtrajectory']], on=['idtrajectory'],
-                                  how='inner')
-        crossing_zones.columns = ['zmu_origin', 'idtrajectory', 'zmu_destination']
-
-        ## keep only "idtrajectories" with different zmu_origin and zmu_destination
-        df_crossed_zmu = []
-        for i in range(len(crossing_zones)):
-            if (crossing_zones.zmu_origin.iloc[i] != crossing_zones.zmu_destination.iloc[i]):
-                # print("============ got it ! ===================")
-                crossed_zmu = pd.DataFrame({'zmu_origin': [crossing_zones.zmu_origin.iloc[i]],
-                                            'idtrajectory': [crossing_zones.idtrajectory.iloc[i]],
-                                            'zmu_destination': [crossing_zones.zmu_destination.iloc[i]]})
-                df_crossed_zmu.append(crossed_zmu)
-        crossed_zmu = pd.concat(df_crossed_zmu)
-
-        crossed_zmu.rename({'zmu_origin': 'zmu'}, axis=1, inplace=True)
-        crossed_zmu = pd.merge(crossed_zmu, ZMU_ROMA, on=['zmu'], how='left')
-        crossed_zmu = crossed_zmu[['zmu', 'index_zmu', 'idtrajectory', 'zmu_destination']]
-        crossed_zmu.replace([np.inf, -np.inf], np.nan, inplace=True)
-        crossed_zmu.dropna(inplace=True)
-        crossed_zmu['index_zmu'] = crossed_zmu.index_zmu.astype('int')
-
-        ## save "crossed_zmu" and "df_gdf_destination_routes" into csv files....
-        ### THESE are the ORIGIN ---> DESTINATION matrices ---------------#############################
-        crossed_zmu.to_csv(path_app + 'static/crossed_zmu_' + session.sid + '.csv')
-        df_gdf_destination_routes.to_csv(
-            path_app + 'static/df_gdf_destination_routes_path_zmu_' + session.sid + '.csv')
-
-        # session["crossed_zmu"] = crossed_zmu
-
-        """
-        data_ZMU_path = [{
-            'ZMU_day': selected_ZMU_day,
-            'hour': selected_ZMU_hour
-        }]
-        """
-
-        return render_template("index_zmu_paths_select_hour.html")  # data_ZMU_path=data_ZMU_path
-
-
-
-@app.route('/ZMU_paths_tod_selector/', methods=['GET', 'POST'])
-def ZMU_paths_tod_selector():
-    if request.method == "POST":
-        import glob
-        try:
-            selected_ZMU_day_start = session["ZMU_day_start"]
-            print("hour from selected_ZMU_day_start:", selected_ZMU_day_start)
-        except:
-            selected_ZMU_day_start = '2022-10-04'
-            session["ZMU_day_start"] = selected_ZMU_day_start
-            print("using stored variable ZMU_day_start: ", session["ZMU_day_start"])
-
-        try:
-            selected_ZMU_day_end = session["ZMU_day_end"]
-            print("hour from selected_ZMU_day_end:", selected_ZMU_day_end)
-        except:
-            selected_ZMU_day_end = '2022-10-15'
-            session["ZMU_day_end"] = selected_ZMU_day_end
-            print("using stored variable ZMU_day_end: ", session["ZMU_day_end"])
-
-        try:
-            selected_ZMU_hourrange = session["ZMU_hourrange"]
-            print("selected_ZMU_hourrange:", selected_ZMU_hourrange)
-        except:
-            selected_ZMU_hourrange = 2
-            session["ZMU_hourrange"] = selected_ZMU_hourrange
-            print("selected_ZMU_hourrange: ", session["ZMU_hourrange"])
-
-        try:
-            with open(path_app + "static/params/selected_data_type_" + session.sid + ".txt", "r") as file:
-                selected_data_type = file.read()
-            print("selected_data_type-------I AM HERE-----------: ", selected_data_type)
-        except:
-            # for stored_tod_file in glob.glob(path_app + "static/params/selected_data_type_*.txt"):
-            #    print(stored_tod_file)
-            stored_data_type_files = glob.glob(path_app + "static/params/selected_data_type_*.txt")
-            stored_data_type_files.sort(key=os.path.getmtime)
-            stored_data_type_file = stored_data_type_files[len(stored_data_type_files) - 1]
-            with open(stored_data_type_file) as file:
-                selected_data_type = file.read()
-            print("selected_data_type-------I AM HERE-----------: ", selected_data_type)
-
-        selected_data_type = session["data_type"]
-        selected_data_type = int(selected_data_type)
-        print("selected_data_type-------2: ", session["data_type"])
-
-        try:
-            selected_hourrange = session["hourrange_id"]
-            selected_hourrange = str(selected_hourrange)
-            print("selected_hourrange:", selected_hourrange)
-        except:
-            selected_hourrange = "A2"
-            session["hourrange_id"] = selected_hourrange
-            print("selected_hourrange: ", session["hourrange_id"])
-
-        ## TRY if session exists (get "tod")
-        try:
-            session["ZMU_tod"] = request.form.get("ZMU_tod")
-            selected_ZMU_tod = session["ZMU_tod"]
-            print("selected_ZMU_tod:", selected_ZMU_tod)
-            selected_ZMU_tod = str(selected_ZMU_tod)
-        except:
-            session["ZMU_tod"] = 7
-            selected_ZMU_tod = session["ZMU_tod"]
-            print("selected_ZMU_tod: ", session["ZMU_tod"])
-
-        ## --------- get hourrange table from DB   -------- #######################
-
-        selected_ZMU_tod = int(selected_ZMU_tod)
-        if selected_ZMU_tod == 6:  ## WORKING day
-            tod = "W"
-        elif selected_ZMU_tod == 7:  ## PRE holiday
-            tod = "P"
-        elif selected_ZMU_tod == 8:  ## HOLIDAY
-            tod = "H"
-
-        session["tod"] = tod
-        print("------tod------------>>>:", tod)
-
-        ######################################################################################
-        #####----- make selection between FCD data and Synthetic data ------ #################
-        ######################################################################################
-        if selected_data_type == 11:  ## FCD data ##
-            print("--------------------------------------------------------FCD data")
-            ## switch to table.........TRIPD----FCD data
-            from sqlalchemy import create_engine
-            from sqlalchemy import exc
-            import sqlalchemy as sal
-            from sqlalchemy.pool import NullPool
-
-            # engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
-            engine = create_engine("postgresql://postgres:pippo123@localhost:5432/RSM_Oct_Nov_2022")
-            from sqlalchemy.sql import text
-
-            ##### ----- destinations ------- #################################
-            query_destination = text('''SELECT * FROM fcd.trips
-                                                         WHERE date(dt_d) BETWEEN :x AND :xx 
-                                                          AND hour_range_d = :y
-                                                          AND tod_d = :z ''')
-            stmt = query_destination.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                y=str(selected_hourrange), z=str(tod))
-
-            with engine.connect() as conn:
-                res = conn.execute(stmt).all()
-            destination_routes = pd.DataFrame(res)
-            destination_routes = destination_routes.sample(frac=0.5)  
-
-            ##### ----- origins ------- #################################
-            query_origin = text('''SELECT * FROM fcd.trips
-                                                        WHERE date(dt_o) BETWEEN :x AND :xx 
-                                                        AND hour_range_o = :y
-                                                        AND tod_o = :z ''')
-            stmt = query_origin.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                           y=str(selected_hourrange), z=str(tod))
-
-            with engine.connect() as conn:
-                res = conn.execute(stmt).all()
-            origin_routes = pd.DataFrame(res)
-            origin_routes = origin_routes.sample(frac=0.5)  
-
-        elif selected_data_type == 12:  ## SYNTHETIC DATA ##
-            print("---------------------------------------------------SYNTHETIC DATA")
-
-            ## switch to table.........TRIPD----FCD data
-            from sqlalchemy import create_engine
-            from sqlalchemy import exc
-            import sqlalchemy as sal
-            from sqlalchemy.pool import NullPool
-
-            # engine = create_engine("postgresql://federico:pippo75@192.168.132.222:5432/RSM_Oct_Nov_2022")
-            engine = create_engine("postgresql://postgres:pippo123@localhost:5432/RSM_Oct_Nov_2022")
-            from sqlalchemy.sql import text
-
-            ##### ----- destinations ------- #################################
-            query_destination = text('''SELECT * FROM synt.trips
-                                                        WHERE date(dt_d) BETWEEN :x AND :xx 
-                                                         AND hour_range_d = :y
-                                                         AND tod_d = :z ''')
-            stmt = query_destination.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                y=str(selected_hourrange), z=str(tod))
-
-            with engine.connect() as conn:
-                res = conn.execute(stmt).all()
-            destination_routes = pd.DataFrame(res)
-            destination_routes = destination_routes.sample(frac=0.4)  
-
-            ##### ----- origins ------- #################################
-            query_origin = text('''SELECT * FROM synt.trips
-                                                   WHERE date(dt_o) BETWEEN :x AND :xx 
-                                                   AND hour_range_o = :y
-                                                   AND tod_o = :z ''')
-            stmt = query_origin.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                           y=str(selected_hourrange), z=str(tod))
-
-            with engine.connect() as conn:
-                res = conn.execute(stmt).all()
-            origin_routes = pd.DataFrame(res)
-            origin_routes = origin_routes.sample(frac=0.4)  
-            
-
-        ## -----  get ZMU zones  -------- ################################
-        ## function to transform Geometry from text to LINESTRING
-        def wkb_tranformation(line):
-            return wkb.loads(line.geom, hex=True)
-
-        def wkb_tranformation_centroid(line):
-            return wkb.loads(line.centroid, hex=True)
-
-        ZMU_ROMA_with_population = gpd.read_file(path_app + "static/zmu_aggregated_POP_ROMA_2015_new.geojson")
-        ZMU_ROMA_with_population['centroid'] = ZMU_ROMA_with_population.apply(wkb_tranformation_centroid, axis=1)
-        ZMU_ROMA = gpd.GeoDataFrame(ZMU_ROMA_with_population)
-
-        #### -------------------------------------------- ##########################################################
-        #### -------------------------------------------- ##########################################################
-        #### -------------------------------------------- ##########################################################
-
-        ### ----- DESTINATIONS ---------------------------------- ##################################################
-
-        ## remove none values
-        df_gdf_destination_routes = destination_routes[
-            ['p_after', 'tt', 'id', 'dt_d', 'dist', 'id_zone_d', 'geom']]
-        df_gdf_destination_routes.rename({'id_zone_d': 'zmu'}, axis=1, inplace=True)
-        df_gdf_destination_routes = df_gdf_destination_routes[df_gdf_destination_routes['zmu'].notna()]
-        df_gdf_destination_routes['zmu'] = df_gdf_destination_routes.zmu.astype('int')
-
-        df_gdf_destination_routes.rename({'tt': 'triptime_s'}, axis=1, inplace=True)
-        df_gdf_destination_routes.rename({'p_before': 'breaktime_s'}, axis=1, inplace=True)
-        df_gdf_destination_routes.rename({'id': 'idtrajectory'}, axis=1, inplace=True)
-        df_gdf_destination_routes.rename({'dist': 'tripdistance_m'}, axis=1, inplace=True)
-
-        ### ----- ORIGIN ---------------------------------- ##################################################
-
-        ## remove none values
-        df_gdf_origin_routes = origin_routes[
-            ['p_before', 'tt', 'id', 'dt_o', 'dist', 'id_zone_o', 'geom']]
-        df_gdf_origin_routes.rename({'id_zone_o': 'zmu'}, axis=1, inplace=True)
-        df_gdf_origin_routes = df_gdf_origin_routes[df_gdf_origin_routes['zmu'].notna()]
-        df_gdf_origin_routes['zmu'] = df_gdf_origin_routes.zmu.astype('int')
-
-        df_gdf_origin_routes.rename({'tt': 'triptime_s'}, axis=1, inplace=True)
-        df_gdf_origin_routes.rename({'p_before': 'breaktime_s'}, axis=1, inplace=True)
-        df_gdf_origin_routes.rename({'id': 'idtrajectory'}, axis=1, inplace=True)
-        df_gdf_origin_routes.rename({'dist': 'tripdistance_m'}, axis=1, inplace=True)
-
-        ### only CONSIDER "idtrajectories" from DIFFERENT zones ZMU
-        crossing_zones = pd.merge(df_gdf_origin_routes[['zmu', 'idtrajectory']],
-                                  df_gdf_destination_routes[['zmu', 'idtrajectory']], on=['idtrajectory'],
-                                  how='inner')
-        crossing_zones.columns = ['zmu_origin', 'idtrajectory', 'zmu_destination']
-
-        ## keep only "idtrajectories" with different zmu_origin and zmu_destination
-        df_crossed_zmu = []
-        for i in range(len(crossing_zones)):
-            if (crossing_zones.zmu_origin.iloc[i] != crossing_zones.zmu_destination.iloc[i]):
-                # print("============ got it ! ===================")
-                crossed_zmu = pd.DataFrame({'zmu_origin': [crossing_zones.zmu_origin.iloc[i]],
-                                            'idtrajectory': [crossing_zones.idtrajectory.iloc[i]],
-                                            'zmu_destination': [crossing_zones.zmu_destination.iloc[i]]})
-                df_crossed_zmu.append(crossed_zmu)
-        crossed_zmu = pd.concat(df_crossed_zmu)
-
-        crossed_zmu.rename({'zmu_origin': 'zmu'}, axis=1, inplace=True)
-        crossed_zmu = pd.merge(crossed_zmu, ZMU_ROMA, on=['zmu'], how='left')
-        crossed_zmu = crossed_zmu[['zmu', 'index_zmu', 'idtrajectory', 'zmu_destination']]
-        crossed_zmu.replace([np.inf, -np.inf], np.nan, inplace=True)
-        crossed_zmu.dropna(inplace=True)
-        crossed_zmu['index_zmu'] = crossed_zmu.index_zmu.astype('int')
-
-        ## save "crossed_zmu" and "df_gdf_destination_routes" into csv files....
-        ### THESE are the ORIGIN ---> DESTINATION matrices ---------------#############################
-        crossed_zmu.to_csv(path_app + 'static/crossed_zmu_' + session.sid + '.csv')
-        df_gdf_destination_routes.to_csv(
-            path_app + 'static/df_gdf_destination_routes_path_zmu_' + session.sid + '.csv')
-
-        return render_template("index_zmu_paths_select_hour.html")
-
-
-
-
-@app.route('/choose_zmu_index_static', methods=['POST'])
-def choose_zmu_index_static():
-    data = request.json['data']
-    session["ZMU_index"] = data
-    print("I am here...selected_index_zmu is: ", session["ZMU_index"])
-    print("-------------- I am here...selected_index_zmu is:---------------------- ", session["ZMU_index"])
-    return jsonify({'result': session["ZMU_index"]})
-
-
-@app.route('/choose_zmu_index', methods=['POST'])
-def choose_zmu_index():
-    data = request.json['data']
-    session["ZMU_index"] = data
-    print("I am here...selected_index_zmu is: ", session["ZMU_index"])
-
-    #### ----- relaod ORIGIN ----> DESTINATION matrix
-    crossed_zmu = pd.read_csv(path_app + 'static/crossed_zmu_' + session.sid + '.csv')
-    df_gdf_destination_routes = pd.read_csv(
-        path_app + 'static/df_gdf_destination_routes_path_zmu_' + session.sid + '.csv')
-
-    # crossed_zmu = pd.read_csv(path_app + 'static/crossed_zmu_359576ab-457d-4b6a-8a62-cfcaa7e38d5f.csv')
-    # df_gdf_destination_routes = pd.read_csv(path_app + 'static/df_gdf_destination_routes_path_zmu_359576ab-457d-4b6a-8a62-cfcaa7e38d5f.csv')
-
-    crossed_zmu['index_zmu'] = crossed_zmu.index_zmu.astype('int')
-
-    # ZMU_ROMA = gpd.read_file(path_app + "static/zmu_aggregated_POP_ROMA_2011.geojson")
-    ZMU_ROMA = gpd.read_file(path_app + "static/zmu_aggregated_POP_ROMA_2015_new.geojson")
-
-    selected_index_zmu = session["ZMU_index"]
-    selected_index_zmu = int(float(selected_index_zmu))
-    # selected_index_zmu = 881
-    print("selected_index_zmu;", selected_index_zmu)
-    # print("I am here...selected_index_zmu is: ", selected_index_zmu)
-    ## select ORIGIN zone ZMU .......
-    filtered_crossed_zmu = crossed_zmu[
-        crossed_zmu.index_zmu == selected_index_zmu]  ## this will be selected by the user.....flask + web interface.....
-
-    print("length idtrajectory;", len(filtered_crossed_zmu.idtrajectory))
-
-    try:
-        highlighted_zmus = []
-        for idtrajectory in filtered_crossed_zmu.idtrajectory.tolist():
-            ## ---->>> cross trajectory geometry with zmu zones and find intersections -------
-            # idtrajectory = 31763873
-            path_trajectory = df_gdf_destination_routes[df_gdf_destination_routes.idtrajectory == idtrajectory]
-            path_trajectory = path_trajectory[['zmu', 'geom']]
-
-            ## transform geom into linestring....projection is in meters epsg:6875
-            path_trajectory['geom'] = path_trajectory.apply(wkb_tranformation, axis=1)
-            path_trajectory = gpd.GeoDataFrame(path_trajectory)
-            path_trajectory.rename({'geom': 'geometry'}, axis=1, inplace=True)
-
-            ## reference system = 6875 (in meters)
-            path_trajectory = path_trajectory.set_geometry("geometry")
-            path_trajectory = path_trajectory.set_crs('epsg:6875', allow_override=True)
-
-            ## convert into lat , lon
-            path_trajectory = path_trajectory.to_crs({'init': 'epsg:4326'})
-            path_trajectory = path_trajectory.set_crs('epsg:4326', allow_override=True)
-
-            ### find intersected ZMUs
-            ZMUs_idtrajectory = gpd.sjoin(ZMU_ROMA[['zmu', 'geometry']], path_trajectory[['geometry']], how='inner',
-                                          predicate='intersects')
-
-            # print(idtrajectory)
-            list_crossed_zmus = pd.DataFrame({'idtrajectory': [idtrajectory],
-                                              'lista_crossed_zmus': [ZMUs_idtrajectory[
-                                                                         "zmu"].tolist()]})  ## crossed zmus are not in order of trajectory direction
-            highlighted_zmus.append(list_crossed_zmus)
-        zmu_paths = pd.concat(highlighted_zmus)
-
-        ### ---- make a dataframe with all the ZMUs interested related to the ZMU chosen by the user
-        list_zmu_paths = []
-        for i in range(len(zmu_paths)):
-            list_zmu_paths.append(pd.DataFrame(zmu_paths.lista_crossed_zmus.iloc[i]))
-        df_zmu_paths = pd.concat(list_zmu_paths)
-        ## group by same ZMU....
-        df_zmu_paths.rename({0: 'zmu_paths'}, axis=1, inplace=True)
-        df_zmu_paths.reset_index(inplace=True)
-        grouped_zmu_paths = df_zmu_paths.groupby(['zmu_paths']).count().reset_index()
-        grouped_zmu_paths.columns = ['zmu', 'counts']
-        ### merge with zmu and build a .json file
-        grouped_zmu_paths = pd.merge(grouped_zmu_paths, ZMU_ROMA, on=['zmu'], how='left')
-        # grouped_zmu_paths.to_csv(path_app + 'static/grouped_zmu_paths_' + session.sid + '.csv')
-
-        ## save as .geojson file
-        try:
-            grouped_zmu_paths = gpd.GeoDataFrame(grouped_zmu_paths)
-        except IndexError:
-            abort(404)
-
-        try:
-            import os
-            if os.path.exists(path_app + "static/grouped_zmu_paths.geojson"):
-                os.remove(path_app + "static/grouped_zmu_paths.geojson")
-            else:
-                print("The file does not exist")
-
-            grouped_zmu_paths.to_file(filename=path_app + 'static/grouped_zmu_paths_' + session.sid + '.geojson',
-                                      driver='GeoJSON')
-
-            grouped_zmu_paths.to_file(filename=path_app + 'static/grouped_zmu_paths.geojson',
-                                      driver='GeoJSON')
-            ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
-            with open(path_app + "static/grouped_zmu_paths.geojson", "r+") as f:
-                old = f.read()  # read everything in the file
-                f.seek(0)  # rewind
-                f.write("var grouped_zmu_paths = \n" + old)  # assign the "var name" in the .geojson file
-        except ValueError:
-            print("empty dataframe.....")
-    except ValueError:
-        print("No objects to concatenate")
-
-    print("length idtrajectory;", len(filtered_crossed_zmu.idtrajectory))
-    print("-------------- I am here...selected_index_zmu is:---------------------- ", session["ZMU_index"])
-
-    return jsonify({'result': session["ZMU_index"]})
-
-
-#### ---->>> this is to refresh the page....with the FINAL LAYER
-@app.route('/redirect_zmu_paths/', methods=['GET', 'POST'])
-def redirect_zmu_paths():
-    ### open .geojson file in the form of dictionary.....
-    grouped_zmu_paths = open(path_app + 'static/grouped_zmu_paths_' + session.sid + '.geojson', )
-    grouped_zmu_paths = json.load(grouped_zmu_paths)
-
-    session["grouped_zmu_paths"] = grouped_zmu_paths
-    # print("session_grouped_zmu_paths", session["grouped_zmu_paths"])
-
-    return render_template("index_showing_zmu_paths_redirect.html",
-                           session_grouped_zmu_paths=session["grouped_zmu_paths"])
-
-
-@app.route('/layer_ZMU_path/', methods=['GET', 'POST'])
-def layer_ZMU_path():
-    return render_template("index_showing_zmu_paths.html")
-
+ 
 
 
 
@@ -8316,10 +6039,12 @@ def modal_selected():
                                         driver='GeoJSON')
 
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + "static/aggregated_modal_work.geojson", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var aggregated_modal_zmu_work = \n" + old)  # assign the "var name" in the .geojson file
+        """
 
 
         ### convert Geodataframe into .geojson...
@@ -8404,10 +6129,12 @@ def choose_zmu_index_modal_shift():
     filtered_od_modal.to_file(filename=path_app + 'static/filtered_od_modal.geojson',
                                 driver='GeoJSON')
     ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+    """
     with open(path_app + "static/filtered_od_modal.geojson", "r+") as f:
         old = f.read()  # read everything in the file
         f.seek(0)  # rewind
         f.write("var filtered_od_modal = \n" + old)  # assign the "var name" in the .geojson file
+    """
 
     print("-------------- I am here...selected_index_zmu is:---------------------- ", session["ZMU_index"])
 
@@ -8620,152 +6347,7 @@ def TRIP_LEGS_hour_selector():
                                         grouped_trajectories_DESTINATION[['zmu_destination', 'count_destination']],
                                         left_on='zmu_destination', right_on='zmu_destination', how='left')
 
-        ##################---------------------------------------------------########################################
-        ##################---------------------------------------------------########################################
-        ### --->>> Group by ORIGIN & DESTINATION separately ----------------- #######################################
-        ##################---------- Create a list of OD counts to make PIECHARTS ------#############################
 
-        """
-        size_zmu_origin = crossed_zmu.groupby('zmu_origin').size().reset_index()
-        size_zmu_destination = crossed_zmu.groupby('zmu_destination').size().reset_index()
-        size_zmu_origin.rename({0: 'count_origin'}, axis=1, inplace=True)
-        size_zmu_destination.rename({0: 'count_destination'}, axis=1, inplace=True)
-        # AAA = size_zmu_destination[size_zmu_destination.zmu_destination == 1000161]  ## Campo Marzio (Population ==1)
-
-        ## merge all data by "zmu"
-        size_zmu_ORIGIN_DESTINATION = pd.merge(size_zmu_origin, size_zmu_destination,
-                                               left_on='zmu_origin', right_on='zmu_destination', how='outer')  # left
-        size_zmu_ORIGIN_DESTINATION['zmu_origin'] = size_zmu_ORIGIN_DESTINATION['zmu_origin'].fillna(0)
-        size_zmu_ORIGIN_DESTINATION['zmu_destination'] = size_zmu_ORIGIN_DESTINATION['zmu_destination'].fillna(0)
-        # AAA = size_zmu_ORIGIN_DESTINATION[size_zmu_ORIGIN_DESTINATION.zmu_destination == 1000161]  ## Campo Marzio (Population ==1)
-        size_zmu_ORIGIN_DESTINATION = size_zmu_ORIGIN_DESTINATION[
-            size_zmu_ORIGIN_DESTINATION['zmu_destination'].notna()]
-        size_zmu_ORIGIN_DESTINATION['zmu_destination'] = size_zmu_ORIGIN_DESTINATION.zmu_destination.astype('int')
-        size_zmu_ORIGIN_DESTINATION['zmu_origin'] = size_zmu_ORIGIN_DESTINATION.zmu_origin.astype('int')
-        # AAA = size_zmu_ORIGIN_DESTINATION[size_zmu_ORIGIN_DESTINATION.zmu_destination == 1000161]
-        ## remove none values
-        # size_zmu_ORIGIN_DESTINATION = size_zmu_ORIGIN_DESTINATION[size_zmu_ORIGIN_DESTINATION['count_destination'].notna()]
-        # size_zmu_ORIGIN_DESTINATION = size_zmu_ORIGIN_DESTINATION[size_zmu_ORIGIN_DESTINATION['count_origin'].notna()]
-        size_zmu_ORIGIN_DESTINATION['count_origin'] = size_zmu_ORIGIN_DESTINATION['count_origin'].fillna(0)
-        size_zmu_ORIGIN_DESTINATION['count_destination'] = size_zmu_ORIGIN_DESTINATION['count_destination'].fillna(0)
-        size_zmu_ORIGIN_DESTINATION['count_destination'] = size_zmu_ORIGIN_DESTINATION.count_destination.astype('int')
-        # AAA = size_zmu_ORIGIN_DESTINATION[size_zmu_ORIGIN_DESTINATION.zmu_destination == 1000161]  ## Campo Marzio (Population ==1)
-        # size_zmu_ORIGIN_DESTINATION = size_zmu_ORIGIN_DESTINATION[['zmu_origin', 'count_origin', 'count_destination']]
-        size_zmu_ORIGIN_DESTINATION = size_zmu_ORIGIN_DESTINATION[
-            ['zmu_origin', 'zmu_destination', 'count_destination', 'count_origin']]
-
-        #### ---- APPLY this trick !!! ------ #################################################################################
-        for i in range(len(size_zmu_ORIGIN_DESTINATION)):
-            if size_zmu_ORIGIN_DESTINATION["zmu_origin"].iloc[i] == 0:
-                size_zmu_ORIGIN_DESTINATION['zmu_origin'].iloc[i] = size_zmu_ORIGIN_DESTINATION['zmu_origin'].iloc[i] + \
-                                                                    size_zmu_ORIGIN_DESTINATION['zmu_destination'].iloc[
-                                                                        i]
-        for i in range(len(size_zmu_ORIGIN_DESTINATION)):
-            if size_zmu_ORIGIN_DESTINATION["zmu_destination"].iloc[i] == 0:
-                size_zmu_ORIGIN_DESTINATION['zmu_destination'].iloc[i] = \
-                size_zmu_ORIGIN_DESTINATION['zmu_destination'].iloc[i] + \
-                size_zmu_ORIGIN_DESTINATION['zmu_origin'].iloc[i]
-
-        size_zmu_ORIGIN_DESTINATION.rename({'zmu_origin': 'zmu'}, axis=1, inplace=True)
-
-        #########################################################################################################################
-
-        ##----> get CENTROID of each ZMU zone (ORIGIN and DESTINATION)
-        ## get geomeries of each ZMU zone (ORIGIN and DESTINATION)
-        size_ORIGIN_DESTINATION = pd.merge(size_zmu_ORIGIN_DESTINATION, ZMU_ROMA[['zmu', 'POP_TOT_ZMU', 'geometry', 'centroid']],
-                                           how='left')
-
-        # AAA = size_ORIGIN_DESTINATION[size_ORIGIN_DESTINATION.zmu == 1000161]   ## Campo Marzio (Population ==1)
-
-        size_ORIGIN_DESTINATION['count_origin'] = (size_ORIGIN_DESTINATION['count_origin'] / size_ORIGIN_DESTINATION[
-            'POP_TOT_ZMU']) * 1.5
-        size_ORIGIN_DESTINATION['count_destination'] = (size_ORIGIN_DESTINATION['count_destination'] /
-                                                        size_ORIGIN_DESTINATION['POP_TOT_ZMU']) * 1.5
-        size_ORIGIN_DESTINATION.replace([np.inf, -np.inf], np.nan, inplace=True)
-        size_ORIGIN_DESTINATION.dropna(inplace=True)
-
-        ##.... get CENTROIDS of each geometry
-        size_ORIGIN_DESTINATION = gpd.GeoDataFrame(size_ORIGIN_DESTINATION)
-        # size_ORIGIN_DESTINATION[
-        #    'centroid'] = size_ORIGIN_DESTINATION.representative_point()  ## the "representative point" is VERY similar to the centroid.
-
-        size_ORIGIN_DESTINATION['centroid'] = size_ORIGIN_DESTINATION.apply(lambda x: [y for y in x['centroid'].coords],
-                                                                            axis=1)
-        ## sum counts of ORIGIN and DESTINATIONS (to set the magnituded of the piechart
-        size_ORIGIN_DESTINATION[
-            'total_size_OD'] = size_ORIGIN_DESTINATION.count_origin + size_ORIGIN_DESTINATION.count_destination
-        # AAA = pd.DataFrame(size_ORIGIN_DESTINATION[size_ORIGIN_DESTINATION.zmu == 1000161])
-        # AAA = pd.DataFrame(size_ORIGIN_DESTINATION)
-        # max(AAA.total_size_OD)
-        # AAAA = AAA[AAA.total_size_OD == 329700]
-
-        # size_ORIGIN_DESTINATION = size_ORIGIN_DESTINATION[size_ORIGIN_DESTINATION.POP_TOT_ZMU != 1]
-        size_ORIGIN_DESTINATION = size_ORIGIN_DESTINATION[size_ORIGIN_DESTINATION.POP_TOT_ZMU > 10]
-
-        lista_counts_OD = []
-        conteggi_totali_indicativi = []
-        for i in range(len(size_ORIGIN_DESTINATION)):
-            coordinates = size_ORIGIN_DESTINATION['centroid'].iloc[i]
-            count_origin = size_ORIGIN_DESTINATION['count_origin'].iloc[i]
-            count_destination = size_ORIGIN_DESTINATION['count_destination'].iloc[i]
-            total_counts = size_ORIGIN_DESTINATION['total_size_OD'].iloc[i]
-            total_counts = total_counts*1
-            # print("---------total_counts:-----------", total_counts)
-            conteggi_totali_indicativi.append(total_counts)
-            # if conteggi_totali_indicativi == 329700:
-            #    break
-            ## unlist the nested list...
-            list_coords = [item for sublist in coordinates for item in sublist]
-            ## compute the tickenss fof the line (weight)
-            # OD_weight = (grouped_trajectories['count_journeys'].iloc[i]) / a
-            # print(list_coords)
-            keys_coords = list(range(len(list_coords)))
-            dict_lat = {}
-            dict_lon = {}
-            dict_count_origin = {}
-            dict_count_destination = {}
-            dict_total_counts = {}
-
-            dict_count_origin["counts_origin"] = count_origin
-            dict_count_destination["counts_destination"] = count_destination
-            dict_total_counts["total_counts"] = total_counts
-            dict_lat["lat"] = list_coords[1]
-            dict_lon["lon"] = list_coords[0]
-            element = {**dict_count_origin, **dict_count_destination, **dict_total_counts, **dict_lat, **dict_lon}
-            # print(element)
-            lista_counts_OD.append(element)
-
-        print("-------------max_vehicle_count_by_person:-------", max(conteggi_totali_indicativi))
-        ## save data
-        try:
-            import os
-            if os.path.exists(path_app + "static/lista_counts_OD.txt"):
-                os.remove(path_app + "static/lista_counts_OD.txt")
-            else:
-                print("The file does not exist")
-            with open(path_app + "static/lista_counts_OD.txt", "w") as file:
-                for i in range(len(lista_counts_OD)):
-                    OD_counts = lista_counts_OD[i]
-                    # print(OD_counts)
-                    if i < len(lista_counts_OD) - 1:
-                        file.write(str(OD_counts) + ",\n")
-                    else:
-                        file.write(str(OD_counts))
-            ## add "var name" in front of the .txt file, in order to properly loat it into the index.html file
-            with open(path_app + "static/lista_counts_OD.txt", "r+") as f:
-                old = f.read()  # read everything in the file
-                f.seek(0)  # rewind
-                f.write(
-                    "var counts_OD =[ \n" + old + "]")  # assign the "var name" in the .geojson file
-
-        except ValueError:
-            print("empty dataframe.....")
-
-        session["counts_OD"] = lista_counts_OD
-        
-        ## also add this into the html file.... //var counts_OD = JSON.parse('{{session_counts_OD | tojson | safe}}');
-	    ##  //alert(counts_OD);
-        """
         ##################---------------------------------------------------########################################
         ##################---------------------------------------------------########################################
         ##################---------------------------------------------------########################################
@@ -9034,15 +6616,7 @@ def AGGREGATERD_ZMU_border_selector():
                 custom_border = json.load(file)
 
 
-        ##---> load BORDER of aggregated ZMUs
-        # BORDER_ZMUS = gpd.read_file(path_app + 'static/BORDER_selected_ZMUs_aggr_' + session.sid + '.geojson')
-        # BORDER_ZMUS = gpd.read_file(path_app + 'static/BORDER_selected_ZMUs_aggr_142bf77c-77b1-4935-900e-e80f7cf2117b.geojson')
-
-        ### open .geojson file in the form of dictionary.....
-        # border_geojson = open(path_app + 'static/BORDER_selected_ZMUs_aggr_' + session.sid + '.geojson')
-        # border_geojson = open(path_app + 'static/BORDER_selected_ZMUs_aggr_950c6991-2d77-4d2c-9743-9a04c9730243.geojson')
-        # custom_border = json.load(border_geojson)
-
+      
         session['BORDER_selected_ZMUs'] = custom_border
         # print("------BORDER----------------------", session['BORDER_selected_ZMUs'])
 
@@ -9107,6 +6681,12 @@ def AGGREGATERD_ZMU_border_selector():
             print("roma")
             print("selected_province_number:--------selector", selected_province_number, province)
             engine = create_engine("postgresql://postgres:pippo123@localhost:5432/VIASAT_RM_Oct_2024")
+            
+        elif selected_province_number == 99:
+            province = 'italia_ev'
+            print("italia_ev")
+            print("selected_province_number:--------selector", selected_province_number, province)
+            engine = create_engine("postgresql://postgres:pippo123@localhost:5432/ELECTRIC_ITALIA_OCT_2024")
 
         # selected_ZMU_day = session["ZMU_day"].strftime('%Y-%m-%d')
         # selected_ZMU_hour = session["ZMU_hour"]
@@ -9119,68 +6699,99 @@ def AGGREGATERD_ZMU_border_selector():
         print("------ selected_data_type---------******++++++-----", selected_data_type)
 
         if selected_data_type == 11:       ### FCD data
+            if (selected_province_number != 99):
+  
+              #### ---- DESTINATION --------------------------------------------------------------------
+              """
+              query_destination_day = text('''SELECT 
+                                                      p_after, tt, dt_d, id, dist, id_zone_o, id_zone_d,
+                                                      date_part('hour', dt_d) as hr, geom,
+                                                      TO_CHAR(dt_d::DATE, 'dd-mm-yyyy') as day
+                                                      FROM fcd.trips
+                                                      WHERE date(dt_d) BETWEEN :x AND :xx 
+                                                      AND tod_d = :z ''')
+              """
+  
+              query_destination_day = text('''SELECT   fcd.trips.id_veh, fcd.trips.p_after, 
+                                                       fcd.trips.tt, fcd.trips.dt_d, fcd.trips.id, 
+                                                       fcd.trips.dist, fcd.trips.id_zone_o, fcd.trips.id_zone_d,
+                                                                  date_part('hour', dt_d) as hr,  fcd.trips.geom,
+                                                                  TO_CHAR(dt_d::DATE, 'dd-mm-yyyy') as day,
+                                                                  fcd.staypoints.id_stay_type
+                                                                  
+                                                                  FROM fcd.staypoints
+                                                                  INNER JOIN 
+                                                                  fcd.trips ON fcd.trips.id_veh = fcd.staypoints.id_veh
+                                                                  
+                                                                  WHERE date(fcd.trips.dt_d) BETWEEN :x AND :xx 
+                                                                  AND fcd.staypoints.id_stay_type != 'O' 
+                                                                  AND (fcd.staypoints.info->>'virtual')::boolean IS false  
+                                                                   ''')
+  
+  
+              stmt = query_destination_day.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end))
+              
+            elif (selected_province_number==99):
+            
+                print("----EV-ITALIA----")
+                
+                #### ---- DESTINATION --------------------------------------------------------------------
 
-            #### ---- DESTINATION --------------------------------------------------------------------
-            """
-            query_destination_day = text('''SELECT 
-                                                    p_after, tt, dt_d, id, dist, id_zone_o, id_zone_d,
-                                                    date_part('hour', dt_d) as hr, geom,
-                                                    TO_CHAR(dt_d::DATE, 'dd-mm-yyyy') as day
-                                                    FROM fcd.trips
-                                                    WHERE date(dt_d) BETWEEN :x AND :xx 
-                                                    AND tod_d = :z ''')
-            """
-
-            query_destination_day = text('''SELECT   fcd.trips.id_veh, fcd.trips.p_after, 
-                                                     fcd.trips.tt, fcd.trips.dt_d, fcd.trips.id, 
-                                                     fcd.trips.dist, fcd.trips.id_zone_o, fcd.trips.id_zone_d,
-                                                                date_part('hour', dt_d) as hr,  fcd.trips.geom,
-                                                                TO_CHAR(dt_d::DATE, 'dd-mm-yyyy') as day,
-                                                                fcd.staypoints.id_stay_type
-                                                                
-                                                                FROM fcd.staypoints
-                                                                INNER JOIN 
-                                                                fcd.trips ON fcd.trips.id_veh = fcd.staypoints.id_veh
-                                                                
-                                                                WHERE date(fcd.trips.dt_d) BETWEEN :x AND :xx 
-                                                                AND fcd.trips.tod_d = :z
-                                                                AND fcd.staypoints.id_stay_type != 'O' 
-                                                                AND (fcd.staypoints.info->>'virtual')::boolean IS false  
-                                                                 ''')
+                query_destination_day = text(''' SELECT * ,date_part('hour', dt_d) as hr,
+                                                               TO_CHAR(dt_d::DATE, 'dd-mm-yyyy') as day
+                                                               FROM fcd.trips
+                                                               WHERE 
+                                                               date(fcd.trips.dt_d) BETWEEN :x AND :xx 
+                                                                ''')
 
 
-            stmt = query_destination_day.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                    z=str(selected_tod))
+                stmt = query_destination_day.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end))
 
 
             with engine.connect() as conn:
                 res = conn.execute(stmt).all()
             destination_routes_day = pd.DataFrame(res)
             destination_routes_day = destination_routes_day.sample(frac=0.1)  # 10%; # n=1000
+            
+            if (selected_province_number != 99):
 
-            #### ---- ORIGIN --------------------------------------------------------------------
+              #### ---- ORIGIN --------------------------------------------------------------------
+  
+  
+              query_origin_day = text('''SELECT   fcd.trips.id_veh, fcd.trips.p_before, 
+                                                                   fcd.trips.tt, fcd.trips.dt_o, fcd.trips.id, 
+                                                                   fcd.trips.dist, fcd.trips.id_zone_o, fcd.trips.id_zone_d,
+                                                                              date_part('hour', dt_o) as hr,  fcd.trips.geom,
+                                                                              TO_CHAR(dt_o::DATE, 'dd-mm-yyyy') as day,
+                                                                              fcd.staypoints.id_stay_type
+  
+                                                                              FROM fcd.staypoints
+                                                                              INNER JOIN 
+                                                                              fcd.trips ON fcd.trips.id_veh = fcd.staypoints.id_veh
+  
+                                                                              WHERE date(fcd.trips.dt_o) BETWEEN :x AND :xx 
+                                                                              AND fcd.staypoints.id_stay_type != 'O' 
+                                                                              AND (fcd.staypoints.info->>'virtual')::boolean IS false  
+                                                                               ''')
+  
+  
+              stmt = query_origin_day.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end))
+              
+            elif (selected_province_number == 99):
+            
+                print("----EV-ITALIA----")
+              
+              #### ---- ORIGIN --------------------------------------------------------------------
 
+                query_origin_day = text(''' SELECT * ,date_part('hour', dt_o) as hr,
+                                              TO_CHAR(dt_o::DATE, 'dd-mm-yyyy') as day
+                                              FROM fcd.trips
+                                              WHERE 
+                                              date(fcd.trips.dt_o) BETWEEN :x AND :xx 
+                                               ''')
 
-            query_origin_day = text('''SELECT   fcd.trips.id_veh, fcd.trips.p_before, 
-                                                                 fcd.trips.tt, fcd.trips.dt_o, fcd.trips.id, 
-                                                                 fcd.trips.dist, fcd.trips.id_zone_o, fcd.trips.id_zone_d,
-                                                                            date_part('hour', dt_o) as hr,  fcd.trips.geom,
-                                                                            TO_CHAR(dt_o::DATE, 'dd-mm-yyyy') as day,
-                                                                            fcd.staypoints.id_stay_type
-
-                                                                            FROM fcd.staypoints
-                                                                            INNER JOIN 
-                                                                            fcd.trips ON fcd.trips.id_veh = fcd.staypoints.id_veh
-
-                                                                            WHERE date(fcd.trips.dt_o) BETWEEN :x AND :xx 
-                                                                            AND fcd.trips.tod_o = :z
-                                                                            AND fcd.staypoints.id_stay_type != 'O' 
-                                                                            AND (fcd.staypoints.info->>'virtual')::boolean IS false  
-                                                                             ''')
-
-
-            stmt = query_origin_day.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                                    z=str(selected_tod))
+                stmt = query_origin_day.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end))
+            
             with engine.connect() as conn:
                 res = conn.execute(stmt).all()
             origin_routes_day = pd.DataFrame(res)
@@ -11404,21 +9015,24 @@ def FCD_hour_selector():
             province = 'firenze'
             print("firenze")
             print("selected_province_number:--------selector", selected_province_number, province)
-            engine = sal.create_engine('postgresql://postgres:superuser@192.168.134.36:5432/VIASAT_FIRENZE')
+            # engine = sal.create_engine('postgresql://postgres:superuser@192.168.134.36:5432/VIASAT_FIRENZE')
+            engine = create_engine("postgresql://postgres:pippo123@localhost:5432/VIASAT_FIRENZE")
             print("----- I AM HEREEEEEEE---------------")
 
         elif selected_province_number == 58:
             province = 'roma'
             print("roma")
             print("selected_province_number:--------selector", selected_province_number, province)
-            engine = sal.create_engine("postgresql://federico:pippo75@192.168.132.222:5432/VIASAT_RM_Oct_2024")
+            # engine = sal.create_engine("postgresql://federico:pippo75@192.168.132.222:5432/VIASAT_RM_Oct_2024")
+            engine = create_engine("postgresql://postgres:pippo123@localhost:5432/VIASAT_RM_Oct_2024")
 
         elif selected_province_number == 99:
             province = 'italia_ev'
             print("italia_ev")
             print("selected_province_number:--------selector", selected_province_number, province)
             # engine = sal.create_engine("postgresql://federico:pippo75@192.168.132.222:5432/ELECTRIC_ITALIA_JULY_2025")
-            engine = create_engine("postgresql://postgres:pippo123@localhost:5432/ELECTRIC_ITALIA_JULY_2025")
+            # engine = create_engine("postgresql://postgres:pippo123@localhost:5432/ELECTRIC_ITALIA_JULY_2025")
+            engine = create_engine("postgresql://postgres:pippo123@localhost:5432/ELECTRIC_ITALIA_OCT_2024")
 
         print("------current ---engine-------------:", engine)
         print("selected_province_number:--------selector", selected_province_number, province)
@@ -11453,6 +9067,7 @@ def FCD_hour_selector():
             from sqlalchemy.pool import NullPool
             from sqlalchemy.sql import text
 
+            """
             query_origin_destination = text(''' SELECT * ,
                                                            date_part('hour', fcd.trips.timedate_o) as hour,
                                                             TO_CHAR(timedate_o::DATE, 'dd-mm-yyyy') as day
@@ -11460,6 +9075,15 @@ def FCD_hour_selector():
                                                            WHERE 
                                                            date(fcd.trips.timedate_o) BETWEEN :x AND :xx 
                                                            AND extract(hour from timedate_o) BETWEEN :y AND :yy ''')
+            """
+            
+            query_origin_destination = text(''' SELECT * ,
+                                               date_part('hour', fcd.trips.dt_o) as hour,
+                                                TO_CHAR(dt_o::DATE, 'dd-mm-yyyy') as day
+                                               FROM fcd.trips
+                                               WHERE 
+                                               date(fcd.trips.dt_o) BETWEEN :x AND :xx 
+                                               AND extract(hour from dt_o) BETWEEN :y AND :yy ''')
 
             # selected_FCD_day_start = '2025-07-21'
             # selected_FCD_day_end = '2025-07-22'
@@ -11477,6 +9101,8 @@ def FCD_hour_selector():
         routes_origin_destination = pd.DataFrame(res)
 
         if selected_province_number == 99:
+        
+            """
             routes_origin_destination.rename({'idterm': 'id_veh'}, axis=1, inplace=True)
             routes_origin_destination.rename({'timedate_o': 'dt_o'}, axis=1, inplace=True)
             routes_origin_destination.rename({'timedate_d': 'dt_d'}, axis=1, inplace=True)
@@ -11484,6 +9110,7 @@ def FCD_hour_selector():
             routes_origin_destination.rename({'triptime_s': 'tt'}, axis=1, inplace=True)
             routes_origin_destination.rename({'breaktime_s_new': 'p_after'}, axis=1, inplace=True)
             routes_origin_destination.rename({'idtrajectory': 'id'}, axis=1, inplace=True)
+            """
 
             routes_origin_destination = routes_origin_destination[['id', 'id_veh', 'dt_o', 'dt_d', 'dist', 'tt', 'hour','day',
                                                                            'p_after', 'id_zone_o', 'id_zone_d', 'geom']]
@@ -11545,6 +9172,8 @@ def FCD_hour_selector():
             def wkb_tranformation(line):
                 return wkb.loads(line.geom, hex=True)
 
+
+            """
             city_councils_zones = pd.DataFrame(res)
             ## transform geom into linestring....
             city_councils_zones['geom'] = city_councils_zones.apply(wkb_tranformation, axis=1)
@@ -11576,6 +9205,31 @@ def FCD_hour_selector():
             ZMU_ROMA.rename({'index': 'index_zmu'}, axis=1, inplace=True)
             ZMU_ROMA.rename({'pop_mag15': 'POP_TOT_ZMU'}, axis=1, inplace=True)
             ZMU_ROMA = gpd.GeoDataFrame(ZMU_ROMA)
+            """
+            
+            ZMU_ROMA = pd.DataFrame(res)
+            # print("----columns-----:", ZMU_ROMA.columns)
+            ## transform geom into linestring....
+            ZMU_ROMA['geom'] = ZMU_ROMA.apply(wkb_tranformation, axis=1)
+            ZMU_ROMA = gpd.GeoDataFrame(ZMU_ROMA)
+            ZMU_ROMA.rename({'geom': 'geometry'}, axis=1, inplace=True)
+
+            ## reference system = 6875 (in meters)
+            # ZMU_ROMA = ZMU_ROMA.set_geometry("geometry")
+            # ZMU_ROMA = ZMU_ROMA.set_crs('epsg:6875', allow_override=True)
+
+            ## convert into lat , lon
+            # ZMU_ROMA = ZMU_ROMA.to_crs({'init': 'epsg:4326'})
+            # ZMU_ROMA.plot()
+            ZMU_ROMA = ZMU_ROMA[['area', 'zmu', 'comune', 'quartiere', 'pgtu', 'municipio', 'geometry']]
+            ## make a column with the index of the ZMU_ROMA
+            ZMU_ROMA['index_zmu'] = ZMU_ROMA.index
+            # print(len(ZMU_ROMA), ZMU_ROMA['index_zmu'], ZMU_ROMA['geometry'])
+
+            # print(ZMU_ROMA.columns)
+            ZMU_ROMA.set_geometry("geometry", inplace=True)
+            ZMU_ROMA = ZMU_ROMA.set_crs('epsg:4326', allow_override=True)
+            
 
         ##### -------->>>> ORIGIN
         routes_origin_destination.rename({'id_zone_o': 'zmu'}, axis=1, inplace=True)
@@ -11630,9 +9284,27 @@ def FCD_hour_selector():
             routes['hour'] = routes['hour'].astype(int)
 
         elif selected_province_number == 99:
+        
+            """
             routes['geom'] = routes.apply(wkb_tranformation, axis=1)
             routes = gpd.GeoDataFrame(routes)
             routes.rename({'geom': 'geometry'}, axis=1, inplace=True)
+            """
+            
+            routes['geometry'] = routes.apply(wkb_tranformation, axis=1)
+            routes = gpd.GeoDataFrame(routes)
+
+            ## reference system = 6875 (in meters)
+            routes = routes.set_geometry("geometry")
+            routes = routes.set_crs('epsg:6875', allow_override=True)
+
+            ## convert into lat , lon
+            routes = routes.to_crs({'init': 'epsg:4326'})
+            routes = routes.set_crs('epsg:4326', allow_override=True)
+
+            ## transfor hours as integer
+            routes['hour'] = routes['hour'].astype(int)
+
 
 
 
@@ -11754,10 +9426,12 @@ def FCD_hour_selector():
                         file.write(str(route_trip))
 
             ## add "var name" in front of the .txt file, in order to properly loat it into the index.html file
+            
             with open(path_app + "static/selected_trip_path_FCD.txt", "r+") as f:
                 old = f.read()  # read everything in the file
                 f.seek(0)  # rewind
-                f.write("var route_FCD =[ \n" + old + "]")  # assign the "var name" in the .geojson file
+                f.write("[ \n" + old + "]")  # assign the "var name" in the .geojson file
+            
 
             ############--------------------------######################################
             ############--------------------------######################################
@@ -11866,8 +9540,20 @@ def trails_FCD():
         routes['geom'] = routes.apply(wkb_tranformation, axis=1)
         routes = gpd.GeoDataFrame(routes)
         routes.rename({'geom': 'geometry'}, axis=1, inplace=True)
+        
+        """
         routes = routes.set_geometry("geometry")
         routes = routes.set_crs('epsg:4326', allow_override=True)
+        """
+        
+        ## reference system = 6875 (in meters)
+        routes = routes.set_geometry("geometry")
+        routes = routes.set_crs('epsg:6875', allow_override=True)
+
+        ## convert into lat , lon
+        routes = routes.to_crs({'init': 'epsg:4326'})
+        routes = routes.set_crs('epsg:4326', allow_override=True)
+        
         ## save routes
 
     ## transfor hours as integer
@@ -11974,7 +9660,8 @@ def trails_FCD():
         with open(path_app + "static/lista_coords.txt", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
-            f.write("var motion_polyline_route_FCD =[ \n" + old + "]")  # assign the "var name" in the .geojson file
+            # f.write("var motion_polyline_route_FCD =[ \n" + old + "]")  # assign the "var name" in the .geojson file
+            f.write("[ \n" + old + "]")  # assign the "var name" in the .geojson file
 
     except ValueError:
         print("empty dataframe.....")
@@ -12350,11 +10037,13 @@ def GTFS_LEGS_hour_selector():
         gdf_stop_buses.to_file(filename=path_app + 'static/gtfs_stops_tod.geojson',
                                driver='GeoJSON')
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + 'static/gtfs_stops_tod.geojson', 'r+', encoding='utf8',
                   errors='ignore') as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var stop_buses = \n" + old)  # assign the "var name" in the .geojson file
+        """
 
         ## transform geodataframe into .geojson and send to the .html direclty within the current session
         stop_buses_json = gdf_stop_buses.to_json()
@@ -12414,10 +10103,12 @@ def GTFS_LEGS_hour_selector():
         ## save file
         with open(path_app + "static/gridded_n_buses.txt", "w") as file:
             file.write(str(joined_lista))
+        """
         with open(path_app + "static/gridded_n_buses.txt", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var n_buses = \n" + old)  # assign the "var name" in the .geojson file
+        """
 
         min_n_buses = min(gridded_data.z)
         max_n_buses = max(gridded_data.z)
@@ -12529,10 +10220,12 @@ def GTFS_LEGS_hour_selector():
         with open(path_app + 'static/gtfs_LEGS.geojson', 'w') as f:
             f.write(gtfs_LEGS_all.to_json())
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + "static/gtfs_LEGS.geojson", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var gtfs_hour = \n" + old)  # assign the "var name" in the .geojson file
+        """
 
         return render_template("index_trails_GTFS_selected.html",
                                session_stop_buses = session["stop_buses_json"],
@@ -13720,6 +11413,7 @@ def tpl_emissions_legs_hour_selector():
         gdf_stop_sum_emiss_buses.to_file(filename=path_app + 'static/gtfs_stops_means_emiss_tod.geojson',
                                      driver='GeoJSON')
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + 'static/gtfs_stops_emiss_tod.geojson', 'r+', encoding='utf8',
                   errors='ignore') as f:
             old = f.read()  # read everything in the file
@@ -13730,6 +11424,7 @@ def tpl_emissions_legs_hour_selector():
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var stop_means_emissions_buses = \n" + old)  # assign the "var name" in the .geojson file
+        """
 
         ## transform geodataframe into .geojson and send to the .html direclty within the current session
         stop_buses_emiss_json = gdf_stop_emiss_buses.to_json()
@@ -14061,10 +11756,12 @@ def tpl_emissions_legs_hour_selector():
         with open(path_app + 'static/gtfs_emiss_LEGS.geojson', 'w') as f:
             f.write(gtfs_emiss_LEGS_all.to_json())
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + "static/gtfs_emiss_LEGS.geojson", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var gtfs_hour = \n" + old)  # assign the "var name" in the .geojson file
+        """
 
 
 
@@ -14143,119 +11840,16 @@ def tpl_emissions_legs_hour_selector():
                                         driver='GeoJSON')
 
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + "static/aggregated_tpl_emission.geojson", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var aggregated_tpl_emissions_zmu = \n" + old)  # assign the "var name" in the .geojson file
+        """
 
         ##### --->>>>>> make the sessions data...<<<------------############################################
         ### convert Geodataframe into .geojson...
         session["aggregated_tpl_emissions_origin_zones"] = aggregated_tpl_emission.to_json()
-
-
-        ####### ----------------------------------------------------------- #######################
-        ####### ----------------------------------------------------------- #######################
-        #### make AGGREGATION BY DAY and by ORIGIN zone to find HOURLY PROFILE from all ORIGIN ZMUs
-
-
-        """
-        query_emissions_origin_hourly_profile = text('''WITH data AS(
-                                                   SELECT *
-                                                      FROM impacts.trips_cons_emis_fcd
-                                                      LEFT JOIN fcd.trips_old 
-                                                                  ON trips_cons_emis_fcd.id_trip = trips_old.id        
-                                                                    WHERE date(trips_old.dt_o) BETWEEN :x AND :xx   
-                                                                     AND trips_old.tod_o = :z      
-                                                                    /*limit 1000*/
-                                                 )
-                                                   SELECT id_car_fleet, id_trip, dt_o, dt_d, id_zone_o, id_zone_d, ec, ec_wtt, nox, nmvoc, pm, pm_nexh, co2eq, co2eq_wtt,
-                                                   date_part('hour', dt_o) as hour,
-                                                   TO_CHAR(dt_o::DATE, 'dd-mm-yyyy') as day
-                                                   from data  WHERE id_car_fleet =:w ''')
-
-        stmt = query_emissions_origin_hourly_profile.bindparams(x=str(selected_ZMU_day_start),
-                                                                xx=str(selected_ZMU_day_end),
-                                                                z=str(tod), w=str(fleet_type))
-        with engine.connect() as conn:
-            res = conn.execute(stmt).all()
-        emission_origin_zones_hourly_profile = pd.DataFrame(res)
-
-      
-        emission_origin_zones_hourly_profile.rename({'id_zone_o': 'zmu'}, axis=1, inplace=True)
-        emission_origin_zones_hourly_profile = emission_origin_zones_hourly_profile[
-            emission_origin_zones_hourly_profile['zmu'].notna()]
-        emission_origin_zones_hourly_profile['zmu'] = emission_origin_zones_hourly_profile.zmu.astype('int')
-        
-     
-
-        ##### --- make sums of all emissions ----***** ###########################################################
-        ########################### ///////////// ------- ****** //////// ***** #################### Mei Ru -----#
-        aggregated_emission_origin_zones_hourly_profile = emission_origin_zones_hourly_profile[
-            ['zmu', 'hour', 'ec', 'ec_wtt', 'nox', 'nmvoc', 'pm', 'pm_nexh', 'co2eq', 'co2eq_wtt']].groupby(
-            ['hour', 'zmu'],
-            sort=False).sum().reset_index().rename(
-            columns={0: 'sum'})
-
-        aggregated_emission_origin_zones_hourly_profile = emission_origin_zones_hourly_profile[
-            ['zmu', 'hour', 'ec', 'ec_wtt', 'nox', 'nmvoc', 'pm', 'pm_nexh', 'co2eq', 'co2eq_wtt']].groupby(
-            ['hour', 'zmu'],
-            sort=False).sum().reset_index().rename(
-            columns={0: 'sum_ec', 1: 'sum_ec_wtt', 2: 'sum_nox', 3: 'sum_nmvoc', 4: 'sum_pm', 5: 'sum_pm_nexh',
-                     6: 'sum_co2_eq', 7: 'sum_co2eq_wtt'})
-
-        aggregated_emission_origin_zones_hourly_profile = pd.merge(aggregated_emission_origin_zones_hourly_profile,
-                                                                   ZMU_ROMA, on=['zmu'], how='left')
-        aggregated_emission_origin_zones_hourly_profile = aggregated_emission_origin_zones_hourly_profile[
-            aggregated_emission_origin_zones_hourly_profile['geometry'].notna()]
-
-        aggregated_emission_origin_zones_hourly_profile = aggregated_emission_origin_zones_hourly_profile[
-            ['ec', 'ec_wtt', 'nox', 'nmvoc', 'pm', 'pm_nexh', 'co2eq', 'co2eq_wtt', 'index_zmu', 'POP_TOT_ZMU',
-             'zmu', 'hour',
-             'nome_comun', 'quartiere', 'pgtu']]
-
-        aggregated_emission_origin_zones_hourly_profile.replace([np.inf, -np.inf], np.nan, inplace=True)
-
-        aggregated_emission_origin_zones_hourly_profile[
-            'hour'] = aggregated_emission_origin_zones_hourly_profile.hour.astype('int')
-        aggregated_emission_origin_zones_hourly_profile['ec'] = round(
-            aggregated_emission_origin_zones_hourly_profile['ec'], 2)
-        aggregated_emission_origin_zones_hourly_profile['ec_wtt'] = round(
-            aggregated_emission_origin_zones_hourly_profile['ec_wtt'], 2)
-        aggregated_emission_origin_zones_hourly_profile['nox'] = round(
-            aggregated_emission_origin_zones_hourly_profile['nox'], 2)
-        aggregated_emission_origin_zones_hourly_profile['nmvoc'] = round(
-            aggregated_emission_origin_zones_hourly_profile['nmvoc'], 2)
-        aggregated_emission_origin_zones_hourly_profile['pm'] = round(
-            aggregated_emission_origin_zones_hourly_profile['pm'], 2)
-        aggregated_emission_origin_zones_hourly_profile['pm_nexh'] = round(
-            aggregated_emission_origin_zones_hourly_profile['pm_nexh'], 2)
-        aggregated_emission_origin_zones_hourly_profile['co2eq'] = round(
-            aggregated_emission_origin_zones_hourly_profile['co2eq'], 2)
-        aggregated_emission_origin_zones_hourly_profile['co2eq_wtt'] = round(
-            aggregated_emission_origin_zones_hourly_profile['co2eq_wtt'], 2)
-
-        aggregated_emission_origin_zones_hourly_profile['start_date'] = selected_ZMU_day_start
-        aggregated_emission_origin_zones_hourly_profile['end_date'] = selected_ZMU_day_end
-        aggregated_emission_origin_zones_hourly_profile['fleet'] = fleet_type
-
-        aggregated_emission_origin_zones_hourly_profile.to_csv(
-            path_app + 'static/aggregated_emission_origin_zones_hourly_profile_' + session.sid + '.csv')
-
-        ##### --->>>>>> make the sessions data...<<<------------################################
-        ### convert Geodataframe into .geojson...
-        session["aggregated_emissions_origin_zones"] = aggregated_gdf_emission.to_json()
-        session["aggregated_costs_origin_zones"] = aggregated_gdf_costs.to_json()
-        session["aggregated_externalities_costs_origin_zones"] = aggregated_gdf_externalities.to_json()
-        # print(session["aggregated_gdf_OD_GTFS"])
-
-        # print(session['id'])
-        return render_template("index_zmu_emiss_select_hour.html",
-                               var_ZMU_day=selected_ZMU_day_start, session_aggregated_emissions_oring_zones=session[
-                                   "aggregated_emissions_origin_zones"],
-                               session_aggregated_costs_oring_zones=session["aggregated_costs_origin_zones"],
-                               session_aggregated_externalities_costs_oring_zones=session[
-                                   "aggregated_externalities_costs_origin_zones"])
-        """
 
 
         return render_template("index_GTFS_emiss_select_hour.html",
@@ -14499,33 +12093,14 @@ def FCD_heatmap_hourrange_selector():
         engine = create_engine("postgresql://postgres:pippo123@localhost:5432/RSM_Oct_Nov_2022")
         from sqlalchemy.sql import text
 
-        """
-        query_destination = text('''WITH data AS(
-                                                       SELECT  
-                                                          id_trace, p_after, tt, dt_d, trips.geom, trips.id, trips.dist, trips.hour_range_d,
-                                                          fcd.lat, fcd.lon, fcd.id_veh
-                                                          FROM fcd.trips
-                                                          LEFT JOIN fcd.fcd 
-                                                                      ON trips.id = fcd.id_trace        
-                                                                        WHERE date(trips.dt_d) BETWEEN :x AND :xx   
-                                                                         AND trips.tod_d = :z      
-                                                                        /*limit 1000*/
-                                                     )
-                                                       SELECT id_veh, dt_d, id,  lat, lon, tt, p_after, dist, hour_range_d,
-                                                       date_part('hour', dt_d) as hour, geom,
-                                                       TO_CHAR(dt_d::DATE, 'dd-mm-yyyy') as day
-                                                       from data     
-                                                       WHERE hour_range_d = :y ''')
-        """
-
+     
         query_destination = text(''' SELECT  id_veh, p_after, tt, dt_d, id, dist, hour_range_d,
                                                            date_part('hour', dt_d) as hour, geom
                                                           FROM fcd.trips  WHERE date(trips.dt_d) BETWEEN :x AND :xx 
-                                                           AND hour_range_d = :y 
-                                                          AND tod_d = :z ''')
+                                                           AND hour_range_d = :y  ''')
                                                           
         stmt = query_destination.bindparams(x=str(selected_ZMU_day_start), xx=str(selected_ZMU_day_end),
-                                            y=str(hourrange_id), z=str(tod))
+                                            y=str(hourrange_id))
 
         with engine.connect() as conn:
             res = conn.execute(stmt).all()
@@ -14647,11 +12222,14 @@ def FCD_heatmap_hourrange_selector():
         ## save file
         with open(path_app + "static/gridded_n_vehicles_destination.txt", "w") as file:
             file.write(str(joined_lista))
+        """
         with open(path_app + "static/gridded_n_vehicles_destination.txt", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
-            f.write("var gridded_destination_data = \n" + old)  # assign the "var name" in the .geojson file
-
+            # f.write("var gridded_destination_data = \n" + old)  # assign the "var name" in the .geojson file
+            f.write("[ \n" + old + "]")  # assign the "var name" in the .geojson file
+        """
+            
         min_n_vehicles = min(gridded_data.z)
         max_n_vehicles = max(gridded_data.z)
 
@@ -14707,11 +12285,13 @@ def FCD_heatmap_hourrange_selector():
         ## save file
         with open(path_app + "static/gridded_triptime_destination.txt", "w") as file:
             file.write(str(joined_lista))
+        """
         with open(path_app + "static/gridded_triptime_destination.txt", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var gridded_destination_triptime = \n" + old)  # assign the "var name" in the .geojson file
-
+        """
+        
         min_triptime = min(gridded_data_triptime.z)  ## minutes
         max_triptime = max(gridded_data_triptime.z)  ## minutes
 
@@ -14726,11 +12306,13 @@ def FCD_heatmap_hourrange_selector():
             f.write("var min_triptime = \n" + old)  # assign the "var name" in the .geojson file
         with open(path_app + "static/max_triptime.txt", "w") as file:
             file.write(str(max_triptime))
+        
         with open(path_app + "static/max_triptime.txt", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var max_triptime = \n" + old)  # assign the "var name" in the .geojson file
-
+        
+        
         #################################################################################################
         ##-------- mean breaktime_s (stop time) within the grid  ----------------------------------######
         #################################################################################################
@@ -14768,11 +12350,13 @@ def FCD_heatmap_hourrange_selector():
         ## save file
         with open(path_app + "static/gridded_stoptime_destination.txt", "w") as file:
             file.write(str(joined_lista))
+        """
         with open(path_app + "static/gridded_stoptime_destination.txt", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var gridded_destination_stoptime = \n" + old)  # assign the "var name" in the .geojson file
-
+        """
+        
         min_stoptime = min(gridded_data_breaktime.z)  ## minutes
         max_stoptime = max(gridded_data_breaktime.z)  ## minutes
 
@@ -14828,11 +12412,12 @@ def FCD_heatmap_hourrange_selector():
         ## save file
         with open(path_app + "static/gridded_tripdistance_destination.txt", "w") as file:
             file.write(str(joined_lista))
+        """
         with open(path_app + "static/gridded_tripdistance_destination.txt", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var gridded_destination_tripdistance = \n" + old)  # assign the "var name" in the .geojson file
-
+        """
         min_tripdistance = min(gridded_data_tripdistance.z)  ## minutes
         max_tripdistance = max(gridded_data_tripdistance.z)  ## minutes
 
@@ -15710,10 +13295,12 @@ def scenario_selector():
                                         driver='GeoJSON')
 
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + "static/steps_recharge.geojson", "r+") as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var aggregated_recharge_zmu = \n" + old)  # assign the "var name" in the .geojson file
+        """
 
         ##### --->>>>>> make the sessions data...<<<------------############################################
         ### convert Geodataframe into .geojson...
@@ -15748,11 +13335,13 @@ def scenario_selector():
         gdf_staypoints.to_file(filename=path_app + 'static/staypoints_home_recharge.geojson',
                                driver='GeoJSON')
         ## add "var name" in front of the .geojson file, in order to properly loat it into the index.html file
+        """
         with open(path_app + 'static/staypoints_home_recharge.geojson', 'r+', encoding='utf8',
                   errors='ignore') as f:
             old = f.read()  # read everything in the file
             f.seek(0)  # rewind
             f.write("var points_staypoints = \n" + old)  # assign the "var name" in the .geojson file
+        """
 
         ##### --->>>>>> make the sessions data...<<<------------############################################
         ### convert Geodataframe into .geojson...
@@ -15839,8 +13428,8 @@ def figure_plotly30():
 @app.route('/download_charging_infrastructure_OSM/', methods=['GET', 'POST'])
 def download_charging_stations():
 
-    link_OCM_full_data_IT = "https://api.openchargemap.io/v3/poi/?output=json&countrycode=IT&maxresults=300000&compact=true&verbose=false&includecomments=true?key=72622769-c655-4c2a-b18f-e58eef38c0f3"
-
+    # link_OCM_full_data_IT = "https://api.openchargemap.io/v3/poi/?output=json&countrycode=IT&maxresults=300000&compact=true&verbose=false&includecomments=true?key=72622769-c655-4c2a-b18f-e58eef38c0f3"
+    link_OCM_full_data_IT = "https://api.openchargemap.io/v3/poi/?output=json&countrycode=IT&maxresults=300000&compact=true&verbose=false&key=26bebefa-f0ba-4188-b14f-0f9cdf9a193d"
     link = link_OCM_full_data_IT
     f = requests.get(link)
     open(path_app + "static/CI_Italy_OCM_full.json", "wb").write(f.content)
@@ -16007,1389 +13596,11 @@ def coords_OSM():
 ####################################################################################################
 
 
-
-@app.route('/IEA_STATS_year_webscrap/', methods=['GET', 'POST'])
-def IEA_STATS_year():
-    selected_IEA_year = request.form["IEA_year"]
-    # selected_IEA_year = 2023
-    selected_IEA_year = str(selected_IEA_year)
-    with open(path_app + "static/params/selected_IEA_year.txt", "w") as file:
-        file.write(selected_IEA_year)
-    print("selected_IEA_year:", selected_IEA_year)
-
-    datum_IEA_year = [{
-        'IEA_year': selected_IEA_year,
-        'IEA_month': 'choose month'
-    }]
-
-    return render_template("index_IEA_stats_year.html", datum_IEA_year = datum_IEA_year)
-
-
-
-
-@app.route('/IEA_STATS_webscrap/', methods=['GET', 'POST'])
-def IEA_STATS():
-
-
-    ####################################################################################################
-    ##-----///// ACEA Automobiles -- STATISTICS, TEAR to DATE (Passenger Cars - NEW REGISTRATIONS) #####
-    #### -->>> scrap data from website of ACEA.AUTO ---------------------------------- #################
-
-    import PyPDF2
-    from tabula import read_pdf
-    import io
-    import urllib
-    from urllib.request import Request, urlopen
-    from PyPDF2 import PdfReader
-    import pandas as pd
-    import calendar
-
-    # Request to website and download HTML contents
-    ## insert current month....now we are in September.....
-    # MONTH = 9  ## AUGUST (!!! set one month after the month to search...)
-
-    selected_IEA_month = request.form["IEA_month"]
-    ## reload "selected_IEA_year"
-    with open(path_app + "static/params/selected_IEA_year.txt", "r") as file:
-        selected_IEA_year = file.read()
-
-    # selected_IEA_month = 11
-    selected_IEA_month = str(selected_IEA_month)
-    with open(path_app + "static/params/selected_IEA_month.txt", "w") as file:
-        file.write(selected_IEA_month)
-    print("selected_IEA_month:", selected_IEA_month)
-
-    # year = 2023
-    selected_IEA_year = int(selected_IEA_year)
-    short_yr = str(selected_IEA_year)[2:4]
-    selected_IEA_month = int(selected_IEA_month)
-
-    from datetime import date
-    today = date.today()
-    today = today.strftime("%d/%m/%Y")
-    today_date = today[:2]
-
-    if today_date < "17":
-        month_before = selected_IEA_month - 2
-        month_before_word = int(selected_IEA_month - 2)
-        month_before_word = calendar.month_name[month_before_word]
-    else:
-        month_before = selected_IEA_month - 1
-        month_before_word = int(selected_IEA_month - 1)
-        month_before_word = calendar.month_name[month_before_word]
-
-    if month_before == -1:
-        month_before = 11
-        month_before_word = calendar.month_name[int(month_before)]
-        selected_IEA_year = selected_IEA_year - 1
-
-    if month_before == 0:
-        month_before = 12
-        month_before_word = calendar.month_name[int(month_before)]
-        selected_IEA_year = selected_IEA_year - 1
-
-    month = str(selected_IEA_month).rjust(2, '0')
-    month_before = str(month_before).rjust(2, '0')
-    print(month)
-    print(month_before)
-    print(month_before_word)
-
-    def get_pdf_from_url(url):
-        remote_file = urlopen(Request(url)).read()
-        memory_file = io.BytesIO(remote_file)
-        pdf_file = PdfReader(memory_file)
-        return pdf_file
-
-    for i in range(32):
-        # print(i)
-        #### ACEA PRESS RELEASE FILES ----- ###############
-        url = "https://www.acea.auto/files/" + str(selected_IEA_year) + month + str(
-            i) + "_PRPC_" + short_yr + month_before + "_FINAL.pdf"
-        # print(url)
-        try:
-            reader = get_pdf_from_url(url)
-            # print("-----GOTTA!!!---------")
-            print(url)
-        except urllib.error.HTTPError:
-            # print("not found....try this instead --->>")
-            ## try also this configuration as exception
-            url = "https://www.acea.auto/files/2023" + month + str(i) + "_PRPC_23" + month_before + "-FINAL.pdf"
-            try:
-                reader = get_pdf_from_url(url)
-            except urllib.error.HTTPError:
-                # print("---searching.....-----")
-                url = "https://www.acea.auto/files/Press_release_car_registrations_" + str(
-                    month_before_word) + "_" + str(selected_IEA_year) + ".pdf"
-                try:
-                    reader = get_pdf_from_url(url)
-                    print("-----GOTTA!!!---------")
-                except urllib.error.HTTPError:
-                    print("---searching.....-----")
-
-    if month_before == '12':
-        url = "https://www.acea.auto/files/Press_release_car_registrations_full_year_" + str(selected_IEA_year) + ".pdf"
-        try:
-            reader = get_pdf_from_url(url)
-            print("-----GOTTA!!!---------")
-        except urllib.error.HTTPError:
-            print("---searching.....-----")
-
-    # print the number of pages in pdf file
-    print(len(reader.pages))
-    # print the text of the first page
-    print(reader.pages[4].extract_text())
-
-    #######################################
-    #####---->>> define key terms to search
-    string = "YEAR TO DATE"
-    import re
-
-    # extract text and do the search
-    i = 0
-    delta = 6
-    for page in reader.pages:
-        i = i + 1
-        # print(i)
-        text = page.extract_text()
-        # print(text)
-        res_search = re.search(string, text)
-        # print(res_search)
-        if (res_search != None):
-            print("gotta!")
-            print(text)
-            print(text.find("Italy"))
-            print(text.find("Latvia"))
-            index_italy = text.find("Italy")
-            index_latvia = text.find("Latvia")
-            print(text[index_italy:index_latvia])
-            Italy_row = text[index_italy:index_latvia]
-
-    ## ---> split file based on spaces
-    list_ITALY_ACEA = Italy_row.split(" ")
-
-    ## get numbers about EV vehicles
-    # new_EV_vehicles_ACEA = Italy_row[6:6+delta]
-    new_EV_vehicles_ACEA = list_ITALY_ACEA[1]
-    new_EV_vehicles_ACEA = int(new_EV_vehicles_ACEA.replace(',', ''))
-    print(new_EV_vehicles_ACEA)
-    # new_PHEV_vehicles_ACEA = Italy_row[26:26 + delta]
-    new_PHEV_vehicles_ACEA = list_ITALY_ACEA[4]
-    new_PHEV_vehicles_ACEA = int(new_PHEV_vehicles_ACEA.replace(',', ''))
-    print(new_PHEV_vehicles_ACEA)
-    # new_HEV_vehicles_ACEA = Italy_row[45:45 + delta]
-    new_HEV_vehicles_ACEA = list_ITALY_ACEA[7]
-    new_HEV_vehicles_ACEA = int(new_HEV_vehicles_ACEA.replace(',', ''))
-    print(new_HEV_vehicles_ACEA)
-    # TOTAL_new_vehicles_ACEA = Italy_row[131:132 + delta]  ## including internal combustion engines
-    TOTAL_new_vehicles_ACEA = list_ITALY_ACEA[19]
-    TOTAL_new_vehicles_ACEA = int(TOTAL_new_vehicles_ACEA.replace(',', ''))
-    print(TOTAL_new_vehicles_ACEA)
-
-
-
-    #################################################################################################
-    ########## ------------------------------------------------------------- ########################
-    #################################################################################################
-    ##-----///// ACEA Automobiles -- STATISTICS, YEAR to DATE (Commercial vehicles - NEW REGISTRATIONS)
-    # url_commercial = "https://www.acea.auto/files/20230727_PRCV_Q1-Q2_2023.pdf"  ## first half (first 6 months)
-
-    del (reader)
-    # year = 2023
-
-    ##--->> select "quarter"
-    first_quarter = 'Q1'
-    first_half = 'Q1-Q2'
-    third_quarter = 'Q1-Q3'
-    # fourth_quarter = 'Q1-Q4'
-
-
-    from datetime import datetime
-    today_date = datetime.today().strftime('%Y-%m-%d')
-    today_day = int(today_date[8:11])
-    today_month = int(today_date[5:7])
-
-    if int(month_before) <= 3:
-        time_range = first_quarter
-    elif int(month_before) <= 6:
-        time_range = first_half
-    elif int(month_before) <= 12:
-        time_range = third_quarter
-    if (today_day >= 29) | (today_month >= 1) and (today_month <= 4):
-        time_range = 'registrations_2023'
-
-
-    def get_pdf_from_url(url):
-        remote_file = urlopen(Request(url)).read()
-        memory_file = io.BytesIO(remote_file)
-        pdf_file = PdfReader(memory_file)
-        return pdf_file
-
-    ### grab the right day...
-    for i in range(32):
-        # print(i)
-        #### ACEA PRESS RELEASE FILES ----- ###############
-        url = "https://www.acea.auto/files/" + str(selected_IEA_year) + str(month_before) + str(
-            i) + "_PRCV_" + time_range + "_" + str(
-            selected_IEA_year) + ".pdf"
-        # print(url)
-        try:
-            reader = get_pdf_from_url(url)
-            print("----- got it!!! ---------")
-        except urllib.error.HTTPError:
-            print("not found....")
-            url = "https://www.acea.auto/files/Press_release_commercial_vehicles_" + str(time_range) + "_" + str(
-                selected_IEA_year) + ".pdf"
-            try:
-                reader = get_pdf_from_url(url)
-                print("-----GOTTA!!!---------")
-            except urllib.error.HTTPError:
-                print("---searching.....-----")
-                url = "https://www.acea.auto/files/Press_release-commercial_vehicle_" + str(time_range) + ".pdf"
-                try:
-                    reader = get_pdf_from_url(url)
-                    print("-----GOTTA!!!---------")
-                except urllib.error.HTTPError:
-                    print("---searching.....-----")
-
-    # print the number of pages in pdf file
-    print(len(reader.pages))
-    # print the text of the first page
-    print(reader.pages[4].extract_text())
-
-    ##########################################
-    ####-------->>> define key terms to search
-    string = "TOTAL NEW BUS"
-    import re
-
-    # extract text and do the search
-    i = 0
-    delta = 3
-    for page in reader.pages:
-        i = i + 1
-        # print(i)
-        text = page.extract_text()
-        # print(text)
-        res_search = re.search(string, text)
-        # print(res_search)
-        if (res_search != None):
-            print("gotta!")
-            print(text)
-            print(text.find("Italy"))
-            print(text.find("Latvia"))
-            index_italy = text.find("Italy")
-            index_latvia = text.find("Latvia")
-            print(text[index_italy:index_latvia])
-            Italy_row = text[index_italy:index_latvia]
-
-    ## ---> split file based on spaces
-    list_ITALY_ACEA = Italy_row.split(" ")
-
-    ## get numbers about EV vehicles
-    # new_EV_BUSES_ACEA = Italy_row[6:6+delta]
-    new_EV_BUSES_ACEA = list_ITALY_ACEA[1]
-    new_EV_BUSES_ACEA = int(new_EV_BUSES_ACEA.replace(',', ''))
-    print(new_EV_BUSES_ACEA)
-    # new_HEV_BUSES_ACEA = Italy_row[20:20 + delta]
-    new_HEV_BUSES_ACEA = list_ITALY_ACEA[4]
-    new_HEV_BUSES_ACEA = int(new_HEV_BUSES_ACEA.replace(',', ''))
-    print(new_HEV_BUSES_ACEA)
-    # TOTAL_new_BUSES_ACEA = Italy_row[70:72 + delta]  ## including internal combustion engines
-    TOTAL_new_BUSES_ACEA = list_ITALY_ACEA[15]  ## including internal combustion engines
-    TOTAL_new_BUSES_ACEA = int(TOTAL_new_BUSES_ACEA.replace(',', ''))
-    print(TOTAL_new_BUSES_ACEA)
-
-    #######################################
-    ####----->>> define key terms to search
-    string = "NEW VAN"
-    import re
-
-    # extract text and do the search
-    i = 0
-    delta = 3
-    for page in reader.pages:
-        i = i + 1
-        # print(i)
-        text = page.extract_text()
-        # print(text)
-        res_search = re.search(string, text)
-        # print(res_search)
-        if (res_search != None):
-            print("searching.....")
-            print(text)
-            print(text.find("Italy"))
-            print(text.find("Latvia"))
-            index_italy = text.find("Italy")
-            index_latvia = text.find("Latvia")
-            print(text[index_italy:index_latvia])
-            Italy_row = text[index_italy:index_latvia]
-
-    ## ---> split file based on spaces
-    list_ITALY_ACEA = Italy_row.split(" ")
-
-    ## get numbers about EV vehicles
-    # new_EV_LIGHT_COMMERCIAL_ACEA = Italy_row[6:8+delta]
-    new_EV_LIGHT_COMMERCIAL_ACEA = list_ITALY_ACEA[1]
-    new_EV_LIGHT_COMMERCIAL_ACEA = int(new_EV_LIGHT_COMMERCIAL_ACEA.replace(',', ''))
-    print(new_EV_LIGHT_COMMERCIAL_ACEA)
-    # new_HEV_LIGHT_COMMERCIAL_ACEA = Italy_row[25:28 + delta]
-    new_HEV_LIGHT_COMMERCIAL_ACEA = list_ITALY_ACEA[4]
-    new_HEV_LIGHT_COMMERCIAL_ACEA = int(new_HEV_LIGHT_COMMERCIAL_ACEA.replace(',', ''))
-    print(new_HEV_LIGHT_COMMERCIAL_ACEA)
-    # TOTAL_LIGHT_COMMERCIAL_ACEA = Italy_row[79:82 + delta]  ## including internal combustion engines
-    TOTAL_LIGHT_COMMERCIAL_ACEA = list_ITALY_ACEA[13]
-    TOTAL_LIGHT_COMMERCIAL_ACEA = int(TOTAL_LIGHT_COMMERCIAL_ACEA.replace(',', ''))
-    print(TOTAL_LIGHT_COMMERCIAL_ACEA)
-
-    ########################################
-    ####----->>>> define key terms to search
-    string = "NEW TRUCK"
-    import re
-
-    # extract text and do the search
-    i = 0
-    delta = 3
-    for page in reader.pages:
-        i = i + 1
-        # print(i)
-        text = page.extract_text()
-        # print(text)
-        res_search = re.search(string, text)
-        # print(res_search)
-        if (res_search != None):
-            print("----searching...")
-            print(text)
-            print(text.find("Italy"))
-            print(text.find("Latvia"))
-            index_italy = text.find("Italy")
-            index_latvia = text.find("Latvia")
-            print(text[index_italy:index_latvia])
-            Italy_row = text[index_italy:index_latvia]
-
-    ## ---> split file based on spaces
-    list_ITALY_ACEA = Italy_row.split(" ")
-
-    ## get numbers about EV vehicles
-    # new_EV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = Italy_row[6:6+delta]
-    new_EV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = list_ITALY_ACEA[1]
-    new_EV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = int(new_EV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA.replace(',', ''))
-    print(new_EV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA)
-    # new_HEV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = Italy_row[19:20 + delta]
-    new_HEV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = list_ITALY_ACEA[4]
-    new_HEV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = int(new_HEV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA.replace(',', ''))
-    print(new_HEV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA)
-    # TOTAL_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = Italy_row[71:74 + delta]  ## including internal combustion engines
-
-    TOTAL_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = list_ITALY_ACEA[15]
-    if (today_day >= 29) | (today_month >= 1) and (today_month <= 4):
-        time_range = 'registrations_2023'
-        TOTAL_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = list_ITALY_ACEA[16]
-
-    TOTAL_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA = int(TOTAL_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA.replace(',', ''))
-    print(TOTAL_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA)
-
-
-    ###################################################################
-    ###################################################################
-    ##---- ANFIA ----------------------------------- ##################
-
-    ## ----//// ANFIA Statistics ---- YEAR to DATE ####################
-    ## https://www.anfia.it/it/portale-autobus/itemlist/category/23-dati-statistici
-    url_anfia = "https://www.anfia.it/data/studi-e-statistiche/dati-statistici/immatricolazioni-italia/autovetture%20-%20struttura%20mercato.xlsx"
-
-    import requests
-    resp = requests.get(url_anfia)
-    import io
-
-    import urllib
-    from urllib.request import Request, urlopen
-    from PyPDF2 import PdfReader
-    import pandas as pd
-
-    ## create a new empty file .excel
-    output = open(path_app + 'static/struttura_mercato_ANFIA.xls', 'wb')
-    output.write(resp.content)
-    output.close()
-
-
-    ### read xls fils (ANFIA)
-    ANFIA_data = pd.read_excel(path_app + 'static/struttura_mercato_ANFIA.xls', sheet_name=0,
-                               skiprows=[0, 1, 2, 3, 4])
-    # set column names equal to values in row index position 0
-    ANFIA_data.columns = ANFIA_data.iloc[0]
-    # remove first row from DataFrame
-    ANFIA_data = ANFIA_data[1:]
-
-    ## select columns
-
-    # ANFIA_data = ANFIA_data[['Volumi']]
-    # ANFIA_data.iloc[: , -3:len(ANFIA_data.columns)-2]
-    ANFIA_data = pd.concat([ANFIA_data[['Volumi']],  ANFIA_data.iloc[: , -3:len(ANFIA_data.columns)-2]], axis=1)
-    ## remove rows with NAN values
-    ANFIA_data = ANFIA_data[ANFIA_data['Volumi'].notna()]
-    contain_values = ANFIA_data[ANFIA_data['Volumi'].str.contains('ELETTRICA')]
-
-    ## get numbers about EV vehicles
-    new_EV_vehicles_ANFIA = ANFIA_data[ANFIA_data['Volumi'].str.contains('ELETTRICA')].iloc[0][1]
-    print(new_EV_vehicles_ANFIA)
-    new_PHEV_vehicles_ANFIA = ANFIA_data[ANFIA_data['Volumi'].str.contains('PHEV')].iloc[0][1]
-    print(new_PHEV_vehicles_ANFIA)
-    new_HEV_vehicles_ANFIA = ANFIA_data[ANFIA_data['Volumi'].str.contains('Hev')].iloc[0][1]
-    print(new_HEV_vehicles_ANFIA)
-    new_HYDROGEN_vehicles_ANFIA = ANFIA_data[ANFIA_data['Volumi'].str.contains('Hydrogen')].iloc[0][1]
-    print(new_HYDROGEN_vehicles_ANFIA)
-
-    TOTAL_new_vehicles_ANFIA = ANFIA_data[ANFIA_data['Volumi'].str.contains('TOTALE')].iloc[0][1]  ## including internal combustion engines
-    print(TOTAL_new_vehicles_ANFIA)
-
-    ######################################################################################################################
-    ##---- UNRAE ----------------------------------- #####################################################################
-    # url_UNRAE = "https://unrae.it/files/04%20Struttura%20del%20Mercato%20Luglio%202023_64c8d3375fb77.pdf" ---- #########
-    ####### --------- "https://unrae.it/files/04%20Struttura%20del%20Mercato%20Giugno%202023_64a2d8d1c4038.pdf" ---- #####
-
-    # month = "Novembre"
-    # selected_IEA_month = 11
-
-    import calendar
-
-    selected_IEA_month = int(selected_IEA_month)
-    month = calendar.month_name[selected_IEA_month]
-    # month = month.title()
-
-    it_month = 'Gennaio'
-
-    if month == 'January':
-        it_month = 'Gennaio'
-    elif month == 'February':
-        it_month = 'Febbraio'
-    elif month == 'March':
-        it_month = 'Marzo'
-    elif month == 'April':
-        it_month = 'Aprile'
-    elif month == 'June':
-        it_month = 'Giugno'
-    elif month == 'July':
-        it_month = 'Luglio'
-    elif month == 'August':
-        it_month = 'Agosto'
-    elif month == 'September':
-        it_month = 'Settembre'
-    elif month == 'October':
-        it_month = 'Ottobre'
-    elif month == 'November':
-        it_month = 'Novembre'
-    elif month == 'December':
-        it_month = 'Dicembre'
-
-    month = it_month
-
-
-    # year = 2023
-    # url_UNRAE = "https://unrae.it/files/04%20Struttura%20del%20Mercato%20" + month + "%20" + str(year) + "_64c8d3375fb77.pdf"
-
-    import httplib2
-    from bs4 import BeautifulSoup, SoupStrainer
-    from urllib.request import Request, urlopen
-    http = httplib2.Http()
-
-    ## --->> get link of UNRAE "immatricolazioni" (all STATISTICAL DATA)
-    status, response = http.request("https://unrae.it/dati-statistici/immatricolazioni")
-
-    ## --->> get link of UNRAE "immatricolazioni" referred to the month above
-    for link in BeautifulSoup(response, parse_only=SoupStrainer('a')):
-        if link.has_attr('href'):
-            if "struttura-del-mercato" in link['href']:
-                print(link['href'])
-                url_UNRAE = link['href']
-
-    status, response_url = http.request(url_UNRAE)
-
-    ## get the .pdf file with the STATISTICS of IMMATRICOLAZIONI for the month
-    for link in BeautifulSoup(response_url, parse_only=SoupStrainer('a')):
-        if link.has_attr('href'):
-            if "Struttura del Mercato" in link['href']:
-                print(link['href'])
-                file_struttura_mercato_UNRAE = link['href']
-
-
-    # url_UNRAE = "https://unrae.it/files/04%20Struttura%20del%20Mercato%20" + month + "%20" + str(year) + "_64c8d3375fb77.pdf"
-    ## ---> split file based on spaces
-    list_file_struttura_mercato_UNRAE = file_struttura_mercato_UNRAE.split(" ")
-    last_element = list_file_struttura_mercato_UNRAE[-1]
-    # url_UNRAE = "https://unrae.it/files/04%20Struttura%20del%20Mercato_" + month + "%20" + last_element
-    # url_UNRAE = "https://unrae.it/files/04%20Struttura%20del%20" + last_element
-    url_UNRAE = "https://unrae.it/files/04%20Struttura%20del%20" + list_file_struttura_mercato_UNRAE[3] + "%20"+ last_element
-
-
-
-
-    def get_pdf_from_url(url_UNRAE):
-        remote_file = urlopen(Request(url_UNRAE)).read()
-        memory_file = io.BytesIO(remote_file)
-        pdf_file = PdfReader(memory_file)
-        return pdf_file
-
-    try:
-        reader = get_pdf_from_url(url_UNRAE)
-    except urllib.error.HTTPError:
-        print("not found....")
-
-
-
-    # print the number of pages in pdf file
-    print(len(reader.pages))
-    # print the text of the first page
-    print(reader.pages[0].extract_text())
-
-    text = reader.pages[0].extract_text()
-
-    ###---Electric cars (BEV)
-    index_BEV = text.find("Elettriche (BEV)")
-    row_BEV = text[index_BEV:index_BEV + 100]
-    ## ---> split file based on spaces
-    list_BEV_row = row_BEV.split(" ")
-    Elettriche__UNRAE_BEV = list_BEV_row[5]
-    Elettriche__UNRAE_BEV = int(Elettriche__UNRAE_BEV.replace('.', ''))
-    print(Elettriche__UNRAE_BEV)
-
-    ###---Hybrid (Electric)
-    index_HEV = text.find("HEV")
-    row_HEV = text[index_HEV:index_HEV + 100]
-    ## ---> split file based on spaces
-    list_HEV_row = row_HEV.split(" ")
-    Ibride_Elettriche_UNRAE_HEV = list_HEV_row[4]
-    Ibride_Elettriche_UNRAE_HEV = int(Ibride_Elettriche_UNRAE_HEV.replace('.', ''))
-    print(Ibride_Elettriche_UNRAE_HEV)
-
-    ###---PlugIn (Electric-Hybrid)
-    index_PHEV = text.find("PHEV")
-    row_PHEV = text[index_PHEV:index_PHEV + 100]
-    ## ---> split file based on spaces
-    list_PHEV_row = row_PHEV.split(" ")
-    PlugIn_Elettriche_UNRAE_PHEV = list_PHEV_row[4]
-    PlugIn_Elettriche_UNRAE_PHEV = int(PlugIn_Elettriche_UNRAE_PHEV.replace('.', ''))
-    print(PlugIn_Elettriche_UNRAE_PHEV)
-
-    ###---Fuel Cell (Hydrogen)
-    index_HYDROGEN = text.find("FCEV")
-    row_FCEV = text[index_HYDROGEN:index_HYDROGEN + 100]
-    ## ---> split file based on spaces
-    list_FCEV_row = row_FCEV.split(" ")
-    Fuel_Cell_Hydrogen_UNRAE_FCEV = list_FCEV_row[4]
-    Fuel_Cell_Hydrogen_UNRAE_FCEV = int(Fuel_Cell_Hydrogen_UNRAE_FCEV.replace('.', ''))
-    print(Fuel_Cell_Hydrogen_UNRAE_FCEV)
-
-    ###---total new vehicles
-    index_total = text.find("Totale mercato")
-    row_total = text[index_total:index_total + 100]
-    ## ---> split file based on spaces
-    list_TOTAL_row = row_total.split(" ")
-    total_NEW_VEHICLES_UNRAE = list_TOTAL_row[5]
-    total_NEW_VEHICLES_UNRAE = int(total_NEW_VEHICLES_UNRAE.replace('.', ''))
-    print(total_NEW_VEHICLES_UNRAE)
-
-
-    ######################################################################################################################
-    ######################################################################################################################
-    ######################################################################################################################
-    ####----- EAFO --------------------------------------------------------------#########################################
-
-    ## https://alternative-fuels-observatory.ec.europa.eu/transport-mode/road/italy/vehicles-and-fleet
-    # https://alternative-fuels-observatory.ec.europa.eu/transport-mode/road/italy/vehicles-and-fleet#chart-csv-pa8y2k6klql
-    ## month EAFO is about 3 month earlier...
-
-    import httplib2
-    from bs4 import BeautifulSoup, SoupStrainer
-    from urllib.request import Request, urlopen
-    http = httplib2.Http()
-    import requests
-    import pandas as pd
-    import json
-    import re
-
-    ## --->> get link of EAFO "immatricolazioni" (all STATISTICAL DATA - YEAR TO DATE)
-    status, response = http.request("https://alternative-fuels-observatory.ec.europa.eu/transport-mode/road/italy/vehicles-and-fleet")
-
-    ### ---->> web scraping.... find the web text containing all the information about new vehicles
-    url = "https://alternative-fuels-observatory.ec.europa.eu/transport-mode/road/italy/vehicles-and-fleet"
-    data = requests.get(url).text
-    soup = BeautifulSoup(data, 'html.parser')
-
-    # <div><script type="application/json">{"service":"charts","version":"2.0","options":{"separator":{"decimals":".","thousands":","}},
-    # "data":{"credits":{"enabled":false},"chart":{"type":"column"},"tooltip":{"shared":true},"xAxis":{"type":"category"},
-    # "plotOptions":{"column":{"borderColor":null},"series":{"stacking":"normal","dataLabels":{"style":{"fontWeight":"bold"}}}},
-    # "legend":{"itemStyle":{"fontWeight":"bold"},"align":"center"},"yAxis":{"reversedStacks":false,"title":{"text":" "}},
-    # "labels":{"csvExportName":"new_registrations_m1.csv"},"colors":["#134074","#AD7FA7","#2A9D8F","#E9C46A","#F4A261","#E76F51"]},
-    # "plugins":["drilldown"],"dataset":{"format":"csv","source":"https:\/\/alternative-fuels-observatory.ec.europa.eu\/sites\/default\/files\/csv\/italy\/new_registrations_m1.csv?token=1691158536"}}</script>
-    # </div>
-
-    ###------>>> find the all new registered passenger vehicles ----- #####
-    list_tags = []
-    tags = soup.find_all("script", type='application/json')
-    for tag in soup.find_all("script", type='application/json'):
-        print(tag)
-        if any(element in str(tag) for element in "new_registrations_m1.csv".split()):
-            print("--------------->>> gotta!  <<<<<---------------")
-            list_tags.append(tag)
-
-    for tag in list_tags:
-        # print(tag)
-        for t in tag:
-            res = json.loads(t)
-            # print(res)
-            keysList = list(res.keys())
-            # print(keysList)
-            ### get data links for .csv files to download for new registered cars
-            url = res['dataset']['source']
-            print(url)
-            ## download data
-            file_name = res['data']['labels']['csvExportName']
-            print(file_name)
-            resp = requests.get(url)
-            ## create a new empty file .excel
-            output = open(path_app + "static/" + file_name, 'wb')
-            output.write(resp.content)
-            output.close()
-
-    year = int(selected_IEA_year)
-    EAFO_vehicles_data = pd.read_csv(path_app + 'static/new_registrations_m1.csv')
-    EAFO_vehicles_data = EAFO_vehicles_data[EAFO_vehicles_data['YEAR'] == year]
-    EV_EAFO = EAFO_vehicles_data['BEV'].iloc[0]
-    print(EV_EAFO)
-    PHEV_EAFO = EAFO_vehicles_data['PHEV'].iloc[0]
-    print(PHEV_EAFO)
-    FC_EAFO = EAFO_vehicles_data['H2'].iloc[0]
-    print(FC_EAFO)
-
-
-    #####################################################################################################
-    #####################################################################################################
-    ###------>>> find the all new registered LIGHT COMMERCIAL vehicles ----- ############################
-
-    list_tags = []
-    tags = soup.find_all("script", type='application/json')
-    for tag in soup.find_all("script", type='application/json'):
-        print(tag)
-        if any(element in str(tag) for element in "new_registrations_n1.csv".split()):
-            print("--------------->>> gotta!  <<<<<---------------")
-            list_tags.append(tag)
-
-    for tag in list_tags:
-        # print(tag)
-        for t in tag:
-            res = json.loads(t)
-            # print(res)
-            keysList = list(res.keys())
-            # print(keysList)
-            ### get data links for .csv files to download for new registered cars
-            url = res['dataset']['source']
-            print(url)
-            ## download data
-            file_name = res['data']['labels']['csvExportName']
-            print(file_name)
-            resp = requests.get(url)
-            ## create a new empty file .excel
-            output = open(path_app + "static/" + file_name, 'wb')
-            output.write(resp.content)
-            output.close()
-
-
-    EAFO_light_commercial_vehicles_data = pd.read_csv(path_app +  'static/new_registrations_n1.csv')
-    EAFO_light_commercial_vehicles_data = EAFO_light_commercial_vehicles_data[
-    EAFO_light_commercial_vehicles_data['YEAR'] == year]
-    EV_light_commercial_vehicles_EAFO = EAFO_light_commercial_vehicles_data['BEV'].iloc[0]
-    print(EV_light_commercial_vehicles_EAFO)
-    PHEV_light_commercial_vehicles_EAFO = EAFO_light_commercial_vehicles_data['PHEV'].iloc[0]
-    print(PHEV_light_commercial_vehicles_EAFO)
-    FC_light_commercial_vehicles_EAFO = EAFO_light_commercial_vehicles_data['H2'].iloc[0]
-    print(FC_light_commercial_vehicles_EAFO)
-
-
-
-    ######################################################################################################################
-    ######################################################################################################################
-    ######################################################################################################################
-    ####----- MOTUSe --------------------------------------------------------------#######################################
-
-    # https://www.motus-e.org/analisi-di-mercato/luglio-2023-auto-elettriche-italia-avanti-piano-mentre-leuropa-vola-i-dati-a-confronto/
-    # https://www.motus-e.org/analisi_di_mercato/
-
-    import httplib2
-    from bs4 import BeautifulSoup, SoupStrainer
-    from urllib.request import Request, urlopen
-    http = httplib2.Http()
-    import requests
-    import pandas as pd
-    import json
-    import re
-
-    ## --->> get link of MOTUSe (analisi di mercato @ Year to Date)
-    # status, response = http.request("https://www.motus-e.org/analisi_di_mercato/")
-
-    ### ---->> web scraping.... find the web text containing all the information about new vehicles
-    url = "https://www.motus-e.org/analisi_di_mercato/"
-    data = requests.get(url).text
-    soup = BeautifulSoup(data, 'html.parser')
-
-    ###------>>> find the all new registered passenger within the analisi di mercato on "Agosto 2023" ----- #####
-    # list_tags = []
-    tags = soup.find_all(attrs={'class': re.compile(r"^hero-news__title$")})
-    for tag in soup.find_all(attrs={'class': re.compile(r"^hero-news__title$")}):
-        print(tag)
-        # if any(element in str(tag) for element in "Settembre 2023".split()):
-        #    print("--------------->>> gotta!  <<<<<---------------")
-        #    list_tags.append(tag)
-
-    # for tag in list_tags:
-    # print(tag)
-    for t in tag:
-        link = t.get('href')
-        print(link)
-        # call get method to request that page
-        page = requests.get(link)
-        # with the help of beautifulSoup and html parser create soup
-        soup = BeautifulSoup(page.content, "html.parser")
-        # child_soup = soup.find_all(attrs={'class': re.compile(r"^title-number$")}) + soup.find_all(attrs={'class': re.compile(r"^number$")})  + soup.find_all(attrs={'class': re.compile(r"^title-section$")})
-        child_soup = soup.find_all(attrs={'class': re.compile(r"^container-numbers$")})
-
-    list_analysis = []
-
-    for i in child_soup:
-        if i:
-            list_analysis.append(i.text.strip())
-    print(list_analysis)
-
-    ### ---->>  find "BEV"
-    for element in list_analysis:
-        if "AUTO BEV" in element:
-            print("gotta!!!", element)
-            output = element.split('\n')
-            # ---> remove emmpty spaces
-            while ("" in output):
-                output.remove("")
-    if 'AUTO BEV' in output:
-        ## get index of the "AUTO BEV"
-        idx_BEV = output.index('AUTO BEV')
-        ## get VALUE of "AUTO BEV"
-        MOTUSe_BEV = output[idx_BEV + 1]
-        MOTUSe_BEV = MOTUSe_BEV.replace('.', "")
-        MOTUSe_BEV = int(MOTUSe_BEV)
-        print(MOTUSe_BEV)
-
-    ## -->> find total new vehicles ('Totale Auto')
-    for element in list_analysis:
-        if "Totale Auto" in element:
-            print("gotta!!!", element)
-            output = element.split('\n')
-            # ---> remove emmpty spaces
-            while ("" in output):
-                output.remove("")
-    if 'Totale Auto' in output:
-        ## get index of the "totale auto"
-        idx_totale_auto = output.index('Totale Auto')
-        ## get VALUE of "AUTO BEV"
-        MOTUSe_TOTALE_AUTO = output[idx_totale_auto + 1]
-        MOTUSe_TOTALE_AUTO = MOTUSe_TOTALE_AUTO.replace('.', "")
-        MOTUSe_TOTALE_AUTO = int(MOTUSe_TOTALE_AUTO)
-        print(MOTUSe_TOTALE_AUTO)
-
-    #### ---- >> get data from plot about PHEV, HEV, Mild Hybrid and sum results ----- ########
-
-    child_soup_chart = soup.find_all(attrs={'class': re.compile(r"^fusion-chart-dataset$")})
-
-    ###############################################
-    ### ---->>  find "PHEV"------##################
-    for element in child_soup_chart:
-        print(element)
-        element = str(element)
-        if "Ibrido Plug-in (PHEV)" in element:
-            print('---------- gotta!!:')
-            element_tag = element
-
-    ## ---> split element_tag by "data-values=
-    element_tag = re.split('data-values=', element_tag)
-    data_PHEV = element_tag[1]
-    ## --->> more splitting....
-    value = data_PHEV.split('|')
-
-    MOTUSe_PHEV = 0
-    for j in value:
-        # print(j)
-        string = str(j)
-        try:
-            record_PHEV = int(''.join(e for e in string if e.isnumeric()))
-        except ValueError:
-            print("skip value")
-        # print(record_PHEV)
-        MOTUSe_PHEV += record_PHEV
-        print(MOTUSe_PHEV)
-
-    #################################################
-    ### ---->>  find "hybrid"------##################
-
-    for element in child_soup_chart:
-        print(element)
-        element = str(element)
-        if "Ibrido" in element:
-            print('---------- gotta!!:')
-            element_tag = element
-
-    ## ---> split element_tag by "data-values=
-    element_tag = re.split('data-values=', element_tag)
-    data_HYBRID = element_tag[1]
-    ## --->> more splitting....
-    value = data_HYBRID.split('|')
-
-    MOTUSe_HYBRID = 0
-    for j in value:
-        print(j)
-        string = str(j)
-        try:
-            record_HYBRID = int(''.join(e for e in string if e.isnumeric()))
-            MOTUSe_HYBRID += record_HYBRID
-            print(MOTUSe_HYBRID)
-        except ValueError:
-            print("skip value")
-
-    #######################################################
-    ### ---->>  find " mild hybrid"------##################
-
-    for element in child_soup_chart:
-        print(element)
-        element = str(element)
-        if "Mild Hybrid" in element:
-            print('---------- gotta!!:')
-            element_tag = element
-
-    ## ---> split element_tag by "data-values=
-    element_tag = re.split('data-values=', element_tag)
-    data_MILD_HYBRID = element_tag[1]
-    ## --->> more splitting....
-    value = data_MILD_HYBRID.split('|')
-
-    MOTUSe_MILD_HYBRID = 0
-    for j in value:
-        print(j)
-        string = str(j)
-        try:
-            record_MILD_HYBRID = int(''.join(e for e in string if e.isnumeric()))
-            MOTUSe_MILD_HYBRID += record_MILD_HYBRID
-            print(MOTUSe_MILD_HYBRID)
-        except ValueError:
-            print("skip value")
-
-    MOTUSe_HYBRID = MOTUSe_HYBRID + MOTUSe_MILD_HYBRID
-    print(MOTUSe_HYBRID)
-
-    ########################################################################################################
-    ##### ------------ CHARGING POINTS ------------------------- ###########################################
-
-    child_soup_charging_data = soup.find_all(attrs={'class': re.compile(
-        r"^fusion-button button-flat fusion-button-default-size button-default button-2 fusion-button-default-span fusion-button-default-type$")})
-    current_year = selected_IEA_year
-
-    for t in child_soup_charging_data:
-        link_charging_points = t.get('href')
-        print(link_charging_points)
-        resp = requests.get(link_charging_points)
-        ## save .xlsx file
-        output = open(path_app + "/static/charging_points_MOTUSe.xls", 'wb')
-        output.write(resp.content)
-        output.close()
-
-    ## open file
-    charging_points_MOTUSe = pd.read_excel(path_app + 'static/charging_points_MOTUSe.xls',
-                                           sheet_name='Potenza Infrastrutture')
-
-    charging_less_3_7_AC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == '≤ 3,7 (AC)'].iloc[0]
-
-    charging_within_3_7_7_AC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == '3,7 < P ≤ 7 (AC)'].iloc[
-        0]
-    charging_within_7_22_AC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == '7 < P ≤ 22 (AC)'].iloc[0]
-    charging_within_3_7_22_AC = charging_within_3_7_7_AC + charging_within_7_22_AC
-
-    charging_within_22_43_AC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == '22 < P ≤ 43 (AC)'].iloc[
-        0]
-
-    charging_within_43_50_DC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == '43 < P ≤ 50 (DC)'].iloc[
-        0]
-
-    charging_within_50_99_DC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == '50 < P ≤99 (DC)'].iloc[0]
-    charging_within_99_150_DC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == '99 < P ≤150 (DC)'].iloc[
-        0]
-    charging_larger_150_DC = charging_points_MOTUSe.Punti[charging_points_MOTUSe.Potenze == 'P > 150 (DC)'].iloc[0]
-    charging_within_50_350_DC = charging_within_50_99_DC + charging_within_99_150_DC + charging_larger_150_DC
-
-    MOTUSe_charging_points = {
-        'type_a': ['AC Level 1 Chargers', 'AC Level 2 Chargers', 'AC Fast Chargers', 'DC Fast Chargers',
-                   'Tesla Superchargers',
-                   'Ultrafast-High power chargers', 'Inductive Chargers'],
-        'type_b': ['AC charging (<= 3.7 kW)', 'AC charging  (>3.7 kW, <= 22 kW)', 'AC charging (43 kW)',
-                   'DC charging (<= 50 kW)',
-                   'DC charging (> 120kW- 250kW)', 'DC charging (> 50 kW and <= 350 kW)', 'EM charging'],
-        'number': [charging_less_3_7_AC,
-                   charging_within_3_7_22_AC,
-                   charging_within_22_43_AC,
-                   charging_within_43_50_DC,
-                   0,
-                   charging_within_50_350_DC,
-                   0],
-        'year': [current_year, current_year, current_year, current_year, current_year, current_year, current_year]}
-    MOTUSe_charging_points = pd.DataFrame(MOTUSe_charging_points)
-
-    ###------------#############################################
-    ##--- charging points from EAFO --- ########################
-    ############################################################
-
-    import httplib2
-    from bs4 import BeautifulSoup, SoupStrainer
-    from urllib.request import Request, urlopen
-    http = httplib2.Http()
-    import requests
-    import pandas as pd
-    import json
-    import re
-
-    ### ---->> web scraping.... find the web text containing all the information about update infrastructucture of AC & DC charging points
-    url = "https://alternative-fuels-observatory.ec.europa.eu/transport-mode/road/italy/infrastructure"
-    data = requests.get(url).text
-    soup = BeautifulSoup(data, 'html.parser')
-
-    ##------->> AC Charging points -----------#######################
-
-    ###------>>> find the all AC public RECHARGINH POINTS ----- #####
-    list_tags = []
-    tags = soup.find_all("script", type='application/json')
-    for tag in soup.find_all("script", type='application/json'):
-        print(tag)
-        if any(element in str(tag) for element in "ac_public_recharging_points_afir.csv".split()):
-            print("--------------->>> gotta!  <<<<<---------------")
-            list_tags.append(tag)
-
-    for tag in list_tags:
-        # print(tag)
-        for t in tag:
-            res = json.loads(t)
-            # print(res)
-            keysList = list(res.keys())
-            # print(keysList)
-            ### get data links for .csv files to download for AC PUblic RECHARGING POINTS
-            url = res['dataset']['source']
-            print(url)
-            ## download data
-            file_name = res['data']['labels']['csvExportName']
-            print(file_name)
-            resp = requests.get(url)
-            ## create a new empty file .excel
-            output = open(path_app + "static/" + file_name, 'wb')
-            output.write(resp.content)
-            output.close()
-
-    year = selected_IEA_year
-    EAFO_AC_Recharging_data = pd.read_csv(path_app + 'static/ac_public_recharging_points_afir.csv')
-    EAFO_AC_Recharging_data = EAFO_AC_Recharging_data[EAFO_AC_Recharging_data['YEAR'] == year]
-
-    EAFO_AC_less_7_4kw = EAFO_AC_Recharging_data['Slow AC recharging point, single-phase (P < 7.4kW)'].iloc[0]
-    EAFO_AC_within_7_and_22kw = EAFO_AC_Recharging_data['Medium-speed AC recharging point, triple-phase (7.4kW ≤ P ≤ 22kW)'].iloc[0]
-    EAFO_AC_larger_22kw = EAFO_AC_Recharging_data['Fast AC recharging point, triple-phase (P > 22kW)'].iloc[0]
-
-    ##------->> DC charging points ----- ############
-    ###------>>> find the all DC public RECHARGINH POINTS ----- #####
-    list_tags = []
-    tags = soup.find_all("script", type='application/json')
-    for tag in soup.find_all("script", type='application/json'):
-        print(tag)
-        if any(element in str(tag) for element in "dc_public_recharging_points_afir.csv".split()):
-            print("--------------->>> gotta!  <<<<<---------------")
-            list_tags.append(tag)
-
-    for tag in list_tags:
-        # print(tag)
-        for t in tag:
-            res = json.loads(t)
-            # print(res)
-            keysList = list(res.keys())
-            # print(keysList)
-            ### get data links for .csv files to download for DC PUblic RECHARGING POINTS
-            url = res['dataset']['source']
-            print(url)
-            ## download data
-            file_name = res['data']['labels']['csvExportName']
-            print(file_name)
-            resp = requests.get(url)
-            ## create a new empty file .excel
-            output = open(path_app + "static/" + file_name, 'wb')
-            output.write(resp.content)
-            output.close()
-
-    EAFO_DC_Recharging_data = pd.read_csv(path_app + 'static/dc_public_recharging_points_afir.csv')
-    EAFO_DC_Recharging_data = EAFO_DC_Recharging_data[EAFO_DC_Recharging_data['YEAR'] == year]
-
-    EAFO_DC_less_50kw = EAFO_DC_Recharging_data['Slow DC recharging point (P < 50kW)'].iloc[0]
-    EAFO_DC_within_50_and_150kw = EAFO_DC_Recharging_data['Fast DC recharging point (50kW ≤ P < 150kW)'].iloc[0]
-    EAFO_DC_within_150_and_350kw = EAFO_DC_Recharging_data['Level 1 - Ultra-fast DC recharging point (150kW ≤ P < 350kW)'].iloc[0]
-    EAFO_AC_larger_350kw = EAFO_DC_Recharging_data['Level 2 - Ultra-fast DC recharging point (P ≥ 350kW)'].iloc[0]
-
-    
-    ############################################################################################################
-    #######------ TESLA SUPERCHARGERS  (DC charging (> 120kW- 250kW) ------------###############################
-    ############################################################################################################
-
-    ## read json file from this link
-    # https://supercharge.info/service/supercharge/allSites
-
-    import requests
-    import json
-
-    link_TESLSA_superchargers_allSites = "https://supercharge.info/service/supercharge/allSites"
-    link = link_TESLSA_superchargers_allSites
-    f = requests.get(link)
-    open(path_app + "static/TESLA_superchargers_allSites.json", "wb").write(f.content)
-
-    with open(path_app + 'static/TESLA_superchargers_allSites.json', encoding='utf-8') as inputfile:
-        df_TESLA_superchargers_all = pd.read_json(inputfile)
-
-    df_TESLA_superchargers_all.to_csv(path_app + 'static/TESLA_superchargers_allSites.csv', encoding='utf-8',
-                                      index=False)
-
-    count = 0
-    TESLA_charging_points = 0
-    data_chargers_TESLA = df_TESLA_superchargers_all['address']
-    for i in range(len(data_chargers_TESLA)):
-        # print(AAA.iloc[i])
-        dict = data_chargers_TESLA.iloc[i]
-        ## read the field 'Country'
-        dict.keys()
-        if dict['country'] == 'Italy':
-            count = count + 1
-            print("gotta")
-            print(dict['country'])
-            # print(i)
-            ## get the number of charging points or "Stalls"
-            charging_points = df_TESLA_superchargers_all[['stallCount']].iloc[i][0]
-            # print(charging_points)
-            TESLA_charging_points = TESLA_charging_points + charging_points
-    print("TESLA CHARGING POINTS: ", TESLA_charging_points)
-
-    ############################################################################################################
-    ############################################################################################################
-
-
-    ###---////////////////------/////////////////////////////////////////////////----####
-    ####----->>> make averages of Charging point infrastructure between EAFO and MOTUS-e
-
-    from statistics import mean, median
-
-    all_charging_within_3_7_22_AC = median([charging_within_3_7_22_AC, (EAFO_AC_less_7_4kw + EAFO_AC_within_7_and_22kw)])
-    all_charging_within_22_43_AC = median([charging_within_22_43_AC, EAFO_AC_larger_22kw])
-
-    all_charging_within_50_350_DC = median([charging_within_50_350_DC, (EAFO_DC_within_50_and_150kw + EAFO_DC_within_150_and_350kw)])
-
-    new_charging_points = {
-        'type_a': ['AC Level 1 Chargers', 'AC Level 2 Chargers', 'AC Fast Chargers', 'DC Fast Chargers',
-                   'Tesla Superchargers',
-                   'Ultrafast-High power chargers', 'Inductive Chargers'],
-        'type_b': ['AC charging (<= 3.7 kW)', 'AC charging  (>3.7 kW, <= 22 kW)', 'AC charging (43 kW)',
-                   'DC charging (<= 50 kW)',
-                   'DC charging (> 120kW- 250kW)', 'DC charging (> 50 kW and <= 350 kW)', 'EM charging'],
-        'number': [charging_less_3_7_AC,
-                   all_charging_within_3_7_22_AC,
-                   all_charging_within_22_43_AC,
-                   charging_within_43_50_DC,
-                   TESLA_charging_points,
-                   all_charging_within_50_350_DC,
-                   0],
-        'year': [current_year, current_year, current_year, current_year, current_year, current_year, current_year]}
-    new_charging_points = pd.DataFrame(new_charging_points)
-
-    ###---->> load previous charging points data
-    previous_charging_data = pd.read_csv(path_app + 'static/Total_Chargers_2021_2022.csv')
-    previous_charging_data = previous_charging_data[['type_a', 'type_b', 'number', 'year']]
-
-    ## concatenate new data with previsou data
-    NEW_charging_data = pd.concat([previous_charging_data, new_charging_points])
-    ## remove all "nan" values
-    NEW_charging_data = NEW_charging_data.fillna("")
-    ## Save data to .csv file
-    NEW_charging_data.to_csv(path_app + 'static/NEW_charging_data_YTD.csv')
-
-    #########################################################################################################
-    #########################################################################################################
-    ### /////////////// ---- make AVERAGES -------------- ////////////////////////////#######################
-
-    ## average all available data as for "YEAR TO DATE"
-
-    from statistics import mean, median
-
-    ### --- EVs ------ #######
-    mean_passenger_EV = median([new_EV_vehicles_ACEA,  new_EV_vehicles_ANFIA, Elettriche__UNRAE_BEV,  EV_EAFO])
-    mean_buses_minibuses_EV = median([new_EV_BUSES_ACEA])
-    mean_light_commercial_EV = median([new_EV_LIGHT_COMMERCIAL_ACEA, EV_light_commercial_vehicles_EAFO])
-    mean_medium_and_heavy_commercial_EV = median([new_EV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA])
-
-    ### --- HEVs ------ ########
-    mean_passenger_HEV = median([new_HEV_vehicles_ACEA,  new_HEV_vehicles_ANFIA, Ibride_Elettriche_UNRAE_HEV, MOTUSe_HYBRID])
-    mean_buses_minibuses_HEV = median([new_HEV_BUSES_ACEA])
-    mean_light_commercial_HEV = median([new_HEV_LIGHT_COMMERCIAL_ACEA])
-    mean_medium_and_heavy_commercial_HEV = median([new_HEV_MEDIUM_AND_HEAVY_COMMERCIAL_ACEA])
-
-    ### --- PHEVs ------ #######
-    mean_passenger_PHEV = median(
-        [new_PHEV_vehicles_ACEA, new_PHEV_vehicles_ANFIA, PlugIn_Elettriche_UNRAE_PHEV, PHEV_EAFO, MOTUSe_PHEV])
-    try:
-        mean_buses_minibuses_PHEV = median([])
-    except:
-        mean_buses_minibuses_PHEV = ''
-
-    mean_light_commercial_PHEV = median([PHEV_light_commercial_vehicles_EAFO])
-
-    try:
-        mean_medium_and_heavy_commercial_PHEV = median([])
-    except:
-        mean_medium_and_heavy_commercial_PHEV = ''
-
-    ### --- FCs ------ #######
-    mean_passenger_FC = median([new_HYDROGEN_vehicles_ANFIA, Fuel_Cell_Hydrogen_UNRAE_FCEV, FC_EAFO])
-
-    try:
-        mean_buses_minibuses_FC = median([])
-    except:
-        mean_buses_minibuses_FC = ''
-    mean_light_commercial_FC = median([FC_light_commercial_vehicles_EAFO])
-
-    try:
-        mean_medium_and_heavy_commercial_FC = median([])
-    except:
-        mean_medium_and_heavy_commercial_FC = ''
-
-    current_year = '2023'
-    # Create DataFrame
-    total_sale_current_year = {'Type': ['EVs', 'HEVs', 'PHEVs', 'FCs'],
-                               'Electric bike': ['', '', '', ''],
-                               'Electric moped (<50 kmph)': ['', '', '', ''],
-                               'Auto-rickshaw': ['', '', '', ''],
-                               'Motorcycle': ['', '', '', ''],
-                               'Motorcycle with sidecar': ['', '', '', ''],
-                               'Motorized tricycle': ['', '', '', ''],
-                               'Passenger vehicles': [mean_passenger_EV, mean_passenger_HEV, mean_passenger_PHEV,
-                                                      mean_passenger_FC],
-                               'Buses and Minibuses': [mean_buses_minibuses_EV, mean_buses_minibuses_HEV,
-                                                       mean_buses_minibuses_PHEV, mean_buses_minibuses_FC],
-                               'Light Commercial vehicles': [mean_light_commercial_EV, mean_light_commercial_HEV,
-                                                             mean_light_commercial_PHEV,
-                                                             mean_medium_and_heavy_commercial_FC],
-                               'Medium and Heavy Weight Trucks': [mean_medium_and_heavy_commercial_EV,
-                                                                  mean_medium_and_heavy_commercial_HEV,
-                                                                  mean_medium_and_heavy_commercial_PHEV,
-                                                                  mean_medium_and_heavy_commercial_FC],
-                               'year': [current_year, current_year, current_year, current_year]}
-    df_total_sale_current_year = pd.DataFrame(total_sale_current_year)
-
-    ##################################################################################
-    ##### ---------->>> load previous YEARLY data and merge with new data ------ #####
-
-    previous_new_registration_data = pd.read_csv(path_app + 'static/Total_sales_2021_2022.csv')
-
-    previous_new_registration_data = previous_new_registration_data[['x', 'Electric bike', 'Electric moped (<50 kmph)',
-                                                                     'Auto-rickshaw', 'Motorcycle',
-                                                                     'Motorcycle with sidecar',
-                                                                     'Motorized tricycle', 'Passenger vehicles',
-                                                                     'Buses and Minibuses',
-                                                                     'Light Commercial vehicles',
-                                                                     'Medium and Heavy Weight Trucks', 'year']]
-    previous_new_registration_data.columns = ['Type', 'Electric bike', 'Electric moped (<50 kmph)',
-                                              'Auto-rickshaw', 'Motorcycle', 'Motorcycle with sidecar',
-                                              'Motorized tricycle', 'Passenger vehicles', 'Buses and Minibuses',
-                                              'Light Commercial vehicles', 'Medium and Heavy Weight Trucks', 'year']
-
-    previous_total_fleet_data = pd.read_csv(path_app + 'static/Fleets_total_2021_2022.csv')
-    previous_total_fleet_data = previous_total_fleet_data[['x', 'Electric bike', 'Electric moped (<50 kmph)',
-                                                                     'Auto-rickshaw', 'Motorcycle',
-                                                                     'Motorcycle with sidecar',
-                                                                     'Motorized tricycle', 'Passenger vehicles',
-                                                                     'Buses and Minibuses',
-                                                                     'Light Commercial vehicles',
-                                                                     'Medium and Heavy Weight Trucks', 'year']]
-    previous_total_fleet_data.columns = ['Type', 'Electric bike', 'Electric moped (<50 kmph)',
-                                              'Auto-rickshaw', 'Motorcycle', 'Motorcycle with sidecar',
-                                              'Motorized tricycle', 'Passenger vehicles', 'Buses and Minibuses',
-                                              'Light Commercial vehicles', 'Medium and Heavy Weight Trucks', 'year']
-
-
-
-    ## concatenate new data with previsou data
-    NEW_registrations = pd.concat([previous_new_registration_data, df_total_sale_current_year])
-    ## remove all "nan" values
-    NEW_registrations = NEW_registrations.fillna("")
-    NEW_registrations.to_csv(path_app + 'static/NEW_registrations_YTD.csv')
-
-    ## remove all "nan" values
-    NEW_total_fleets = previous_total_fleet_data.fillna("")
-    NEW_total_fleets.to_csv(path_app + 'static/NEW_total_fleets.csv')
-
-    datum_IEA_month = [{
-        'IEA_year': selected_IEA_year,
-        'IEA_month': selected_IEA_month
-    }]
-
-    return render_template("index_IEA_stats_month.html", datum_IEA_month=datum_IEA_month)
-
-
-
-
-@app.route('/IEA_STATS_show/', methods=['GET', 'POST'])
-def IEA_STATS_prova():
-
-    import pandas as pd
-    import numpy as np
-
-
-    #### ---- NEW REGISTRATIONS ------ ##########################################################################
-    #############################################################################################################
-    NEW_registrations_new = pd.read_csv(path_app + 'static/NEW_registrations_YTD.csv',
-                                        usecols=['Type', 'Electric bike', 'Electric moped (<50 kmph)',
-                                                 'Auto-rickshaw', 'Motorcycle', 'Motorcycle with sidecar',
-                                                 'Motorized tricycle', 'Passenger vehicles', 'Buses and Minibuses',
-                                                 'Light Commercial vehicles', 'Medium and Heavy Weight Trucks', 'year'])
-
-    NEW_registrations_new = NEW_registrations_new.fillna("")
-    NEW_registrations_new['year'] = NEW_registrations_new.year.astype(object)
-
-    ## ------>> gather data
-    NEW_registrations = pd.melt(NEW_registrations_new, id_vars=['Type', 'year'])
-    NEW_registrations.columns = ['Type', 'year', 'vehicle_type', 'records']
-    ## remove none values in the "record" column
-    NEW_registrations['records'].replace('', np.nan, inplace=True)
-    NEW_registrations.dropna(subset=['records'], inplace=True)
-    NEW_registrations = NEW_registrations.reset_index(drop=True)
-    NEW_registrations['records'] = NEW_registrations.records.astype('int')
-
-    ##############################################################################################################
-    ############ ----------------------------------------------------------------------------- ###################
-
-    #### ---- NEW TOTAL FLEETS ------ ###########################################################################
-    #############################################################################################################
-    NEW_total_fleets = pd.read_csv(path_app + 'static/NEW_total_fleets.csv',
-                                        usecols=['Type', 'Electric bike', 'Electric moped (<50 kmph)',
-                                                 'Auto-rickshaw', 'Motorcycle', 'Motorcycle with sidecar',
-                                                 'Motorized tricycle', 'Passenger vehicles', 'Buses and Minibuses',
-                                                 'Light Commercial vehicles', 'Medium and Heavy Weight Trucks', 'year'])
-
-    NEW_total_fleets = NEW_total_fleets.fillna("")
-    NEW_total_fleets['year'] = NEW_total_fleets.year.astype(object)
-
-    ## ------>> gather data
-    NEW_total_fleets = pd.melt(NEW_total_fleets, id_vars=['Type', 'year'])
-    NEW_total_fleets.columns = ['Type', 'year', 'vehicle_type', 'records']
-    ## remove none values in the "record" column
-    NEW_total_fleets['records'].replace('', np.nan, inplace=True)
-    NEW_total_fleets.dropna(subset=['records'], inplace=True)
-    NEW_total_fleets = NEW_total_fleets.reset_index(drop=True)
-    NEW_total_fleets['records'] = NEW_total_fleets.records.astype('int')
-
-
-
-    from plotnine import ggplot, aes, geom_line
-    from plotnine.data import mpg
-    from plotnine import ggplot, aes, geom_point, theme_bw, facet_grid, geom_bar, guides, theme, element_text, element_blank, ylab, ylim, geom_text, ggtitle, position_nudge, geom_label
-    import matplotlib.pyplot as plt
-    import matplotlib
-    matplotlib.use('agg')
-    from ipywidgets import interact
-
-    dpi = 96
-
-    ## ---->>> NEW Registrations -----------------------------------------------------------------------------------
-    q_new_registrations = ggplot(data=NEW_registrations) + aes(x='vehicle_type', y='records', fill='vehicle_type') + \
-        theme_bw() + \
-        facet_grid('year ~ Type', scales='free_x', space='free') + \
-        geom_bar(stat="identity") + \
-        theme(strip_text_x=element_text(size=12, colour="black")) + \
-        theme(strip_text_y=element_text(size=12, colour="black")) + \
-        guides(fill=False) + \
-        theme(axis_text_x=element_text(angle=65, hjust=1, vjust=1, size=12)) + \
-        theme(axis_text_x=element_text(size=12, face="bold", colour="black")) + \
-        theme(axis_title_x=element_blank()) + \
-        ylab("number of vehicles") + \
-        ylim(0, 700000) + \
-        theme(axis_title_y=element_text(face="bold", colour="black", size=14),
-              axis_text_y=element_text(angle=0, vjust=0.5, size=12, colour="black")) + \
-        geom_text(aes(label="records"), size=9, ha='center', va='center', nudge_y=50000, angle=0) + \
-        ggtitle("Total Sales (2021 --> 2023)") + \
-        theme(plot_title=element_text(lineheight=.8, face="bold", size=15))
-
-    q_new_registrations.save(path_app + "static/NEW_registrations_IEA.png", width= 12, height= 8 ,dpi = dpi)
-
-    ##### ---------------------- ######################
-    #### ---->> total fleets --------------------------
-    q_new_total_fleets = ggplot(data=NEW_total_fleets) + aes(x='vehicle_type', y='records', fill='vehicle_type') + \
-                          theme_bw() + \
-                          facet_grid('year ~ Type', scales='free_x', space='free') + \
-                          geom_bar(stat="identity") + \
-                          theme(strip_text_x=element_text(size=12, colour="black")) + \
-                          theme(strip_text_y=element_text(size=12, colour="black")) + \
-                          guides(fill=False) + \
-                          theme(axis_text_x=element_text(angle=65, hjust=1, vjust=1, size=12)) + \
-                          theme(axis_text_x=element_text(size=12, face="bold", colour="black")) + \
-                          theme(axis_title_x=element_blank()) + \
-                          ylab("number of vehicles") + \
-                          ylim(0, 1700000) + \
-                          theme(axis_title_y=element_text(face="bold", colour="black", size=14),
-                                axis_text_y=element_text(angle=0, vjust=0.5, size=12, colour="black")) + \
-                          geom_text(aes(label="records"), size=9, ha='center', va='center', nudge_y=80000, angle=0) + \
-                          ggtitle("Total Fleets (2021 --> 2022)") + \
-                          theme(plot_title=element_text(lineheight=.8, face="bold", size=15))
-
-    q_new_total_fleets.save(path_app + "static/NEW_total_fleets_IEA.png", width=12, height=8, dpi=dpi)
-
-    #####################################################
-    ######## charging points ----------------------------
-
-    NEW_charging_points = pd.read_csv(path_app + 'static/NEW_charging_data_YTD.csv',
-                                      usecols=['type_a', 'type_b', 'number', 'year'])
-    NEW_charging_points = NEW_charging_points.fillna("")
-    NEW_charging_points['year'] = NEW_charging_points.year.astype(object)
-
-    from plotnine import facet_wrap
-
-    qq = ggplot(data=NEW_charging_points) + aes(x='type_b', y='number', fill='type_b') + \
-         theme_bw() + \
-         facet_wrap('year', scales='free_x') + \
-         geom_bar(stat="identity") + \
-         theme(strip_text_x=element_text(size=12, colour="black")) + \
-         theme(strip_text_y=element_text(size=12, colour="black")) + \
-         guides(fill=False) + \
-         theme(axis_text_x=element_text(angle=65, hjust=1, vjust=1, size=10)) + \
-         theme(axis_text_x=element_text(size=10, face="bold", colour="black")) + \
-         theme(axis_title_x=element_blank()) + \
-         ylab("number of vehicles") + \
-         ylim(0, 40000) + \
-         theme(axis_title_y=element_text(face="bold", colour="black", size=14),
-               axis_text_y=element_text(angle=0, vjust=0.5, size=12, colour="black")) + \
-         geom_text(aes(label="number"), size=9, ha='center', va='center', nudge_y=1000, angle=0) + \
-         ggtitle("Number of Charging outlets (2021 --> 2023)") + \
-         theme(plot_title=element_text(lineheight=.8, face="bold", size=15))
-
-    qq.save(path_app + "static/NEW_charging_points.png", width=12, height=8, dpi=dpi)
-
-    return render_template("index_IEA_stats_month.html")
-    
-    
-
-
+  
 #######################################################################################################
 #######################################################################################################
 ############# ----------- SIMULATE Origin ---> Destination PATH for private Vehicles ---- #############
 ###########////////////////////////////////////////////////////////////////////////////////############
-
-# https://www.tutorialspoint.com/how-to-get-the-longitude-and-latitude-of-a-city-using-python
-
-"""
-from geopy.geocoders import Nominatim
-geolocator = Nominatim(user_agent="MyApp")
-location = geolocator.geocode("via degli aceri bracciano roma")
-print("The latitude of the location is: ", location.latitude)
-print("The longitude of the location is: ", location.longitude)
-"""
 
 
 
@@ -17693,856 +13904,6 @@ def OD_path_vehicle_select():
 #####----- CONNECTION SCAN ALGORITHM (CSA) ----------------------------------------###############################
 ##################################################################################################################
 
-
-
-@app.route('/plan_trip_CSA/', methods=['GET', 'POST'])
-def plan_trip_CSA():
-    return render_template("index_OD_path_TPL_names.html")
-
-
-
-
-##--->>>*** insert the NAME of THE LOCATION as ORIGIN
-@app.route('/insert_ORIGIN_name_CSA/', methods=['GET', 'POST'])
-def insert_ORIGIN_name_CSA():
-
-    session["name_ORIGIN_location"] = request.form.get("name_ORIGIN_location")
-    print("name---->:", session["name_ORIGIN_location"])
-    from geopy.geocoders import Nominatim
-    geolocator = Nominatim(user_agent="MyApp")
-    geolocator = Nominatim(user_agent="my_request")
-    try:
-        location = geolocator.geocode(session["name_ORIGIN_location"] + ",Roma Capitale, Lazio, 00187, Italia")
-    except:
-        location = geolocator.geocode(session["name_ORIGIN_location"] + ",Roma Capitale, Lazio, Italia")
-    print("----ORIGIN LOCATION:", location)
-    if location == None:
-        abort(404)
-
-
-    """
-    loc = 'Viale Giuseppe Mazzini, Roma, Roma Capitale, Lazio, 00195, Italia'
-    loc = 'Viale Giuseppe Mazzini, Roma, Roma Capitale, Lazio, 00187, Italia'
-    loc = 'Via del corso 10, Roma, Roma Capitale, Lazio, 00187, Italia'
-    loc = 'Via del corso 10, Roma, Roma Capitale, Lazio, Italia'
-    # applying geocode method to get the location
-    location = geolocator.geocode(loc)
-    # printing address and coordinates
-    print(location.address)
-    """
-
-    print("-----------The latitude of the ORIGIN location is: ", location.latitude)
-    print("-----------The longitude of the ORIGIN location is: ", location.longitude)
-    session["lat_ORIGIN"] = location.latitude
-    session["lon_ORIGIN"] = location.longitude
-    print("lat_ORIGIN, lon_ORIGIN:", session["lat_ORIGIN"], session["lon_ORIGIN"])
-
-    ## make a .geojson file with the ORIGIN location POINT (see below...)
-    df_ORIGIN_point = pd.DataFrame({'latitude': [session["lat_ORIGIN"]],
-                                    'longitude':[session["lon_ORIGIN"]]
-                                    })
-
-    ####-----> make a Geodataframe....with ORIGIN POINT
-    geometry = [Point(xy) for xy in zip(df_ORIGIN_point.longitude, df_ORIGIN_point.latitude)]
-    crs = {'init': 'epsg:4326'}
-    gdf_df_ORIGIN_point = GeoDataFrame(df_ORIGIN_point, crs=crs, geometry=geometry)
-    ## transform geodataframeo into .geojson
-    ORIGIN_point_json = gdf_df_ORIGIN_point.to_json()
-    # print("ORIGIN_point_json:", ORIGIN_point_json)
-
-    data_location_ORIGIN_TPL = [{
-        'Origin': session["name_ORIGIN_location"],
-        'Destination': '--choose destination--'
-    }]
-
-    session["ORIGIN_point"] = ORIGIN_point_json
-    # print(session["ORIGIN_point"])
-
-    return render_template("index_OD_path_TPL_ORIGIN_point.html",
-                           data_location_ORIGIN_TPL=data_location_ORIGIN_TPL,
-                           session_ORIGIN_point=session["ORIGIN_point"])
-
-
-
-##à--->>>*** insert the NAME of THE LOCATION as DESTINATION
-@app.route('/insert_DESTINATION_name_CSA/', methods=['GET', 'POST'])
-def insert_DESTINATION_name_CSA():
-    if request.method == "POST":
-        try:
-            name_ORIGIN_location = session["name_ORIGIN_location"]
-            print("name_ORIGIN_location:", name_ORIGIN_location)
-        except AttributeError:
-            abort(404)
-
-        session["name_DESTINATION_location"] = request.form.get("name_DESTINATION_location")
-        print("name---->:", session['name_DESTINATION_location'])
-        from geopy.geocoders import Nominatim
-        geolocator = Nominatim(user_agent="MyApp")
-        try:
-            location = geolocator.geocode(session["name_DESTINATION_location"] + ",Roma Capitale, Lazio, 00187, Italia")
-        except:
-            location = geolocator.geocode(session["name_DESTINATION_location"] + ",Roma Capitale, Lazio, Italia")
-        print("----DESTINATION LOCATION:", location)
-        if location == None:
-          abort(404)
-        print("-----------The latitude of the DESTINATION location is: ", location.latitude)
-        print("-----------The longitude of the DESTINATION location is: ", location.longitude)
-
-        session["lat_DESTINATION"] = location.latitude
-        session["lon_DESTINATION"] = location.longitude
-        print("lat_DESTINATION, lon_DESTINATION:", session["lat_DESTINATION"], session["lon_DESTINATION"])
-
-        ## make a .geojson file with the DESTINATION location POINT (see below...)
-        df_DESTINATION_point = pd.DataFrame({'latitude': [session["lat_DESTINATION"]],
-                                        'longitude': [session["lon_DESTINATION"]]
-                                        })
-
-        ####-----> make a Geodataframe....with ORIGIN POINT
-        geometry = [Point(xy) for xy in zip(df_DESTINATION_point.longitude, df_DESTINATION_point.latitude)]
-        crs = {'init': 'epsg:4326'}
-        gdf_df_DESTINATION_point = GeoDataFrame(df_DESTINATION_point, crs=crs, geometry=geometry)
-        ## transform geodataframeo into .geojson
-        DESTINATION_point_json = gdf_df_DESTINATION_point.to_json()
-        # print("ORIGIN_point_json:", ORIGIN_point_json)
-
-        ## make a .geojson file with the DESTINATION location POINT (see below...)
-
-        data_location_DESTINATION_TPL = [{
-            'Origin': session["name_ORIGIN_location"],
-            'Destination': session["name_DESTINATION_location"]
-        }]
-
-
-        session["DESTINATION_point"] = DESTINATION_point_json
-
-        session["gtfs"] = '2023_04_05'
-        print("-------- GTFS data file------------:", session["gtfs"])
-
-        return render_template("index_OD_path_TPL_DESTINATION_point.html",
-                               data_location_DESTINATION_TPL=data_location_DESTINATION_TPL,
-                               session_ORIGIN_point=session["ORIGIN_point"],
-                               session_DESTINATION_point=session["DESTINATION_point"],
-                               session_GTFS = session["gtfs"])  #
-
-
-
-
-
-
-
-@app.route('/GTFS_selector_CSA/', methods=['GET', 'POST'])
-def GTFS_selector_CSA():
-    if request.method == "POST":
-        ## declare a global variable
-
-        session["gtfs"] = '2023_04_05'
-        ## TRY if session exists
-        try:
-            session["gtfs"] = request.form.get("gtfs")
-            selected_GTFS_data = session["gtfs"]
-            print("selected_GTFS_data within session:", selected_GTFS_data)
-            selected_GTFS_data = str(selected_GTFS_data)
-        except:
-            session["gtfs"] = '2023_04_05'
-            selected_GTFS_data = session["gtfs"]
-            print("using stored variable: ", session["gtfs"])
-
-
-        print("selected_GTFS_data:", selected_GTFS_data)
-
-        path = path_app + "static/GTFS"
-        ## list all files in the directory
-        list_GTFS_files = listdir(path)
-
-        readable_day_GTFS = []
-        for element in list_GTFS_files:
-            # print(element)
-            year_GTFS = element[:4]
-            month_GTFS = element[4:6]
-            day_GTFS = element[6:9]
-            full_day_GTFS = year_GTFS + "_" + month_GTFS + "_" + day_GTFS
-            # print(full_day_GTFS)
-            readable_day_GTFS.append(full_day_GTFS)
-
-            ## ----->> make a dictionary (for each id GTFS file associate a date):
-            GTFS_dict = {}
-            keys = list(readable_day_GTFS)
-
-            for idx, u in  enumerate(keys):
-                # print(idx, u)
-                GTFS_dict[u] = list_GTFS_files[idx]
-
-
-        ## add empty element in front of the list
-        readable_day_GTFS.insert(0, 'select day (GTFS)')
-
-        ## save the list into a .txt file
-        with open(path_app + "static/GTFS_files.txt", "w") as file:
-            file.write(str(readable_day_GTFS))
-        with open(path_app +"static/GTFS_files.txt", "r+") as f:
-            old = f.read()  # read everything in the file
-            f.seek(0)  # rewind
-            f.write("var list_GTFS_files = \n" + old)  # assign the "var name" in the .geojson file
-
-
-        # selected_GTFS_data = "2023_01_23"
-        try:
-            day = GTFS_dict[selected_GTFS_data]
-        except KeyError:
-            day = "20230123"
-
-
-        # day = selected_GTFS_data
-        print("GTFS day:", selected_GTFS_data)
-        print("day:", day)
-
-
-        """
-        routes = pd.read_csv(path + '/' + day + '/' + 'routes.txt')  ## "route_id" is the "line"
-
-        ## list of all routes or trip_IDs
-        list_lines_routes = routes.route_short_name.values.tolist()
-        list_lines_routes.sort()
-        ## add empty element in front of the list
-        list_lines_routes.insert(0, 'select TPL line')
-
-        with open(path_app + "static/list_lines_routes_TPL.txt", "w") as file:
-            file.write(str(list_lines_routes))
-        with open(path_app + "static/list_lines_routes_TPL.txt", "r+") as f:
-            old = f.read()  # read everything in the file
-            f.seek(0)  # rewind
-            f.write("var list_lines_routes = \n" + old)  # assign the "var name" in the .geojson file
-        """
-
-        #### ---- retrieve ORIGIN - DESTINATION data --------------- ################################
-        try:
-            name_ORIGIN_location = session["name_ORIGIN_location"]
-            print("name_ORIGIN_location:", name_ORIGIN_location)
-        except AttributeError:
-            abort(404)
-
-        try:
-            name_DESTINATION_location = session["name_DESTINATION_location"]
-            print("name_DESTINATION_location:", name_DESTINATION_location)
-        except AttributeError:
-            abort(404)
-
-        # session["gtfs"] = '2023_04_05'
-        print("-------- GTFS data file------------:", session["gtfs"])
-
-        selected_year_GTFS = day[:4]
-        selected_month_GTFS = day[4:6]
-        selected_day_GTFS = day[6:9]
-        selected_CSA_day = selected_year_GTFS + "-" + selected_month_GTFS + "-" + selected_day_GTFS
-        session["CSA_day"] = selected_CSA_day
-
-        data_location_DESTINATION_TPL = [{
-            'Origin': session["name_ORIGIN_location"],
-            'Destination': session["name_DESTINATION_location"]
-        }]
-
-
-        datum_CSA_day = [{
-            'day': selected_CSA_day,
-            'hour': 'choose hour'
-        }]
-
-        return render_template("index_OD_path_TPL_DESTINATION_point_select_hour.html",
-                               datum_CSA_day=datum_CSA_day,
-                               session_ORIGIN_point=session["ORIGIN_point"],
-                               session_DESTINATION_point = session["DESTINATION_point"],
-                               data_location_DESTINATION_TPL=data_location_DESTINATION_TPL,
-                               session_GTFS = session["gtfs"],
-                               session_selected_CSA_day = session["CSA_day"])
-
-
-
-
-
-@app.route('/CSA_hour_selector/', methods=['GET', 'POST'])
-def CSA_hour_selector():
-    if request.method == "POST":
-
-        selected_CSA_hour = 7
-        selected_CSA_day = '2023-10-17'
-
-        try:
-            selected_CSA_day = session["CSA_day"]
-            print("selected_CSA_day:.....", selected_CSA_day)
-        except AttributeError:
-            abort(404)
-
-
-        session["CSA_hour"] = request.form["CSA_hour"]
-        print("selected_CSA_hour....:", session["CSA_hour"])
-        print("selected_CSA_day.....:", session["CSA_day"])
-        selected_CSA_hour = str(session["CSA_hour"])
-
-        #### ---- retrieve ORIGIN - DESTINATION data --------------- ################################
-        try:
-            name_ORIGIN_location = session["name_ORIGIN_location"]
-            print("name_ORIGIN_location:", name_ORIGIN_location)
-        except AttributeError:
-            abort(404)
-
-        try:
-            name_DESTINATION_location = session["name_DESTINATION_location"]
-            print("name_DESTINATION_location:", name_DESTINATION_location)
-        except AttributeError:
-            abort(404)
-
-        data_location_DESTINATION_TPL = [{
-            'Origin': session["name_ORIGIN_location"],
-            'Destination': session["name_DESTINATION_location"]
-        }]
-
-        datum_CSA_day = [{
-            'day': selected_CSA_day,
-            'hour': selected_CSA_hour
-        }]
-
-
-        return render_template("index_OD_path_TPL_DESTINATION_point_select_hour.html",
-                               session_ORIGIN_point=session["ORIGIN_point"],
-                               session_DESTINATION_point=session["DESTINATION_point"],
-                               data_location_DESTINATION_TPL=data_location_DESTINATION_TPL,
-                               datum_CSA_day=datum_CSA_day,
-                               selected_CSA_day=session["CSA_day"],
-                               selected_CSA_hour=session["CSA_hour"])
-
-
-
-
-
-
-
-
-@app.route('/OD_path_TPL_CSA/', methods=['GET', 'POST'])
-def OD_path_TPL_CSA():
-
-    from center_map import center, cost_assignment, get_pos
-    import time
-    import csa
-    from datetime import datetime
-    from prepare_timetable_GTFS import PreCsa
-
-    #########################################################
-    #########################################################
-
-    ###---->>> CREATE TIMETABLE FROM gtfs FILE
-    selected_CSA_day = session["CSA_day"]
-    selected_CSA_hour = session["CSA_hour"]
-    print("---------selected_CSA_day------------:", selected_CSA_day)
-    print("---------selected_CSA_hour------------:", selected_CSA_hour)
-
-    # selected_CSA_day = "2020-10-02"
-    # selected_CSA_hour = 9
-
-
-    if len(selected_CSA_day) == 8:
-        selected_GTFS_data = selected_CSA_day
-    else:
-        selected_year_GTFS = selected_CSA_day[:4]
-        selected_month_GTFS = selected_CSA_day[5:7]
-        selected_day_GTFS = selected_CSA_day[8:10]
-        selected_GTFS_data = selected_year_GTFS + selected_month_GTFS + selected_day_GTFS
-
-
-    session["CSA_day"] = selected_GTFS_data
-
-    # selected_GTFS_data = "20201002"
-    path = path_app + "static/GTFS/" + selected_GTFS_data + "/"
-    graph_path = path_app + "static/GTFS/gtfs_osmnet/"
-    fn = 'walknet_epgs4326.graphml'
-
-    ## create timetable (.csv file)
-    print(selected_GTFS_data)
-    body = PreCsa(path, graph_path, selected_GTFS_data)
-    # ----> a.path_graph=graph_path
-    try:
-        body.create_timetable()
-        # body.create_walkNetstopToStopDistance(800)    ###---> to do only once
-        # body.create_stopToStopDistance(800)           ###---> to do only once
-    except:
-        abort(404)
-
-
-    #######################################################################
-    #######################################################################
-
-    # deptime='09:30'
-    # selected_CSA_hour = "0:05"
-
-
-    hour = int(selected_CSA_hour.split(":")[0])
-    minutes = int(selected_CSA_hour.split(":")[1])
-    # selected_csa_hour = 9
-    # hour = 8
-    # min = 0
-    # sec = 0
-    total_seconds = hour * 60 * 60 + minutes * 60
-
-    def convert(seconds):
-        return time.strftime("%H:%M:%S", time.gmtime(seconds))
-
-    deptime = convert(total_seconds)
-
-    print("-----------selected_GTFS_data-------------:", session["CSA_day"])
-    print("-------------deptime-----------:", deptime)
-
-    ## retrieve Origin & Destiantion coordinates
-    lat_ORIGIN = session["lat_ORIGIN"]
-    lon_ORIGIN = session["lon_ORIGIN"]
-
-    lat_DESTINATION = session["lat_DESTINATION"]
-    lon_DESTINATION = session["lon_DESTINATION"]
-    
-    """
-    ## via Nicola Nisco 30, Roma
-    lat_ORIGIN = 41.8684964
-    lon_ORIGIN = 12.5191904
-
-    # via anguillarese 301,roma
-    lat_DESTINATION =  42.040126
-    lon_DESTINATION =  12.302037845479633
-    """
-
-    # print(lat_ORIGIN, lon_ORIGIN, lat_DESTINATION, lon_DESTINATION)
-
-    # lat_ORIGIN = 41.9053403
-    # lon_ORIGIN = 12.4785973
-    # lat_DESTINATION = 41.9011353
-    # lon_DESTINATION = 12.4993198
-
-    # selected_GTFS_data = "20230123"
-    try:
-        startLocation = [lat_ORIGIN, lon_ORIGIN]
-        endLocation = [lat_DESTINATION, lon_DESTINATION]
-
-        c = csa.Csa(path_app + "/static/GTFS/" + selected_GTFS_data + "/" , selected_GTFS_data)
-        c.load_timetable()
-        c.load_stops()
-        print('loading footpath between adjacent stops....')
-        print('loading stopToStop shape....')
-        print("---list of foothpaths-------")
-        # c.load_stopsfootpath()  ## do not use this...
-        c.load_walknetstopsfootpath()
-        c.run(startLocation, endLocation, deptime)
-        try:
-          c.showMapPath(startLocation, endLocation)
-        except:
-          abort(404)
-
-        TRAVEL_TIME = c.showMapPath(startLocation, endLocation)[0]
-        TRAVEL_SPEED = c.showMapPath(startLocation, endLocation)[1]
-        WALKING_DISTANCE = c.showMapPath(startLocation, endLocation)[2]
-        TRANSFERS = c.showMapPath(startLocation, endLocation)[3]
-        WAITING_TIME = c.showMapPath(startLocation, endLocation)[4]
-
-    except NameError:
-            abort(404)
-
-
-    ##################################################################################
-    #### build path on the map......
-    new_poline_list = []
-    # load "stop.txt"
-
-    stops = pd.read_csv(path_app + '/static/GTFS/' + selected_GTFS_data + '/' + 'stops.txt')
-    trips = pd.read_csv(path_app + '/static/GTFS/' + selected_GTFS_data + '/' + 'trips.txt')
-    shapes = pd.read_csv(path_app + '/static/GTFS/' + selected_GTFS_data + '/' + 'shapes.txt')
-
-    timetable = pd.read_csv(path_app + '/static/' + 'final_timetable.csv')
-
-    # for i in range(len(timetable)):
-    for element in timetable.itertuples(index=True):
-        print(element)
-        # if element.line_number =='MEA':
-        #    break
-        ###-->> check for FIRST walking path ----------------------------------------------------#################
-        ##########################################################################################################
-        if ((element.line_number == '1fp') & (element.trip_id == 'footpath')):
-            # first_footpath_start = '41.9411_12.4619'
-            first_footpath_start = element.stop1_code
-            x = first_footpath_start.split("_")
-            LAT_first_fp = float(x[0])
-            LON_first_fp = float(x[1])
-
-            stop_name = element.stop
-            stop2_code = str(element.stop2_code)
-
-            # stop_name = 'Orti Farnesina/Farnesina'
-            # LAT_next = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop_name + '(?:,\s|$)')]
-            LAT_next = stops[stops['stop_name'] == stop_name]
-            # LAT_next = stops[stops['stop_code']==stop2_code]['stop_lat']
-            LAT_next = stops[stops['stop_id'] == stop2_code]['stop_lat']
-            LAT_next = pd.DataFrame(LAT_next)
-            LAT_next = LAT_next.reset_index(drop=True)
-            LAT_next = LAT_next[['stop_lat']]
-            LAT_next = LAT_next['stop_lat'][0]
-            LAT_next = float(LAT_next)
-
-            # LON_next = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop_name + '(?:,\s|$)')]
-            LON_next = stops[stops['stop_name'] == stop_name]
-            # LON_next = stops[stops['stop_code']==stop2_code]['stop_lon']
-            LON_next = stops[stops['stop_id'] == stop2_code]['stop_lon']
-            LON_next = pd.DataFrame(LON_next)
-            LON_next = LON_next.reset_index(drop=True)
-            LON_next = LON_next[['stop_lon']]
-            LON_next = LON_next['stop_lon'][0]
-            LON_next = float(LON_next)
-
-            ext = 0.005
-
-            def polygon():
-                if (LAT_first_fp != LAT_next) & (LON_first_fp != LON_next):
-                    poly = Polygon([(min(LON_first_fp, LON_next) - ext, min(LAT_first_fp, LAT_next) - ext),
-                                    (max(LON_first_fp, LON_next) + ext, min(LAT_first_fp, LAT_next) - ext),
-                                    (max(LON_first_fp, LON_next) + ext, max(LAT_first_fp, LAT_next) + ext),
-                                    (min(LON_first_fp, LON_next) - ext, max(LAT_first_fp, LAT_next) + ext)])
-                    return poly
-
-
-
-            polygon()
-
-            grafo = ox.graph_from_polygon(polygon(), network_type='walk')
-            gdf_nodes, gdf_edges = ox.graph_to_gdfs(grafo)
-            ## get nearest node to the Origin & Destination points
-            nearest_node_ORIGIN, distance_ORIGIN = ox.nearest_nodes(grafo, LON_first_fp, LAT_first_fp,
-                                                                    return_dist=True)
-            nearest_node_DESTINATION, distance_DESTINATION = ox.nearest_nodes(grafo, LON_next,
-                                                                              LAT_next,
-                                                                              return_dist=True)
-            ## find shortest path
-            shortest_OD_walk = nx.shortest_path(grafo, nearest_node_ORIGIN,
-                                                nearest_node_DESTINATION,
-                                                weight='length')
-            ### associate lat, lon to each node
-            shortest_OD_walk_df = gdf_nodes.loc[shortest_OD_walk]
-            poline_walk_1sp = [[x, y] for (x, y) in zip(shortest_OD_walk_df.x, shortest_OD_walk_df.y)]
-            new_poline_list.append(poline_walk_1sp)
-
-        ###################################################################################################
-        ####-->> check for walking path.........LAST footpath.......................#######################
-        if ((element.line_number == 'lastfp') & (element.trip_id == 'footpath')):
-            stop_name = element.start
-            stop1_code = str(element.stop1_code)
-            # LAT_next = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop_name + '(?:,\s|$)')]
-            LAT_next = stops[stops['stop_name'] == stop_name]
-            # LAT_next = stops[stops['stop_code'] == stop1_code]['stop_lat']
-            LAT_next = stops[stops['stop_id'] == stop1_code]['stop_lat']
-            LAT_next = pd.DataFrame(LAT_next)
-            LAT_next = LAT_next.reset_index(drop=True)
-            LAT_next = LAT_next[['stop_lat']]
-            LAT_next = LAT_next['stop_lat'][0]
-            LAT_next = float(LAT_next)
-
-            # LON_next = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop_name + '(?:,\s|$)')]
-            LON_next = stops[stops['stop_name'] == stop_name]
-            # LON_next = stops[stops['stop_code'] == stop1_code]['stop_lon']
-            LON_next = stops[stops['stop_id'] == stop1_code]['stop_lon']
-            LON_next = pd.DataFrame(LON_next)
-            LON_next = LON_next.reset_index(drop=True)
-            LON_next = LON_next[['stop_lon']]
-            LON_next = LON_next['stop_lon'][0]
-            LON_next = float(LON_next)
-
-            last_footpath_end = element.stop2_code
-            x = last_footpath_end.split("_")
-            LAT_last_fp = float(x[0])
-            LON_last_fp = float(x[1])
-
-            ext = 0.005
-
-            def polygon():
-                poly = Polygon([(min(LON_last_fp, LON_next) - ext, min(LAT_last_fp, LAT_next) - ext),
-                                (max(LON_last_fp, LON_next) + ext, min(LAT_last_fp, LAT_next) - ext),
-                                (max(LON_last_fp, LON_next) + ext, max(LAT_last_fp, LAT_next) + ext),
-                                (min(LON_last_fp, LON_next) - ext, max(LAT_last_fp, LAT_next) + ext)])
-                return poly
-
-            polygon()
-
-            grafo = ox.graph_from_polygon(polygon(), network_type='walk')
-            gdf_nodes, gdf_edges = ox.graph_to_gdfs(grafo)
-            ## get nearest node to the Origin & Destination points
-            nearest_node_ORIGIN, distance_ORIGIN = ox.nearest_nodes(grafo, LON_next, LAT_next,
-                                                                    return_dist=True)
-            nearest_node_DESTINATION, distance_DESTINATION = ox.nearest_nodes(grafo, LON_last_fp,
-                                                                              LAT_last_fp,
-                                                                              return_dist=True)
-            ## find shortest path
-            shortest_OD_walk = nx.shortest_path(grafo, nearest_node_ORIGIN,
-                                                nearest_node_DESTINATION,
-                                                weight='length')
-            ### associate lat, lon to each node
-            shortest_OD_walk_df = gdf_nodes.loc[shortest_OD_walk]
-            poline_walk_last = [[x, y] for (x, y) in zip(shortest_OD_walk_df.x, shortest_OD_walk_df.y)]
-            new_poline_list.append(poline_walk_last)
-
-        #################################################################################################
-        ####-->> check for walking path.........INTERMEDIATE footpath.......................#############
-        if ((element.line_number == 'fp') & (element.trip_id == 'footpath')):
-            # break
-
-            stop1_name = element.start
-            stop1_code = str(element.stop1_code)
-            # LAT_next1 = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop1_name + '(?:,\s|$)')]
-            LAT_next1 = stops[stops['stop_name'] == stop1_name]
-            # LAT_next1 = LAT_next1[LAT_next1['stop_code'] == stop1_code]['stop_lat']
-            LAT_next1 = LAT_next1[LAT_next1['stop_id'] == stop1_code]['stop_lat']
-            LAT_next1 = pd.DataFrame(LAT_next1)
-            LAT_next1 = LAT_next1.reset_index(drop=True)
-            LAT_next1 = LAT_next1[['stop_lat']]
-            LAT_next1 = LAT_next1['stop_lat'][0]
-            LAT_next1 = float(LAT_next1)
-
-            # LON_next1 = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop1_name + '(?:,\s|$)')]
-            LON_next1 = stops[stops['stop_name'] == stop1_name]
-            # LON_next1 = LON_next1[LON_next1['stop_code'] == stop1_code]['stop_lon']
-            LON_next1 = LON_next1[LON_next1['stop_id'] == stop1_code]['stop_lon']
-            LON_next1 = pd.DataFrame(LON_next1)
-            LON_next1 = LON_next1.reset_index(drop=True)
-            LON_next1 = LON_next1[['stop_lon']]
-            LON_next1 = LON_next1['stop_lon'][0]
-            LON_next1 = float(LON_next1)
-
-            stop2_name = element.stop
-            stop2_code = str(element.stop2_code)
-            # LAT_next2 = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop2_name + '(?:,\s|$)')]
-            LAT_next2 = stops[stops['stop_name'] == stop2_name]
-            # LAT_next2 = LAT_next2[LAT_next2['stop_code'] == stop2_code]['stop_lat']
-            LAT_next2 = LAT_next2[LAT_next2['stop_id'] == stop2_code]['stop_lat']
-            LAT_next2 = pd.DataFrame(LAT_next2)
-            LAT_next2 = LAT_next2.reset_index(drop=True)
-            LAT_next2 = LAT_next2[['stop_lat']]
-            LAT_next2 = LAT_next2['stop_lat'][0]
-            LAT_next2 = float(LAT_next2)
-
-            # LON_next2 = stops[stops['stop_name'].str.contains(r'(?:\s|^)' + stop2_name + '(?:,\s|$)')]
-            LON_next2 = stops[stops['stop_name'] == stop2_name]
-            # LON_next2 = LON_next2[LON_next2['stop_code'] == stop2_code]['stop_lon']
-            LON_next2 = LON_next2[LON_next2['stop_id'] == stop2_code]['stop_lon']
-            LON_next2 = pd.DataFrame(LON_next2)
-            LON_next2 = LON_next2.reset_index(drop=True)
-            LON_next2 = LON_next2[['stop_lon']]
-            LON_next2 = LON_next2['stop_lon'][0]
-            LON_next2 = float(LON_next2)
-
-            ext = 0.005
-
-            def polygon():
-                poly = Polygon([(min(LON_next2, LON_next1) - ext, min(LAT_next2, LAT_next1) - ext),
-                                (max(LON_next2, LON_next1) + ext, min(LAT_next2, LAT_next1) - ext),
-                                (max(LON_next2, LON_next1) + ext, max(LAT_next2, LAT_next1) + ext),
-                                (min(LON_next2, LON_next1) - ext, max(LAT_next2, LAT_next1) + ext)])
-                return poly
-
-            polygon()
-
-            grafo = ox.graph_from_polygon(polygon(), network_type='walk')
-            gdf_nodes, gdf_edges = ox.graph_to_gdfs(grafo)
-            ## get nearest node to the Origin & Destination points
-            nearest_node_ORIGIN, distance_ORIGIN = ox.nearest_nodes(grafo, LON_next1, LAT_next1,
-                                                                    return_dist=True)
-            nearest_node_DESTINATION, distance_DESTINATION = ox.nearest_nodes(grafo, LON_next2,
-                                                                              LAT_next2,
-                                                                              return_dist=True)
-            ## find shortest path
-            shortest_OD_walk = nx.shortest_path(grafo, nearest_node_ORIGIN,
-                                                nearest_node_DESTINATION,
-                                                weight='length')
-            ### associate lat, lon to each node
-            shortest_OD_walk_df = gdf_nodes.loc[shortest_OD_walk]
-            poline_walk_intermediate = [[x, y] for (x, y) in zip(shortest_OD_walk_df.x, shortest_OD_walk_df.y)]
-            new_poline_list.append(poline_walk_intermediate)
-
-        #################################################################################################
-        ### check TPL ONLY path --------------------#####################################################
-        if (element.trip_id != 'footpath'):
-            # trip1_id = '1906-4'
-            trip1_id = str(element.trip_id)
-            shape_ID = trips[trips['trip_id'] == trip1_id]['shape_id']
-            shape_ID = pd.DataFrame(shape_ID)
-            shape_ID = shape_ID.reset_index(drop=True)
-            shape_ID = shape_ID[['shape_id']]
-            shape_ID = shape_ID['shape_id'][0]
-            try:
-                shape_ID = int(shape_ID)
-            except ValueError:
-                pass
-            except TypeError:
-                pass
-            except NameError:
-                pass
-                trip1_id = str(element.trip_id)
-                shape_ID = trips[trips['trip_id'] == trip1_id]['shape_id']
-                shape_ID = pd.DataFrame(shape_ID)
-                shape_ID = shape_ID.reset_index(drop=True)
-                shape_ID = shape_ID[['shape_id']]
-                shape_ID = shape_ID['shape_id'][0]
-
-            ## get all lat lon....
-
-            shape_path = shapes[shapes['shape_id'] == shape_ID]
-            if len(shape_path) < 1:
-                shape_path = shapes[shapes['shape_id'] == str(shape_ID)]
-
-            # stop1_code = '72265'
-            stop1_code = str(element.stop1_code)
-            # road_1_LAT = stops[stops['stop_code'] == stop1_code]['stop_lat']
-            road_1_LAT = stops[stops['stop_id'] == stop1_code]['stop_lat']
-            road_1_LAT = pd.DataFrame(road_1_LAT)
-            road_1_LAT = road_1_LAT.reset_index(drop=True)
-            road_1_LAT = road_1_LAT[['stop_lat']]
-            road_1_LAT = road_1_LAT['stop_lat'][0]
-
-            # road_1_LON = stops[stops['stop_code'] == stop1_code]['stop_lon']
-            road_1_LON = stops[stops['stop_id'] == stop1_code]['stop_lon']
-            road_1_LON = pd.DataFrame(road_1_LON)
-            road_1_LON = road_1_LON.reset_index(drop=True)
-            road_1_LON = road_1_LON[['stop_lon']]
-            road_1_LON = road_1_LON['stop_lon'][0]
-
-            # stop2_code = '72157'
-            stop2_code = str(element.stop2_code)
-            # road_2_LAT = stops[stops['stop_code'] == stop2_code]['stop_lat']
-            road_2_LAT = stops[stops['stop_id'] == stop2_code]['stop_lat']
-            road_2_LAT = pd.DataFrame(road_2_LAT)
-            road_2_LAT = road_2_LAT.reset_index(drop=True)
-            road_2_LAT = road_2_LAT[['stop_lat']]
-            road_2_LAT = road_2_LAT['stop_lat'][0]
-
-            # road_2_LON = stops[stops['stop_code'] == stop2_code]['stop_lon']
-            road_2_LON = stops[stops['stop_id'] == stop2_code]['stop_lon']
-            road_2_LON = pd.DataFrame(road_2_LON)
-            road_2_LON = road_2_LON.reset_index(drop=True)
-            road_2_LON = road_2_LON[['stop_lon']]
-            road_2_LON = road_2_LON['stop_lon'][0]
-
-            try:
-                ## get fraction of shape_path from lat, lon from Road1 to Road2
-                seq1_LAT_start = shape_path[(shape_path['shape_pt_lat']) == round(road_1_LAT, 6)]['shape_pt_sequence']
-                # if len(seq1_LAT_start) <1:
-                # AAA = shape_path.sort_values(by=['shape_pt_lat'])
-                #  seq1_LAT_start = shape_path[((shape_path['shape_pt_lat']) <= road_1_LAT + 0.0001 )  &
-                #                              ((shape_path['shape_pt_lat']) >= road_1_LAT - 0.00001 )]['shape_pt_sequence']
-                seq1_LAT_start = pd.DataFrame(seq1_LAT_start)
-                seq1_LAT_start = seq1_LAT_start.reset_index(drop=True)
-                seq1_LAT_start = seq1_LAT_start[['shape_pt_sequence']]
-                seq_start = seq1_LAT_start['shape_pt_sequence'][0]
-            except KeyError:
-                pass
-
-            try:
-                seq2_LAT_stop = shape_path[shape_path['shape_pt_lat'] == round(road_2_LAT, 6)]['shape_pt_sequence']
-                # if len(seq2_LAT_stop) < 1:
-                #    seq2_LAT_stop = shape_path[((shape_path['shape_pt_lat']) <= road_2_LAT + 0.0001) &
-                #                                ((shape_path['shape_pt_lat']) >= road_2_LAT - 0.00001)]['shape_pt_sequence']
-                seq2_LAT_stop = pd.DataFrame(seq2_LAT_stop)
-                seq2_LAT_stop = seq2_LAT_stop.reset_index(drop=True)
-                seq2_LAT_stop = seq2_LAT_stop[['shape_pt_sequence']]
-                seq_stop = seq2_LAT_stop['shape_pt_sequence'][0]
-
-                shape_path_LEG = shape_path[
-                    (shape_path['shape_pt_sequence'] >= seq_start) & (shape_path['shape_pt_sequence'] <= seq_stop)]
-                # make a polyline:
-                TPL_poline = [[x, y] for (x, y) in zip(shape_path_LEG.shape_pt_lon, shape_path_LEG.shape_pt_lat)]
-            except KeyError:
-                TPL_poline = [[road_1_LON, road_1_LAT], [road_2_LON, road_2_LAT]]
-
-            new_poline_list.append(TPL_poline)
-
-        ###---------------> ###################################################################################
-        ##### flattering a list----------------------------------------########################################
-        flat_list = [item for sublist in new_poline_list for item in sublist]
-
-        ## calculate distance
-        distance = []
-        for previous, current in zip(flat_list, flat_list[1:]):
-            # print(tuple(previous), tuple(current))
-            dist = hs.haversine(tuple(previous), tuple(current), unit=Unit.KILOMETERS)
-            distance.append(dist)
-        total_distance = sum(distance)   # distance in kilometers
-
-        ####------flatten list----------------------------------------------####
-        geom = LineString(flat_list)
-        poline_gdf = gpd.GeoDataFrame(geometry=[geom])
-        # poline_gdf.plot()
-        #### save into geojson file....................
-        ## set crs first
-        poline_gdf = poline_gdf.set_crs('epsg:4326')
-
-
-        ## save "poline_gdf" as geojson file:
-        ## transform geodataframeo into .geojson
-        path_TPL_CSA = poline_gdf.to_json()
-
-        with open(path_app + 'static/path_TPL_CSA_' + session.sid + '.geojson', 'w') as f:
-            f.write(poline_gdf.to_json())
-
-        session["path_TPL_CSA"] = path_TPL_CSA
-        # print("----path_TPL_CSA-----------------------:",   session["path_TPL_CSA"])
-
-    DISTANZA = total_distance
-    # print("Travelled distance -------------->:", DISTANZA)
-    # print("TRAVEL_TIME, TRAVEL_SPEED, WALKING_DISTANCE, TRANSFERS, WAITING_TIME:", TRAVEL_TIME, TRAVEL_SPEED, WALKING_DISTANCE, TRANSFERS, WAITING_TIME)
-
-
-    session['travel_time'] = TRAVEL_TIME
-    session['travel_speed'] = TRAVEL_SPEED
-    session['walking_distance'] = WALKING_DISTANCE
-    session['transfers'] = TRANSFERS
-    session['waiting_time'] = round(WAITING_TIME/60, 2)
-    session['total_distance'] = DISTANZA
-
-    data_path_TPL_CSA = [{
-        'n_transfers': session['transfers'],
-        'Travel_time': session["travel_time"],
-        'Waiting_time': session['waiting_time']
-    }]
-
-    data_location_DESTINATION_TPL = [{
-        'Origin': session["name_ORIGIN_location"],
-        'Destination': session["name_DESTINATION_location"]
-    }]
-    
-    datum_CSA_day = [{
-        'day': selected_CSA_day,
-        'hour': selected_CSA_hour
-    }]
-
-    return render_template("index_OD_TPL_CSA_PATH.html",
-                           session_ORIGIN_point=session["ORIGIN_point"],
-                           session_DESTINATION_point=session["DESTINATION_point"],
-                           data_location_DESTINATION_TPL=data_location_DESTINATION_TPL,
-                           session_trave_time=session['travel_time'],
-                           session_travel_speed = session['travel_speed'],
-                           session_transfers = session['transfers'],
-                           session_waiting_time = session['waiting_time'],
-                           session_total_distance = session["total_distance"],
-                           session_path_TPL_CSA=session["path_TPL_CSA"],
-                           selected_CSA_day=session["CSA_day"],
-                           selected_CSA_hour=session["CSA_hour"],
-                           data_path_TPL_CSA = data_path_TPL_CSA,
-                           datum_CSA_day=datum_CSA_day)
-
-
-
-@app.route('/simulated_path_CSA/', methods=['GET', 'POST'])
-def simulated_path_CSA():
-    df_stops_and_times = pd.read_csv(path_app + "static/final_timetable.csv")
-    df_stops_and_times.reset_index(inplace=True)
-    df_stops_and_times = df_stops_and_times[['line_number', 'trip_id', 'stop1_code', 'start',
-       'stop2_code', 'stop', 'start_time', 'end_time', 'distance(m)']]
-    CSA_timetable_to_show = df_stops_and_times[['line_number', 'start', 'stop', 'start_time', 'end_time', 'distance(m)']]
-
-    ## convert to html with the vanilla structure
-    CSA_timetable_to_show = CSA_timetable_to_show.to_html()
-    #### render directly from string:
-    resp_CSA = make_response(render_template_string(CSA_timetable_to_show))
-    return resp_CSA
 
 
 ##################################################################################################
